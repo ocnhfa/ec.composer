@@ -19,6 +19,11 @@ package tech.metacontext.ec.prototype.abs;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public interface Individual {
-   
+public abstract class Individual {
+
+  public String id;
+
+  public Individual(String id) {
+    this.id = id;
+  }
 }

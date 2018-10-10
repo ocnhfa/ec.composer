@@ -23,12 +23,13 @@ public class Main {
 //通常是先 eval -> select -> crossover/mutation
 //因為構想是比較好的人可以繁衍下一代
 
-   public static void main(String[] args) {
-      MusicalIdeas p = new MusicalIdeas(100){
-      
-      };
-
-
-   }
+  public static void main(String[] args) {
+    MusicalIdeas p = new MusicalIdeas(100);
+    p.population.keySet().forEach(System.out::println);
+    p.evolution();
+    p.population.keySet().forEach(System.out::println);
+    p.evolution();
+    p.population.keySet().forEach(System.out::println);
+  }
 
 }

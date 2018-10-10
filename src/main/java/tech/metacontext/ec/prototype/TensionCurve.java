@@ -24,30 +24,36 @@ import tech.metacontext.ec.prototype.abs.Individual;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class TensionCurve implements Individual {
+public class TensionCurve extends Individual {
 
-   List<Integer> curve;
+  List<Integer> curve;
 
-   public TensionCurve() {
-      curve = new ArrayList<>();
-   }
+  public TensionCurve(String id) {
+    super(id);
+    this.curve = new ArrayList<>();
+  }
 
-   public TensionCurve generateRandom() {
-      for (int i = 0; i < 20; i++) {
-         int delta = new Random().nextInt(21) - 10;
-         curve.add(delta);
-      }
-      return this;
-   }
+  public TensionCurve(String id, List<Integer> curve) {
+    super(id);
+    this.curve = curve;
+  }
 
-   @Override
-   public String toString() {
-      String s = "";
-      for (int i = 0; i < curve.size() - 1; i++) {
-         s += String.format("%+4d,", curve.get(i));
-      }
-      s += String.format("%+4d", curve.get(curve.size() - 1));
-      return s;
-   }
+  public TensionCurve generateRandom() {
+    for (int i = 0; i < 20; i++) {
+      int delta = new Random().nextInt(21) - 10;
+      curve.add(delta);
+    }
+    return this;
+  }
+
+  @Override
+  public String toString() {
+    String s = "";
+    for (int i = 0; i < curve.size() - 1; i++) {
+      s += String.format("%+4d,", curve.get(i));
+    }
+    s += String.format("%+4d", curve.get(curve.size() - 1));
+    return s;
+  }
 
 }

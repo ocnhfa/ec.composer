@@ -26,19 +26,19 @@ import java.util.Map;
  */
 public abstract class Population<E extends Individual, R> {
 
-   public int size;
-   public Map<E, R> population = new HashMap<>();
-   public Evaluation<E, R> eval;
-   public Selection selector;
-   public Map<String, GeneticOperator<E>> operators;
+  public int size;
+  public Map<E, R> population = new HashMap<>();
+  public Evaluation<E, R> evalutaion;
+  public Selection selector;
+  public Map<String, GeneticOperator<E>> operators = new HashMap<>();
 
-   public Population(int size) {
-      this.size = size;
-      this.initiate(size);
-   }
+  public Population(int size) {
+    this.size = size;
+    this.initiate(size);
+  }
 
-   public abstract void initiate(int size);
+  public abstract void initiate(int size);
 
-   public abstract void evolution();
+  public abstract void evolution();
 
 }
