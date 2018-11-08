@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype;
 
+import java.io.IOException;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
@@ -23,13 +25,17 @@ public class Main {
 //通常是先 eval -> select -> crossover/mutation
 //因為構想是比較好的人可以繁衍下一代
 
-  public static void main(String[] args) {
-    MusicalIdeas p = new MusicalIdeas(100);
-    p.population.keySet().forEach(System.out::println);
-    p.evolution();
-    p.population.keySet().forEach(System.out::println);
-    p.evolution();
-    p.population.keySet().forEach(System.out::println);
+  public static void main(String[] args) throws IOException {
+    MusicalIdeas p = new MusicalIdeas(12);
+    p.render(0);
+    for (int i = 0; i < 10; i++) {
+//      System.in.read();
+      System.out.println("Generation " + i);
+      int diff = p.evolution();
+      p.render(i + 1);
+      if (diff == 0) {
+        break;
+      }
+    }
   }
-
 }

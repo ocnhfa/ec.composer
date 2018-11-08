@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.test.LineChart_AWT;
 
 /**
  *
@@ -89,21 +92,61 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   }
 
   @Override
-  public void evolution() {
-    System.out.println("size before selection = " + this.population.size());
+  public int evolution() {
+    int size_before = this.population.size();
+    System.out.println("size before selection = " + size_before);
     this.selector();
-    System.out.println("size after selection = " + this.population.size());
+    int size_after = this.population.size();
+    System.out.println("size after selection = " + size_after);
+    int size_diff = size_before - size_after;
+    System.out.println("size different = " + size_diff);
     List<TensionCurve> keySet = new ArrayList(this.population.keySet());
-    int original_size = this.population.size();
-    for (int i = 0; i < size - original_size; i++) {
-      int p1 = new Random().nextInt(original_size), p2 = p1;
+    for (int i = 0; i < size_diff; i++) {
+      int p1 = new Random().nextInt(size_after), p2 = p1;
       while (p1 == p2) {
-        p2 = new Random().nextInt(original_size);
+        p2 = new Random().nextInt(size_after);
       }
       TensionCurve child = crossover(keySet.get(p1), keySet.get(p2)).get(0);
       this.population.put(child, this.eval(child));
-      this.mutation(keySet.get(new Random().nextInt(original_size)));
+      this.mutation(keySet.get(new Random().nextInt(size_after)));
     }
     System.out.println("size of new generation = " + this.population.size());
+    return size_diff;
   }
+
+  private DefaultCategoryDataset dataset;
+  private int index;
+  private int render_generation;
+  private int y_min, y_max;
+
+  @Override
+  public void render() {
+    LineChart_AWT chart = new LineChart_AWT("Musical Ideas");
+    dataset = new DefaultCategoryDataset();
+    index = 1;
+    this.population.keySet().forEach(this::render);
+    chart.addLineChart("Tension Curves, generation = " + render_generation,
+            "Time", "Tension Level", dataset);
+    chart.pack();
+    RefineryUtilities.positionFrameOnScreen(chart, render_generation * 0.1, render_generation * 0.1);
+    chart.setVisible(true);
+  }
+
+  public void render(int i) {
+    this.render_generation = i;
+    this.render();
+  }
+
+  public void render(TensionCurve tc) {
+    int tension = 0;
+//    dataset.addValue(0, "" + index, "0");
+    for (int i = 0; i < tc.curve.size(); i++) {
+      tension += tc.curve.get(i);
+      System.out.printf("%3d ", tension);
+      dataset.addValue(tension, "" + index, "" + (i + 1));
+    }
+    System.out.println();
+    index++;
+  }
+
 }

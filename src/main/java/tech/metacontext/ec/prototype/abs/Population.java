@@ -39,6 +39,13 @@ public abstract class Population<E extends Individual, R> {
 
   public abstract void initiate(int size);
 
-  public abstract void evolution();
+  /**
+   * Evolution function.
+   *
+   * @return size difference after selection.
+   */
+  public abstract int evolution();
+
+  public abstract void render();
 
 }
