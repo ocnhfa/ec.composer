@@ -13,58 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.test;
+package tech.metacontext.ec.prototype.render;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 /**
+ * Rendering a Line Chart.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class LineChart_AWT extends ApplicationFrame {
 
+  DefaultCategoryDataset dataset;
+  JFreeChart lineChart;
+
   public LineChart_AWT(String applicationTitle) {
+
     super(applicationTitle);
+    dataset = new DefaultCategoryDataset();
   }
 
-  public void addLineChart(String chartTitle, String xLabel, String yLabel,
-          CategoryDataset dataset) {
-    JFreeChart lineChart = ChartFactory.createLineChart(
+  public void addData(double value, String rowKey, String colKey) {
+
+    dataset.addValue(value, rowKey, colKey);
+  }
+
+  public void createLineChart(String chartTitle, String xLabel, String yLabel,
+          int x, int y) {
+
+    lineChart = ChartFactory.createLineChart(
             chartTitle, xLabel, yLabel, dataset,
             PlotOrientation.VERTICAL,
             true, true, false);
 
     ChartPanel chartPanel = new ChartPanel(lineChart);
-    chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
+    chartPanel.setPreferredSize(new java.awt.Dimension(x, y));
     setContentPane(chartPanel);
+
+    this.pack();
+    RefineryUtilities.centerFrameOnScreen(this);
+
   }
 
-  private DefaultCategoryDataset createDataset() {
-    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    dataset.addValue(15, "schools", "1970");
-    dataset.addValue(30, "schools", "1980");
-    dataset.addValue(60, "schools", "1990");
-    dataset.addValue(120, "schools", "2000");
-    dataset.addValue(240, "schools", "2010");
-    dataset.addValue(300, "schools", "2014");
-    return dataset;
+  public void showChartWindow() {
+
+    this.setVisible(true);
   }
 
-  public static void main(String[] args) {
-    LineChart_AWT chart = new LineChart_AWT(
-            "School Vs Years");
-    chart.addLineChart("Numer of Schools vs years",
-            "Years", "Number of Schools", chart.createDataset());
-
-    chart.pack();
-    RefineryUtilities.centerFrameOnScreen(chart);
-    chart.setVisible(true);
-  }
 }

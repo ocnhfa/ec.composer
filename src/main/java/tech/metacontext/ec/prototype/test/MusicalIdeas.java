@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype;
+package tech.metacontext.ec.prototype.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ import java.util.Random;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Population;
-import tech.metacontext.ec.prototype.test.LineChart_AWT;
+import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
  *
@@ -52,7 +52,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
             tccs2 = new TensionCurve(++counter + "", c2);
     List<TensionCurve> result = new ArrayList<>();
     result.add(eval(tccs1) > eval(tccs2) ? tccs1 : tccs2);
-    System.out.println("Crossover occurred on TC#" + tc1.id + ", " + tc2.id + " at " + csPt);
+    System.out.println("Crossover occurred on TC#" + tc1.getId() + ", " + tc2.getId() + " at " + csPt);
     return result;
   }
 
@@ -61,7 +61,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
     int locus = new Random().nextInt(curve.size()),
             value = new Random().nextInt(21) - 10;
     curve.set(locus, value);
-    System.out.println("Mutation occurred on TC#" + e[0].id + " at " + locus);
+    System.out.println("Mutation occurred on TC#" + e[0].getId() + " at " + locus);
     return Arrays.asList(e);
   }
 
@@ -84,7 +84,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   }
 
   @Override
-  public void initiate(int size) {
+  public void initiate() {
     for (int i = 0; i < size; i++) {
       TensionCurve tc = new TensionCurve(++counter + "").generateRandom();
       this.population.put(tc, this.eval(tc));
@@ -114,22 +114,21 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
     return size_diff;
   }
 
-  private DefaultCategoryDataset dataset;
   private int index;
   private int render_generation;
-  private int y_min, y_max;
+  private LineChart_AWT chart;
 
   @Override
   public void render() {
-    LineChart_AWT chart = new LineChart_AWT("Musical Ideas");
-    dataset = new DefaultCategoryDataset();
+    chart = new LineChart_AWT("Musical Ideas");
     index = 1;
     this.population.keySet().forEach(this::render);
-    chart.addLineChart("Tension Curves, generation = " + render_generation,
-            "Time", "Tension Level", dataset);
-    chart.pack();
-    RefineryUtilities.positionFrameOnScreen(chart, render_generation * 0.1, render_generation * 0.1);
-    chart.setVisible(true);
+    chart.createLineChart("Tension Curves, generation = " + render_generation,
+            "Time", "Tension Level", 560, 367);
+    RefineryUtilities.positionFrameOnScreen(chart,
+            render_generation * 0.1 % 1.0,
+            render_generation * 0.1 % 1.0);
+    chart.showChartWindow();
   }
 
   public void render(int i) {
@@ -143,7 +142,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
     for (int i = 0; i < tc.curve.size(); i++) {
       tension += tc.curve.get(i);
       System.out.printf("%3d ", tension);
-      dataset.addValue(tension, "" + index, "" + (i + 1));
+      chart.addData(tension, "" + index, "" + (i + 1));
     }
     System.out.println();
     index++;

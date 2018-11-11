@@ -34,10 +34,13 @@ public abstract class Population<E extends Individual, R> {
 
   public Population(int size) {
     this.size = size;
-    this.initiate(size);
+    this.initiate();
   }
 
-  public abstract void initiate(int size);
+  /**
+   * Initialization of the population.
+   */
+  public abstract void initiate();
 
   /**
    * Evolution function.
@@ -46,6 +49,9 @@ public abstract class Population<E extends Individual, R> {
    */
   public abstract int evolution();
 
+  /**
+   * Rendering function of the population.
+   */
   public abstract void render();
 
 }

@@ -13,28 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.abs;
+package tech.metacontext.ec.prototype.composer;
 
-import java.util.UUID;
+import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public abstract class Individual {
+public class SketchNodeFactory {
 
-  private final String id;
+  private static SketchNodeFactory instance;
 
-  public Individual(String id) {
-    this.id = id;
+  List<? extends IdeaDescriptor> template;
+
+  private SketchNodeFactory() {
+    template = new ArrayList<>();
   }
 
-  public Individual() {
-    this.id = UUID.randomUUID().toString();
+  public SketchNodeFactory getInstance() {
+    if (instance == null) {
+      instance = new SketchNodeFactory();
+    }
+    return instance;
   }
 
-  public String getId() {
-    return id;
+  public SketchNode createNode() {
+    SketchNode node = new SketchNode();
+    template.forEach(d -> node.addDescriptor(d));
+    return node;
   }
-
 }

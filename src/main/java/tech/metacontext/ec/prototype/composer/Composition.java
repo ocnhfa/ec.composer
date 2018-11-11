@@ -13,28 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.abs;
+package tech.metacontext.ec.prototype.composer;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public abstract class Individual {
+public class Composition extends Individual {
 
-  private final String id;
+  private List<SketchNode> nodes;
 
-  public Individual(String id) {
-    this.id = id;
+  public Composition() {
+    super();
+    nodes = new ArrayList<>();
   }
 
-  public Individual() {
-    this.id = UUID.randomUUID().toString();
+  public List<SketchNode> getNodes() {
+    return nodes;
   }
 
-  public String getId() {
-    return id;
+  public void setNodes(List<SketchNode> nodes) {
+    this.nodes = nodes;
   }
 
 }

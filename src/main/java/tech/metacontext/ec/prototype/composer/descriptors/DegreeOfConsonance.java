@@ -13,29 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype;
+package tech.metacontext.ec.prototype.composer.descriptors;
 
-import java.io.IOException;
+import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
-//通常是先 eval -> select -> crossover/mutation
-//因為構想是比較好的人可以繁衍下一代
+public class DegreeOfConsonance extends IdeaDescriptor<PitchSet, Double> {
 
-  public static void main(String[] args) throws IOException {
-    MusicalIdeas p = new MusicalIdeas(12);
-    p.render(0);
-    for (int i = 0; i < 10; i++) {
-//      System.in.read();
-      System.out.println("Generation " + i);
-      int diff = p.evolution();
-      p.render(i + 1);
-      if (diff == 0) {
-        break;
-      }
+  private static DegreeOfConsonance instance;
+
+  private DegreeOfConsonance() {
+    super("Degree of Consonance");
+    instance = this;
+  }
+
+  public DegreeOfConsonance getInstance() {
+    if (instance == null) {
+      instance = new DegreeOfConsonance();
     }
+    return instance;
+  }
+
+  @Override
+  public Double describe(PitchSet factor) {
+    double degree = 100;
+    //TODO
+    return degree;
   }
 }

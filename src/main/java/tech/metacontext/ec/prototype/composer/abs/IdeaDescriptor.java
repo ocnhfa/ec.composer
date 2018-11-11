@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.abs;
-
-import java.util.UUID;
+package tech.metacontext.ec.prototype.composer.abs;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <F>factor to be described.
+ * @param <R>result of description.
  */
-public abstract class Individual {
+public abstract class IdeaDescriptor<F, R> {
 
-  private final String id;
+  private final String name;
 
-  public Individual(String id) {
-    this.id = id;
+  public IdeaDescriptor(String id) {
+    this.name = id;
   }
 
-  public Individual() {
-    this.id = UUID.randomUUID().toString();
+  public String getName() {
+    return name;
   }
 
-  public String getId() {
-    return id;
-  }
-
+  public abstract R describe(F factor);
 }

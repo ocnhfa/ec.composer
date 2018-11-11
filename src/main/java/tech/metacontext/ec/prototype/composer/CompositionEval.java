@@ -13,28 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.abs;
-
-import java.util.UUID;
+package tech.metacontext.ec.prototype.composer;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public abstract class Individual {
+public class CompositionEval {
 
-  private final String id;
+  Composition composition;
 
-  public Individual(String id) {
-    this.id = id;
-  }
-
-  public Individual() {
-    this.id = UUID.randomUUID().toString();
-  }
-
-  public String getId() {
-    return id;
+  public CompositionEval(Composition composition) {
+    this.composition = composition;
   }
 
 }
