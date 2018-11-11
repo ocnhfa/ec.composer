@@ -15,23 +15,20 @@
  */
 package tech.metacontext.ec.prototype.composer.abs;
 
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+
 /**
+ * An abstract class to describe a musical idea.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <F>factor to be described.
- * @param <R>result of description.
+ * @param <M> material factor to be described.
+ * @param <R> result of description.
  */
-public abstract class IdeaDescriptor<F, R> {
+public abstract class IdeaDescriptor<M extends MusicMaterial, R> extends AbstractElement {
 
-  private final String name;
+   public IdeaDescriptor() {
+      super();
+   }
 
-  public IdeaDescriptor(String id) {
-    this.name = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public abstract R describe(F factor);
+   public abstract R describe(M factor);
 }

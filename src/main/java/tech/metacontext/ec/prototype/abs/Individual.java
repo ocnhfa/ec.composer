@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.abs;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -23,18 +24,44 @@ import java.util.UUID;
  */
 public abstract class Individual {
 
-  private final String id;
+   private final String id;
 
-  public Individual(String id) {
-    this.id = id;
-  }
+   public Individual(String id) {
+      this.id = id;
+   }
 
-  public Individual() {
-    this.id = UUID.randomUUID().toString();
-  }
+   public Individual() {
+      this.id = UUID.randomUUID().toString();
+   }
 
-  public String getId() {
-    return id;
-  }
+   public String getId() {
+      return id;
+   }
 
+   @Override
+   public int hashCode() {
+      int hash = 7;
+      hash = 59 * hash + Objects.hashCode(this.id);
+      return hash;
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      final Individual other = (Individual) obj;
+      return Objects.equals(this.id, other.id);
+   }
+
+   @Override
+   public String toString() {
+      return String.format("%s [%s]", this.getClass().getSimpleName(), this.getId());
+   }
 }

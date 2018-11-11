@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
+package tech.metacontext.ec.prototype.composer.nodes;
+
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
+public class SketchNode extends Individual {
 
-   public static void main(String[] args) {
-      //There are 10 composition evolving in Composer.
-      Composer c = new Composer(10);
-      c.render();
-      for (int i = 0; i < 10; i++) {
-         System.out.println("Generation " + (i + 1));
-         int diff = c.evolution();
-         c.render();
-         if (diff == 0) {
-            break;
-         }
-      }
+   List<MusicMaterial> materials;
+
+   public void addMaterial(MusicMaterial material) {
+      materials.add(material);
    }
 
 }

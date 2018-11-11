@@ -15,9 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import tech.metacontext.ec.prototype.composer.nodes.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.nodes.SketchNode;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import java.util.ArrayList;
 import java.util.List;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
+import tech.metacontext.ec.prototype.composer.abs.Factory;
 
 /**
  *
@@ -25,19 +31,43 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class Composition extends Individual {
 
-  private List<SketchNode> nodes;
+   private final List<SketchNode> nodes;
+   private final List<Connector> ideas;
 
-  public Composition() {
-    super();
-    nodes = new ArrayList<>();
-  }
+   private static final Factory<SketchNode> SN_FACTORY = SketchNodeFactory.getInstance();
+   private static final Factory<Connector> CI_FACTORY = ConnectorFactory.getInstance();
 
-  public List<SketchNode> getNodes() {
-    return nodes;
-  }
+   public Composition() {
+      super();
+      nodes = new ArrayList<>();
+      ideas = new ArrayList<>();
+      nodes.add(SN_FACTORY.create());
+   }
 
-  public void setNodes(List<SketchNode> nodes) {
-    this.nodes = nodes;
-  }
+   public void addNode() {
+      Connector idea = ((ConnectorFactory) CI_FACTORY).create(
+              ConnectorType.Default,
+              nodes.get(nodes.size() - 1));
+      ideas.add(idea);
+      nodes.add(idea.generate());
+   }
 
+   @Override
+   public String toString() {
+      String result = super.toString() + "\n"
+              + "*** " + nodes.get(0).toString();
+      for (int i = 0; i < ideas.size(); i++) {
+         result += String.format(" --> %s\n--> %s", ideas.get(i).toString(),
+                 nodes.get(i + 1).toString());
+      }
+      return result;
+   }
+
+   public static void main(String[] args) {
+      Composition c = new Composition();
+      c.addNode();
+      c.addNode();
+      c.addNode();
+      System.out.println(c);
+   }
 }

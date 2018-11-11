@@ -13,26 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
+package tech.metacontext.ec.prototype.composer.materials;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
+public enum Pitch {
+  C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B;
 
-   public static void main(String[] args) {
-      //There are 10 composition evolving in Composer.
-      Composer c = new Composer(10);
-      c.render();
-      for (int i = 0; i < 10; i++) {
-         System.out.println("Generation " + (i + 1));
-         int diff = c.evolution();
-         c.render();
-         if (diff == 0) {
-            break;
-         }
-      }
-   }
-
+  public Pitch simple(String note) {
+    switch (note) {
+      case "1":
+        return C;
+      case "1#":
+      case "2b":
+        return Cs;
+      case "2":
+        return D;
+      case "3":
+        return E;
+      case "4":
+        return F;
+      case "4#":
+      case "5b":
+        return Fs;
+      case "5":
+        return G;
+      case "5#":
+      case "6b":
+        return Gs;
+      case "6":
+        return A;
+      case "6#":
+      case "7b":
+        return As;
+      case "7":
+        return B;
+    }
+    return null;
+  }
 }

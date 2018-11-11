@@ -13,26 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
+package tech.metacontext.ec.prototype.composer.connectors;
+
+import tech.metacontext.ec.prototype.composer.nodes.SketchNode;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
+public class MirrorNextNodeConnector extends Connector {
 
-   public static void main(String[] args) {
-      //There are 10 composition evolving in Composer.
-      Composer c = new Composer(10);
-      c.render();
-      for (int i = 0; i < 10; i++) {
-         System.out.println("Generation " + (i + 1));
-         int diff = c.evolution();
-         c.render();
-         if (diff == 0) {
-            break;
-         }
-      }
+   @Override
+   public SketchNode generate() {
+      return getNext();
    }
 
 }

@@ -13,20 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
+package tech.metacontext.ec.prototype.composer.connectors;
 
-import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
-import java.util.List;
+import tech.metacontext.ec.prototype.composer.nodes.SketchNode;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class SketchNode {
+public class MirrorConnector extends Connector {
 
-  List<IdeaDescriptor> descriptors;
+   private Connector mirror;
 
-  public void addDescriptor(IdeaDescriptor descriptor) {
-    descriptors.add(descriptor);
-  }
+   public Connector getMirror() {
+      return mirror;
+   }
+
+   public void setMirror(Connector mirror) {
+      this.mirror = mirror;
+   }
+
+   @Override
+   public SketchNode getNext() {
+      return mirror.getNext();
+   }
+
+   @Override
+   public SketchNode generate() {
+      return mirror.generate();
+   }
+
+   @Override
+   public SketchNode getPrevious() {
+      return mirror.getPrevious();
+   }
+
 }

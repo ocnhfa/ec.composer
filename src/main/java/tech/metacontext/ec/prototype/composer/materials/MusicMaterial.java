@@ -13,44 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.descriptors;
+package tech.metacontext.ec.prototype.composer.materials;
+
+import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <E>
  */
-public enum Pitch {
-  C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B;
+public abstract class MusicMaterial<E> extends AbstractElement {
 
-  public Pitch simple(String note) {
-    switch (note) {
-      case "1":
-        return C;
-      case "1#":
-      case "2b":
-        return Cs;
-      case "2":
-        return D;
-      case "3":
-        return E;
-      case "4":
-        return F;
-      case "4#":
-      case "5b":
-        return Fs;
-      case "5":
-        return G;
-      case "5#":
-      case "6b":
-        return Gs;
-      case "6":
-        return A;
-      case "6#":
-      case "7b":
-        return As;
-      case "7":
-        return B;
-    }
-    return null;
-  }
+   public abstract void add(E element);
+
+   public abstract void remove(E element);
 }

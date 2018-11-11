@@ -18,32 +18,34 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.abs.Population;
 
 /**
+ * Composer class bears a number of Composition objects and evolves them.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Composer extends Population<Composition, CompositionEval> {
 
-  public Composer(int size) {
-    super(size);
-  }
+   public Composer(int size) {
+      super(size);
+   }
 
-  @Override
-  public void initiate() {
-    for (int i = 0; i < size; i++) {
-      Composition composition = new Composition();
-      CompositionEval eval = new CompositionEval(composition);
-      this.population.put(composition, eval);
-    }
-  }
+   @Override
+   public void initiate() {
+      for (int i = 0; i < size; i++) {
+         Composition composition = new Composition();
+         CompositionEval eval = new CompositionEval(composition);
+         this.population.put(composition, eval);
+      }
+   }
 
-  @Override
-  public int evolution() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   @Override
+   public int evolution() {
+      population.keySet().forEach(Composition::addNode);
+      return size;
+   }
 
-  @Override
-  public void render() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   @Override
+   public void render() {
+      population.keySet().forEach(System.out::println);
+   }
 
 }

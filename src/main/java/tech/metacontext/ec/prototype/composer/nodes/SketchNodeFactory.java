@@ -13,36 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
+package tech.metacontext.ec.prototype.composer.nodes;
 
-import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
 import java.util.ArrayList;
 import java.util.List;
+import tech.metacontext.ec.prototype.composer.abs.Factory;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class SketchNodeFactory {
+public class SketchNodeFactory extends Factory<SketchNode> {
 
-  private static SketchNodeFactory instance;
+   private static SketchNodeFactory instance;
+   List<? extends MusicMaterial> template;
 
-  List<? extends IdeaDescriptor> template;
+   private SketchNodeFactory() {
+      template = new ArrayList<>();
+   }
 
-  private SketchNodeFactory() {
-    template = new ArrayList<>();
-  }
+   public static SketchNodeFactory getInstance() {
+      if (instance == null) {
+         instance = new SketchNodeFactory();
+      }
+      return instance;
+   }
 
-  public SketchNodeFactory getInstance() {
-    if (instance == null) {
-      instance = new SketchNodeFactory();
-    }
-    return instance;
-  }
-
-  public SketchNode createNode() {
-    SketchNode node = new SketchNode();
-    template.forEach(d -> node.addDescriptor(d));
-    return node;
-  }
+   @Override
+   public SketchNode create() {
+      SketchNode node = new SketchNode();
+      template.forEach(node::addMaterial);
+      return node;
+   }
 }
