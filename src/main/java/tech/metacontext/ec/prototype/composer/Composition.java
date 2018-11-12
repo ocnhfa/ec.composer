@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorRemark;
 import tech.metacontext.ec.prototype.composer.abs.Factory;
 
 /**
@@ -45,11 +45,14 @@ public class Composition extends Individual {
    }
 
    public void addNode() {
-      Connector idea = ((ConnectorFactory) CI_FACTORY).create(
-              ConnectorType.Default,
+      Connector idea = ((ConnectorFactory) CI_FACTORY).create(ConnectorRemark.Default,
               nodes.get(nodes.size() - 1));
       ideas.add(idea);
-      nodes.add(idea.generate());
+      nodes.add(idea.getNext());
+   }
+
+   public int length() {
+      return nodes.size();
    }
 
    @Override
@@ -63,11 +66,4 @@ public class Composition extends Individual {
       return result;
    }
 
-   public static void main(String[] args) {
-      Composition c = new Composition();
-      c.addNode();
-      c.addNode();
-      c.addNode();
-      System.out.println(c);
-   }
 }

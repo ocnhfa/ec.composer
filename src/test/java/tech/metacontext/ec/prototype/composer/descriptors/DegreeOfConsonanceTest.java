@@ -26,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import static tech.metacontext.ec.prototype.composer.descriptors.ConsonanceType.getType;
 
 /**
  *
@@ -59,10 +60,10 @@ public class DegreeOfConsonanceTest {
    public void main() {
       List<PitchSet> tester = new ArrayList<>();
       tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.E));
-      tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.E, Pitch.As));
+      tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.E, Pitch.B_flat));
       tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.E, Pitch.B));
-      tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.Ds, Pitch.As));
-      tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.Ds, Pitch.B));
+      tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.E_flat, Pitch.B_flat));
+      tester.add(new PitchSet(Pitch.C, Pitch.G, Pitch.E_flat, Pitch.B));
       tester.forEach(this::test);
    }
 
@@ -86,7 +87,7 @@ public class DegreeOfConsonanceTest {
    }
 
    /**
-    * Test of type method, of class DegreeOfConsonance.
+    * Test of getType method, of class DegreeOfConsonance.
     */
    @Test
    @Ignore
@@ -94,8 +95,8 @@ public class DegreeOfConsonanceTest {
       System.out.println("type");
       Pitch p1 = null;
       Pitch p2 = null;
-      DegreeOfConsonance.ConsonanceType expResult = null;
-      DegreeOfConsonance.ConsonanceType result = DegreeOfConsonance.type(p1, p2);
+      ConsonanceType expResult = null;
+      ConsonanceType result = getType(p1, p2);
       assertEquals(expResult, result);
       // TODO review the generated test code and remove the default call to fail.
       fail("The test case is a prototype.");

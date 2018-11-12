@@ -18,10 +18,11 @@ package tech.metacontext.ec.prototype.composer.descriptors;
 import tech.metacontext.ec.prototype.composer.materials.PitchSet;
 import tech.metacontext.ec.prototype.composer.materials.Pitch;
 import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
+import static tech.metacontext.ec.prototype.composer.descriptors.ConsonanceType.getType;
 
 /**
- * Describe the consonance of a PitchSet with a double type number ranging from
- * 0.0 (extremely dissonant) to 100.0 (perfectly consonant).
+ * Describe the consonance of a PitchSet with a double getType number ranging
+ * from 0.0 (extremely dissonant) to 100.0 (perfectly consonant).
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
@@ -39,35 +40,6 @@ public class DegreeOfConsonance extends IdeaDescriptor<PitchSet, Double> {
       return instance;
    }
 
-   public enum ConsonanceType {
-      PerfectConsonance(1.0),
-      ImperfectConsonance(0.9),
-      Dissonance(0.5);
-
-      public double factor;
-
-      ConsonanceType(double factor) {
-         this.factor = factor;
-      }
-
-   }
-
-   public static ConsonanceType type(Pitch p1, Pitch p2) {
-      switch (Math.abs(p1.compareTo(p2))) {
-         case 0:
-         case 5:
-         case 7:
-            return ConsonanceType.PerfectConsonance;
-         case 3:
-         case 4:
-         case 8:
-         case 9:
-            return ConsonanceType.ImperfectConsonance;
-         default:
-            return ConsonanceType.Dissonance;
-      }
-   }
-
    double degree;
 
    @Override
@@ -76,8 +48,8 @@ public class DegreeOfConsonance extends IdeaDescriptor<PitchSet, Double> {
       factor.getPitches().stream().forEach((Pitch p1) -> {
          factor.getPitches().forEach((Pitch p2) -> {
             if (p1.compareTo(p2) < 0) {
-               degree *= type(p1, p2).factor;
-               System.out.printf("%s, %s: %s -> %.2f\n", p1, p2, type(p1, p2), degree);
+               degree *= getType(p1, p2).factor;
+               System.out.printf("%s, %s: %s -> %.2f\n", p1, p2, getType(p1, p2), degree);
             }
          });
       });

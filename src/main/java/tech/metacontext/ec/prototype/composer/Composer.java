@@ -25,11 +25,16 @@ import tech.metacontext.ec.prototype.abs.Population;
 public class Composer extends Population<Composition, CompositionEval> {
 
    public Composer(int size) {
-      super(size);
+      super(size, CompositionEval::new);
+   }
+
+   public CompositionEval eval(Composition c) {
+      CompositionEval e = new CompositionEval(c);
+      return e;
    }
 
    @Override
-   public void initiate() {
+   public void initiate(int size) {
       for (int i = 0; i < size; i++) {
          Composition composition = new Composition();
          CompositionEval eval = new CompositionEval(composition);
@@ -40,7 +45,7 @@ public class Composer extends Population<Composition, CompositionEval> {
    @Override
    public int evolution() {
       population.keySet().forEach(Composition::addNode);
-      return size;
+      return size();
    }
 
    @Override

@@ -25,22 +25,23 @@ import tech.metacontext.ec.prototype.composer.nodes.SketchNodeFactory;
  */
 public class Connector extends Individual {
 
-   private ConnectorType type;
+   private ConnectorRemark mark = ConnectorRemark.Default;
    private SketchNode previous, next;
 
-   public Connector(ConnectorType type) {
-      this.type = type;
+   public Connector(ConnectorRemark mark, SketchNode... nodes) {
+      this.mark = mark;
+      
    }
 
    public Connector() {
    }
 
-   public ConnectorType getType() {
-      return type;
+   public ConnectorRemark getType() {
+      return mark;
    }
 
-   public Connector setType(ConnectorType type) {
-      this.type = type;
+   public Connector setType(ConnectorRemark type) {
+      this.mark = type;
       return this;
    }
 
@@ -61,8 +62,15 @@ public class Connector extends Individual {
    }
 
    public SketchNode generate() {
-      next = SketchNodeFactory.getInstance().create();
-      return next;
+      switch (mark) {
+         case MirrorNextNodeConnector:
+            return getNext();
+         case Default:
+         case MirrorConnector:
+         default:
+            next = SketchNodeFactory.getInstance().create();
+            return next;
+      }
    }
 
 }

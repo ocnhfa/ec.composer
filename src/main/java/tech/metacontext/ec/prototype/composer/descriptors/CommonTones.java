@@ -56,14 +56,4 @@ public class CommonTones extends IdeaDescriptor<PitchSet, Long> {
       }).count();
    }
 
-   public static void main(String[] args) {
-      Pitch[] ps1 = new Pitch[]{Pitch.D, Pitch.A, Pitch.B, Pitch.C, Pitch.Cs};
-      Pitch[] ps2 = new Pitch[]{Pitch.D, Pitch.B, Pitch.C, Pitch.Cs};
-      PitchSet set1 = new PitchSet(ps1);
-      PitchSet set2 = new PitchSet(ps2);
-      CommonTones ct = new CommonTones(set1);
-      System.out.println("set1 = " + set1);
-      System.out.println("set2 = " + set2);
-      System.out.println("common = " + ct.describe(set2));
-   }
 }

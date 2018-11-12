@@ -55,7 +55,7 @@ public class PitchSet extends MusicMaterial<Pitch> {
    }
 
    public static void main(String[] args) {
-      PitchSet ps = new PitchSet(Pitch.D, Pitch.A, Pitch.B, Pitch.C, Pitch.Cs);
+      PitchSet ps = new PitchSet(Pitch.D, Pitch.A, Pitch.B, Pitch.C, Pitch.C_sharp);
       System.out.println("set1 = " + ps);
       ps.remove(Pitch.B);
       System.out.println("set1 = " + ps);

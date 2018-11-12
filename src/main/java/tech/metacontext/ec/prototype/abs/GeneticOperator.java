@@ -20,7 +20,7 @@ import java.util.List;
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <E>
+ * @param <E> Type of Individual
  */
 public interface GeneticOperator<E extends Individual> {
 

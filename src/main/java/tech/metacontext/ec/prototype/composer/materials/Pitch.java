@@ -20,37 +20,39 @@ package tech.metacontext.ec.prototype.composer.materials;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum Pitch {
-  C, Cs, D, Ds, E, F, Fs, G, Gs, A, As, B;
+   //0, 1, 2, 3,
+   C("1"), C_sharp("1#"), D("2"), D_sharp("2#"),
+   //4, 5, 6, 7, 
+   E("3"), F("4"), F_sharp("4#"), G("5"),
+   //8, 9, 10, 11,
+   G_sharp("5#"), A("6"), A_sharp("6#"), B("7"),
+   //12, 13, 14, 15, 16 
+   D_flat("2b"), E_flat("2b"), G_flat("5b"), A_flat("6b"), B_flat("7b");
 
-  public Pitch simple(String note) {
-    switch (note) {
-      case "1":
-        return C;
-      case "1#":
-      case "2b":
-        return Cs;
-      case "2":
-        return D;
-      case "3":
-        return E;
-      case "4":
-        return F;
-      case "4#":
-      case "5b":
-        return Fs;
-      case "5":
-        return G;
-      case "5#":
-      case "6b":
-        return Gs;
-      case "6":
-        return A;
-      case "6#":
-      case "7b":
-        return As;
-      case "7":
-        return B;
-    }
-    return null;
-  }
+   String simple;
+
+   Pitch(String simple) {
+      this.simple = simple;
+   }
+
+   public int ordinalEnharmonic() {
+      switch (this.ordinal()) {
+         case 12:
+            return 1;
+         case 13:
+            return 3;
+         case 14:
+            return 6;
+         case 15:
+            return 8;
+         case 16:
+            return 10;
+         default:
+            return this.ordinal();
+      }
+   }
+
+   public int compareToPitch(Pitch other) {
+      return this.ordinalEnharmonic() - other.ordinalEnharmonic();
+   }
 }

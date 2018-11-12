@@ -25,6 +25,10 @@ public class MirrorConnector extends Connector {
 
    private Connector mirror;
 
+   public MirrorConnector(Connector mirror) {
+      this.mirror = mirror;
+   }
+
    public Connector getMirror() {
       return mirror;
    }

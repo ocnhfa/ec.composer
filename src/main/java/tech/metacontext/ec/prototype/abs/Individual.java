@@ -62,6 +62,8 @@ public abstract class Individual {
 
    @Override
    public String toString() {
-      return String.format("%s [%s]", this.getClass().getSimpleName(), this.getId());
+      return String.format("%s [%s]", 
+              this.getClass().getSimpleName(), 
+              this.getId().substring(0, 13));
    }
 }

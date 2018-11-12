@@ -55,17 +55,20 @@ public class ConnectorFactory extends Factory<Connector> {
       return new Connector();
    }
 
-   public Connector create(ConnectorType type, Individual... params) {
-      Connector conn = create().setType(type);
-      switch (type) {
-         case MirrorNextNodeConnector:
-            conn.setNext((SketchNode) params[1]);
-         case Default:
-            conn.setPrevious((SketchNode) params[0]);
-            break;
+   public Connector create(ConnectorRemark mark, Individual... params) {
+      Connector conn = create().setType(mark);
+      switch (mark) {
          case MirrorConnector:
             ((MirrorConnector) conn).setMirror((Connector) params[0]);
             break;
+         case MirrorNextNodeConnector:
+            conn.setPrevious((SketchNode) params[0]);
+            conn.setNext((SketchNode) params[1]);
+            break;
+         default:
+         case Default:
+            conn.setPrevious((SketchNode) params[0]);
+            conn.setNext(conn.generate());
       }
       return conn;
    }

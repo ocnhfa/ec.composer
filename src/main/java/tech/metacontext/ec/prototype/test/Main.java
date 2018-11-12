@@ -26,17 +26,20 @@ public class Main {
 //因為構想是比較好的人可以繁衍下一代
 //steady state, generational model
 
-  public static void main(String[] args) throws IOException {
-    MusicalIdeas p = new MusicalIdeas(50);
-    p.render(0);
-    for (int i = 0; i < 9; i++) {
+   public static void main(String[] args) throws IOException {
+      MusicalIdeas p = new MusicalIdeas(50);
+      p.render(0);
+      int i;
+      for (i = 1; i < 30; i++) {
 //      System.in.read();
-      System.out.println("Generation " + i);
-      int diff = p.evolution();
-      p.render(i + 1);
-      if (diff == 0) {
-        break;
+         System.out.println("Generation " + i);
+         int diff = p.evolution();
+//         if (i % 5 == 1) {
+         p.render(i);
+//         }
+         if (diff == 0) {
+            break;
+         }
       }
-    }
-  }
+   }
 }

@@ -19,6 +19,6 @@ package tech.metacontext.ec.prototype.composer.connectors;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum ConnectorType {
+public enum ConnectorRemark {
    Default, MirrorConnector, MirrorNextNodeConnector;
 }

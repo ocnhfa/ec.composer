@@ -22,36 +22,50 @@ import java.util.Map;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  * @param <E> Type of population
- * @param <R> type of eval score
+ * @param <R> type of evaluation score
  */
 public abstract class Population<E extends Individual, R> {
 
-  public int size;
-  public Map<E, R> population = new HashMap<>();
-  public Evaluation<E, R> evalutaion;
-  public Selection selector;
-  public Map<String, GeneticOperator<E>> operators = new HashMap<>();
+   public Map<E, R> population = new HashMap<>();
+   public Evaluation<E, R> evalutaion;
+   public Selection selector;
+   public Map<String, GeneticOperator<E>> operators = new HashMap<>();
 
-  public Population(int size) {
-    this.size = size;
-    this.initiate();
-  }
+   public Population(int size, Evaluation<E, R> eval) {
+      this.evalutaion = eval;
+      this.initiate(size);
+   }
 
-  /**
-   * Initialization of the population.
-   */
-  public abstract void initiate();
+   /**
+    * Initialization of the population.
+    * @param size Initial size of the population.
+    */
+   public abstract void initiate(int size);
 
-  /**
-   * Evolution function.
-   *
-   * @return size difference after selection.
-   */
-  public abstract int evolution();
+   /**
+    * Add Individual to Population.
+    *
+    * @param individual
+    */
+   public void add(E individual) {
+      R eval = this.evalutaion.eval(individual);
+      population.put(individual, eval);
+   }
 
-  /**
-   * Rendering function of the population.
-   */
-  public abstract void render();
+   public int size() {
+      return population.size();
+   }
+
+   /**
+    * Evolution function.
+    *
+    * @return size difference after selection.
+    */
+   public abstract int evolution();
+
+   /**
+    * Rendering function of the population.
+    */
+   public abstract void render();
 
 }
