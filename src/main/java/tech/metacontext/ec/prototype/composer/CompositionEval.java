@@ -15,16 +15,26 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import tech.metacontext.ec.prototype.abs.Evaluation;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class CompositionEval {
+public class CompositionEval implements Evaluation<Composition, CompositionEval> {
 
   Composition composition;
 
+  public CompositionEval() {
+  }
+
   public CompositionEval(Composition composition) {
     this.composition = composition;
+  }
+
+  @Override
+  public CompositionEval eval(Composition composition) {
+    return new CompositionEval(composition);
   }
 
 }

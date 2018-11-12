@@ -45,12 +45,12 @@ public class LineChart_AWT extends ApplicationFrame {
   }
 
   public void createLineChart(String chartTitle, String xLabel, String yLabel,
-          int x, int y) {
+          int x, int y, boolean legend) {
 
     lineChart = ChartFactory.createLineChart(
             chartTitle, xLabel, yLabel, dataset,
             PlotOrientation.VERTICAL,
-            true, true, false);
+            legend, true, false);
 
     ChartPanel chartPanel = new ChartPanel(lineChart);
     chartPanel.setPreferredSize(new java.awt.Dimension(x, y));
@@ -58,7 +58,6 @@ public class LineChart_AWT extends ApplicationFrame {
 
     this.pack();
     RefineryUtilities.centerFrameOnScreen(this);
-
   }
 
   public void showChartWindow() {

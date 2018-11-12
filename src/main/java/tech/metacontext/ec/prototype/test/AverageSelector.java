@@ -15,32 +15,21 @@
  */
 package tech.metacontext.ec.prototype.test;
 
-import java.io.IOException;
+import tech.metacontext.ec.prototype.abs.Selector;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
-//通常是先 eval -> select -> crossover/mutation
-//因為構想是比較好的人可以繁衍下一代
-//steady state, generational model
+public class AverageSelector implements Selector<MusicalIdeas> {
 
-  public static void main(String[] args) throws IOException {
-    MusicalIdeas p = new MusicalIdeas(500);
-    p.render(0);
-    int i;
-    int round = 1000;
-    for (i = 1; i <= round; i++) {
-//      System.in.read();
-      System.out.println("Generation " + i);
-      int diff = p.evolution();
-      if (i % 100 == 0 || diff == 0) {
-        p.render(i);
-      }
-      if (diff == 0) {
-        break;
-      }
-    }
+  @Override
+  public int selector(MusicalIdeas p) {
+    Double threshold = p.population.values().stream()
+            .mapToDouble(a -> a)
+            .average().getAsDouble();
+    p.population.values().removeIf(value -> value < threshold);
+    return p.size();
   }
+
 }

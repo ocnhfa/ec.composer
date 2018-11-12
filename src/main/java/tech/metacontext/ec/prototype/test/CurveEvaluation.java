@@ -15,32 +15,22 @@
  */
 package tech.metacontext.ec.prototype.test;
 
-import java.io.IOException;
+import tech.metacontext.ec.prototype.abs.Evaluation;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
-//通常是先 eval -> select -> crossover/mutation
-//因為構想是比較好的人可以繁衍下一代
-//steady state, generational model
+public class CurveEvaluation implements Evaluation<TensionCurve, Double> {
 
-  public static void main(String[] args) throws IOException {
-    MusicalIdeas p = new MusicalIdeas(500);
-    p.render(0);
-    int i;
-    int round = 1000;
-    for (i = 1; i <= round; i++) {
-//      System.in.read();
-      System.out.println("Generation " + i);
-      int diff = p.evolution();
-      if (i % 100 == 0 || diff == 0) {
-        p.render(i);
-      }
-      if (diff == 0) {
-        break;
-      }
+  @Override
+  public Double eval(TensionCurve individual) {
+    int max = 0, diff = 0, tension = 0;
+    for (Integer delta : individual.getCurve()) {
+      tension += delta;
+      max = Math.max(tension, max);
+      diff = Math.max(diff, max - tension);
     }
+    return 5 - ((diff - 5) * 0.5);
   }
 }

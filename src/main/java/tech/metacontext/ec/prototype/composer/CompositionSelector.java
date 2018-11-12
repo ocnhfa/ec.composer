@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.abs;
+package tech.metacontext.ec.prototype.composer;
+
+import tech.metacontext.ec.prototype.abs.Selector;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public interface Selection {
+public class CompositionSelector implements Selector<Composer> {
 
-   public void selector();
+  @Override
+  public int selector(Composer composer) {
+    return composer.size();
+  }
+
 }

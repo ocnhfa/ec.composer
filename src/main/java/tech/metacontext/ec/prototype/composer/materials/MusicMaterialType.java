@@ -13,34 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.test;
-
-import java.io.IOException;
+package tech.metacontext.ec.prototype.composer.materials;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Main {
-//通常是先 eval -> select -> crossover/mutation
-//因為構想是比較好的人可以繁衍下一代
-//steady state, generational model
-
-  public static void main(String[] args) throws IOException {
-    MusicalIdeas p = new MusicalIdeas(500);
-    p.render(0);
-    int i;
-    int round = 1000;
-    for (i = 1; i <= round; i++) {
-//      System.in.read();
-      System.out.println("Generation " + i);
-      int diff = p.evolution();
-      if (i % 100 == 0 || diff == 0) {
-        p.render(i);
-      }
-      if (diff == 0) {
-        break;
-      }
-    }
-  }
+public enum MusicMaterialType {
+  PitchSet, NoteNumber, NoteRange;
 }

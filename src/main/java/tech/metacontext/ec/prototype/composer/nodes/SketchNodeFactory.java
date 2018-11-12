@@ -21,29 +21,30 @@ import tech.metacontext.ec.prototype.composer.abs.Factory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
+ * Factory for producing SketchNode.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class SketchNodeFactory extends Factory<SketchNode> {
 
-   private static SketchNodeFactory instance;
-   List<? extends MusicMaterial> template;
+  private static SketchNodeFactory instance;
+  List<? extends MusicMaterial> template;
 
-   private SketchNodeFactory() {
-      template = new ArrayList<>();
-   }
+  private SketchNodeFactory() {
+    template = new ArrayList<>();
+  }
 
-   public static SketchNodeFactory getInstance() {
-      if (instance == null) {
-         instance = new SketchNodeFactory();
-      }
-      return instance;
-   }
+  public static SketchNodeFactory getInstance() {
+    if (instance == null) {
+      instance = new SketchNodeFactory();
+    }
+    return instance;
+  }
 
-   @Override
-   public SketchNode create() {
-      SketchNode node = new SketchNode();
-      template.forEach(node::addMaterial);
-      return node;
-   }
+  @Override
+  public SketchNode create() {
+    SketchNode node = new SketchNode();
+    template.forEach(node::addMaterial);
+    return node;
+  }
 }

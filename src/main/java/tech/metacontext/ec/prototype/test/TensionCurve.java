@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import tech.metacontext.ec.prototype.abs.Individual;
@@ -26,7 +27,7 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class TensionCurve extends Individual {
 
-  List<Integer> curve;
+  private List<Integer> curve;
 
   public TensionCurve(String id) {
     super(id);
@@ -35,6 +36,14 @@ public class TensionCurve extends Individual {
 
   public TensionCurve(String id, List<Integer> curve) {
     super(id);
+    this.curve = curve;
+  }
+
+  public List<Integer> getCurve() {
+    return curve;
+  }
+
+  public void setCurve(List<Integer> curve) {
     this.curve = curve;
   }
 
@@ -47,6 +56,31 @@ public class TensionCurve extends Individual {
   }
 
   @Override
+  public int hashCode() {
+    int hash = super.hashCode();
+    hash = 79 * hash + Arrays.deepHashCode(this.curve.toArray());
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (super.equals(obj)) {
+      return true;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TensionCurve other = (TensionCurve) obj;
+    for (int i = 0; i < this.curve.size(); i++) {
+      if (this.curve.get(i) != other.getCurve().get(i)) {
+        return false;
+      }
+    }
+//    System.out.println("All match, regarded as equal.");
+    return true;
+  }
+
+  @Override
   public String toString() {
     String s = "";
     for (int i = 0; i < curve.size() - 1; i++) {
@@ -55,5 +89,4 @@ public class TensionCurve extends Individual {
     s += String.format("%+4d", curve.get(curve.size() - 1));
     return s;
   }
-
 }

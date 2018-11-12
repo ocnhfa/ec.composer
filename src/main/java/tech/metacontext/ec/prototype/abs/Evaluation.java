@@ -18,11 +18,11 @@ package tech.metacontext.ec.prototype.abs;
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <E>
- * @param <R>
+ * @param <E> Individual to be evaluated.
+ * @param <R> Object type to deliver result.
  */
 public interface Evaluation<E extends Individual, R> {
 
-   public R eval(E individual);
+  public R eval(E individual);
 
 }

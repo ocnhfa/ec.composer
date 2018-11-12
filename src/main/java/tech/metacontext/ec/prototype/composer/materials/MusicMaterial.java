@@ -20,11 +20,13 @@ import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <E>
+ * @param <E> Element type of this material.
  */
 public abstract class MusicMaterial<E> extends AbstractElement {
 
-   public abstract void add(E element);
+  public abstract void randomInit();
 
-   public abstract void remove(E element);
+  public abstract void add(E element);
+
+  public abstract void remove(E element);
 }

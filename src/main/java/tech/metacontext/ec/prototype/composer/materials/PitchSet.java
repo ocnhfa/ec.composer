@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -25,41 +26,54 @@ import java.util.TreeSet;
  */
 public class PitchSet extends MusicMaterial<Pitch> {
 
-   private final Set<Pitch> pitches;
+  private final Set<Pitch> pitches;
 
-   public PitchSet(Pitch... pitches) {
-      this.pitches = new TreeSet<>(Arrays.asList(pitches));
-   }
+  public PitchSet(Pitch... pitches) {
+    this.pitches = new TreeSet<>(Arrays.asList(pitches));
+  }
 
-   public Set<Pitch> getPitches() {
-      return pitches;
-   }
+  public PitchSet() {
+    this.pitches = new TreeSet<>(Pitch.comparator);
+  }
 
-   @Override
-   public void remove(Pitch pitchToRemove) {
-      if (this.pitches.remove(pitchToRemove)) {
-         System.out.println(pitchToRemove + " removed.");
+  public Set<Pitch> getPitches() {
+    return pitches;
+  }
+
+  @Override
+  public void randomInit() {
+    this.pitches.clear();
+    Arrays.asList(Pitch.values()).forEach((Pitch p) -> {
+      if (new Random().nextBoolean()) {
+        pitches.add(p);
       }
-   }
+    });
+  }
 
-   @Override
-   public void add(Pitch pitchToAdd) {
-      if (this.pitches.add(pitchToAdd)) {
-         System.out.println(pitchToAdd + " added.");
-      }
-   }
+  @Override
+  public void remove(Pitch pitchToRemove) {
+    if (this.pitches.remove(pitchToRemove)) {
+      System.out.println(pitchToRemove + " removed.");
+    }
+  }
 
-   @Override
-   public String toString() {
-      return pitches.toString();
-   }
+  @Override
+  public void add(Pitch pitchToAdd) {
+    if (this.pitches.add(pitchToAdd)) {
+      System.out.println(pitchToAdd + " added.");
+    }
+  }
 
-   public static void main(String[] args) {
-      PitchSet ps = new PitchSet(Pitch.D, Pitch.A, Pitch.B, Pitch.C, Pitch.C_sharp);
-      System.out.println("set1 = " + ps);
-      ps.remove(Pitch.B);
-      System.out.println("set1 = " + ps);
-      ps.add(Pitch.F);
-      System.out.println("set1 = " + ps);
-   }
+  @Override
+  public String toString() {
+    return pitches.toString();
+  }
+
+  public static void main(String[] args) {
+    PitchSet ps = new PitchSet();;
+    for (int i = 0; i < 10; i++) {
+      ps.randomInit();
+      System.out.println(ps);
+    }
+  }
 }
