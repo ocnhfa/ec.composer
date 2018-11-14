@@ -41,7 +41,7 @@ public class Composition extends Individual {
       super();
       nodes = new ArrayList<>();
       ideas = new ArrayList<>();
-      nodes.add(SN_FACTORY.create());
+      nodes.add(SN_FACTORY.create());  // Create initial node.
    }
 
    public void addNode() {

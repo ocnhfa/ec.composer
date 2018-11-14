@@ -13,28 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
-
-import tech.metacontext.ec.prototype.abs.Evaluation;
+package tech.metacontext.ec.prototype.composer.eval;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class CompositionEval implements Evaluation<Composition, CompositionEval> {
-
-  Composition composition;
-
-  public CompositionEval() {
-  }
-
-  public CompositionEval(Composition composition) {
-    this.composition = composition;
-  }
-
-  @Override
-  public CompositionEval eval(Composition composition) {
-    return new CompositionEval(composition);
-  }
-
+public enum CompositionState {
+  Motive, Phrase, Section, Movement;
 }

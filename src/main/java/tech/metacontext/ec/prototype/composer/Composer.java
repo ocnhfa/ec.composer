@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import tech.metacontext.ec.prototype.composer.eval.CompositionEval;
 import tech.metacontext.ec.prototype.abs.Population;
 
 /**
