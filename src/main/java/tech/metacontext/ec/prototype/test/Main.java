@@ -27,16 +27,19 @@ public class Main {
 //steady state, generational model
 
   public static void main(String[] args) throws IOException {
-    MusicalIdeas p = new MusicalIdeas(500);
+    int size = 300;
+    MusicalIdeas p = new MusicalIdeas(size);
     p.render(0);
-    int i;
+//    p.renderHighest(0);
     int round = 1000;
-    for (i = 1; i <= round; i++) {
-//      System.in.read();
-      System.out.println("Generation " + i);
+    for (int i = 1; i <= round; i++) {
       int diff = p.evolution();
       if (i % 100 == 0 || diff == 0) {
+        System.out.println("Generation " + i);
+        System.out.printf("original size = %3d, selected size = %3d\n",
+                size, size - diff);
         p.render(i);
+//        p.renderHighest(i);
       }
       if (diff == 0) {
         break;

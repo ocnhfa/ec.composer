@@ -21,14 +21,14 @@ import tech.metacontext.ec.prototype.abs.Selector;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class AverageSelector implements Selector<MusicalIdeas> {
+public class SelectorAverage implements Selector<MusicalIdeas> {
 
   @Override
   public int selector(MusicalIdeas p) {
-    Double threshold = p.population.values().stream()
+    Double ave = p.population.values().stream()
             .mapToDouble(a -> a)
             .average().getAsDouble();
-    p.population.values().removeIf(value -> value < threshold);
+    p.population.values().removeIf(value -> value < ave);
     return p.size();
   }
 

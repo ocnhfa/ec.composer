@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
@@ -28,30 +30,39 @@ import tech.metacontext.ec.prototype.abs.Individual;
 public class TensionCurve extends Individual {
 
   private List<Integer> curve;
-
-  public TensionCurve(String id) {
-    super(id);
-    this.curve = new ArrayList<>();
-  }
+  static int size = 19;
 
   public TensionCurve(String id, List<Integer> curve) {
     super(id);
     this.curve = curve;
   }
 
+  public TensionCurve(String id) {
+    this(id, new ArrayList<>());
+  }
+
+  public TensionCurve(TensionCurve tc) {
+    this(tc.getId(), new ArrayList<>(tc.curve));
+  }
+
   public List<Integer> getCurve() {
     return curve;
   }
 
-  public void setCurve(List<Integer> curve) {
-    this.curve = curve;
+  public List<Integer> getTensionCurve() {
+    int tension = 0;
+    List<Integer> tensions = new ArrayList<>();
+    tensions.add(0);
+    for (int i = 0; i < curve.size(); i++) {
+      tensions.add(tension += curve.get(i));
+    }
+    return tensions;
   }
 
   public TensionCurve generateRandom() {
-    for (int i = 0; i < 20; i++) {
-      int delta = new Random().nextInt(21) - 10;
-      curve.add(delta);
-    }
+    curve = Stream.generate(Math::random).limit(size)
+            .map(r -> (int) ((r - 0.5) * 10))
+            .collect(Collectors.toList());
     return this;
   }
 

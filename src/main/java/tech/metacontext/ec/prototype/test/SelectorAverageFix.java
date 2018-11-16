@@ -13,19 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.abs;
+package tech.metacontext.ec.prototype.test;
 
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.abs.Selector;
 
 /**
- * An abstract class to describe a musical idea.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <M> material factor to be described.
- * @param <R> result of description.
  */
-public abstract class IdeaDescriptor<M extends MusicMaterial, R>
-        extends AbstractElement {
+public class SelectorAverageFix implements Selector<MusicalIdeas> {
 
-  public abstract R describe(M factor);
+  private final double fix;
+
+  public SelectorAverageFix(double fix) {
+    this.fix = fix;
+  }
+
+  @Override
+  public int selector(MusicalIdeas p) {
+    Double ave = p.population.values().stream()
+            .mapToDouble(a -> a)
+            .average().getAsDouble();
+    Double threshold = Math.max(ave, fix);
+    p.population.values().removeIf(value -> value < threshold);
+    return p.size();
+  }
+
 }

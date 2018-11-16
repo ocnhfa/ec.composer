@@ -17,9 +17,12 @@ package tech.metacontext.ec.prototype.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.render.LineChart_AWT;
@@ -33,7 +36,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   int counter = 0;
 
   public MusicalIdeas(int size) {
-    super(size, new CurveEvaluation(), new AverageSelector());
+    super(size, new CurveEvaluation(), new SelectorAverageFix(27.5));
     this.operators.put("crossover", this::crossover);
     this.operators.put("mutation", this::mutation);
   }
@@ -49,14 +52,16 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   @Override
   public int evolution() {
     int size_originl = this.size();
-    System.out.println("original size = " + size_originl);
-
     int size_after = this.selection.selector(this);
-    System.out.println("selected size = " + size_after);
 
     List<TensionCurve> curves = new ArrayList(this.population.keySet());
     this.population = new HashMap<>();
 
+//    curves.stream().filter(tc -> ce.eval(tc) > 29.85)
+//            .forEach(tc -> this.population.put(tc, ce.eval(tc)));
+//    if (size() > 0) {
+//      System.out.println("************************** = " + size());
+//    }
     while (size() < size_originl) {
       int p1 = new Random().nextInt(size_after), p2 = p1;
       while (p1 == p2) {
@@ -70,17 +75,6 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
     return size_originl - size_after;
   }
 
-  public Double eval(TensionCurve tc) {
-    int max = 0, min = 0, tension = 0;
-    for (Integer delta : tc.getCurve()) {
-      tension += delta;
-      max = (max < tension) ? tension : max;
-      min = (tension < min) ? tension : min;
-    }
-    int diff = max - min;
-    return 5 - ((diff - 5) * 0.5);
-  }
-
   public List<TensionCurve> crossover(TensionCurve... e) {
     TensionCurve tc1 = e[0], tc2 = e[1];
     int csSize = (tc1.getCurve().size() > tc2.getCurve().size()) ? tc2.getCurve().size() : tc1.getCurve().size(),
@@ -92,7 +86,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
     TensionCurve tccs1 = new TensionCurve(++counter + "", c1),
             tccs2 = new TensionCurve(++counter + "", c2);
     List<TensionCurve> result = new ArrayList<>();
-    result.add(eval(tccs1) > eval(tccs2) ? tccs1 : tccs2);
+    result.add(this.evalutaion.eval(tccs1) > this.evalutaion.eval(tccs2) ? tccs1 : tccs2);
 //      System.out.println("Crossover occurred on TC#" + tc1.getId() + ", " + tc2.getId() + " at " + csPt);
     return result;
   }
@@ -114,7 +108,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   public void render() {
     chart = new LineChart_AWT("Musical Ideas");
     index = 1;
-    this.population.keySet().forEach(this::render);
+    this.population.keySet().forEach(this::addDataToChart);
     chart.createLineChart("Tension Curves, generation = " + render_generation,
             "Time", "Tension Level", 560, 367, false);
     x = (x + 0.05) % 1.0;
@@ -128,32 +122,31 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
     this.render();
   }
 
-  public void render(TensionCurve tc) {
-    List<Integer> tensions = new ArrayList<>();
-    int tension = 0;
-    for (int i = 0; i < tc.getCurve().size(); i++) {
-      tension += tc.getCurve().get(i);
-      tensions.add(tension);
-    }
-    int min = tensions.stream().reduce(Math::min).get();
-//      System.out.println("min = " + min);
+  public void addDataToChart(TensionCurve tc) {
+    List<Integer> tensions = tc.getTensionCurve();
+    int min = Collections.min(tensions);
     for (int i = 0; i < tensions.size(); i++) {
-//      System.out.printf("%d(%d) ", tensions.get(i) - min, tc.curve.get(i));
       chart.addData(tensions.get(i) - min, "" + index, "" + i);
     }
-//    System.out.println();
     index++;
   }
 
-  public static void main(String[] args) {
-    MusicalIdeas test = new MusicalIdeas(0);
-    TensionCurve tc1 = new TensionCurve("1");
-    tc1.generateRandom();
-    test.add(tc1);
-    test.render(1);
-    TensionCurve tc2 = new TensionCurve("2", tc1.getCurve());
-    test.add(tc2);
-    test.render(2);
+  public void renderHighest(int i) {
+    this.render_generation = i;
+    chart = new LineChart_AWT("Musical Ideas");
+    List<TensionCurve> sorted = this.population.entrySet().stream()
+            .map(e -> e.getKey()).map(TensionCurve::new)
+            .sorted((TensionCurve o1, TensionCurve o2) -> 
+                    (int) (this.evalutaion.eval(o2) - this.evalutaion.eval(o1)))
+            .limit(50)
+            .collect(Collectors.toList());
+    sorted.stream().forEach(this::addDataToChart);
+    chart.createLineChart("Tension Curves, generation = " + render_generation,
+            "Time", "Tension Level", 560, 367, false);
+    x = (x + 0.07) % 1.0;
+    y = (y + 0.07) % 1.0;
+    RefineryUtilities.positionFrameOnScreen(chart, x, y);
+    chart.showChartWindow();
   }
 
 }

@@ -19,7 +19,7 @@ package tech.metacontext.ec.prototype.composer.abs;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class AbstractElement {
+public abstract class AbstractElement {
 
    private final String name;
 
