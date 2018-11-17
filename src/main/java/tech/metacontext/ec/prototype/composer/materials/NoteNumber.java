@@ -15,25 +15,48 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Stream;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class NoteNumber extends MusicMaterial<Integer> {
 
-  @Override
-  public void randomInit() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   int init_size, min, max;
+   private final List<Integer> numbers;
 
-  @Override
-  public void add(Integer element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   public NoteNumber(int init_size, int min, int max) {
+      this.init_size = init_size;
+      this.min = min;
+      this.max = max;
+      numbers = new ArrayList<>();
+   }
 
-  @Override
-  public void remove(Integer element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   @Override
+   public void randomInit() {
+      numbers.clear();
+      Stream.generate(() -> new Random().nextInt(max - min + 1))
+              .limit(init_size)
+              .forEach(numbers::add);
+   }
 
+   @Override
+   public void add(Integer element) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public void remove(Integer element) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   public static void main(String[] args) {
+      NoteNumber nn = new NoteNumber(4, 0, 8);
+      nn.randomInit();
+      System.out.println(nn.numbers);
+   }
 }

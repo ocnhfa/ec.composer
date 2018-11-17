@@ -15,25 +15,53 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Stream;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class NoteRange extends MusicMaterial<Range> {
 
-  @Override
-  public void randomInit() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   int size;
+   private final List<Range> range;
+   private final Set<Range> rangeAvailable;
 
-  @Override
-  public void add(Range element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   public NoteRange(int size, Range... rangeAvailable) {
+      this.size = size;
+      this.range = new ArrayList<>();
+      this.rangeAvailable = new HashSet<>(Arrays.asList(rangeAvailable));
+   }
 
-  @Override
-  public void remove(Range element) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+   @Override
+   public void randomInit() {
+      range.clear();
+      Stream.generate(() -> new Random().nextInt(rangeAvailable.size()))
+              .limit(size)
+              .map(r -> rangeAvailable.toArray(new Range[0])[r])
+              .forEach(range::add);
+   }
 
+   @Override
+   public void add(Range element) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   @Override
+   public void remove(Range element) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
+
+   public static void main(String[] args) {
+      NoteRange r = new NoteRange(10, Range.C2, Range.C3, Range.C4, Range.C5, Range.C6);
+      r.randomInit();
+      System.out.println(r.range);
+
+   }
 }

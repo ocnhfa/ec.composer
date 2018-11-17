@@ -70,7 +70,7 @@ public class PitchSet extends MusicMaterial<Pitch> {
   }
 
   public static void main(String[] args) {
-    PitchSet ps = new PitchSet();;
+    PitchSet ps = new PitchSet();
     for (int i = 0; i < 10; i++) {
       ps.randomInit();
       System.out.println(ps);
