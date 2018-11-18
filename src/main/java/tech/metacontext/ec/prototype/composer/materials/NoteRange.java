@@ -29,39 +29,44 @@ import java.util.stream.Stream;
  */
 public class NoteRange extends MusicMaterial<Range> {
 
-   int size;
-   private final List<Range> range;
-   private final Set<Range> rangeAvailable;
+  int size;
+  private final List<Range> range;
+  private final Set<Range> rangeAvailable;
 
-   public NoteRange(int size, Range... rangeAvailable) {
-      this.size = size;
-      this.range = new ArrayList<>();
-      this.rangeAvailable = new HashSet<>(Arrays.asList(rangeAvailable));
-   }
+  public NoteRange() {
+    this.range = new ArrayList<>();
+    this.rangeAvailable = new HashSet<>();
+  }
 
-   @Override
-   public void randomInit() {
-      range.clear();
-      Stream.generate(() -> new Random().nextInt(rangeAvailable.size()))
-              .limit(size)
-              .map(r -> rangeAvailable.toArray(new Range[0])[r])
-              .forEach(range::add);
-   }
+  public NoteRange(int size, Range... rangeAvailable) {
+    this();
+    this.size = size;
+    this.rangeAvailable.addAll(Arrays.asList(rangeAvailable));
+  }
 
-   @Override
-   public void add(Range element) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
+  @Override
+  public void randomInit() {
+    range.clear();
+    Stream.generate(() -> new Random().nextInt(rangeAvailable.size()))
+            .limit(size)
+            .map(r -> rangeAvailable.toArray(new Range[0])[r])
+            .forEach(range::add);
+  }
 
-   @Override
-   public void remove(Range element) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
+  @Override
+  public void add(Range element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
-   public static void main(String[] args) {
-      NoteRange r = new NoteRange(10, Range.C2, Range.C3, Range.C4, Range.C5, Range.C6);
-      r.randomInit();
-      System.out.println(r.range);
+  @Override
+  public void remove(Range element) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
-   }
+  public static void main(String[] args) {
+    NoteRange r = new NoteRange(10, Range.C2, Range.C3, Range.C4, Range.C5, Range.C6);
+    r.randomInit();
+    System.out.println(r.range);
+
+  }
 }

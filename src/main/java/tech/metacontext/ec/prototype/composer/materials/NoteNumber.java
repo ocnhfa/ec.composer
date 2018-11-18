@@ -17,46 +17,80 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
 /**
+ * Describe the serial change in note numbers of a Node.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class NoteNumber extends MusicMaterial<Integer> {
 
-   int init_size, min, max;
-   private final List<Integer> numbers;
+  private int init_size = 4;
+  private int min = 0;
+  private int max = 16;
+  private final List<Integer> numbers;
 
-   public NoteNumber(int init_size, int min, int max) {
-      this.init_size = init_size;
-      this.min = min;
-      this.max = max;
-      numbers = new ArrayList<>();
-   }
+  public NoteNumber() {
+    numbers = new ArrayList<>();
+  }
 
-   @Override
-   public void randomInit() {
-      numbers.clear();
-      Stream.generate(() -> new Random().nextInt(max - min + 1))
-              .limit(init_size)
-              .forEach(numbers::add);
-   }
+  public NoteNumber(int init_size, int min, int max) {
+    this();
+    this.init_size = init_size;
+    this.min = min;
+    this.max = max;
+  }
 
-   @Override
-   public void add(Integer element) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
+  @Override
+  public void randomInit() {
+    numbers.clear();
+    this.init_size = 4;
+    this.min = 0;
+    this.max = 16;
+    Stream.generate(Math::random)
+            .limit(init_size)
+            .map(r -> (int) (Math.ceil(max - min) * r))
+            .forEach(this::add);
+  }
 
-   @Override
-   public void remove(Integer element) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
+  @Override
+  public void add(Integer element) {
+    this.numbers.add(element);
+  }
 
-   public static void main(String[] args) {
-      NoteNumber nn = new NoteNumber(4, 0, 8);
-      nn.randomInit();
-      System.out.println(nn.numbers);
-   }
+  @Override
+  public void remove(Integer element) {
+    this.numbers.remove(element);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("NoteNumber(%d, %d, %d)%s",
+            init_size, min, max, numbers);
+  }
+
+  public int getInit_size() {
+    return init_size;
+  }
+
+  public void setInit_size(int init_size) {
+    this.init_size = init_size;
+  }
+
+  public int getMin() {
+    return min;
+  }
+
+  public void setMin(int min) {
+    this.min = min;
+  }
+
+  public int getMax() {
+    return max;
+  }
+
+  public void setMax(int max) {
+    this.max = max;
+  }
 }

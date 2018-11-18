@@ -25,52 +25,53 @@ import tech.metacontext.ec.prototype.composer.nodes.SketchNodeFactory;
  */
 public class Connector extends Individual {
 
-   private ConnectorRemark mark = ConnectorRemark.Default;
-   private SketchNode previous, next;
+  private ConnectorRemark mark = ConnectorRemark.Default;
+  private SketchNode previous, next;
 
-   public Connector(ConnectorRemark mark, SketchNode... nodes) {
-      this.mark = mark;
-      
-   }
+  public Connector(ConnectorRemark mark, SketchNode... nodes) {
+    this.mark = mark;
 
-   public Connector() {
-   }
+  }
 
-   public ConnectorRemark getType() {
-      return mark;
-   }
+  public Connector() {
+  }
 
-   public Connector setType(ConnectorRemark type) {
-      this.mark = type;
-      return this;
-   }
+  public SketchNode generate() {
+    switch (mark) {
+      case MirrorNextNodeConnector:
+        return getNext();
+      case Default:
+      case MirrorConnector:
+      default:
+        next = SketchNodeFactory.getInstance().create();
+        
+        return next;
+    }
+  }
 
-   public SketchNode getPrevious() {
-      return previous;
-   }
+  public ConnectorRemark getType() {
+    return mark;
+  }
 
-   public void setPrevious(SketchNode previous) {
-      this.previous = previous;
-   }
+  public Connector setType(ConnectorRemark type) {
+    this.mark = type;
+    return this;
+  }
 
-   public SketchNode getNext() {
-      return next;
-   }
+  public SketchNode getPrevious() {
+    return previous;
+  }
 
-   public void setNext(SketchNode next) {
-      this.next = next;
-   }
+  public void setPrevious(SketchNode previous) {
+    this.previous = previous;
+  }
 
-   public SketchNode generate() {
-      switch (mark) {
-         case MirrorNextNodeConnector:
-            return getNext();
-         case Default:
-         case MirrorConnector:
-         default:
-            next = SketchNodeFactory.getInstance().create();
-            return next;
-      }
-   }
+  public SketchNode getNext() {
+    return next;
+  }
+
+  public void setNext(SketchNode next) {
+    this.next = next;
+  }
 
 }

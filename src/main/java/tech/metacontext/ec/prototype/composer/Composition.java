@@ -34,8 +34,8 @@ public class Composition extends Individual {
    private final List<SketchNode> nodes;
    private final List<Connector> ideas;
 
-   private static final Factory<SketchNode> SN_FACTORY = SketchNodeFactory.getInstance();
-   private static final Factory<Connector> CI_FACTORY = ConnectorFactory.getInstance();
+   private static final SketchNodeFactory SN_FACTORY = SketchNodeFactory.getInstance();
+   private static final ConnectorFactory CI_FACTORY = ConnectorFactory.getInstance();
 
    public Composition() {
       super();
@@ -45,7 +45,7 @@ public class Composition extends Individual {
    }
 
    public void addNode() {
-      Connector idea = ((ConnectorFactory) CI_FACTORY).create(ConnectorRemark.Default,
+      Connector idea = CI_FACTORY.create(ConnectorRemark.Default,
               nodes.get(nodes.size() - 1));
       ideas.add(idea);
       nodes.add(idea.getNext());

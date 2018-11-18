@@ -20,5 +20,22 @@ package tech.metacontext.ec.prototype.composer.materials;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum MusicMaterialType {
-  PitchSet, NoteNumber, NoteRange;
+  PitchSet(PitchSet.class),
+  NoteNumber(NoteNumber.class),
+  NoteRange(NoteRange.class);
+
+  private Class<? extends MusicMaterial> clazz;
+
+  private MusicMaterialType(Class<? extends MusicMaterial> clazz) {
+    this.clazz = clazz;
+  }
+
+  public Class<? extends MusicMaterial> getClazz() {
+    return clazz;
+  }
+
+  public void setClazz(Class<? extends MusicMaterial> clazz) {
+    this.clazz = clazz;
+  }
+
 }

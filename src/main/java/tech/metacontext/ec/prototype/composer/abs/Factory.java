@@ -22,8 +22,8 @@ import tech.metacontext.ec.prototype.abs.Individual;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  * @param <E> Individual class to be produced.
  */
-public abstract class Factory<E extends Individual> {
+public interface Factory<E extends Individual> {
 
-   public abstract E create();
+  public abstract E create();
 
 }

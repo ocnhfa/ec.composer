@@ -22,37 +22,36 @@ import tech.metacontext.ec.prototype.composer.materials.Pitch;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum ConsonanceType {
-   PerfectConsonance(1.0),
-   ImperfectConsonance(0.9),
-   Dissonance(0.7);
+  PerfectConsonance(1.0),
+  ImperfectConsonance(0.9),
+  Dissonance(0.7);
 
-   public double factor;
+  public double factor;
 
-   ConsonanceType(double factor) {
-      this.factor = factor;
-   }
+  ConsonanceType(double factor) {
+    this.factor = factor;
+  }
 
-   public static ConsonanceType getType(Pitch p1, Pitch p2) {
-      String names = p1.name() + " " + p2.name() + " ";
-      int compare = (p2.compareToPitch(p1) + 12) % 12;
-      if (names.contains("sharp") && names.contains("flat")) {
-         return Dissonance;
-      }
-      switch (compare) {
-         case 7:
-            if (names.contains("F ") && names.contains("sharp")
-                    || names.contains("B ") && names.contains("flat")) {
-               return Dissonance;
-            }
-            return PerfectConsonance;
-         case 3:
-         case 4:
-         case 8:
-         case 9:
-            return ImperfectConsonance;
-         default:
-            return Dissonance;
-      }
-   }
+  public static ConsonanceType getType(Pitch p1, Pitch p2) {
+    String names = p1.name() + "." + p2.name() + ".";
+    if (names.contains("sharp") && names.contains("flat")) {
+      return Dissonance;
+    }
+    switch ((p2.compareToPitch(p1) + 12) % 12) {
+      case 7:
+        if (names.contains("F.") && names.contains("sharp")
+                || names.contains("B.") && names.contains("flat")) {
+          return Dissonance;
+        }
+        return PerfectConsonance;
+      case 3:
+      case 4:
+      case 8:
+      case 9:
+        return ImperfectConsonance;
+      default:
+        return Dissonance;
+    }
+  }
 
 }

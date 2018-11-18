@@ -17,21 +17,32 @@ package tech.metacontext.ec.prototype.composer.nodes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.abs.Factory;
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterialType;
 
 /**
  * Factory for producing SketchNode.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class SketchNodeFactory extends Factory<SketchNode> {
+public class SketchNodeFactory implements Factory<SketchNode> {
 
   private static SketchNodeFactory instance;
-  List<? extends MusicMaterial> template;
+  List<Class<? extends MusicMaterial>> template;
 
+  /**
+   * Constructor.
+   */
   private SketchNodeFactory() {
     template = new ArrayList<>();
+    Stream.of(MusicMaterialType.values())
+            .map(MusicMaterialType::getClazz)
+            .forEach(template::add);
   }
 
   public static SketchNodeFactory getInstance() {
@@ -44,7 +55,14 @@ public class SketchNodeFactory extends Factory<SketchNode> {
   @Override
   public SketchNode create() {
     SketchNode node = new SketchNode();
-    template.forEach(node::addMaterial);
+    template.stream().forEach((c) -> {
+      try {
+        node.addMaterial(c.newInstance());
+      } catch (InstantiationException | IllegalAccessException ex) {
+        Logger.getLogger(SketchNodeFactory.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    });
     return node;
   }
+
 }

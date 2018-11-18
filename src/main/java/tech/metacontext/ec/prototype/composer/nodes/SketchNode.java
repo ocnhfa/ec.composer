@@ -15,9 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.nodes;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterialType;
 
 /**
  *
@@ -25,10 +28,26 @@ import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
  */
 public class SketchNode extends Individual {
 
-   List<MusicMaterial> materials;
+  private Map<MusicMaterialType, MusicMaterial> materials;
 
-   public void addMaterial(MusicMaterial material) {
-      materials.add(material);
-   }
+  public SketchNode() {
+    this.materials = new HashMap<>();
+  }
+
+  public <M extends MusicMaterial> void addMaterial(M material) {
+    materials.put(material.getType(), material);
+  }
+
+  public Map<MusicMaterialType, ? extends MusicMaterial> getMaterials() {
+    return materials;
+  }
+
+  public void setMaterials(Map<MusicMaterialType, MusicMaterial> materials) {
+    this.materials = materials;
+  }
+
+  public MusicMaterial getMaterial(MusicMaterialType type) {
+    return this.materials.get(type);
+  }
 
 }

@@ -26,54 +26,55 @@ import tech.metacontext.ec.prototype.composer.abs.Factory;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class ConnectorFactory extends Factory<Connector> {
+public class ConnectorFactory implements Factory<Connector> {
 
-   private static ConnectorFactory instance;
-   private final List<Calculator> template;
+  private static ConnectorFactory instance;
+  private final List<Calculator> template;
 
-   private ConnectorFactory() {
-      this.template = new ArrayList<>();
-   }
+  private ConnectorFactory() {
+    this.template = new ArrayList<>();
+  }
 
-   public void addCalculator(Calculator cal) {
-      this.template.add(cal);
-   }
+  public void addCalculator(Calculator cal) {
+    this.template.add(cal);
+  }
 
-   public void removeCalculator(Calculator cal) {
-      this.template.remove(cal);
-   }
+  public void removeCalculator(Calculator cal) {
+    this.template.remove(cal);
+  }
 
-   public static Factory<Connector> getInstance() {
-      if (instance == null) {
-         instance = new ConnectorFactory();
-      }
-      return instance;
-   }
+  public static ConnectorFactory getInstance() {
+    if (instance == null) {
+      instance = new ConnectorFactory();
+    }
+    return instance;
+  }
 
-   @Override
-   public Connector create() {
-      return new Connector();
-   }
+  @Override
+  public Connector create() {
+    return new Connector();
+  }
 
-   public Connector create(ConnectorRemark mark, Individual... params) {
-      Connector conn = create().setType(mark);
-      switch (mark) {
-         case MirrorConnector:
-            ((MirrorConnector) conn).setMirror((Connector) params[0]);
-            break;
-         case MirrorNextNodeConnector:
-            conn.setPrevious((SketchNode) params[0]);
-            conn.setNext((SketchNode) params[1]);
-            break;
-         default:
-         case Default:
-            conn.setPrevious((SketchNode) params[0]);
-            conn.setNext(conn.generate());
-      }
-      return conn;
-   }
+  public Connector create(ConnectorRemark mark, Individual... params) {
+    Connector conn = create().setType(mark);
+    switch (mark) {
+      case MirrorConnector:
+        ((MirrorConnector) conn).setMirror((Connector) params[0]);
+        break;
+      case MirrorNextNodeConnector:
+        conn.setPrevious((SketchNode) params[0]);
+        conn.setNext((SketchNode) params[1]);
+        break;
+      default:
+      case Default:
+        conn.setPrevious((SketchNode) params[0]);
+        conn.setNext(conn.generate());
+    }
+    return conn;
+  }
 
-   public static void main(String[] args) {
-      System.out.println(ConnectorFactory.getInstance().getClass().getSimpleName());
-   }
+  public static void main(String[] args) {
+    ConnectorFactory cf = ConnectorFactory.getInstance();
+    System.out.println(cf.create());
+  }
 }
