@@ -23,7 +23,6 @@ import java.util.List;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorRemark;
-import tech.metacontext.ec.prototype.composer.abs.Factory;
 
 /**
  *

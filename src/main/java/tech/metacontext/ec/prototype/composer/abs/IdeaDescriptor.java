@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.abs;
 
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
 
 /**
  * An abstract class to describe a musical idea.

@@ -13,12 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials;
+package tech.metacontext.ec.prototype.composer.nodes.materials;
+
+import tech.metacontext.ec.prototype.composer.enums.MusicMaterialType;
+import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <E> Element type of this material.
  */
-public enum Range {
-   C0, C1, C2, C3, C4, C5, C6, C7, C8;
+public abstract class MusicMaterial<E> extends AbstractElement {
+
+  public MusicMaterialType getType() {
+    return MusicMaterialType.valueOf(getName());
+  }
+
+  public abstract void randomInit();
+
+  public abstract void add(E element);
+
+  public abstract void remove(E element);
 }

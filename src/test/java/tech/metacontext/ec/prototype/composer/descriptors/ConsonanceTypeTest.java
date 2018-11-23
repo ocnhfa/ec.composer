@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.descriptors;
 
+import tech.metacontext.ec.prototype.composer.enums.ConsonanceType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,8 +26,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import static tech.metacontext.ec.prototype.composer.descriptors.ConsonanceType.*;
-import tech.metacontext.ec.prototype.composer.materials.Pitch;
+import static tech.metacontext.ec.prototype.composer.enums.ConsonanceType.*;
+import tech.metacontext.ec.prototype.composer.enums.Pitch;
 
 /**
  *

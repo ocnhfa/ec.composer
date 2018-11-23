@@ -15,8 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer.descriptors;
 
-import tech.metacontext.ec.prototype.composer.materials.Pitch;
-import tech.metacontext.ec.prototype.composer.materials.PitchSet;
+import tech.metacontext.ec.prototype.composer.enums.ConsonanceType;
+import tech.metacontext.ec.prototype.composer.connectors.descriptors.DegreeOfConsonance;
+import tech.metacontext.ec.prototype.composer.enums.Pitch;
+import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -26,7 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import static tech.metacontext.ec.prototype.composer.descriptors.ConsonanceType.getType;
+import static tech.metacontext.ec.prototype.composer.enums.ConsonanceType.getType;
 
 /**
  *

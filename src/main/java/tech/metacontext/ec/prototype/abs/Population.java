@@ -27,58 +27,60 @@ import java.util.NoSuchElementException;
  */
 public abstract class Population<E extends Individual, R> {
 
-  public Map<E, R> population;
-  public Evaluation<E, R> evalutaion;
-  public Selector selection;
-  public Map<String, GeneticOperator<E>> operators;
+   public Map<E, R> population;
+   public Evaluation<E, R> evalutaion;
+   public Selector selection;
+   public Map<String, GeneticOperator<E>> operators;
 
-  public Population(int size,
-          Evaluation<E, R> eval,
-          Selector selection) {
-    this.population = new HashMap<>();
-    this.evalutaion = eval;
-    this.selection = selection;
-    this.operators = new HashMap<>();
-    this.initiate(size);
-  }
+   public Population(int size,
+           Evaluation<E, R> eval,
+           Selector selection) {
+      this.population = new HashMap<>();
+      this.evalutaion = eval;
+      this.selection = selection;
+      this.operators = new HashMap<>();
+      this.initiate(size);
+   }
 
-  /**
-   * Initialization of the population.
-   *
-   * @param size Initial size of the population.
-   */
-  public abstract void initiate(int size);
+   /**
+    * Initialization of the population.
+    *
+    * @param size Initial size of the population.
+    */
+   public abstract void initiate(int size);
 
-  /**
-   * Add Individual to Population.
-   *
-   * @param individual
-   */
-  public void add(E individual) {
-    try {
-      population.keySet().stream().filter((E t) -> {
-        return t.equals(individual);
-      }).findAny().get();
-    } catch (NoSuchElementException ex) {
-      R eval = this.evalutaion.eval(individual);
-      population.put(individual, eval);
-    }
-  }
+   /**
+    * Add Individual to Population.
+    *
+    * @param individual
+    */
+   public void add(E individual) {
+      try {
+         population.keySet()
+                 .stream()
+                 .filter(t -> t.equals(individual))
+                 .findAny()
+                 .get();
+      } catch (NoSuchElementException ex) {
+         R eval = this.evalutaion.eval(individual);
+         population.put(individual, eval);
+      }
+   }
 
-  public int size() {
-    return population.size();
-  }
+   public int size() {
+      return population.size();
+   }
 
-  /**
-   * Evolution function.
-   *
-   * @return size difference after selection.
-   */
-  public abstract int evolution();
+   /**
+    * Evolution function.
+    *
+    * @return size difference after selection.
+    */
+   public abstract int evolution();
 
-  /**
-   * Rendering function of the population.
-   */
-  public abstract void render();
+   /**
+    * Rendering function of the population.
+    */
+   public abstract void render();
 
 }

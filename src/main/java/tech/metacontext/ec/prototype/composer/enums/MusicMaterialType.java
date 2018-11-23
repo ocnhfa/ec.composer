@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials;
+package tech.metacontext.ec.prototype.composer.enums;
+
+import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.nodes.materials.NoteNumber;
+import tech.metacontext.ec.prototype.composer.nodes.materials.NoteRange;
+import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
 
 /**
  *
