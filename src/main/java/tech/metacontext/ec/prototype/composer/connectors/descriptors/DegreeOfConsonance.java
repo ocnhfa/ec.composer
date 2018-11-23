@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.descriptors;
+package tech.metacontext.ec.prototype.composer.connectors.descriptors;
 
-import tech.metacontext.ec.prototype.composer.materials.PitchSet;
-import tech.metacontext.ec.prototype.composer.materials.Pitch;
 import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
-import static tech.metacontext.ec.prototype.composer.descriptors.ConsonanceType.getType;
+import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
+import tech.metacontext.ec.prototype.composer.enums.Pitch;
+import static tech.metacontext.ec.prototype.composer.enums.ConsonanceType.getType;
 
 /**
  * Describe the consonance of a PitchSet with a double getType number ranging

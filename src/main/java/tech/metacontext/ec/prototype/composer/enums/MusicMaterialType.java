@@ -13,20 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.abs;
+package tech.metacontext.ec.prototype.composer.enums;
 
-import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
 import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.nodes.materials.NoteNumber;
+import tech.metacontext.ec.prototype.composer.nodes.materials.NoteRange;
+import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
 
 /**
- * An abstract class to describe a musical idea.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <M> material factor to be described.
- * @param <R> result of description.
  */
-public abstract class IdeaDescriptor<M extends MusicMaterial, R>
-        extends AbstractElement {
+public enum MusicMaterialType {
+  PitchSet(PitchSet.class),
+  NoteNumber(NoteNumber.class),
+  NoteRange(NoteRange.class);
 
-  public abstract R describe(M factor);
+  private Class<? extends MusicMaterial> clazz;
+
+  private MusicMaterialType(Class<? extends MusicMaterial> clazz) {
+    this.clazz = clazz;
+  }
+
+  public Class<? extends MusicMaterial> getClazz() {
+    return clazz;
+  }
+
+  public void setClazz(Class<? extends MusicMaterial> clazz) {
+    this.clazz = clazz;
+  }
+
 }

@@ -17,10 +17,9 @@ package tech.metacontext.ec.prototype.composer.nodes;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterialType;
+import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.enums.MusicMaterialType;
 
 /**
  *

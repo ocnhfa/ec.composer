@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials;
+package tech.metacontext.ec.prototype.composer.nodes.materials;
 
 import java.util.ArrayList;
 import java.util.List;

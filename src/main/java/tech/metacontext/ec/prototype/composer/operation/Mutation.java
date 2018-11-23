@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials;
+package tech.metacontext.ec.prototype.composer.operation;
+
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum MusicMaterialType {
-  PitchSet(PitchSet.class),
-  NoteNumber(NoteNumber.class),
-  NoteRange(NoteRange.class);
+public class Mutation implements GeneticOperator {
 
-  private Class<? extends MusicMaterial> clazz;
-
-  private MusicMaterialType(Class<? extends MusicMaterial> clazz) {
-    this.clazz = clazz;
-  }
-
-  public Class<? extends MusicMaterial> getClazz() {
-    return clazz;
-  }
-
-  public void setClazz(Class<? extends MusicMaterial> clazz) {
-    this.clazz = clazz;
+  @Override
+  public List operator(Individual... individuals) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
 }

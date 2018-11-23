@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.abs.Factory;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterialType;
+import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.enums.MusicMaterialType;
 
 /**
  * Factory for producing SketchNode.

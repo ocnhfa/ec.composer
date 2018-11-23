@@ -13,20 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.abs;
-
-import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
-import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
+package tech.metacontext.ec.prototype.composer.operation;
 
 /**
- * An abstract class to describe a musical idea.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <M> material factor to be described.
- * @param <R> result of description.
  */
-public abstract class IdeaDescriptor<M extends MusicMaterial, R>
-        extends AbstractElement {
-
-  public abstract R describe(M factor);
+public class Crossover {
+  
 }

@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import tech.metacontext.ec.prototype.composer.enums.Pitch;
+import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
 import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;

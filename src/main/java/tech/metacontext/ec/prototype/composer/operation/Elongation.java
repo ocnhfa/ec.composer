@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials;
+package tech.metacontext.ec.prototype.composer.operation;
+
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum Range {
-   C0, C1, C2, C3, C4, C5, C6, C7, C8;
+public class Elongation implements GeneticOperator{
+
+  @Override
+  public List operator(Individual... individuals) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
 }

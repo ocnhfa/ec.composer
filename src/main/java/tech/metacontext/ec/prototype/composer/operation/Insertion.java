@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.abs;
+package tech.metacontext.ec.prototype.composer.operation;
 
-import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
-import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
- * An abstract class to describe a musical idea.
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <M> material factor to be described.
- * @param <R> result of description.
  */
-public abstract class IdeaDescriptor<M extends MusicMaterial, R>
-        extends AbstractElement {
+public class Insertion implements GeneticOperator {
 
-  public abstract R describe(M factor);
+  @Override
+  public List operator(Individual... individuals) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
 }
