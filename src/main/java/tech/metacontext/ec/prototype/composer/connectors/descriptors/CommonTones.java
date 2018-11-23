@@ -15,10 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors.descriptors;
 
+import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
 import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
 import tech.metacontext.ec.prototype.composer.enums.Pitch;
 import java.util.Arrays;
-import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
 
 /**
  *
