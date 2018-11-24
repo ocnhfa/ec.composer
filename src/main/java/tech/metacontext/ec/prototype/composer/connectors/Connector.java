@@ -15,7 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import java.util.ArrayList;
+import java.util.List;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.abs.IdeaDescriptor;
 import tech.metacontext.ec.prototype.composer.nodes.SketchNode;
 import tech.metacontext.ec.prototype.composer.nodes.SketchNodeFactory;
 
@@ -27,10 +30,11 @@ public class Connector extends Individual {
 
   private ConnectorRemark mark = ConnectorRemark.Default;
   private SketchNode previous, next;
+  private static List<IdeaDescriptor> descriptors = new ArrayList<>();
 
   public Connector(ConnectorRemark mark, SketchNode... nodes) {
-    this.mark = mark;
 
+    this.mark = mark;
   }
 
   public Connector() {
@@ -44,9 +48,14 @@ public class Connector extends Individual {
       case MirrorConnector:
       default:
         next = SketchNodeFactory.getInstance().create();
-        
+
         return next;
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Connector{" + previous + " to " + next + ", mark=" + mark + '}';
   }
 
   public ConnectorRemark getType() {
@@ -72,6 +81,22 @@ public class Connector extends Individual {
 
   public void setNext(SketchNode next) {
     this.next = next;
+  }
+
+  public ConnectorRemark getMark() {
+    return mark;
+  }
+
+  public void setMark(ConnectorRemark mark) {
+    this.mark = mark;
+  }
+
+  public List<IdeaDescriptor> getDescriptors() {
+    return descriptors;
+  }
+
+  public void setDescriptors(List<IdeaDescriptor> descriptors) {
+    this.descriptors = descriptors;
   }
 
 }

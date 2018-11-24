@@ -13,35 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.eval;
+package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.abs.Evaluation;
-import tech.metacontext.ec.prototype.composer.Composition;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class CompositionEval implements Evaluation<Composition, CompositionEval> {
+public class CompositionEval implements Evaluation<Composition, Double> {
 
-  Composition composition;
-  CompositionState state;
+  private static CompositionEval instance;
 
-  public CompositionEval() {
+  private CompositionEval() {
   }
 
-  public CompositionEval(Composition composition) {
-    this.composition = composition;
+  public static CompositionEval getInstance() {
+    if (instance == null) {
+      instance = new CompositionEval();
+    }
+    return instance;
   }
 
+  /**
+   * Get eval based on composition state.
+   *
+   * @param composition
+   * @return
+   */
   @Override
-  public CompositionEval eval(Composition composition) {
-    updateState();
-    return new CompositionEval(composition);
-  }
-
-  public void updateState() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Double eval(Composition composition) {
+    return composition.getState().rules
+            .stream()
+            .mapToDouble(rule -> rule.getResult(composition))
+            .average()
+            .getAsDouble();
   }
 
 }

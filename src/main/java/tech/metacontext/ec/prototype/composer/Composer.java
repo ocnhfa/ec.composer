@@ -15,7 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import tech.metacontext.ec.prototype.composer.eval.CompositionEval;
 import tech.metacontext.ec.prototype.abs.Population;
 
 /**
@@ -23,29 +22,24 @@ import tech.metacontext.ec.prototype.abs.Population;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Composer extends Population<Composition, CompositionEval> {
+public class Composer extends Population<Composition, Double> {
 
   public Composer(int size) {
-    super(size, new CompositionEval(), new CompositionSelector());
-  }
-
-  public CompositionEval eval(Composition c) {
-    CompositionEval e = new CompositionEval(c);
-    return e;
+    super(size, CompositionEval.getInstance(), new CompositionSelector());
   }
 
   @Override
   public void initiate(int size) {
     for (int i = 0; i < size; i++) {
-      Composition composition = new Composition();
-      CompositionEval eval = new CompositionEval(composition);
-      this.population.put(composition, eval);
+      this.add(new Composition());
+      Composition c = new Composition();
+      this.population.put(c, this.evalutaion.eval(c));
     }
   }
 
   @Override
   public int evolution() {
-    population.keySet().forEach(Composition::addNode);
+    population.keySet().forEach(Composition::compose);
     return size();
   }
 

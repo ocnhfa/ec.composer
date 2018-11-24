@@ -16,13 +16,14 @@
 package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.nodes.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer.nodes.SketchNode;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorRemark;
+import tech.metacontext.ec.prototype.composer.enums.CompositionState;
 
 /**
  *
@@ -30,39 +31,56 @@ import tech.metacontext.ec.prototype.composer.connectors.ConnectorRemark;
  */
 public class Composition extends Individual {
 
-   private final List<SketchNode> nodes;
-   private final List<Connector> ideas;
+//   private final List<SketchNode> nodes;
+  private final List<Connector> ideas;
 
-   private static final SketchNodeFactory SN_FACTORY = SketchNodeFactory.getInstance();
-   private static final ConnectorFactory CI_FACTORY = ConnectorFactory.getInstance();
+  private static final SketchNodeFactory SN_FACTORY = SketchNodeFactory.getInstance();
+  private static final ConnectorFactory CI_FACTORY = ConnectorFactory.getInstance();
 
-   public Composition() {
-      super();
-      nodes = new ArrayList<>();
-      ideas = new ArrayList<>();
-      nodes.add(SN_FACTORY.create());  // Create initial node.
-   }
+  public Composition() {
 
-   public void addNode() {
-      Connector idea = CI_FACTORY.create(ConnectorRemark.Default,
-              nodes.get(nodes.size() - 1));
-      ideas.add(idea);
-      nodes.add(idea.getNext());
-   }
+    super();
+    ideas = new ArrayList<>();
+    Connector idea = CI_FACTORY.create(ConnectorRemark.Default,
+            SN_FACTORY.create());
+    ideas.add(idea);
+  }
 
-   public int length() {
-      return nodes.size();
-   }
+  public void compose() {
 
-   @Override
-   public String toString() {
-      String result = super.toString() + "\n"
-              + "*** " + nodes.get(0).toString();
-      for (int i = 0; i < ideas.size(); i++) {
-         result += String.format(" --> %s\n--> %s", ideas.get(i).toString(),
-                 nodes.get(i + 1).toString());
-      }
-      return result;
-   }
+    // Elongation
+    Connector idea = CI_FACTORY.create(ConnectorRemark.Default,
+            ideas.get(this.length() - 1).getNext());
+    ideas.add(idea);
+  }
 
+  public int length() {
+
+    return ideas.size();
+  }
+
+  public CompositionState getState() {
+    if (this.length() < 2) {
+      return CompositionState.Motive;
+    } else if (this.length() < 4) {
+      return CompositionState.Phrase;
+    } else if (this.length() < 8) {
+      return CompositionState.Section;
+    }
+    return CompositionState.Movement;
+  }
+
+  @Override
+  public String toString() {
+
+    String result = "*** " + super.toString() + "\n"
+            + ideas.stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining("\n"));
+    return result;
+  }
+
+  public List<Connector> getIdeas() {
+    return ideas;
+  }
 }

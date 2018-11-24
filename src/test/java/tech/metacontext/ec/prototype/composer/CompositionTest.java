@@ -57,7 +57,7 @@ public class CompositionTest {
       Composition instance = new Composition();
       int expResult = 10;
       for (int i = 1; i < expResult; i++) {
-         instance.addNode();
+         instance.compose();
       }
       int result = instance.length();
       assertEquals(expResult, result);
@@ -70,9 +70,9 @@ public class CompositionTest {
    public void testToString() {
       System.out.println("toString");
       Composition instance = new Composition();
-      instance.addNode();
-      instance.addNode();
-      instance.addNode();
+      instance.compose();
+      instance.compose();
+      instance.compose();
       String result = instance.toString();
       assertTrue(result.contains("Composition")
               && result.contains("SketchNode")
