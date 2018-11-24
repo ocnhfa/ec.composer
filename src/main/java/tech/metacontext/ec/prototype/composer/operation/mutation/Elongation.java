@@ -13,12 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.operation;
+package tech.metacontext.ec.prototype.composer.operation.mutation;
+
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Alteration {
+public class Elongation implements GeneticOperator{
+
+  @Override
+  public List operator(Individual... individuals) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
   
 }
