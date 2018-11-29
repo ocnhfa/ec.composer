@@ -60,6 +60,7 @@ public class Composition extends Individual {
   }
 
   public CompositionState getState() {
+    
     if (this.length() < 2) {
       return CompositionState.Motive;
     } else if (this.length() < 4) {
@@ -81,6 +82,7 @@ public class Composition extends Individual {
   }
 
   public List<Connector> getIdeas() {
+    
     return ideas;
   }
 }

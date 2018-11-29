@@ -27,6 +27,7 @@ public class Alteration implements GeneticOperator<Composition> {
 
    @Override
    public List<Composition> operator(Composition... individuals) {
+     
       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
    }
 

@@ -27,19 +27,23 @@ public abstract class Individual {
    private final String id;
 
    public Individual(String id) {
+     
       this.id = id;
    }
 
    public Individual() {
+     
       this.id = UUID.randomUUID().toString();
    }
 
    public String getId() {
+     
       return id;
    }
 
    @Override
    public int hashCode() {
+     
       int hash = 7;
       hash = 59 * hash + Objects.hashCode(this.id);
       return hash;
@@ -47,6 +51,7 @@ public abstract class Individual {
 
    @Override
    public boolean equals(Object obj) {
+     
       if (this == obj) {
          return true;
       }
@@ -62,6 +67,7 @@ public abstract class Individual {
 
    @Override
    public String toString() {
+     
       return String.format("%s [%s]", 
               this.getClass().getSimpleName(), 
               this.getId().substring(0, 13));

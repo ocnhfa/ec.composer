@@ -29,23 +29,28 @@ public class CommonTones extends IdeaDescriptor<PitchSet, Long> {
    private PitchSet base;
 
    public CommonTones(PitchSet base) {
+     
       this.base = base;
    }
 
    public PitchSet getBase() {
+     
       return base;
    }
 
    public void setBase(PitchSet base) {
+     
       this.base = base;
    }
 
    @Override
    public Long describe(PitchSet factor) {
+     
       return common(base, factor);
    }
 
    public static long common(PitchSet... sets) {
+     
       return Arrays.asList(Pitch.values()).stream().filter((p) -> {
          for (PitchSet set : sets) {
             if (!set.getPitches().contains(p)) {

@@ -41,6 +41,7 @@ public class Connector extends Individual {
   }
 
   public SketchNode generate() {
+
     switch (mark) {
       case MirrorNextNodeConnector:
         return getNext();
@@ -55,47 +56,58 @@ public class Connector extends Individual {
 
   @Override
   public String toString() {
+    
     return "Connector{" + previous + " to " + next + ", mark=" + mark + '}';
   }
 
   public ConnectorRemark getType() {
+    
     return mark;
   }
 
   public Connector setType(ConnectorRemark type) {
+    
     this.mark = type;
     return this;
   }
 
   public SketchNode getPrevious() {
+    
     return previous;
   }
 
   public void setPrevious(SketchNode previous) {
+    
     this.previous = previous;
   }
 
   public SketchNode getNext() {
+    
     return next;
   }
 
   public void setNext(SketchNode next) {
+    
     this.next = next;
   }
 
   public ConnectorRemark getMark() {
+    
     return mark;
   }
 
   public void setMark(ConnectorRemark mark) {
+    
     this.mark = mark;
   }
 
   public List<IdeaDescriptor> getDescriptors() {
+    
     return descriptors;
   }
 
   public void setDescriptors(List<IdeaDescriptor> descriptors) {
+    
     this.descriptors = descriptors;
   }
 

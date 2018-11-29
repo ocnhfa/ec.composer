@@ -27,6 +27,7 @@ public class Main {
 //steady state, generational model
 
   public static void main(String[] args) throws IOException {
+    
     int size = 300;
     MusicalIdeas p = new MusicalIdeas(size);
     p.render(0);

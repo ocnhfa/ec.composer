@@ -18,7 +18,6 @@ package tech.metacontext.ec.prototype.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
@@ -33,15 +32,18 @@ public class TensionCurve extends Individual {
   static int size = 19;
 
   public TensionCurve(String id, List<Integer> curve) {
+    
     super(id);
     this.curve = curve;
   }
 
-  public TensionCurve(String id) {
+    public TensionCurve(String id) {
+      
     this(id, new ArrayList<>());
   }
 
   public TensionCurve(TensionCurve tc) {
+    
     this(tc.getId(), new ArrayList<>(tc.curve));
   }
 
@@ -50,6 +52,7 @@ public class TensionCurve extends Individual {
   }
 
   public List<Integer> getTensionCurve() {
+    
     int tension = 0;
     List<Integer> tensions = new ArrayList<>();
     tensions.add(0);
@@ -60,6 +63,7 @@ public class TensionCurve extends Individual {
   }
 
   public TensionCurve generateRandom() {
+    
     curve = Stream.generate(Math::random).limit(size)
             .map(r -> (int) ((r - 0.5) * 10))
             .collect(Collectors.toList());
@@ -68,6 +72,7 @@ public class TensionCurve extends Individual {
 
   @Override
   public int hashCode() {
+    
     int hash = super.hashCode();
     hash = 79 * hash + Arrays.deepHashCode(this.curve.toArray());
     return hash;
@@ -75,6 +80,7 @@ public class TensionCurve extends Individual {
 
   @Override
   public boolean equals(Object obj) {
+    
     if (super.equals(obj)) {
       return true;
     }
@@ -93,6 +99,7 @@ public class TensionCurve extends Individual {
 
   @Override
   public String toString() {
+    
     String s = "";
     for (int i = 0; i < curve.size() - 1; i++) {
       s += String.format("%+4d,", curve.get(i));

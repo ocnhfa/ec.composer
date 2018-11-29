@@ -27,6 +27,7 @@ public class Elongation implements GeneticOperator{
 
   @Override
   public List operator(Individual... individuals) {
+    
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   

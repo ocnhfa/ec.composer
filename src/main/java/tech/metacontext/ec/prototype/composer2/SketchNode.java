@@ -13,13 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.connectors;
+package tech.metacontext.ec.prototype.composer2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum ConnectorRemark {
-  
-   Default, MirrorConnector, MirrorNextNodeConnector;
+public class SketchNode {
+
+  private List<MusicMaterial> mats;
+
+  public SketchNode() {
+
+    this.mats = new ArrayList<>();
+  }
+
+  public List<MusicMaterial> getMats() {
+
+    return mats;
+  }
+
+  public void setMats(List<MusicMaterial> mats) {
+
+    this.mats = mats;
+  }
+
 }

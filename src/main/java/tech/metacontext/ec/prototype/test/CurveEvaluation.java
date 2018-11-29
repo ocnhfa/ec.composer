@@ -27,6 +27,7 @@ public class CurveEvaluation implements Evaluation<TensionCurve, Double> {
 
   @Override
   public Double eval(TensionCurve individual) {
+    
     List<Integer> tensions = individual.getTensionCurve();
     double range = range(tensions), climax_count = climax_count(tensions),
             climax_position = climax_position(tensions);
@@ -37,11 +38,13 @@ public class CurveEvaluation implements Evaluation<TensionCurve, Double> {
   }
 
   public static Double range(List<Integer> tensions) {
+    
     int max = Collections.max(tensions), min = Collections.min(tensions);
     return 10.0 / (1 + (Math.abs(max - min - 10.0) * 0.5));
   }
 
   public static Double climax_count(List<Integer> tensions) {
+    
     int max = Collections.max(tensions);
     long climax_count = tensions.stream().filter(t -> t == max).count();
     if (tensions.get(0) == max) {
@@ -54,6 +57,7 @@ public class CurveEvaluation implements Evaluation<TensionCurve, Double> {
   }
 
   public static Double climax_position(List<Integer> tensions) {
+    
     int max = Collections.max(tensions);
     double position = 2.0 * tensions.size() / 3.0;
     double rating = 10.0;
@@ -66,6 +70,7 @@ public class CurveEvaluation implements Evaluation<TensionCurve, Double> {
   }
 
   public static void main(String[] args) {
+    
     MusicalIdeas music;
     for (int i = 0; i < 10; i++) {
 //      TensionCurve individual = new TensionCurve("test",

@@ -25,6 +25,7 @@ public class SelectorFix implements Selector<MusicalIdeas> {
 
   @Override
   public int selector(MusicalIdeas p) {
+    
     p.population.values().removeIf(value -> value < 27.0);
     return p.size();
   }

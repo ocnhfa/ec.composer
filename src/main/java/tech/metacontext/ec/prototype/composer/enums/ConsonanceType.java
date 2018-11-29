@@ -20,6 +20,7 @@ package tech.metacontext.ec.prototype.composer.enums;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum ConsonanceType {
+  
   PerfectConsonance(1.0),
   ImperfectConsonance(0.9),
   Dissonance(0.7);
@@ -27,10 +28,12 @@ public enum ConsonanceType {
   public double factor;
 
   ConsonanceType(double factor) {
+    
     this.factor = factor;
   }
 
   public static ConsonanceType getType(Pitch p1, Pitch p2) {
+    
     String names = p1.name() + "." + p2.name() + ".";
     if (names.contains("sharp") && names.contains("flat")) {
       return Dissonance;

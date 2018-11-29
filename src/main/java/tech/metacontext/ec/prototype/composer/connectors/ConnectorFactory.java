@@ -32,18 +32,22 @@ public class ConnectorFactory implements Factory<Connector> {
   private final List<Calculator> template;
 
   private ConnectorFactory() {
+    
     this.template = new ArrayList<>();
   }
 
   public void addCalculator(Calculator cal) {
+    
     this.template.add(cal);
   }
 
   public void removeCalculator(Calculator cal) {
+    
     this.template.remove(cal);
   }
 
   public static ConnectorFactory getInstance() {
+    
     if (instance == null) {
       instance = new ConnectorFactory();
     }
@@ -52,10 +56,12 @@ public class ConnectorFactory implements Factory<Connector> {
 
   @Override
   public Connector create() {
+    
     return new Connector();
   }
 
   public Connector create(ConnectorRemark mark, Individual... params) {
+    
     Connector conn = create().setType(mark);
     switch (mark) {
       case MirrorConnector:
@@ -74,6 +80,7 @@ public class ConnectorFactory implements Factory<Connector> {
   }
 
   public static void main(String[] args) {
+    
     ConnectorFactory cf = ConnectorFactory.getInstance();
     System.out.println(cf.create());
   }

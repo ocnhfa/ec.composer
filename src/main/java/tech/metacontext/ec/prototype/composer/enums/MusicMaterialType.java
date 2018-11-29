@@ -25,6 +25,7 @@ import tech.metacontext.ec.prototype.composer.nodes.materials.PitchSet;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum MusicMaterialType {
+  
   PitchSet(PitchSet.class),
   NoteNumber(NoteNumber.class),
   NoteRange(NoteRange.class);
@@ -32,14 +33,17 @@ public enum MusicMaterialType {
   private Class<? extends MusicMaterial> clazz;
 
   private MusicMaterialType(Class<? extends MusicMaterial> clazz) {
+    
     this.clazz = clazz;
   }
 
   public Class<? extends MusicMaterial> getClazz() {
+    
     return clazz;
   }
 
   public void setClazz(Class<? extends MusicMaterial> clazz) {
+    
     this.clazz = clazz;
   }
 

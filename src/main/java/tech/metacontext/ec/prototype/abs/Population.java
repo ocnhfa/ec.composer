@@ -27,60 +27,62 @@ import java.util.NoSuchElementException;
  */
 public abstract class Population<E extends Individual, R> {
 
-   public Map<E, R> population;
-   public Evaluation<E, R> evalutaion;
-   public Selector selection;
-   public Map<String, GeneticOperator<E>> operators;
+  public Map<E, R> population;
+  public Evaluation<E, R> evalutaion;
+  public Selector selection;
+  public Map<String, GeneticOperator<E>> operators;
 
-   public Population(int size,
-           Evaluation<E, R> eval,
-           Selector selection) {
-      this.population = new HashMap<>();
-      this.evalutaion = eval;
-      this.selection = selection;
-      this.operators = new HashMap<>();
-      this.initiate(size);
-   }
+  public Population(int size, Evaluation<E, R> eval,
+          Selector selection) {
 
-   /**
-    * Initialization of the population.
-    *
-    * @param size Initial size of the population.
-    */
-   public abstract void initiate(int size);
+    this.population = new HashMap<>();
+    this.evalutaion = eval;
+    this.selection = selection;
+    this.operators = new HashMap<>();
+    this.initiate(size);
+  }
 
-   /**
-    * Add Individual to Population.
-    *
-    * @param individual
-    */
-   public void add(E individual) {
-      try {
-         population.keySet()
-                 .stream()
-                 .filter(t -> t.equals(individual))
-                 .findAny()
-                 .get();
-      } catch (NoSuchElementException ex) {
-         R eval = this.evalutaion.eval(individual);
-         population.put(individual, eval);
-      }
-   }
+  /**
+   * Initialization of the population.
+   *
+   * @param size Initial size of the population.
+   */
+  public abstract void initiate(int size);
 
-   public int size() {
-      return population.size();
-   }
+  /**
+   * Add Individual to Population.
+   *
+   * @param individual
+   */
+  public void add(E individual) {
+    
+    try {
+      population.keySet()
+              .stream()
+              .filter(t -> t.equals(individual))
+              .findAny()
+              .get();
+    } catch (NoSuchElementException ex) {
+      R eval = this.evalutaion.eval(individual);
+      population.put(individual, eval);
+    }
+  }
 
-   /**
-    * Evolution function.
-    *
-    * @return size difference after selection.
-    */
-   public abstract int evolution();
+  public int size() {
+    
+    return population.size();
+  }
 
-   /**
-    * Rendering function of the population.
-    */
-   public abstract void render();
+  /**
+   * Evolution function.
+   *
+   * @return size difference after selection.
+   */
+  public abstract int evolution();
+
+  /**
+   * Rendering function of the population.
+   */
+  public abstract void render();
 
 }

@@ -20,5 +20,6 @@ package tech.metacontext.ec.prototype.composer.enums;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum Range {
+  
    C0, C1, C2, C3, C4, C5, C6, C7, C8;
 }

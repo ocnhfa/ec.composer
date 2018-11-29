@@ -25,11 +25,13 @@ import tech.metacontext.ec.prototype.abs.Population;
 public class Composer extends Population<Composition, Double> {
 
   public Composer(int size) {
+    
     super(size, CompositionEval.getInstance(), new CompositionSelector());
   }
 
   @Override
   public void initiate(int size) {
+    
     for (int i = 0; i < size; i++) {
       this.add(new Composition());
       Composition c = new Composition();
@@ -39,12 +41,14 @@ public class Composer extends Population<Composition, Double> {
 
   @Override
   public int evolution() {
+    
     population.keySet().forEach(Composition::compose);
     return size();
   }
 
   @Override
   public void render() {
+    
     population.keySet().forEach(System.out::println);
   }
 

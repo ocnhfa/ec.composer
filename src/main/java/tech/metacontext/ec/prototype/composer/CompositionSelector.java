@@ -25,6 +25,7 @@ public class CompositionSelector implements Selector<Composer> {
 
   @Override
   public int selector(Composer composer) {
+    
     return composer.size();
   }
 

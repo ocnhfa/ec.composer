@@ -25,5 +25,4 @@ import tech.metacontext.ec.prototype.abs.Individual;
 public interface Factory<E extends Individual> {
 
   public abstract E create();
-
 }

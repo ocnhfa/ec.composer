@@ -22,6 +22,7 @@ package tech.metacontext.ec.prototype.composer;
 public class Main {
 
    public static void main(String[] args) {
+     
       //There are 10 composition evolving in Composer.
       Composer c = new Composer(10);
       c.render();

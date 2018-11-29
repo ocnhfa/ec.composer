@@ -17,7 +17,6 @@ package tech.metacontext.ec.prototype.composer.rules;
 
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.abs.CompositionEvalRule;
-import tech.metacontext.ec.prototype.composer.connectors.descriptors.CommonTones;
 
 /**
  *
@@ -27,6 +26,7 @@ public class SmoothPitchSet implements CompositionEvalRule {
 
   @Override
   public Double getResult(Composition composition) {
+    
 //    composition.getIdeas().stream().mapToDouble(idea -> {
 //      return idea.getDescriptor(CommonTones.class);
 //    });

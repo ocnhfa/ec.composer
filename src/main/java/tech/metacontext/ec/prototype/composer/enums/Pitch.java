@@ -22,6 +22,7 @@ import java.util.Comparator;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum Pitch {
+  
    //0, 1, 2, 3,
    C("1"), C_sharp("1#"), D("2"), D_sharp("2#"),
    //4, 5, 6, 7, 
@@ -34,10 +35,12 @@ public enum Pitch {
    String simple;
 
    Pitch(String simple) {
+     
       this.simple = simple;
    }
 
    public int ordinalEnharmonic() {
+     
       switch (this.ordinal()) {
          case 12:
             return 1;
@@ -55,6 +58,7 @@ public enum Pitch {
    }
 
    public int compareToPitch(Pitch other) {
+     
       return this.ordinalEnharmonic() - other.ordinalEnharmonic();
    }
 

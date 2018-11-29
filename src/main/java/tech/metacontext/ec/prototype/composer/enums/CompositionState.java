@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.abs.CompositionEvalRule;
 import tech.metacontext.ec.prototype.composer.rules.SmoothPitchSet;
 
@@ -28,6 +27,7 @@ import tech.metacontext.ec.prototype.composer.rules.SmoothPitchSet;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum CompositionState {
+  
   Motive(SmoothPitchSet.class),
   Phrase(SmoothPitchSet.class),
   Section(SmoothPitchSet.class),
@@ -38,7 +38,6 @@ public enum CompositionState {
   CompositionState(Class<? extends CompositionEvalRule>... rules) {
 
     this.rules = new ArrayList<>();
-
     for (Class<? extends CompositionEvalRule> rule : rules) {
       try {
         this.rules.add(rule.newInstance());

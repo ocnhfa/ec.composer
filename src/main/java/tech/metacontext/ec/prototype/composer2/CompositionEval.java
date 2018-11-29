@@ -13,13 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.connectors;
+package tech.metacontext.ec.prototype.composer2;
+
+import tech.metacontext.ec.prototype.composer2.rules.Rule;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum ConnectorRemark {
-  
-   Default, MirrorConnector, MirrorNextNodeConnector;
+public class CompositionEval {
+
+  private List<Rule> rules;
+
+  public CompositionEval() {
+
+    this.rules = new ArrayList<>();
+  }
+
+  public List<Rule> getRules() {
+
+    return rules;
+  }
+
+  public void setRules(List<Rule> rules) {
+
+    this.rules = rules;
+  }
+
+  public void addRule(Rule rule) {
+
+    this.rules.add(rule);
+  }
+
 }

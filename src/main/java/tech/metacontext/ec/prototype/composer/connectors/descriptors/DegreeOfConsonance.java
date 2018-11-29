@@ -34,6 +34,7 @@ public class DegreeOfConsonance extends IdeaDescriptor<PitchSet, Double> {
    }
 
    public static DegreeOfConsonance getInstance() {
+     
       if (instance == null) {
          instance = new DegreeOfConsonance();
       }
@@ -44,6 +45,7 @@ public class DegreeOfConsonance extends IdeaDescriptor<PitchSet, Double> {
 
    @Override
    public Double describe(PitchSet factor) {
+     
       degree = 100;
       factor.getPitches().stream().forEach((Pitch p1) -> {
          factor.getPitches().forEach((Pitch p2) -> {

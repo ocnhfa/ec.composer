@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.connectors;
+package tech.metacontext.ec.prototype.composer2;
+
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum ConnectorRemark {
-  
-   Default, MirrorConnector, MirrorNextNodeConnector;
+public class Composition extends Individual {
+
+  List<Connector> connectors;
+
+  public Composition() {
+
+  }
+
+  public void render() {
+    System.out.println(this);
+  }
 }

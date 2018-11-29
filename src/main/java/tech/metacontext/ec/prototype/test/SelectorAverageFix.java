@@ -31,6 +31,7 @@ public class SelectorAverageFix implements Selector<MusicalIdeas> {
 
   @Override
   public int selector(MusicalIdeas p) {
+    
     Double ave = p.population.values().stream()
             .mapToDouble(a -> a)
             .average().getAsDouble();

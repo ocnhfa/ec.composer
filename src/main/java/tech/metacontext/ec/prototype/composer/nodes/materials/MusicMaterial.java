@@ -26,6 +26,7 @@ import tech.metacontext.ec.prototype.composer.abs.AbstractElement;
 public abstract class MusicMaterial<E> extends AbstractElement {
 
   public MusicMaterialType getType() {
+    
     return MusicMaterialType.valueOf(getName());
   }
 

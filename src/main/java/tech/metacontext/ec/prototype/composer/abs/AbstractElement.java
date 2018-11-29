@@ -24,10 +24,12 @@ public abstract class AbstractElement {
    private final String name;
 
    public AbstractElement() {
+     
       this.name = this.getClass().getSimpleName();
    }
 
    public String getName() {
+     
       return name;
    }
 

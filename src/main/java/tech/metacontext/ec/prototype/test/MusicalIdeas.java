@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
 import org.jfree.ui.RefineryUtilities;
@@ -51,6 +50,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
 
   @Override
   public int evolution() {
+    
     int size_originl = this.size();
     int size_after = this.selection.selector(this);
 
@@ -76,6 +76,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   }
 
   public List<TensionCurve> crossover(TensionCurve... e) {
+    
     TensionCurve tc1 = e[0], tc2 = e[1];
     int csSize = (tc1.getCurve().size() > tc2.getCurve().size()) ? tc2.getCurve().size() : tc1.getCurve().size(),
             csPt = new Random().nextInt(csSize) + 1;
@@ -92,6 +93,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   }
 
   public List<TensionCurve> mutation(TensionCurve... e) {
+    
     List<Integer> curve = e[0].getCurve();
     int locus = new Random().nextInt(curve.size()),
             value = new Random().nextInt(21) - 10;
@@ -106,6 +108,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
 
   @Override
   public void render() {
+    
     chart = new LineChart_AWT("Musical Ideas");
     index = 1;
     this.population.keySet().forEach(this::addDataToChart);
@@ -118,11 +121,13 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   }
 
   public void render(int i) {
+    
     this.render_generation = i;
     this.render();
   }
 
   public void addDataToChart(TensionCurve tc) {
+    
     List<Integer> tensions = tc.getTensionCurve();
     int min = Collections.min(tensions);
     for (int i = 0; i < tensions.size(); i++) {
@@ -132,6 +137,7 @@ public class MusicalIdeas extends Population<TensionCurve, Double> {
   }
 
   public void renderHighest(int i) {
+    
     this.render_generation = i;
     chart = new LineChart_AWT("Musical Ideas");
     List<TensionCurve> sorted = this.population.entrySet().stream()

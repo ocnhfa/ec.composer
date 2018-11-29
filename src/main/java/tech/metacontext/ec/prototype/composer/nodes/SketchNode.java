@@ -30,22 +30,27 @@ public class SketchNode extends Individual {
   private Map<MusicMaterialType, MusicMaterial> materials;
 
   public SketchNode() {
+    
     this.materials = new HashMap<>();
   }
 
   public <M extends MusicMaterial> void addMaterial(M material) {
+    
     materials.put(material.getType(), material);
   }
 
   public Map<MusicMaterialType, ? extends MusicMaterial> getMaterials() {
+    
     return materials;
   }
 
   public void setMaterials(Map<MusicMaterialType, MusicMaterial> materials) {
+    
     this.materials = materials;
   }
 
   public MusicMaterial getMaterial(MusicMaterialType type) {
+    
     return this.materials.get(type);
   }
 

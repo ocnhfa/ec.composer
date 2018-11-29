@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.connectors;
+package tech.metacontext.ec.prototype.composer2.styles;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public enum ConnectorRemark {
+public class Style2 implements Style {
   
-   Default, MirrorConnector, MirrorNextNodeConnector;
 }

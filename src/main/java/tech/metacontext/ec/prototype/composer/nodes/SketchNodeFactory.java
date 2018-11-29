@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.abs.Factory;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.nodes.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MusicMaterialType;
 
@@ -39,6 +38,7 @@ public class SketchNodeFactory implements Factory<SketchNode> {
    * Constructor.
    */
   private SketchNodeFactory() {
+    
     template = new ArrayList<>();
     Stream.of(MusicMaterialType.values())
             .map(MusicMaterialType::getClazz)
@@ -46,6 +46,7 @@ public class SketchNodeFactory implements Factory<SketchNode> {
   }
 
   public static SketchNodeFactory getInstance() {
+    
     if (instance == null) {
       instance = new SketchNodeFactory();
     }
@@ -54,6 +55,7 @@ public class SketchNodeFactory implements Factory<SketchNode> {
 
   @Override
   public SketchNode create() {
+    
     SketchNode node = new SketchNode();
     template.stream().forEach((c) -> {
       try {

@@ -26,29 +26,35 @@ public class MirrorConnector extends Connector {
    private Connector mirror;
 
    public MirrorConnector(Connector mirror) {
+     
       this.mirror = mirror;
    }
 
    public Connector getMirror() {
+     
       return mirror;
    }
 
    public void setMirror(Connector mirror) {
+     
       this.mirror = mirror;
    }
 
    @Override
    public SketchNode getNext() {
+     
       return mirror.getNext();
    }
 
    @Override
    public SketchNode generate() {
+     
       return mirror.generate();
    }
 
    @Override
    public SketchNode getPrevious() {
+     
       return mirror.getPrevious();
    }
 

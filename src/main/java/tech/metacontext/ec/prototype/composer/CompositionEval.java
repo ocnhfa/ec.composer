@@ -29,6 +29,7 @@ public class CompositionEval implements Evaluation<Composition, Double> {
   }
 
   public static CompositionEval getInstance() {
+    
     if (instance == null) {
       instance = new CompositionEval();
     }
@@ -43,6 +44,7 @@ public class CompositionEval implements Evaluation<Composition, Double> {
    */
   @Override
   public Double eval(Composition composition) {
+    
     return composition.getState().rules
             .stream()
             .mapToDouble(rule -> rule.getResult(composition))
