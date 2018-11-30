@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer2.rules;
+package tech.metacontext.ec.prototype.composer2.materials;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Rule1 implements Rule {
+public interface MusicMaterial {
 
+   public abstract void randomInit();
 }

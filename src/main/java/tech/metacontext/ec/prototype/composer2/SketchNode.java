@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer2;
 
+import tech.metacontext.ec.prototype.composer2.materials.MusicMaterial;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -21,4 +21,5 @@ package tech.metacontext.ec.prototype.composer2.rules;
  */
 public interface Rule {
 
+   public double rating();
 }
