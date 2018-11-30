@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer2;
 
+import java.util.Arrays;
 import java.util.List;
 import tech.metacontext.ec.prototype.abs.Individual;
 
@@ -24,13 +25,30 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class Composition extends Individual {
 
-  List<Connector> connectors;
+   private List<Connector> connectors;
 
-  public Composition() {
+   public Composition() {
 
-  }
+      this.connectors = Arrays.asList(new Connector(new SketchNode()));
+   }
 
-  public void render() {
-    System.out.println(this);
-  }
+   public void render() {
+
+      System.out.println(this);
+   }
+
+   public void addConnect(Connector connector) {
+      
+      this.connectors.add(connector);
+   }
+
+   public List<Connector> getConnectors() {
+
+      return connectors;
+   }
+
+   public void setConnectors(List<Connector> connectors) {
+
+      this.connectors = connectors;
+   }
 }

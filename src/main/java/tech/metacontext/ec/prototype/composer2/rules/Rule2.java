@@ -21,4 +21,9 @@ package tech.metacontext.ec.prototype.composer2.rules;
  */
 public class Rule2 implements Rule {
 
+   @Override
+   public double rating() {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
+
 }
