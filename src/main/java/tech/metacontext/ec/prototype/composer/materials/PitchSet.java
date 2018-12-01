@@ -16,109 +16,153 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.AbstractMap.SimpleEntry;
-import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class PitchSet implements MusicMaterial {
+public class PitchSet extends MusicMaterial<Pitch> {
 
-   public static final boolean DEFAULT_ALLOWED_ENHARMONIC = false;
-   public static final int DEFAULT_MIN = 3;
-   public static final int DEFAULT_MAX = 5;
+  public static final int DEFAULT_MIN = 1;
+  public static final int DEFAULT_MAX = 5;
+  public static final int DEFAULT_NUMBER = 3;
+  public static final int ALLOW = 1, NOT_ALLOW = 0;
+  public static final int DEFAULT_ENHARMONIC_ALLOWED = NOT_ALLOW;
+  public static final int DEFAULT_SHARP_ALLOWED = ALLOW;
 
-   private Set<Pitch> pitches;
-   private boolean allowedEnharmonic;
-   private int min, max;
+  private int min, max;
+  private int number;
+  private boolean sharpAllowed;
+  private boolean enharmonicAllowed;
+  private List<Pitch> preset = new ArrayList<>();
 
-   public PitchSet() {
+  @Override
 
-      this.pitches = new TreeSet<>(Pitch::compareToPitch);
-      this.allowedEnharmonic = DEFAULT_ALLOWED_ENHARMONIC;
-      this.min = DEFAULT_MIN;
-      this.max = DEFAULT_MAX;
-   }
+  public PitchSet reset() {
 
-   public PitchSet(Pitch... pitches) {
+    this.min = DEFAULT_MIN;
+    this.max = DEFAULT_MAX;
+    this.number = DEFAULT_NUMBER;
+    this.sharpAllowed = (DEFAULT_SHARP_ALLOWED == ALLOW);
+    this.enharmonicAllowed = (DEFAULT_ENHARMONIC_ALLOWED == ALLOW);
+    this.preset = new ArrayList<>();
+    return this;
+  }
 
-      this();
-      this.pitches.addAll(Arrays.asList(pitches));
-   }
+  @Override
+  public PitchSet random() {
 
-   public Set<Pitch> getPitches() {
-      return pitches;
-   }
+    this.sharpAllowed = new Random().nextBoolean();
+    this.number = new Random().nextInt(this.max - this.min + 1) + this.min;
+    return this.generate();
+  }
 
-   public void setPitches(Set<Pitch> pitches) {
-      this.pitches = pitches;
-   }
+  @Override
+  public PitchSet generate() {
 
-   @Override
-   public PitchSet random() {
+    this.setMaterials(
+            Stream.of(Pitch.values())
+                    .limit(this.sharpAllowed ? 17 : 12)
+                    .map(p -> new SimpleEntry<>(this.preset.contains(p) ? 0.0 : Math.random(), p))
+                    .sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey()))
+                    .map(e -> (this.enharmonicAllowed) ? e.getValue().ordinal() : e.getValue().ordinalEnharmonic())
+                    .distinct()
+                    .map(i -> Pitch.values()[i])
+                    .limit(this.number)
+                    .collect(Collectors.toList())
+    );
+    return this;
+  }
 
-      AtomicInteger i = new AtomicInteger(0);
-      this.pitches = Stream.generate(Math::random)
-              .limit((this.allowedEnharmonic) ? 17 : 12)
-              .map(r -> new SimpleEntry<>(r, Pitch.values()[i.getAndIncrement()]))
-              .sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey()))
-              .limit(new Random().nextInt(this.max - this.min + 1) + this.min)
-              .map(SimpleEntry::getValue)
-              .collect(Collectors.toSet());
-      return this;
-   }
+  public static void main(String[] args) {
 
-   /**
-    *
-    * @param args
-    */
-   public static void main(String[] args) {
-      PitchSet ps = new PitchSet();
-      ps.setAllowedEnharmonic(false);
-      for (int i = 0; i < 10; i++) {
-         System.out.println(
-                 (i + 1) + ". "
-                 + ps.random().pitches.stream()
-                         .sorted(Pitch::compareToPitch)
-                         .map(Object::toString)
-                         .collect(Collectors.joining(" - "))
-         );
-         System.out.println("---");
-      }
-   }
+    List<Pitch> preset = new ArrayList<>();
 
-   /*
-    * default setters and getters
-    */
-   public boolean isAllowedEnharmonic() {
-      return allowedEnharmonic;
-   }
+    Stream.generate(PitchSet::new)
+            .limit(10)
+            .peek(ps -> {
+              preset.clear();
+              Pitch p = ps.getMaterials().get(0);
+              ps.preset.add(p);
+              System.out.println("peek: " + ps + "->" + p);
+            })
+            .map(PitchSet::random)
+            .forEach(System.out::println);
+  }
 
-   public void setAllowedEnharmonic(boolean allowedEnharmonic) {
-      this.allowedEnharmonic = allowedEnharmonic;
-   }
+  @Override
+  public String toString() {
+    return String.format("PitchSet[ %d -> %s ]",
+            this.number,
+            this.getMaterials().stream()
+                    .sorted()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", ")));
+  }
 
-   public int getMin() {
-      return min;
-   }
+  /*
+   * Default setters and getters.
+   */
+  public boolean isAllowedEnharmonic() {
+    return sharpAllowed;
+  }
 
-   public void setMin(int min) {
-      this.min = min;
-   }
+  public void setAllowedEnharmonic(boolean allowedEnharmonic) {
+    this.sharpAllowed = allowedEnharmonic;
+  }
 
-   public int getMax() {
-      return max;
-   }
+  public List<Pitch> getPreset() {
+    return preset;
+  }
 
-   public void setMax(int max) {
-      this.max = max;
-   }
+  public void setPreset(List<Pitch> preset) {
+    this.preset = preset;
+  }
+
+  public int getMin() {
+    return min;
+  }
+
+  public void setMin(int min) {
+    this.min = min;
+  }
+
+  public int getMax() {
+    return max;
+  }
+
+  public void setMax(int max) {
+    this.max = max;
+  }
+
+  public int getNumber() {
+    return number;
+  }
+
+  public void setNumber(int number) {
+    this.number = number;
+  }
+
+  public boolean isSharpAllowed() {
+    return sharpAllowed;
+  }
+
+  public void setSharpAllowed(boolean sharpAllowed) {
+    this.sharpAllowed = sharpAllowed;
+  }
+
+  public boolean isEnharmonicAllowed() {
+    return enharmonicAllowed;
+  }
+
+  public void setEnharmonicAllowed(boolean enharmonicAllowed) {
+    this.enharmonicAllowed = enharmonicAllowed;
+  }
 
 }

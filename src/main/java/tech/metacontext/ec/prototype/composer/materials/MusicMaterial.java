@@ -15,12 +15,60 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public interface MusicMaterial {
+public abstract class MusicMaterial<E> {
 
-   public <E extends MusicMaterial> E random();
+  private int division;
+  private List<E> materials = new ArrayList<>();
+
+  public MusicMaterial(int division, List<E> materials) {
+
+    this.division = division;
+    this.materials = materials;
+  }
+
+  public MusicMaterial() {
+
+    this.reset().generate();
+  }
+
+  abstract public <M extends MusicMaterial> M reset();
+
+  abstract public <M extends MusicMaterial> M random();
+
+  abstract public <M extends MusicMaterial> M generate();
+
+  public int size() {
+    return this.materials.size();
+  }
+
+  /*
+   * Default setters and getters.
+   */
+  public int getDivision() {
+
+    return division;
+  }
+
+  public void setDivision(int division) {
+
+    this.division = division;
+  }
+
+  public List<E> getMaterials() {
+
+    return materials;
+  }
+
+  public void setMaterials(List<E> materials) {
+
+    this.materials = materials;
+  }
 
 }

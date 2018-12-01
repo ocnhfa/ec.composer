@@ -19,7 +19,7 @@ package tech.metacontext.ec.prototype.composer.rules;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Rule2 implements Rule {
+public class Contracting implements Rule {
 
    @Override
    public double rating() {

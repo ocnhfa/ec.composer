@@ -22,27 +22,30 @@ import java.util.List;
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <M>
  */
-public class IdeaDescriptor {
+public abstract class IdeaDescriptor<M extends MusicMaterial> {
 
-   private List<MusicMaterial> materials;
+  private List<M> materials;
 
-   public IdeaDescriptor() {
+  public IdeaDescriptor() {
 
-      this.materials = new ArrayList<>();
-   }
+    this.materials = new ArrayList<>();
+  }
 
-   /*
+  public abstract <E extends IdeaDescriptor> E describe();
+
+  /*
     * default setters and getters
-    */
-   public List<MusicMaterial> getMaterials() {
+   */
+  public List<M> getMaterials() {
 
-      return materials;
-   }
+    return materials;
+  }
 
-   public void setMaterials(List<MusicMaterial> materials) {
+  public void setMaterials(List<M> materials) {
 
-      this.materials = materials;
-   }
+    this.materials = materials;
+  }
 
 }
