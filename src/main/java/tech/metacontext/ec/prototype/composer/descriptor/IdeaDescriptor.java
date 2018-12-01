@@ -13,13 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer2.materials;
+package tech.metacontext.ec.prototype.composer.descriptor;
+
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public interface MusicMaterial {
+public class IdeaDescriptor {
 
-   public abstract void randomInit();
+   private List<MusicMaterial> materials;
+
+   public IdeaDescriptor() {
+
+      this.materials = new ArrayList<>();
+   }
+
+   /*
+    * default setters and getters
+    */
+   public List<MusicMaterial> getMaterials() {
+
+      return materials;
+   }
+
+   public void setMaterials(List<MusicMaterial> materials) {
+
+      this.materials = materials;
+   }
+
 }

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer2;
+package tech.metacontext.ec.prototype.composer;
 
-import tech.metacontext.ec.prototype.composer2.rules.Rule;
+import tech.metacontext.ec.prototype.composer.rules.Rule;
 import java.util.ArrayList;
 import java.util.List;
 

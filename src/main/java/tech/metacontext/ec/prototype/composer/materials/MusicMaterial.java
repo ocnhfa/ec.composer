@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer2.styles;
+package tech.metacontext.ec.prototype.composer.materials;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public interface Style {
-  
+public interface MusicMaterial {
+
+   public <E extends MusicMaterial> E random();
+
 }

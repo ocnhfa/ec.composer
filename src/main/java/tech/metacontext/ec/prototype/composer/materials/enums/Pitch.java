@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer2.materials;
+package tech.metacontext.ec.prototype.composer.materials.enums;
 
 import java.util.Comparator;
 
@@ -57,11 +57,9 @@ public enum Pitch {
       }
    }
 
-   public int compareToPitch(Pitch other) {
+   public int compareToPitch(Pitch o) {
 
-      return this.ordinalEnharmonic() - other.ordinalEnharmonic();
+      return this.ordinalEnharmonic() - o.ordinalEnharmonic();
    }
-
-   public static Comparator<Pitch> comparator = Pitch::compareToPitch;
 
 }

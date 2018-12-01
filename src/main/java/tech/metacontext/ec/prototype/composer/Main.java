@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer2;
+package tech.metacontext.ec.prototype.composer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer2.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer2.styles.Style2;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
+import tech.metacontext.ec.prototype.composer.styles.Style2;
 
 /**
  *
