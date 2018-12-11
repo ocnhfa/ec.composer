@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer_draft;
 
-import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.abs.draft.Population;
 
 /**
  * Composer class bears a number of Composition objects and evolves them.

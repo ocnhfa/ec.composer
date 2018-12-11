@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan Chang, Chun-yien <ccy@musicapoetica.org>.
+ * Copyright 2018 Jonathan Chang.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,74 +15,41 @@
  */
 package tech.metacontext.ec.prototype.abs;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
- * @param <E> Type of population
- * @param <R> type of evaluation score
+ * @author Jonathan Chang
+ * @param <E>
  */
-public abstract class Population<E extends Individual, R> {
+public abstract class Population<E extends Individual> {
 
-  public Map<E, R> population;
-  public Evaluation<E, R> evalutaion;
-  public Selector selection;
-  public Map<String, GeneticOperator<E>> operators;
+    private List<E> population;
 
-  public Population(int size, Evaluation<E, R> eval,
-          Selector selection) {
+    public Population() {
 
-    this.population = new HashMap<>();
-    this.evalutaion = eval;
-    this.selection = selection;
-    this.operators = new HashMap<>();
-    this.initiate(size);
-  }
-
-  /**
-   * Initialization of the population.
-   *
-   * @param size Initial size of the population.
-   */
-  public abstract void initiate(int size);
-
-  /**
-   * Add Individual to Population.
-   *
-   * @param individual
-   */
-  public void add(E individual) {
-    
-    try {
-      population.keySet()
-              .stream()
-              .filter(t -> t.equals(individual))
-              .findAny()
-              .get();
-    } catch (NoSuchElementException ex) {
-      R eval = this.evalutaion.eval(individual);
-      population.put(individual, eval);
+        this.population = new ArrayList<>();
     }
-  }
 
-  public int size() {
-    
-    return population.size();
-  }
+    abstract public List<E> evolve();
 
-  /**
-   * Evolution function.
-   *
-   * @return size difference after selection.
-   */
-  public abstract int evolution();
+    abstract public void render();
 
-  /**
-   * Rendering function of the population.
-   */
-  public abstract void render();
+    public int getSize() {
+
+        return population.size();
+    }
+
+    /*
+     * Default setters and getters.
+     */
+    public List<E> getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(List<E> population) {
+        this.population = population;
+    }
 
 }

@@ -52,22 +52,18 @@ public abstract class MusicMaterial<E> {
    * Default setters and getters.
    */
   public int getDivision() {
-
     return division;
   }
 
   public void setDivision(int division) {
-
     this.division = division;
   }
 
   public List<E> getMaterials() {
-
     return materials;
   }
 
   public void setMaterials(List<E> materials) {
-
     this.materials = materials;
   }
 

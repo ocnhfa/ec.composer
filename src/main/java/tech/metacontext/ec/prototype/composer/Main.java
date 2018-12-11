@@ -15,14 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.Style2;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -30,31 +30,30 @@ import tech.metacontext.ec.prototype.composer.styles.Style2;
  */
 public class Main {
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    int size = 5;
-    Composer composer = new Composer(size);
+        int size = 10;
+        Composer composer = new Composer(size);
 
-    composer.setStyles(Arrays.asList(
-            new GoldenSectionClimax(),
-            new Style2()
-    ));
+        composer.setStyles(Arrays.asList(
+                new UnaccompaniedCello(),
+                new GoldenSectionClimax()
+        ));
 
-    AtomicInteger g = new AtomicInteger(0);
-    List<List<Composition>> archive
-            = Stream.generate(composer::compose)
-                    .limit(5)
-                    .peek(list -> {
-                      System.out.println("Generation " + g.incrementAndGet());
-                      list.stream().forEach(Composition::render);
-                    })
-                    .collect(Collectors.toList());
+        int generation = 5;
+        List<List<Composition>> archive = new ArrayList<>();
 
-    System.out.println("---------------------------------");
-    IntStream.range(0, 5)
-            .peek(i -> System.out.println("Generation " + (i + 1)))
-            .mapToObj(archive::get)
-            .forEach(list -> list.stream().forEach(Composition::render));
-  }
+        System.out.println(composer.getPopulation());
+        
+        for (int i = 0; i < generation; i++) {
+            archive.add(composer.evolve());
+        }
+
+        System.out.println("---------------------------------");
+        IntStream.range(0, 5)
+                .peek(i -> System.out.println("Generation " + i))
+                .mapToObj(archive::get)
+                .forEach(list -> list.stream().forEach(Composition::render));
+    }
 
 }

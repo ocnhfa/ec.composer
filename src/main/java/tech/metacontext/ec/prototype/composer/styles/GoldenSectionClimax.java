@@ -20,7 +20,7 @@ package tech.metacontext.ec.prototype.composer.styles;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class GoldenSectionClimax implements Style {
-  
-  public static final double RATIO = 1.6180339887498948482;
+
+    public static final double RATIO = 1.6180339887498948482;
 
 }

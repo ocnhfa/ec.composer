@@ -27,7 +27,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.abs.draft.Population;
 
 /**
  *

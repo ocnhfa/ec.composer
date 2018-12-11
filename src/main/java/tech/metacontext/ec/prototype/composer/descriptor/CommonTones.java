@@ -83,22 +83,18 @@ public class CommonTones extends IdeaDescriptor<PitchSet> {
    * Default setters and getters.
    */
   public Set<Pitch> getCommon_tones() {
-
     return common_tones;
   }
 
   public void setCommon_tones(Set<Pitch> common_tones) {
-
     this.common_tones = common_tones;
   }
 
   public boolean isAllowedEnharmonic() {
-
     return enharmonicEquivalent;
   }
 
   public void setAllowedEnharmonic(boolean allowedEnharmonic) {
-
     this.enharmonicEquivalent = allowedEnharmonic;
   }
 

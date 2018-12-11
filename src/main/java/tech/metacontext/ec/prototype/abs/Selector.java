@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.abs;
 
+import tech.metacontext.ec.prototype.abs.draft.Population;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>

@@ -20,55 +20,60 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.abs.Population;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Composer {
+public class Composer extends Population<Composition> {
 
-   private List<Composition> compositions;
-   private List<Style> styles;
+    private List<Style> styles;
 
-   public Composer(int size) {
+    /**
+     * Constructor.
+     *
+     * @param size number of Compositions.
+     */
+    public Composer(int size) {
 
-      this.compositions = Stream.generate(Composition::new)
-              .limit(size)
-              .collect(Collectors.toList());
-      this.styles = new ArrayList<>();
-   }
+        this.styles = new ArrayList<>();
+        this.setPopulation(
+                Stream.generate(Composition::new)
+                        .limit(size)
+                        .collect(Collectors.toList())
+        );
+    }
 
-   public void addStyle(Style style) {
+    public void addStyle(Style style) {
 
-      this.styles.add(style);
-   }
+        this.styles.add(style);
+    }
 
-   /*
+    @Override
+    public List<Composition> evolve() {
+        List<Composition> population
+                = this.getPopulation();
+        this.setPopulation(Stream.generate(Composition::new)
+                .limit(this.getSize())
+                .collect(Collectors.toList()));
+        return population;
+    }
+
+    @Override
+    public void render() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /*
     * Default getters and setters.
-    */
-   public List<Composition> getCompositions() {
+     */
+    public List<? extends Style> getStyles() {
+        return this.styles;
+    }
 
-      return compositions;
-   }
-
-   public void setCompositions(List<Composition> compositions) {
-
-      this.compositions = compositions;
-   }
-
-   public List<? extends Style> getStyles() {
-
-      return this.styles;
-   }
-
-   public void setStyles(List<Style> styles) {
-
-      this.styles = styles;
-   }
-
-   public List<Composition> compose() {
-
-      return this.compositions;
-   }
+    public void setStyles(List<Style> styles) {
+        this.styles = styles;
+    }
 
 }

@@ -39,12 +39,10 @@ public abstract class IdeaDescriptor<M extends MusicMaterial> {
     * default setters and getters
    */
   public List<M> getMaterials() {
-
     return materials;
   }
 
   public void setMaterials(List<M> materials) {
-
     this.materials = materials;
   }
 

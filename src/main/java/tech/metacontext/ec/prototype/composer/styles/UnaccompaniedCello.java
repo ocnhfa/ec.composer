@@ -15,10 +15,22 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import java.util.Arrays;
+import java.util.List;
+import tech.metacontext.ec.prototype.composer_draft.enums.Range;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Style2 implements Style {
-  
+public class UnaccompaniedCello implements Style {
+
+    List<Range> cell_range = Arrays.asList(
+            Range.C2,
+            Range.C3,
+            Range.C4,
+            Range.C5,
+            Range.C6
+    );
+
 }

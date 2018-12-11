@@ -25,41 +25,40 @@ import java.util.List;
  */
 public class Connector {
 
-   private SketchNode previous;
-   private SketchNode next;
-   private List<IdeaDescriptor> descriptors;
+    private SketchNode previous;
+    private SketchNode next;
+    private List<IdeaDescriptor> descriptors;
 
-   public Connector(SketchNode previous) {
+    public Connector(SketchNode previous) {
 
-      this.descriptors = new ArrayList<>();
-   }
+        this.descriptors = new ArrayList<>();
+    }
 
-   public SketchNode getPrevious() {
+    /*
+     * Default setters and getters
+     */
+    public SketchNode getPrevious() {
+        return previous;
+    }
 
-      return previous;
-   }
+    public void setPrevious(SketchNode previous) {
+        this.previous = previous;
+    }
 
-   public void setPrevious(SketchNode previous) {
+    public SketchNode getNext() {
+        return next;
+    }
 
-      this.previous = previous;
-   }
+    public void setNext(SketchNode next) {
+        this.next = next;
+    }
 
-   public SketchNode getNext() {
+    public List<IdeaDescriptor> getDescriptors() {
+        return descriptors;
+    }
 
-      return next;
-   }
-
-   public void setNext(SketchNode next) {
-
-      this.next = next;
-   }
-
-   public List<IdeaDescriptor> getDescriptors() {
-      return descriptors;
-   }
-
-   public void setDescriptors(List<IdeaDescriptor> descriptors) {
-      this.descriptors = descriptors;
-   }
+    public void setDescriptors(List<IdeaDescriptor> descriptors) {
+        this.descriptors = descriptors;
+    }
 
 }

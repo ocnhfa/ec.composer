@@ -25,21 +25,22 @@ import java.util.List;
  */
 public class SketchNode {
 
-  private List<MusicMaterial> mats;
+    private List<MusicMaterial> mats;
 
-  public SketchNode() {
+    public SketchNode() {
 
-    this.mats = new ArrayList<>();
-  }
+        this.mats = new ArrayList<>();
+    }
 
-  public List<MusicMaterial> getMats() {
+    /*
+     * Default setters and getters
+     */
+    public List<MusicMaterial> getMats() {
+        return mats;
+    }
 
-    return mats;
-  }
-
-  public void setMats(List<MusicMaterial> mats) {
-
-    this.mats = mats;
-  }
+    public void setMats(List<MusicMaterial> mats) {
+        this.mats = mats;
+    }
 
 }

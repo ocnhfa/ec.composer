@@ -25,51 +25,71 @@ import java.util.stream.Stream;
  */
 public class NoteNumbers extends MusicMaterial<Integer> {
 
-  public static final int DEFAULT_DIVISION = 4;
-  public static final int DEFAULT_MIN_DIVISION = 1;
-  public static final int DEFAULT_MAX_DIVISION = 6;
-  public static final int DEFAULT_MIN_NUMBER = 0;
-  public static final int DEFAULT_MAX_NUMBER = 8;
+    public static final int DEFAULT_DIVISION = 4;
+    public static final int DEFAULT_MIN_DIVISION = 1;
+    public static final int DEFAULT_MAX_DIVISION = 6;
+    public static final int DEFAULT_MIN_NUMBER = 0;
+    public static final int DEFAULT_MAX_NUMBER = 8;
 
-  private int min, max;
+    private int min, max;
 
-  @Override
-  public NoteNumbers reset() {
+    @Override
+    public NoteNumbers reset() {
 
-    this.setDivision(DEFAULT_DIVISION);
-    this.min = DEFAULT_MIN_NUMBER;
-    this.max = DEFAULT_MAX_NUMBER;
-    return this;
-  }
+        this.setDivision(DEFAULT_DIVISION);
+        this.min = DEFAULT_MIN_NUMBER;
+        this.max = DEFAULT_MAX_NUMBER;
+        return this;
+    }
 
-  @Override
-  public NoteNumbers random() {
+    @Override
+    public NoteNumbers random() {
 
-    this.setDivision(new Random()
-            .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
-            + DEFAULT_MIN_DIVISION);
-    return generate();
-  }
+        this.setDivision(new Random()
+                .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
+                + DEFAULT_MIN_DIVISION);
+        return generate();
+    }
 
-  @Override
-  public NoteNumbers generate() {
+    @Override
+    public NoteNumbers generate() {
 
-    this.setMaterials(
-            new Random().ints(this.getDivision(), this.min, this.max + 1)
-                    .boxed()
-                    .collect(Collectors.toList())
-    );
-    return this;
+        this.setMaterials(
+                new Random().ints(this.getDivision(), this.min, this.max + 1)
+                        .boxed()
+                        .collect(Collectors.toList())
+        );
+        return this;
 
-  }
+    }
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    NoteNumbers nn = new NoteNumbers();
-    Stream.generate(() -> nn.random())
-            .limit(50)
-            .map(NoteNumbers::getMaterials)
-            .forEach(System.out::println);
-  }
+        NoteNumbers nn = new NoteNumbers();
+        Stream.generate(() -> nn.random())
+                .limit(50)
+                .map(NoteNumbers::getMaterials)
+                .forEach(System.out::println);
+    }
+
+    /*
+     * Default setters and getters
+     */
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
 
 }

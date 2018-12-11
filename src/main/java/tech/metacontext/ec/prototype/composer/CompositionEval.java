@@ -25,26 +25,27 @@ import java.util.List;
  */
 public class CompositionEval {
 
-  private List<Rule> rules;
+    private List<Rule> rules;
 
-  public CompositionEval() {
+    public CompositionEval() {
 
-    this.rules = new ArrayList<>();
-  }
+        this.rules = new ArrayList<>();
+    }
 
-  public List<Rule> getRules() {
+    public void addRule(Rule rule) {
 
-    return rules;
-  }
+        this.rules.add(rule);
+    }
 
-  public void setRules(List<Rule> rules) {
+    /*
+     * Default setters and getters
+     */
+    public List<Rule> getRules() {
+        return rules;
+    }
 
-    this.rules = rules;
-  }
-
-  public void addRule(Rule rule) {
-
-    this.rules.add(rule);
-  }
+    public void setRules(List<Rule> rules) {
+        this.rules = rules;
+    }
 
 }

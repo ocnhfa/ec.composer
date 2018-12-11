@@ -25,30 +25,31 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class Composition extends Individual {
 
-   private List<Connector> connectors;
+    private List<Connector> connectors;
 
-   public Composition() {
+    public Composition() {
 
-      this.connectors = Arrays.asList(new Connector(new SketchNode()));
-   }
+        this.connectors = Arrays.asList(new Connector(new SketchNode()));
+    }
 
-   public void render() {
+    public void render() {
 
-      System.out.println(this);
-   }
+        System.out.println(this);
+    }
 
-   public void addConnect(Connector connector) {
-      
-      this.connectors.add(connector);
-   }
+    public void addConnect(Connector connector) {
 
-   public List<Connector> getConnectors() {
+        this.connectors.add(connector);
+    }
 
-      return connectors;
-   }
+    /*
+     * Default setters and getters
+     */
+    public List<Connector> getConnectors() {
+        return connectors;
+    }
 
-   public void setConnectors(List<Connector> connectors) {
-
-      this.connectors = connectors;
-   }
+    public void setConnectors(List<Connector> connectors) {
+        this.connectors = connectors;
+    }
 }

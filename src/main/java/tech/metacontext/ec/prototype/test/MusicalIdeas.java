@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import org.jfree.ui.RefineryUtilities;
-import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.abs.draft.Population;
 import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**

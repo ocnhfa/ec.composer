@@ -28,79 +28,75 @@ import tech.metacontext.ec.prototype.composer.materials.PitchSets;
  */
 public class SmoothPitchSets implements Rule {
 
-  private PitchSets p1;
-  private PitchSets p2;
+    private PitchSets p1;
+    private PitchSets p2;
 
-  public SmoothPitchSets(PitchSets p1, PitchSets p2) {
+    public SmoothPitchSets(PitchSets p1, PitchSets p2) {
 
-    this.p1 = p1;
-    this.p2 = p2;
-  }
-
-  @Override
-  public double rating() {
-
-    AtomicInteger common = new AtomicInteger(),
-            base = new AtomicInteger();
-    int max = Math.max(p1.size(), p2.size());
-    System.out.println("max = " + max);
-    Stream.of(Pitch.values())
-            .forEach(p -> {
-              IntStream.range(0, max)
-                      .forEach(i -> {
-                        int p1ci = Math.max(p1.size() - 1 - i, 0),
-                                p2ci = Math.min(p2.size() - 1, i);
-                        boolean p1c = p1.getMaterials().get(p1ci)
-                                .getMaterials().contains(p),
-                                p2c = p2.getMaterials().get(p2ci)
-                                        .getMaterials().contains(p);
-                        if (p1c || p2c) {
-                          base.getAndAdd(max - i);
-//                          System.out.println("base + " + (max - i));
-                          if (p1c && p2c) {
-                            common.getAndAdd(max - i);
-//                            System.out.println("common + " + (max - i));
-                          }
-                        }
-                      });
-            });
-    System.out.println("common = " + common);
-    System.out.println("base = " + base);
-    return 1.0 * common.get() / base.get();
-  }
-
-  public static void main(String[] args) {
-    for (int i = 0; i < 10; i++) {
-      PitchSets ps1 = new PitchSets().random();
-      PitchSets ps2 = new PitchSets().random();
-      SmoothPitchSets sps = new SmoothPitchSets(ps1, ps2);
-      System.out.println(ps1);
-      System.out.println(ps2);
-      System.out.printf("%.2f\n", sps.rating());
+        this.p1 = p1;
+        this.p2 = p2;
     }
-  }
 
-  /*
-    * default setters and getters
-   */
-  public PitchSets getP1() {
+    @Override
+    public double rating() {
 
-    return p1;
-  }
+        AtomicInteger common = new AtomicInteger(),
+                base = new AtomicInteger();
+        int max = Math.max(p1.size(), p2.size());
+        System.out.println("max = " + max);
+        Stream.of(Pitch.values())
+                .forEach(p -> {
+                    IntStream.range(0, max)
+                            .forEach(i -> {
+                                int p1ci = Math.max(p1.size() - 1 - i, 0),
+                                        p2ci = Math.min(p2.size() - 1, i);
+                                boolean p1c = p1.getMaterials().get(p1ci)
+                                        .getMaterials().contains(p),
+                                        p2c = p2.getMaterials().get(p2ci)
+                                                .getMaterials().contains(p);
+                                if (p1c || p2c) {
+                                    base.getAndAdd(max - i);
+//                          System.out.println("base + " + (max - i));
+                                    if (p1c && p2c) {
+                                        common.getAndAdd(max - i);
+//                            System.out.println("common + " + (max - i));
+                                    }
+                                }
+                            });
+                });
+        System.out.println("common = " + common);
+        System.out.println("base = " + base);
+        return 1.0 * common.get() / base.get();
+    }
 
-  public void setP1(PitchSets p1) {
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
+            PitchSets ps1 = new PitchSets().random();
+            PitchSets ps2 = new PitchSets().random();
+            SmoothPitchSets sps = new SmoothPitchSets(ps1, ps2);
+            System.out.println(ps1);
+            System.out.println(ps2);
+            System.out.printf("%.2f\n", sps.rating());
+        }
+    }
 
-    this.p1 = p1;
-  }
+    /*
+     * default setters and getters
+     */
+    public PitchSets getP1() {
+        return p1;
+    }
 
-  public PitchSets getP2() {
+    public void setP1(PitchSets p1) {
+        this.p1 = p1;
+    }
 
-    return p2;
-  }
+    public PitchSets getP2() {
+        return p2;
+    }
 
-  public void setP2(PitchSets p2) {
-
-    this.p2 = p2;
-  }
+    public void setP2(PitchSets p2) {
+        this.p2 = p2;
+    }
 
 }
