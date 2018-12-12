@@ -16,8 +16,10 @@
 package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -25,21 +27,27 @@ import java.util.List;
  */
 public class SketchNode {
 
-    private List<MusicMaterial> mats;
+    private Map<MusicMaterial.Type, MusicMaterial> mats;
 
     public SketchNode() {
 
-        this.mats = new ArrayList<>();
+        this.mats = new HashMap<>();
+    }
+
+    public SketchNode(SketchNode parent) {
+
+        this.mats = parent.getMats().entrySet().stream()
+                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
 
     /*
      * Default setters and getters
      */
-    public List<MusicMaterial> getMats() {
+    public Map<MusicMaterial.Type, MusicMaterial> getMats() {
         return mats;
     }
 
-    public void setMats(List<MusicMaterial> mats) {
+    public void setMats(Map<MusicMaterial.Type, MusicMaterial> mats) {
         this.mats = mats;
     }
 

@@ -13,34 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.styles;
+package tech.metacontext.ec.prototype.composer.draft.nodes.materials;
 
-import java.util.Arrays;
-import java.util.List;
-import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.materials.enums.Range;
+import tech.metacontext.ec.prototype.composer.draft.enums.MusicMaterialType;
+import tech.metacontext.ec.prototype.composer.draft.abs.AbstractElement;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <E> Element type of this material.
  */
-public class UnaccompaniedCello implements Style {
+public abstract class MusicMaterial<E> extends AbstractElement {
 
-    /**
-     * 音域
-     */
-    List<Range> cell_range = Arrays.asList(
-            Range.C2,
-            Range.C3,
-            Range.C4,
-            Range.C5,
-            Range.C6
-    );
+  public MusicMaterialType getType() {
+    
+    return MusicMaterialType.valueOf(getName());
+  }
 
-    public boolean isValidRange(SketchNode node) {
-        //@todo: isValidRange in Style-UnaccompaniedCello
-//        node.getMats().get(0)
-        return false;
-    }
+  public abstract void randomInit();
 
+  public abstract void add(E element);
+
+  public abstract void remove(E element);
 }

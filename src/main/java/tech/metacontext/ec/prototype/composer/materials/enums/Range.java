@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan Chang, Chun-yien <ccy@musicapoetica.org>.
+ * Copyright 2018 Jonathan.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.styles;
-
-import tech.metacontext.ec.prototype.composer.Composition;
+package tech.metacontext.ec.prototype.composer.materials.enums;
 
 /**
  *
- * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @author Jonathan
  */
-public class GoldenSectionClimax implements Style {
+public enum Range {
 
-    public static final double RATIO = 1.6180339887498948482;
-
-    public static double intensityIndex() {
-
-        //@todo
-        return 0.0;
-    }
-
-    public static double climaxEval(Composition c) {
-
-        //@todo
-        return 0.0;
-    }
+    C0, C1, C2, C3, C4, C5, C6, C7, C8;
 }

@@ -15,8 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.materials.enums;
 
-import java.util.Comparator;
-
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>

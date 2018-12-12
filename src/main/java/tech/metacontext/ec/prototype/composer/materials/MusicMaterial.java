@@ -24,47 +24,53 @@ import java.util.List;
  */
 public abstract class MusicMaterial<E> {
 
-  private int division;
-  private List<E> materials = new ArrayList<>();
+    public enum Type {
+        PitchSets,
+        NoteNumbers,
+        NoteRange
+    }
 
-  public MusicMaterial(int division, List<E> materials) {
+    private int division;
+    private List<E> materials = new ArrayList<>();
 
-    this.division = division;
-    this.materials = materials;
-  }
+    public MusicMaterial(int division, List<E> materials) {
 
-  public MusicMaterial() {
+        this.division = division;
+        this.materials = materials;
+    }
 
-    this.reset().generate();
-  }
+    public MusicMaterial() {
 
-  abstract public <M extends MusicMaterial> M reset();
+        this.reset().generate();
+    }
 
-  abstract public <M extends MusicMaterial> M random();
+    abstract public <M extends MusicMaterial> M reset();
 
-  abstract public <M extends MusicMaterial> M generate();
+    abstract public <M extends MusicMaterial> M random();
 
-  public int size() {
-    return this.materials.size();
-  }
+    abstract public <M extends MusicMaterial> M generate();
 
-  /*
+    public int size() {
+        return this.materials.size();
+    }
+
+    /*
    * Default setters and getters.
-   */
-  public int getDivision() {
-    return division;
-  }
+     */
+    public int getDivision() {
+        return division;
+    }
 
-  public void setDivision(int division) {
-    this.division = division;
-  }
+    public void setDivision(int division) {
+        this.division = division;
+    }
 
-  public List<E> getMaterials() {
-    return materials;
-  }
+    public List<E> getMaterials() {
+        return materials;
+    }
 
-  public void setMaterials(List<E> materials) {
-    this.materials = materials;
-  }
+    public void setMaterials(List<E> materials) {
+        this.materials = materials;
+    }
 
 }

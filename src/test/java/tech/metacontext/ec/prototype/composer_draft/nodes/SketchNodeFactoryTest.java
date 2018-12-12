@@ -15,8 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer_draft.nodes;
 
-import tech.metacontext.ec.prototype.composer_draft.nodes.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer_draft.nodes.SketchNode;
+import tech.metacontext.ec.prototype.composer.draft.nodes.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.draft.nodes.SketchNode;
 import java.util.stream.Stream;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -24,8 +24,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tech.metacontext.ec.prototype.composer_draft.enums.MusicMaterialType;
-import tech.metacontext.ec.prototype.composer_draft.nodes.materials.NoteNumber;
+import tech.metacontext.ec.prototype.composer.draft.enums.MusicMaterialType;
+import tech.metacontext.ec.prototype.composer.draft.nodes.materials.NoteNumber;
 
 /**
  *

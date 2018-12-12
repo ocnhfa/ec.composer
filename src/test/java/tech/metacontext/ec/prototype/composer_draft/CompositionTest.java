@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer_draft;
 
-import tech.metacontext.ec.prototype.composer_draft.Composition;
+import tech.metacontext.ec.prototype.composer.draft.Composition;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

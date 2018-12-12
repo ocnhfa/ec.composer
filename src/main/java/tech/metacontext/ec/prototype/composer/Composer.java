@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 
 /**
  *
@@ -29,20 +30,37 @@ import tech.metacontext.ec.prototype.abs.Population;
 public class Composer extends Population<Composition> {
 
     private List<Style> styles;
+    private ComposerAim aim;
+    private final List<Composition> conservetory;
 
     /**
      * Constructor.
      *
      * @param size number of Compositions.
+     * @param aim
      */
-    public Composer(int size) {
+    public Composer(int size, ComposerAim aim) {
 
         this.styles = new ArrayList<>();
+        this.aim = aim;
+        this.conservetory = new ArrayList<>();
         this.setPopulation(
-                Stream.generate(Composition::new)
+                Stream.generate(this::initComposition)
                         .limit(size)
                         .collect(Collectors.toList())
         );
+    }
+
+    public Composition initComposition() {
+
+        SketchNode seed = generateSeed();
+        Connector conn = new Connector(seed);
+        return new Composition(seed, conn);
+    }
+
+    public SketchNode generateSeed() {
+        //@todo: apply rule
+        return new SketchNode();
     }
 
     public void addStyle(Style style) {
@@ -52,12 +70,25 @@ public class Composer extends Population<Composition> {
 
     @Override
     public List<Composition> evolve() {
-        List<Composition> population
-                = this.getPopulation();
-        this.setPopulation(Stream.generate(Composition::new)
-                .limit(this.getSize())
-                .collect(Collectors.toList()));
-        return population;
+
+        List<Composition> parents = this.getPopulation();
+        List<Composition> gamets = parents.stream().map(Composition::new)
+                .collect(Collectors.toList());
+        // 1. 作曲
+        this.getPopulation().forEach(Composition::compose);
+        // 2. mutation, crossover... 
+        // 3. 符合目標、風格者保留至conservatory
+        this.conservetory.addAll(
+                gamets.stream()
+                        .filter(this::qualify)
+                        .map(c -> gamets.remove(gamets.indexOf(c)))
+                        .collect(Collectors.toList())
+        );
+        return parents;
+    }
+
+    public boolean qualify(Composition composition) {
+        return false;
     }
 
     @Override
@@ -74,6 +105,18 @@ public class Composer extends Population<Composition> {
 
     public void setStyles(List<Style> styles) {
         this.styles = styles;
+    }
+
+    public ComposerAim getAim() {
+        return aim;
+    }
+
+    public void setAim(ComposerAim aim) {
+        this.aim = aim;
+    }
+
+    public List<Composition> getConservetory() {
+        return conservetory;
     }
 
 }

@@ -15,12 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer_draft.descriptors;
 
-import tech.metacontext.ec.prototype.composer_draft.connectors.descriptors.CommonTones;
+import tech.metacontext.ec.prototype.composer.draft.connectors.descriptors.CommonTones;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tech.metacontext.ec.prototype.composer_draft.enums.Pitch;
-import tech.metacontext.ec.prototype.composer_draft.nodes.materials.PitchSet;
+import tech.metacontext.ec.prototype.composer.draft.enums.Pitch;
+import tech.metacontext.ec.prototype.composer.draft.nodes.materials.PitchSet;
 
 /**
  *

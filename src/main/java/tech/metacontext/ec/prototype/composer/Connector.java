@@ -16,8 +16,9 @@
 package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.descriptor.IdeaDescriptor;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import tech.metacontext.ec.prototype.composer.descriptor.CommonTones;
 
 /**
  *
@@ -27,11 +28,19 @@ public class Connector {
 
     private SketchNode previous;
     private SketchNode next;
-    private List<IdeaDescriptor> descriptors;
+    private static List<IdeaDescriptor> descriptors = Arrays.asList(
+        new CommonTones()
+    );
 
     public Connector(SketchNode previous) {
 
-        this.descriptors = new ArrayList<>();
+        this.previous = previous;
+    }
+
+    public Connector(Connector c) {
+
+        this.previous = new SketchNode(c.previous);
+        this.next = new SketchNode(c.next);
     }
 
     /*
@@ -56,9 +65,4 @@ public class Connector {
     public List<IdeaDescriptor> getDescriptors() {
         return descriptors;
     }
-
-    public void setDescriptors(List<IdeaDescriptor> descriptors) {
-        this.descriptors = descriptors;
-    }
-
 }

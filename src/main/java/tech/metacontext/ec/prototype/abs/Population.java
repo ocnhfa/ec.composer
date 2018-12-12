@@ -32,6 +32,11 @@ public abstract class Population<E extends Individual> {
         this.population = new ArrayList<>();
     }
 
+    /**
+     * Make population evolve.
+     *
+     * @return parents.
+     */
     abstract public List<E> evolve();
 
     abstract public void render();

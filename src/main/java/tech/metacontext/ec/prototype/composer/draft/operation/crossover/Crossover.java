@@ -13,34 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.styles;
+package tech.metacontext.ec.prototype.composer.draft.operation.crossover;
 
-import java.util.Arrays;
 import java.util.List;
-import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.materials.enums.Range;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
+import tech.metacontext.ec.prototype.composer.draft.Composition;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class UnaccompaniedCello implements Style {
+public class Crossover implements GeneticOperator<Composition> {
 
-    /**
-     * 音域
-     */
-    List<Range> cell_range = Arrays.asList(
-            Range.C2,
-            Range.C3,
-            Range.C4,
-            Range.C5,
-            Range.C6
-    );
-
-    public boolean isValidRange(SketchNode node) {
-        //@todo: isValidRange in Style-UnaccompaniedCello
-//        node.getMats().get(0)
-        return false;
-    }
+   @Override
+   public List<Composition> operator(Composition... individuals) {
+     
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+   }
 
 }

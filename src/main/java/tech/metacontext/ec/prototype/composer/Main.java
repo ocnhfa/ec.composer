@@ -18,9 +18,8 @@ package tech.metacontext.ec.prototype.composer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
@@ -30,11 +29,15 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class Main {
 
+    // 決定作品數量
+    static int size = 10;
+
     public static void main(String[] args) {
 
-        int size = 10;
-        Composer composer = new Composer(size);
+        // 創建作曲家物件
+        Composer composer = new Composer(size, ComposerAim.Phrase);
 
+        // 設定風格
         composer.setStyles(Arrays.asList(
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax()
@@ -44,7 +47,7 @@ public class Main {
         List<List<Composition>> archive = new ArrayList<>();
 
         System.out.println(composer.getPopulation());
-        
+
         for (int i = 0; i < generation; i++) {
             archive.add(composer.evolve());
         }

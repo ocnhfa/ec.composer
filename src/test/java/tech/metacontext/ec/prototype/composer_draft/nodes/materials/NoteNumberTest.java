@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer_draft.nodes.materials;
 
-import tech.metacontext.ec.prototype.composer_draft.nodes.materials.NoteNumber;
+import tech.metacontext.ec.prototype.composer.draft.nodes.materials.NoteNumber;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
