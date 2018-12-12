@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import java.util.Random;
 import tech.metacontext.ec.prototype.composer.Composition;
 
 /**
@@ -39,6 +40,6 @@ public class GoldenSectionClimax implements Style {
 
     @Override
     public boolean qualify(Composition composition) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new Random().nextBoolean();
     }
 }

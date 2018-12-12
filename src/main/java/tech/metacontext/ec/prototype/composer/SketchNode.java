@@ -21,12 +21,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class SketchNode {
+public class SketchNode extends Individual {
 
     private Map<Type, ? extends MusicMaterial> mats;
 
@@ -38,6 +39,7 @@ public class SketchNode {
 
     public SketchNode(SketchNode parent) {
 
+        super(parent.getId());
 //        System.out.println("parent=" + parent);
 //        System.out.println("parent.getMats=" + parent.getMats());
 //        System.out.println("parent.getMats.entrySet=" + parent.getMats().entrySet());

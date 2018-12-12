@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.composer.styles;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
@@ -46,8 +47,8 @@ public class UnaccompaniedCello implements Style {
 
     @Override
     public boolean qualify(Composition composition) {
-        //@todo: qualify in Style-UnaccompaniedCello
-        return false;
+
+        return new Random().nextBoolean();
     }
 
 }

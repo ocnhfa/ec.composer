@@ -18,13 +18,14 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.composer.descriptor.IdeaDescriptor;
 import java.util.Arrays;
 import java.util.List;
+import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.descriptor.CommonTones;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Connector {
+public class Connector extends Individual {
 
     private SketchNode previous;
     private SketchNode next;
@@ -38,10 +39,16 @@ public class Connector {
         this.next = new SketchNode();
     }
 
-    public Connector(Connector c) {
+    public Connector(Connector conn) {
 
-        this.previous = new SketchNode(c.previous);
-        this.next = new SketchNode(c.next);
+        super(conn.getId());
+        this.previous = new SketchNode(conn.previous);
+        this.next = new SketchNode(conn.next);
+    }
+
+    @Override
+    public String toString() {
+        return "Connector{" + previous + " => " + next + '}';
     }
 
     /*

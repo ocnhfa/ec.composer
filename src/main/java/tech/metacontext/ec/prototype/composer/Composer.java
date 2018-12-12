@@ -117,6 +117,7 @@ public class Composer extends Population<Composition> {
      * @param composition
      */
     public void persist(Composition composition) {
+        System.out.println("Persist " + composition + ", in generation " + this.genCount + ".");
     }
 
     @Override

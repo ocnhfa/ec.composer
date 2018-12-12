@@ -30,7 +30,8 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class Main {
 
     // 決定作品數量
-    static int size = 10;
+    static int size = 5;
+    static int generation = 2;
 
     public static void main(String[] args) {
 
@@ -43,7 +44,6 @@ public class Main {
                 new GoldenSectionClimax()
         ));
 
-        int generation = 5;
         List<List<Composition>> archive = new ArrayList<>();
 
 //        System.out.println(composer.getPopulation());
@@ -53,10 +53,13 @@ public class Main {
         }
 
         System.out.println("---------------------------------");
-        IntStream.range(0, 5)
+        IntStream.range(0, generation)
                 .peek(i -> System.out.println("Generation " + i))
                 .mapToObj(archive::get)
                 .forEach(list -> list.stream().forEach(Composition::render));
+
+        System.out.println("---------------------------------");
+        composer.getConservetory().forEach(System.out::println);
     }
 
 }

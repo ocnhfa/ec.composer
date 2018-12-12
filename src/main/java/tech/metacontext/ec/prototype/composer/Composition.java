@@ -15,9 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 
@@ -27,11 +25,10 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class Composition extends Individual {
 
-    private List<Connector> connectors;
+    private LinkedList<Connector> connectors = new LinkedList<>();
 
     public Composition(SketchNode seed, Connector conn) {
 
-        this.connectors = new ArrayList<>();
         this.connectors.add(conn);
         conn.setPrevious(seed);
         conn.getNext();
@@ -39,19 +36,22 @@ public class Composition extends Individual {
 
     public Composition(Connector connector) {
 
-        this.connectors = Arrays.asList(connector);
+        this.connectors.add(connector);
     }
 
     public Composition(Composition parent) {
 
+        super(parent.getId());
         this.connectors = parent.connectors.stream()
                 .map(Connector::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public Composition compose() {
+        //@todo: compose
         // if not meet aim, elongation
         // if meet aim, mutate or crossover
+        this.connectors.add(new Connector(this.connectors.getLast().getNext()));
         return this;
     }
 
@@ -65,14 +65,24 @@ public class Composition extends Individual {
         this.connectors.add(connector);
     }
 
+    @Override
+    public String toString() {
+
+        return String.format("%s: (%d)\n  %s",
+                super.toString(), this.getConnectors().size(),
+                this.getConnectors().stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n  ")));
+    }
+
     /*
      * Default setters and getters
      */
-    public List<Connector> getConnectors() {
+    public LinkedList<Connector> getConnectors() {
         return connectors;
     }
 
-    public void setConnectors(List<Connector> connectors) {
+    public void setConnectors(LinkedList<Connector> connectors) {
         this.connectors = connectors;
     }
 }
