@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Population;
@@ -32,6 +33,7 @@ public class Composer extends Population<Composition> {
     private List<Style> styles;
     private ComposerAim aim;
     private final List<Composition> conservetory;
+    private int genCount;
 
     /**
      * Constructor.
@@ -44,6 +46,7 @@ public class Composer extends Population<Composition> {
         this.styles = new ArrayList<>();
         this.aim = aim;
         this.conservetory = new ArrayList<>();
+        this.genCount = 0;
         this.setPopulation(
                 Stream.generate(this::initComposition)
                         .limit(size)
@@ -59,6 +62,7 @@ public class Composer extends Population<Composition> {
     }
 
     public SketchNode generateSeed() {
+
         //@todo: apply rule
         return new SketchNode();
     }
@@ -71,24 +75,48 @@ public class Composer extends Population<Composition> {
     @Override
     public List<Composition> evolve() {
 
-        List<Composition> parents = this.getPopulation();
-        List<Composition> gamets = parents.stream().map(Composition::new)
+        List<Composition> parents = this.getPopulation().stream()
+                .peek(this::persist)
+                .map(Composition::new)
                 .collect(Collectors.toList());
-        // 1. 作曲
-        this.getPopulation().forEach(Composition::compose);
-        // 2. mutation, crossover... 
-        // 3. 符合目標、風格者保留至conservatory
-        this.conservetory.addAll(
-                gamets.stream()
-                        .filter(this::qualify)
-                        .map(c -> gamets.remove(gamets.indexOf(c)))
-                        .collect(Collectors.toList())
+        System.out.println(
+                "// 1. compose()"
         );
+        this.getPopulation().stream()
+                .map(Composition::compose)
+                .forEach(this::conserve);  // conserved Composition remains.
+        System.out.println(
+                "// 2. parents -> children via mutation, crossover..."
+        );
+        List<Composition> children = new ArrayList<>();
+        do {
+            children.add(parents.get(new Random().nextInt(parents.size())));
+            //@todo: genetic operations here -> child, add and conserve
+        } while (children.size() < this.getSize());
+        System.out.println(
+                "// 3. 符合目標、風格者保留至conservatory"
+        );
+        this.setPopulation(children);
+        this.genCount++;
         return parents;
     }
 
-    public boolean qualify(Composition composition) {
+    public boolean conserve(Composition composition) {
+
+        if (this.styles.stream()
+                .allMatch(s -> s.qualify(composition))) {
+            this.conservetory.add(composition);
+            return true;
+        }
         return false;
+    }
+
+    /**
+     * Persist population with genCount.
+     *
+     * @param composition
+     */
+    public void persist(Composition composition) {
     }
 
     @Override
@@ -117,6 +145,14 @@ public class Composer extends Population<Composition> {
 
     public List<Composition> getConservetory() {
         return conservetory;
+    }
+
+    public int getGenCount() {
+        return genCount;
+    }
+
+    public void setGenCount(int genCount) {
+        this.genCount = genCount;
     }
 
 }

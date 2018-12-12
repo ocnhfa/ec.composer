@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan Chang, Chun-yien <ccy@musicapoetica.org>.
+ * Copyright 2018 Jonathan.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,35 +15,38 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 
 /**
  *
- * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @author Jonathan
  */
-public class NoteNumbers extends MusicMaterial<Integer> {
+public class NoteRange extends MusicMaterial<Range> {
 
     public static final int DEFAULT_DIVISION = 4;
     public static final int DEFAULT_MIN_DIVISION = 1;
     public static final int DEFAULT_MAX_DIVISION = 6;
-    public static final int DEFAULT_MIN_NUMBER = 0;
-    public static final int DEFAULT_MAX_NUMBER = 8;
+    public static final Range DEFAULT_LOWEST_RANGE = Range.C0;
+    public static final Range DEFAULT_HIGHEST_RANGE = Range.C8;
 
-    private int min, max;
+    private Range lowest;
+    private Range highest;
 
     @Override
-    public NoteNumbers reset() {
+    public NoteRange reset() {
 
         this.setDivision(DEFAULT_DIVISION);
-        this.min = DEFAULT_MIN_NUMBER;
-        this.max = DEFAULT_MAX_NUMBER;
+        this.lowest = DEFAULT_LOWEST_RANGE;
+        this.highest = DEFAULT_HIGHEST_RANGE;
         return this;
     }
 
     @Override
-    public NoteNumbers random() {
+    public NoteRange random() {
 
         this.setDivision(new Random()
                 .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
@@ -52,43 +55,36 @@ public class NoteNumbers extends MusicMaterial<Integer> {
     }
 
     @Override
-    public NoteNumbers generate() {
+    public NoteRange generate() {
 
+        List<Range> rangeList = Arrays.asList(Range.values());
+        int lowest_value = rangeList.indexOf(this.lowest);
+        int highest_value = rangeList.indexOf(this.highest);
         this.setMaterials(
-                new Random().ints(this.getDivision(), this.min, this.max + 1)
-                        .boxed()
+                new Random().ints(this.getDivision(), lowest_value, highest_value + 1)
+                        .mapToObj(rangeList::get)
                         .collect(Collectors.toList())
         );
         return this;
     }
 
-    public static void main(String[] args) {
-
-        NoteNumbers nn = new NoteNumbers();
-        Stream.generate(() -> nn.random())
-                .limit(50)
-                .map(NoteNumbers::getMaterials)
-                .forEach(System.out::println);
-    }
-
     /*
-     * Default setters and getters
+     * Default setters and getters.
      */
-
-    public int getMin() {
-        return min;
+    public Range getLowest() {
+        return lowest;
     }
 
-    public void setMin(int min) {
-        this.min = min;
+    public void setLowest(Range lowest) {
+        this.lowest = lowest;
     }
 
-    public int getMax() {
-        return max;
+    public Range getHighest() {
+        return highest;
     }
 
-    public void setMax(int max) {
-        this.max = max;
+    public void setHighest(Range highest) {
+        this.highest = highest;
     }
 
 }

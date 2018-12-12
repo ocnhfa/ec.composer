@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.styles;
+package tech.metacontext.ec.prototype.composer.operation.mutation;
 
-import tech.metacontext.ec.prototype.composer.Composition;
+import java.util.List;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
+import tech.metacontext.ec.prototype.abs.Individual;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class GoldenSectionClimax implements Style {
+public class Mutation implements GeneticOperator {
 
-    public static final double RATIO = 1.6180339887498948482;
+  @Override
+  public List operator(Individual... individuals) {
+    
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
-    public static double intensityIndex() {
-
-        //@todo
-        return 0.0;
-    }
-
-    public static double climaxEval(Composition c) {
-
-        //@todo
-        return 0.0;
-    }
-
-    @Override
-    public boolean qualify(Composition composition) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

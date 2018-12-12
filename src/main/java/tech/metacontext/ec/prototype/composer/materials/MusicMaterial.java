@@ -15,20 +15,20 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import tech.metacontext.ec.prototype.composer.ex.InstantiationFailedException;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <E>
  */
 public abstract class MusicMaterial<E> {
 
-    public enum Type {
-        PitchSets,
-        NoteNumbers,
-        NoteRange
-    }
 
     private int division;
     private List<E> materials = new ArrayList<>();

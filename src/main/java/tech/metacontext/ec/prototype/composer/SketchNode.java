@@ -16,10 +16,11 @@
 package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import java.util.HashMap;
+import tech.metacontext.ec.prototype.composer.materials.enums.Type;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -27,15 +28,19 @@ import java.util.stream.Collectors;
  */
 public class SketchNode {
 
-    private Map<MusicMaterial.Type, MusicMaterial> mats;
+    private Map<Type, ? extends MusicMaterial> mats;
 
     public SketchNode() {
 
-        this.mats = new HashMap<>();
+        this.mats = Stream.of(Type.values())
+                .collect(Collectors.toMap(t -> t, Type::getInstance));
     }
 
     public SketchNode(SketchNode parent) {
 
+//        System.out.println("parent=" + parent);
+//        System.out.println("parent.getMats=" + parent.getMats());
+//        System.out.println("parent.getMats.entrySet=" + parent.getMats().entrySet());
         this.mats = parent.getMats().entrySet().stream()
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
@@ -43,11 +48,11 @@ public class SketchNode {
     /*
      * Default setters and getters
      */
-    public Map<MusicMaterial.Type, MusicMaterial> getMats() {
+    public Map<Type, ? extends MusicMaterial> getMats() {
         return mats;
     }
 
-    public void setMats(Map<MusicMaterial.Type, MusicMaterial> mats) {
+    public void setMats(Map<Type, MusicMaterial> mats) {
         this.mats = mats;
     }
 

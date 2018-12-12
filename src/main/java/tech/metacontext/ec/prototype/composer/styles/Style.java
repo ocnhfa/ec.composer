@@ -15,10 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import tech.metacontext.ec.prototype.composer.Composition;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public interface Style {
+
+    public boolean qualify(Composition composition);
   
 }

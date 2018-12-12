@@ -46,9 +46,9 @@ public class Main {
         int generation = 5;
         List<List<Composition>> archive = new ArrayList<>();
 
-        System.out.println(composer.getPopulation());
-
+//        System.out.println(composer.getPopulation());
         for (int i = 0; i < generation; i++) {
+            System.out.println("i=" + i);
             archive.add(composer.evolve());
         }
 

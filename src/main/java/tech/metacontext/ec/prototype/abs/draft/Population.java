@@ -29,6 +29,7 @@ import tech.metacontext.ec.prototype.abs.Selector;
  * @param <E> Type of population
  * @param <R> type of evaluation score
  */
+@Deprecated
 public abstract class Population<E extends Individual, R> {
 
   public Map<E, R> population;

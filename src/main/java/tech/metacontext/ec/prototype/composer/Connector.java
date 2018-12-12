@@ -29,12 +29,13 @@ public class Connector {
     private SketchNode previous;
     private SketchNode next;
     private static List<IdeaDescriptor> descriptors = Arrays.asList(
-        new CommonTones()
+            new CommonTones()
     );
 
     public Connector(SketchNode previous) {
 
         this.previous = previous;
+        this.next = new SketchNode();
     }
 
     public Connector(Connector c) {

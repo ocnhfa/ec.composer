@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.composer.styles;
 
 import java.util.Arrays;
 import java.util.List;
+import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 
@@ -40,6 +41,12 @@ public class UnaccompaniedCello implements Style {
     public boolean isValidRange(SketchNode node) {
         //@todo: isValidRange in Style-UnaccompaniedCello
 //        node.getMats().get(0)
+        return false;
+    }
+
+    @Override
+    public boolean qualify(Composition composition) {
+        //@todo: qualify in Style-UnaccompaniedCello
         return false;
     }
 

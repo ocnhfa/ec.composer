@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,8 @@ public class Composition extends Individual {
 
     public Composition(SketchNode seed, Connector conn) {
 
+        this.connectors = new ArrayList<>();
+        this.connectors.add(conn);
         conn.setPrevious(seed);
         conn.getNext();
     }
@@ -46,9 +49,10 @@ public class Composition extends Individual {
                 .collect(Collectors.toList());
     }
 
-    public void compose() {
-    // if not meet aim, elongation
-    // if meet aim, mutate or crossover
+    public Composition compose() {
+        // if not meet aim, elongation
+        // if meet aim, mutate or crossover
+        return this;
     }
 
     public void render() {
