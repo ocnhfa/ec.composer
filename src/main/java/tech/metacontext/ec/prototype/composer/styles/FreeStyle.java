@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan Chang, Chun-yien <ccy@musicapoetica.org>.
+ * Copyright 2018 Jonathan Chang.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,24 @@ import tech.metacontext.ec.prototype.composer.SketchNode;
 
 /**
  *
- * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @author Jonathan Chang
  */
-public interface Style {
+public class FreeStyle implements Style {
 
-    public boolean qualifySketchNode(SketchNode sketchNode);
+    @Override
+    public boolean qualifySketchNode(SketchNode sketchNode) {
 
-    public double rateComposition(Composition composition);
+        return true;
+    }
+
+    @Override
+    public double rateComposition(Composition composition) {
+
+        return Math.random();
+    }
+
+    public static boolean checker(SketchNode whatever) {
+
+        return true;
+    }
 }

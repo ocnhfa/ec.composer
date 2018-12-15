@@ -18,8 +18,11 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.composer.descriptor.IdeaDescriptor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.descriptor.CommonTones;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -33,10 +36,13 @@ public class Connector extends Individual {
             new CommonTones()
     );
 
-    public Connector(SketchNode previous) {
+    public Connector(SketchNode previous, Predicate<SketchNode> styleChecker) {
 
         this.previous = previous;
-        this.next = new SketchNode();
+        this.next = Stream.generate(SketchNode::new)
+                .filter(styleChecker)
+                .findFirst()
+                .get();
     }
 
     public Connector(Connector conn) {

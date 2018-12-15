@@ -16,16 +16,11 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
+import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
@@ -37,26 +32,14 @@ public class ComposerTest {
     public ComposerTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
+    /**
+     * Test of compose method, of class Composer.
+     */
     @Test
-    public void main() {
+    public void testCompose() {
+        System.out.println("compose");
         int size = 20;
-        Composer c = new Composer(size, ComposerAim.Phrase, new GoldenSectionClimax());
+        Composer c = new Composer(size, ComposerAim.Phrase, new FreeStyle());
         for (int i = 0; i < 50; i++) {
             c.compose();
 //            System.out.print(
@@ -78,21 +61,6 @@ public class ComposerTest {
     }
 
     /**
-     * Test of initComposition method, of class Composer.
-     */
-    @Test
-    @Ignore
-    public void testInitComposition() {
-        System.out.println("initComposition");
-        Composer instance = null;
-        Composition expResult = null;
-        Composition result = instance.initComposition();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of generateSeed method, of class Composer.
      */
     @Test
@@ -103,19 +71,6 @@ public class ComposerTest {
         SketchNode expResult = null;
         SketchNode result = instance.generateSeed();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of compose method, of class Composer.
-     */
-    @Test
-    @Ignore
-    public void testCompose() {
-        System.out.println("compose");
-        Composer instance = null;
-        instance.compose();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

@@ -24,6 +24,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
@@ -56,10 +57,11 @@ public class CompositionTest {
 
         System.out.println("ObjectCopy");
         SketchNode node = new SketchNode();
-        Composition c1 = new Composition(node, new Connector(node)),
+        Composition c1 = new Composition(node,
+                new Connector(node, FreeStyle::checker)),
                 c2 = c1,
                 c3 = new Composition(c1);
-        c1.elongation(null);
+        c1.elongation(FreeStyle::checker);
         assertEquals(
                 c1.getConnectors().size(),
                 c2.getConnectors().size());
@@ -75,10 +77,9 @@ public class CompositionTest {
     @Ignore
     public void testElongation() {
         System.out.println("elongation");
-        List<? extends Style> styles = null;
         Composition instance = null;
         Composition expResult = null;
-        Composition result = instance.elongation(styles);
+        Composition result = instance.elongation((t) -> true);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.composer;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
@@ -50,17 +51,13 @@ public class Composition extends Individual {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public Composition elongation(List<? extends Style> styles) {
+    public Composition elongation(Predicate<SketchNode> styleChecker) {
         //@todo: compose
         // if not meet aim, elongation
         // if meet aim, mutate or crossover
         this.connectors.add(
-                Stream.generate(() -> new Connector(this.connectors.getLast().getNext()))
-                        .filter(conn
-                                -> styles == null || styles.stream()
-                                .allMatch(style
-                                        -> style
-                                        .qualifySketchNode(conn.getNext())))
+                Stream.generate(()
+                        -> new Connector(this.connectors.getLast().getNext(), styleChecker))
                         .findAny()
                         .get()
         );

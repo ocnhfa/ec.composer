@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.abs.GeneticOperator;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 
 /**
  *
@@ -36,9 +36,15 @@ public class Composer extends Population<Composition> {
     private int size;
 
     private final List<Composition> conservetory;
-    // Constants
-    private static final double ELONGATION_RATE = 0.1;
-    private static final double CONSERVE_RATE = 0.99;
+
+    /**
+     * 當作品達到目標之後，還繼續加長的機率。
+     */
+    private static final double ELONGATION_CHANCE = 0.1;
+    /**
+     * 作品收入conservatory所須達到的分數。
+     */
+    private static final double CONSERVE_SCORE = 0.99;
 
     /**
      * Constructor.
@@ -56,17 +62,20 @@ public class Composer extends Population<Composition> {
         }
         this.size = size;
         this.conservetory = new ArrayList<>();
-        this.setPopulation(Stream.generate(this::initComposition)
-                .limit(size)
-                .collect(Collectors.toList())
+        this.setPopulation(
+                Stream.generate(() -> generateSeed())
+                        .map(seed
+                                -> new Composition(seed,
+                                new Connector(seed, this::styleChecker)))
+                        .limit(size)
+                        .collect(Collectors.toList())
         );
     }
 
-    public Composition initComposition() {
+    public boolean styleChecker(SketchNode node) {
 
-        SketchNode seed = generateSeed();
-        Connector conn = new Connector(seed);
-        return new Composition(seed, conn);
+        return this.getStyles().stream().allMatch(
+                style -> style.qualifySketchNode(node));
     }
 
     public SketchNode generateSeed() {
@@ -82,8 +91,8 @@ public class Composer extends Population<Composition> {
     public void compose() {
 
         this.getPopulation().stream()
-                .filter(c -> !aim.completed(c) || Math.random() < ELONGATION_RATE)
-                .forEach(c -> c.elongation(this.getStyles()));
+                .filter(c -> !aim.completed(c) || Math.random() < ELONGATION_CHANCE)
+                .forEach(c -> c.elongation(this::styleChecker));
         this.getPopulation().removeIf(this::conserve);
     }
 
@@ -93,20 +102,17 @@ public class Composer extends Population<Composition> {
         List<Composition> parents = this.getPopulation().stream()
                 .map(Composition::new)
                 .collect(Collectors.toList());
-
         this.archive(parents);
-
-        System.out.println(
-                "// 2. parents -> children via mutation, crossover..."
-        );
         List<Composition> children = new ArrayList<>();
         do {
-            children.add(parents.get(new Random().nextInt(parents.size())));
             //@todo: genetic operations here -> child, add and conserve
+//            switch () {
+//            }
+            children.add(parents.get(new Random().nextInt(parents.size())));
+            children.removeIf(this::conserve);
         } while (children.size() < this.getPopulationSize());
-        System.out.println(
-                "// 3. 符合目標、風格者保留至conservatory"
-        );
+        System.out.println();
+
         this.setPopulation(children);
         this.genCountIncrement();
     }
@@ -115,7 +121,7 @@ public class Composer extends Population<Composition> {
 
         if (this.getAim().completed(composition)
                 && this.styles.stream()
-                        .allMatch(s -> s.rateComposition(composition) > CONSERVE_RATE)) {
+                        .allMatch(s -> s.rateComposition(composition) > CONSERVE_SCORE)) {
             this.conservetory.add(composition);
             return true;
         }
