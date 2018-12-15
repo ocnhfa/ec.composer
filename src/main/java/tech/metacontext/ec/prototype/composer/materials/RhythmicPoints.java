@@ -25,40 +25,17 @@ import java.util.stream.Stream;
  */
 public class RhythmicPoints extends MusicMaterial<Integer> {
 
-    public static final int DEFAULT_DIVISION = 4;
-    public static final int DEFAULT_MIN_DIVISION = 1;
-    public static final int DEFAULT_MAX_DIVISION = 6;
-    public static final int DEFAULT_MIN_NUMBER = 0;
-    public static final int DEFAULT_MAX_NUMBER = 8;
+    public static final int DEFAULT_MIN_POINTS = 0;
+    public static final int DEFAULT_MAX_POINTS = 8;
 
-    private int min, max;
+    private int minPoints, maxPoints;
 
     @Override
     public RhythmicPoints reset() {
 
         this.setDivision(DEFAULT_DIVISION);
-        this.min = DEFAULT_MIN_NUMBER;
-        this.max = DEFAULT_MAX_NUMBER;
-        return this;
-    }
-
-    @Override
-    public RhythmicPoints random() {
-
-        this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
-                + DEFAULT_MIN_DIVISION);
-        return generate();
-    }
-
-    @Override
-    public RhythmicPoints generate() {
-
-        this.setMaterials(
-                new Random().ints(this.getDivision(), this.min, this.max + 1)
-                        .boxed()
-                        .collect(Collectors.toList())
-        );
+        this.minPoints = DEFAULT_MIN_POINTS;
+        this.maxPoints = DEFAULT_MAX_POINTS;
         return this;
     }
 
@@ -72,11 +49,30 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     }
 
     @Override
+    public RhythmicPoints generate() {
+
+        this.setMaterials(new Random().ints(this.getDivision(), this.minPoints, this.maxPoints + 1)
+                .boxed()
+                .collect(Collectors.toList())
+        );
+        return this;
+    }
+
+    @Override
+    public RhythmicPoints random() {
+
+        this.setDivision(new Random()
+                .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
+                + DEFAULT_MIN_DIVISION);
+        return generate();
+    }
+
+    @Override
     public String toString() {
         return "RhythmicPoints{"
                 + "div=" + this.getDivision()
-                + ", min=" + min
-                + ", max=" + max + '}'
+                + ", min=" + minPoints
+                + ", max=" + maxPoints + '}'
                 + this.getMaterials();
     }
 
@@ -84,19 +80,19 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
      * Default setters and getters
      */
     public int getMin() {
-        return min;
+        return minPoints;
     }
 
     public void setMin(int min) {
-        this.min = min;
+        this.minPoints = min;
     }
 
     public int getMax() {
-        return max;
+        return maxPoints;
     }
 
     public void setMax(int max) {
-        this.max = max;
+        this.maxPoints = max;
     }
 
 }

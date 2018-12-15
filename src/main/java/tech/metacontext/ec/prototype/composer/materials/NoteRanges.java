@@ -27,21 +27,32 @@ import tech.metacontext.ec.prototype.composer.materials.enums.Range;
  */
 public class NoteRanges extends MusicMaterial<Range> {
 
-    public static final int DEFAULT_DIVISION = 4;
-    public static final int DEFAULT_MIN_DIVISION = 1;
-    public static final int DEFAULT_MAX_DIVISION = 6;
     public static final Range DEFAULT_LOWEST_RANGE = Range.C0;
     public static final Range DEFAULT_HIGHEST_RANGE = Range.C8;
 
-    private Range lowest;
-    private Range highest;
+    private Range lowestRange;
+    private Range highestRange;
 
     @Override
     public NoteRanges reset() {
 
         this.setDivision(DEFAULT_DIVISION);
-        this.lowest = DEFAULT_LOWEST_RANGE;
-        this.highest = DEFAULT_HIGHEST_RANGE;
+        this.lowestRange = DEFAULT_LOWEST_RANGE;
+        this.highestRange = DEFAULT_HIGHEST_RANGE;
+        return this;
+    }
+
+    @Override
+    public NoteRanges generate() {
+
+        List<Range> rangeList = Arrays.asList(Range.values());
+        int lowest_value = rangeList.indexOf(this.lowestRange);
+        int highest_value = rangeList.indexOf(this.highestRange);
+        this.setMaterials(
+                new Random().ints(this.getDivision(), lowest_value, highest_value + 1)
+                        .mapToObj(rangeList::get)
+                        .collect(Collectors.toList())
+        );
         return this;
     }
 
@@ -55,25 +66,11 @@ public class NoteRanges extends MusicMaterial<Range> {
     }
 
     @Override
-    public NoteRanges generate() {
-
-        List<Range> rangeList = Arrays.asList(Range.values());
-        int lowest_value = rangeList.indexOf(this.lowest);
-        int highest_value = rangeList.indexOf(this.highest);
-        this.setMaterials(
-                new Random().ints(this.getDivision(), lowest_value, highest_value + 1)
-                        .mapToObj(rangeList::get)
-                        .collect(Collectors.toList())
-        );
-        return this;
-    }
-
-    @Override
     public String toString() {
         return "{"
                 + "div=" + this.getDivision()
-                + ", lowest=" + lowest
-                + ", highest=" + highest
+                + ", lowest=" + lowestRange
+                + ", highest=" + highestRange
                 + '}'
                 + this.getMaterials();
     }
@@ -82,19 +79,19 @@ public class NoteRanges extends MusicMaterial<Range> {
      * Default setters and getters.
      */
     public Range getLowest() {
-        return lowest;
+        return lowestRange;
     }
 
     public void setLowest(Range lowest) {
-        this.lowest = lowest;
+        this.lowestRange = lowest;
     }
 
     public Range getHighest() {
-        return highest;
+        return highestRange;
     }
 
     public void setHighest(Range highest) {
-        this.highest = highest;
+        this.highestRange = highest;
     }
 
 }

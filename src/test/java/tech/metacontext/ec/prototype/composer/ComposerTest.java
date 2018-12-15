@@ -60,6 +60,11 @@ public class ComposerTest {
         assertEquals(c.getSize(), c.getPopulationSize() + c.getConservetory().size());
     }
 
+    @Test
+    @Ignore
+    public void testStyleChecker() {
+    }
+
     /**
      * Test of generateSeed method, of class Composer.
      */

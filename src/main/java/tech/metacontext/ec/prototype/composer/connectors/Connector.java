@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer;
+package tech.metacontext.ec.prototype.composer.connectors;
 
 import tech.metacontext.ec.prototype.composer.descriptor.IdeaDescriptor;
 import java.util.Arrays;
@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.descriptor.CommonTones;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *

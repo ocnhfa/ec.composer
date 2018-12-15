@@ -15,16 +15,13 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.List;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.enums.Type;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *

@@ -15,23 +15,19 @@
  */
 package tech.metacontext.ec.prototype.composer.materials.enums;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import tech.metacontext.ec.prototype.composer.ex.InstantiationFailedException;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.RhythmicPoints;
-import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
-import tech.metacontext.ec.prototype.composer.materials.PitchSets;
+import tech.metacontext.ec.prototype.composer.materials.*;
 
 /**
  *
  * @author Jonathan
  */
 public enum Type {
+
     PitchSets(PitchSets.class),
     NoteNumbers(RhythmicPoints.class),
-    NoteRanges(NoteRanges.class);
+    NoteRanges(NoteRanges.class),
+    Dynamics(Dynamics.class);
 
     Class<? extends MusicMaterial> clazz;
 
@@ -43,10 +39,8 @@ public enum Type {
 
         try {
             return this.clazz.getDeclaredConstructor().newInstance();
-        } catch (NoSuchMethodException | SecurityException | InstantiationException
-                | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException ex) {
-            Logger.getLogger(MusicMaterial.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            System.out.println(this);
             throw new InstantiationFailedException(ex.getMessage());
         }
     }

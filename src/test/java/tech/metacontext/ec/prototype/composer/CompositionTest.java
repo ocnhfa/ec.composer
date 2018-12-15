@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.After;
@@ -107,7 +108,7 @@ public class CompositionTest {
         System.out.println("addConnect");
         Connector connector = null;
         Composition instance = null;
-        instance.addConnect(connector);
+        instance.addConnector(connector);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

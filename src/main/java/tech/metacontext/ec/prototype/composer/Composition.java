@@ -15,13 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -52,10 +51,11 @@ public class Composition extends Individual {
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
+        
         //@todo: compose
         // if not meet aim, elongation
         // if meet aim, mutate or crossover
-        this.connectors.add(
+        this.addConnector(
                 Stream.generate(()
                         -> new Connector(this.connectors.getLast().getNext(), styleChecker))
                         .findAny()
@@ -69,7 +69,7 @@ public class Composition extends Individual {
         System.out.println(this);
     }
 
-    public void addConnect(Connector connector) {
+    public void addConnector(Connector connector) {
 
         this.connectors.add(connector);
     }

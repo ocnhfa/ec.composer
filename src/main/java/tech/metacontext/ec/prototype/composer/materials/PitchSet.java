@@ -29,56 +29,27 @@ import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
  */
 public class PitchSet extends MusicMaterial<Pitch> {
 
-    public static final int DEFAULT_MIN = 1;
-    public static final int DEFAULT_MAX = 5;
-    public static final int DEFAULT_NUMBER = 3;
-    public static final int ALLOW = 1, NOT_ALLOW = 0;
-    public static final int DEFAULT_ENHARMONIC_ALLOWED = NOT_ALLOW;
-    public static final int DEFAULT_SHARP_ALLOWED = ALLOW;
+    public static final int DEFAULT_MIN_PITCH_NUMBER = 1;
+    public static final int DEFAULT_MAX_PITCH_NUMBER = 5;
+    public static final int DEFAULT_PITCH_NUMBER = 3;
+    public static final int SHARP_ALLOWED = 1, SHARP_NOT_ALLOWED = 0;
+    public static final int DEFAULT_ENHARMONIC_ALLOWED = SHARP_NOT_ALLOWED;
+    public static final int DEFAULT_SHARP_ALLOWED = SHARP_ALLOWED;
 
-    private int min, max;
-    private int number;
+    private int minPitchNumber, maxPitchNumber;
+    private int pitchNumber;
+    /**
+     * 是否容許混合升記號音符
+     */
     private boolean sharpAllowed;
+    /**
+     * 同音異名是否視為同音
+     */
     private boolean enharmonicAllowed;
+    /**
+     * 保留音
+     */
     private List<Pitch> preset = new ArrayList<>();
-
-    @Override
-
-    public PitchSet reset() {
-
-        this.min = DEFAULT_MIN;
-        this.max = DEFAULT_MAX;
-        this.number = DEFAULT_NUMBER;
-        this.sharpAllowed = (DEFAULT_SHARP_ALLOWED == ALLOW);
-        this.enharmonicAllowed = (DEFAULT_ENHARMONIC_ALLOWED == ALLOW);
-        this.preset = new ArrayList<>();
-        return this;
-    }
-
-    @Override
-    public PitchSet random() {
-
-        this.sharpAllowed = new Random().nextBoolean();
-        this.number = new Random().nextInt(this.max - this.min + 1) + this.min;
-        return this.generate();
-    }
-
-    @Override
-    public PitchSet generate() {
-
-        this.setMaterials(
-                Stream.of(Pitch.values())
-                        .limit(this.sharpAllowed ? 17 : 12)
-                        .map(p -> new SimpleEntry<>(this.preset.contains(p) ? 0.0 : Math.random(), p))
-                        .sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey()))
-                        .map(e -> (this.enharmonicAllowed) ? e.getValue().ordinal() : e.getValue().ordinalEnharmonic())
-                        .distinct()
-                        .map(i -> Pitch.values()[i])
-                        .limit(this.number)
-                        .collect(Collectors.toList())
-        );
-        return this;
-    }
 
     public static void main(String[] args) {
 
@@ -87,19 +58,61 @@ public class PitchSet extends MusicMaterial<Pitch> {
         Stream.generate(PitchSet::new)
                 .limit(10)
                 .peek(ps -> {
+                    System.out.println("new: " + ps);
+                    ps.preset.addAll(preset);
                     preset.clear();
-                    Pitch p = ps.getMaterials().get(0);
-                    ps.preset.add(p);
-                    System.out.println("peek: " + ps + "->" + p);
+                    preset.add(ps.getMaterials().get(0));
+                    System.out.println("preset = " + preset);
                 })
                 .map(PitchSet::random)
                 .forEach(System.out::println);
     }
 
     @Override
+    public PitchSet reset() {
+
+        this.minPitchNumber = DEFAULT_MIN_PITCH_NUMBER;
+        this.maxPitchNumber = DEFAULT_MAX_PITCH_NUMBER;
+        this.pitchNumber = DEFAULT_PITCH_NUMBER;
+        this.sharpAllowed = (DEFAULT_SHARP_ALLOWED == SHARP_ALLOWED);
+        this.enharmonicAllowed = (DEFAULT_ENHARMONIC_ALLOWED == SHARP_ALLOWED);
+        this.preset = new ArrayList<>();
+        return this;
+    }
+
+    @Override
+    public PitchSet generate() {
+        //若不允許升記號則將preset中的升記號以降記號取代
+        if (!this.sharpAllowed && !preset.isEmpty()) {
+            for (int i = 0; i < preset.size(); i++) {
+                preset.set(i, Pitch.values()[preset.get(i).ordinalEnharmonic()]);
+            }
+        }
+        this.setMaterials(Stream.of(Pitch.values())
+                .limit(this.sharpAllowed ? 17 : 12)
+                .map(p -> new SimpleEntry<>(this.preset.contains(p) ? 0.0 : Math.random(), p))
+                .sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey()))
+                .map(e -> (this.enharmonicAllowed) ? e.getValue().ordinal() : e.getValue().ordinalEnharmonic())
+                .distinct()
+                .map(i -> Pitch.values()[i])
+                .limit(this.pitchNumber)
+                .collect(Collectors.toList())
+        );
+        return this;
+    }
+
+    @Override
+    public PitchSet random() {
+
+        this.sharpAllowed = new Random().nextBoolean();
+        this.pitchNumber = new Random().nextInt(this.maxPitchNumber - this.minPitchNumber + 1) + this.minPitchNumber;
+        return this.generate();
+    }
+
+    @Override
     public String toString() {
         return String.format("PitchSet[ %d -> %s ]",
-                this.number,
+                this.pitchNumber,
                 this.getMaterials().stream()
                         .sorted()
                         .map(Object::toString)
@@ -126,27 +139,27 @@ public class PitchSet extends MusicMaterial<Pitch> {
     }
 
     public int getMin() {
-        return min;
+        return minPitchNumber;
     }
 
     public void setMin(int min) {
-        this.min = min;
+        this.minPitchNumber = min;
     }
 
     public int getMax() {
-        return max;
+        return maxPitchNumber;
     }
 
     public void setMax(int max) {
-        this.max = max;
+        this.maxPitchNumber = max;
     }
 
     public int getNumber() {
-        return number;
+        return pitchNumber;
     }
 
     public void setNumber(int number) {
-        this.number = number;
+        this.pitchNumber = number;
     }
 
     public boolean isSharpAllowed() {

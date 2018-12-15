@@ -25,26 +25,56 @@ import java.util.List;
  */
 public abstract class MusicMaterial<E> {
 
+    public static final int DEFAULT_DIVISION = 2;
+    public static final int DEFAULT_MIN_DIVISION = 1;
+    public static final int DEFAULT_MAX_DIVISION = 4;
 
     private int division;
     private List<E> materials = new ArrayList<>();
 
+    /**
+     * Constructor with specified division and material content.
+     *
+     * @param division
+     * @param materials
+     */
     public MusicMaterial(int division, List<E> materials) {
 
         this.division = division;
         this.materials = materials;
     }
 
+    /**
+     * Constructor with default parameters.
+     */
     public MusicMaterial() {
 
         this.reset().generate();
     }
 
+    /**
+     * Reset parameters to the default state.
+     *
+     * @param <M>
+     * @return this instance for cascading.
+     */
     abstract public <M extends MusicMaterial> M reset();
 
-    abstract public <M extends MusicMaterial> M random();
-
+    /**
+     * Generate materials according to current parameters.
+     *
+     * @param <M>
+     * @return this instance for cascading.
+     */
     abstract public <M extends MusicMaterial> M generate();
+
+    /**
+     * Randomize parameters.
+     *
+     * @param <M>
+     * @return this instance for cascading.
+     */
+    abstract public <M extends MusicMaterial> M random();
 
     public int size() {
         return this.materials.size();

@@ -30,10 +30,6 @@ import java.util.stream.Stream;
  */
 public class PitchSets extends MusicMaterial<PitchSet> {
 
-    public static final int DEFAULT_DIVISION = 4;
-    public static final int DEFAULT_MIN_DIVISION = 1;
-    public static final int DEFAULT_MAX_DIVISION = 6;
-
     private int minDivision, maxDivision;
     private boolean randomPitchSet = false;
     private int commonTone = -1;
@@ -43,18 +39,6 @@ public class PitchSets extends MusicMaterial<PitchSet> {
 
         this.setDivision(DEFAULT_DIVISION);
         return this;
-    }
-
-    @Override
-    public PitchSets random() {
-
-        if (this.randomPitchSet || this.maxDivision == 0) {
-            this.setDivision(new Random().nextInt(
-                    DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1) + DEFAULT_MIN_DIVISION);
-        } else {
-            this.setDivision(new Random().nextInt(maxDivision - minDivision + 1) + minDivision);
-        }
-        return this.generate();
     }
 
     @Override
@@ -75,6 +59,18 @@ public class PitchSets extends MusicMaterial<PitchSet> {
                 .collect(Collectors.toList())
         );
         return this;
+    }
+
+    @Override
+    public PitchSets random() {
+
+        if (this.randomPitchSet || this.maxDivision == 0) {
+            this.setDivision(new Random().nextInt(
+                    DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1) + DEFAULT_MIN_DIVISION);
+        } else {
+            this.setDivision(new Random().nextInt(maxDivision - minDivision + 1) + minDivision);
+        }
+        return this.generate();
     }
 
     @Override
