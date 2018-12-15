@@ -15,14 +15,17 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import tech.metacontext.ec.prototype.composer.materials.enums.PitchSet;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.materials.enums.PitchSetFactory;
 
 /**
  *
@@ -30,32 +33,44 @@ import java.util.stream.Stream;
  */
 public class PitchSets extends MusicMaterial<PitchSet> {
 
-    private int minDivision, maxDivision;
-    private boolean randomPitchSet = false;
-    private int commonTone = -1;
+    public static final int DEFAULT_MIN_PITCH_NUMBER = 1;
+    public static final int DEFAULT_MAX_PITCH_NUMBER = 5;
+    public static final int DEFAULT_PITCH_NUMBER = 3;
+    public static final int SHARP_ALLOWED = 1, SHARP_NOT_ALLOWED = 0;
+    public static final int DEFAULT_ENHARMONIC_ALLOWED = SHARP_NOT_ALLOWED;
+    public static final int DEFAULT_SHARP_ALLOWED = SHARP_ALLOWED;
+
+    private boolean randomDivision = false;
+    private int commonTone = 0;
+    public PitchSetFactory factory;
 
     @Override
     public PitchSets reset() {
 
         this.setDivision(DEFAULT_DIVISION);
+        this.factory = new PitchSetFactory();
         return this;
+    }
+
+    public static void main(String[] args) {
+
+        PitchSets pss = new PitchSets();
+        pss.setCommonTone(2);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(pss.random());
+            pss.factory.randomize();
+        }
     }
 
     @Override
     public PitchSets generate() {
 
-        Set<Pitch> preset = new HashSet<>();
-        this.setMaterials(Stream.generate(PitchSet::new)
+        if (factory.getMinPitchNumber() < this.commonTone) {
+            factory.setMinPitchNumber(this.commonTone);
+        }
+        this.setMaterials(Stream.generate(factory::generate)
+                .peek(ps -> factory.setPresetPitches(ps.selectPitch(this.commonTone)))
                 .limit(this.getDivision())
-                .peek(ps -> ps.setPreset(new ArrayList<>(preset)))
-                .map(PitchSet::random)
-                .peek(ps -> {
-                    preset.clear();
-                    while (preset.size() < Math.min(ps.size(), this.commonTone)) {
-                        preset.add(ps.getMaterials().get(new Random().nextInt(ps.size())));
-                    }
-//              System.out.println(preset);
-                })
                 .collect(Collectors.toList())
         );
         return this;
@@ -64,12 +79,8 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     @Override
     public PitchSets random() {
 
-        if (this.randomPitchSet || this.maxDivision == 0) {
-            this.setDivision(new Random().nextInt(
-                    DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1) + DEFAULT_MIN_DIVISION);
-        } else {
-            this.setDivision(new Random().nextInt(maxDivision - minDivision + 1) + minDivision);
-        }
+        this.setDivision(new Random().nextInt(
+                DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1) + DEFAULT_MIN_DIVISION);
         return this.generate();
     }
 
@@ -87,28 +98,12 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     /*
      * default setters and getters
      */
-    public int getMinDivision() {
-        return minDivision;
-    }
-
-    public void setMinDivision(int minDivision) {
-        this.minDivision = minDivision;
-    }
-
-    public int getMaxDivision() {
-        return maxDivision;
-    }
-
-    public void setMaxDivision(int maxDivision) {
-        this.maxDivision = maxDivision;
-    }
-
     public boolean isRandomPitchSet() {
-        return randomPitchSet;
+        return randomDivision;
     }
 
     public void setRandomPitchSet(boolean randomPitchSet) {
-        this.randomPitchSet = randomPitchSet;
+        this.randomDivision = randomPitchSet;
     }
 
     public int getCommonTone() {

@@ -35,24 +35,8 @@ public class SketchNodeTest {
     public SketchNodeTest() {
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
-    public void main() {
+    public void copyObject() {
         SketchNode node1 = new SketchNode(),
                 node2 = node1,
                 node3 = new SketchNode(node1);

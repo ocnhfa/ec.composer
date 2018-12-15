@@ -59,12 +59,11 @@ public class PitchSetsTest {
     public void testSetRandomPitchSet() {
         System.out.println("setRandomPitchSet");
         AtomicInteger i = new AtomicInteger(0);
-        List<PitchSets> pss = Stream.generate(PitchSets::new)
+        PitchSets pss = new PitchSets();
+        pss.setCommonTone(2);
+        pss.setRandomPitchSet(true);
+        Stream.generate(pss::random)
                 .limit(10)
-                .peek(ps -> {
-                    ps.setCommonTone(1);
-                    ps.setRandomPitchSet(true);
-                })
                 .map(PitchSets::random)
                 .peek(ps -> System.out.print(i.incrementAndGet() + ". "))
                 .peek(System.out::println)
@@ -127,64 +126,6 @@ public class PitchSetsTest {
         String expResult = "";
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getMin method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testGetMin() {
-        System.out.println("getMin");
-        PitchSets instance = new PitchSets();
-        int expResult = 0;
-        int result = instance.getMinDivision();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMin method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testSetMin() {
-        System.out.println("setMin");
-        int min = 0;
-        PitchSets instance = new PitchSets();
-        instance.setMinDivision(min);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getMax method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testGetMax() {
-        System.out.println("getMax");
-        PitchSets instance = new PitchSets();
-        int expResult = 0;
-        int result = instance.getMaxDivision();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMax method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testSetMax() {
-        System.out.println("setMax");
-        int max = 0;
-        PitchSets instance = new PitchSets();
-        instance.setMaxDivision(max);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

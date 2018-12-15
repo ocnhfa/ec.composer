@@ -15,49 +15,51 @@
  */
 package tech.metacontext.ec.prototype.composer.materials.enums;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum Pitch {
 
-  //0, 1, 2, 3,
-  C("1"), D_flat("2b"), D("2"), E_flat("3b"),
-  //4, 5, 6, 7, 
-  E("3"), F("4"), G_flat("5b"), G("5"),
-  //8, 9, 10, 11,
-  A_flat("6b"), A("6"), B_flat("7b"), B("7"),
-  //12, 13, 14, 15, 16 
-  C_sharp("1#"), D_sharp("2#"), F_sharp("4#"), G_sharp("5#"), A_sharp("6#");
+    //0, 1, 2, 3,
+    C("1"), D_flat("2b"), D("2"), E_flat("3b"),
+    //4, 5, 6, 7, 
+    E("3"), F("4"), G_flat("5b"), G("5"),
+    //8, 9, 10, 11,
+    A_flat("6b"), A("6"), B_flat("7b"), B("7"),
+    //12, 13, 14, 15, 16 
+    C_sharp("1#"), D_sharp("2#"), F_sharp("4#"), G_sharp("5#"), A_sharp("6#");
 
-  String simple;
+    String simple;
 
-  Pitch(String simple) {
+    Pitch(String simple) {
 
-    this.simple = simple;
-  }
-
-  public int ordinalEnharmonic() {
-
-    switch (this.ordinal()) {
-      case 12:
-        return 1;
-      case 13:
-        return 3;
-      case 14:
-        return 6;
-      case 15:
-        return 8;
-      case 16:
-        return 10;
-      default:
-        return this.ordinal();
+        this.simple = simple;
     }
-  }
 
-  public int compareToPitch(Pitch o) {
+    public int ordinalEnharmonic() {
 
-    return this.ordinalEnharmonic() - o.ordinalEnharmonic();
-  }
+        switch (this.ordinal()) {
+            case 12:
+                return 1;
+            case 13:
+                return 3;
+            case 14:
+                return 6;
+            case 15:
+                return 8;
+            case 16:
+                return 10;
+            default:
+                return this.ordinal();
+        }
+    }
+
+    public int compareToPitch(Pitch o) {
+
+        return this.ordinalEnharmonic() - o.ordinalEnharmonic();
+    }
 
 }

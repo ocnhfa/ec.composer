@@ -15,14 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
-import tech.metacontext.ec.prototype.composer.descriptor.IdeaDescriptor;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.descriptor.CommonTones;
 
 /**
  *
@@ -32,9 +28,6 @@ public class Connector extends Individual {
 
     private SketchNode previous;
     private SketchNode next;
-    private static List<IdeaDescriptor> descriptors = Arrays.asList(
-            new CommonTones()
-    );
 
     public Connector(SketchNode previous, Predicate<SketchNode> styleChecker) {
 
@@ -76,7 +69,4 @@ public class Connector extends Individual {
         this.next = next;
     }
 
-    public List<IdeaDescriptor> getDescriptors() {
-        return descriptors;
-    }
 }
