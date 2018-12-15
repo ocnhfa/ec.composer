@@ -25,7 +25,7 @@ import tech.metacontext.ec.prototype.composer.materials.enums.Range;
  *
  * @author Jonathan
  */
-public class NoteRange extends MusicMaterial<Range> {
+public class NoteRanges extends MusicMaterial<Range> {
 
     public static final int DEFAULT_DIVISION = 4;
     public static final int DEFAULT_MIN_DIVISION = 1;
@@ -37,7 +37,7 @@ public class NoteRange extends MusicMaterial<Range> {
     private Range highest;
 
     @Override
-    public NoteRange reset() {
+    public NoteRanges reset() {
 
         this.setDivision(DEFAULT_DIVISION);
         this.lowest = DEFAULT_LOWEST_RANGE;
@@ -46,7 +46,7 @@ public class NoteRange extends MusicMaterial<Range> {
     }
 
     @Override
-    public NoteRange random() {
+    public NoteRanges random() {
 
         this.setDivision(new Random()
                 .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
@@ -55,7 +55,7 @@ public class NoteRange extends MusicMaterial<Range> {
     }
 
     @Override
-    public NoteRange generate() {
+    public NoteRanges generate() {
 
         List<Range> rangeList = Arrays.asList(Range.values());
         int lowest_value = rangeList.indexOf(this.lowest);
@@ -66,6 +66,16 @@ public class NoteRange extends MusicMaterial<Range> {
                         .collect(Collectors.toList())
         );
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "{"
+                + "div=" + this.getDivision()
+                + ", lowest=" + lowest
+                + ", highest=" + highest
+                + '}'
+                + this.getMaterials();
     }
 
     /*

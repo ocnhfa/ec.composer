@@ -16,7 +16,9 @@
 package tech.metacontext.ec.prototype.composer.styles;
 
 import java.util.Random;
+import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.Composition;
+import tech.metacontext.ec.prototype.composer.SketchNode;
 
 /**
  *
@@ -38,8 +40,27 @@ public class GoldenSectionClimax implements Style {
         return 0.0;
     }
 
+    /**
+     * Golden Section Style is not about single SketchNodes.
+     *
+     * @param sketchNode
+     * @return Always true.
+     */
     @Override
-    public boolean qualify(Composition composition) {
-        return new Random().nextBoolean();
+    public boolean qualifySketchNode(SketchNode sketchNode) {
+
+        return true;
     }
+
+    /**
+     * @todo: dummy
+     * @param composition
+     * @return
+     */
+    @Override
+    public double rateComposition(Composition composition) {
+
+        return Math.random();
+    }
+
 }

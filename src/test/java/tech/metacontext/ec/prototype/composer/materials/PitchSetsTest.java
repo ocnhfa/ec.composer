@@ -190,35 +190,6 @@ public class PitchSetsTest {
     }
 
     /**
-     * Test of getMats method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testGetMats() {
-        System.out.println("getMats");
-        PitchSets instance = new PitchSets();
-        List<PitchSet> expResult = null;
-        List<PitchSet> result = instance.getMats();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setMats method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testSetMats() {
-        System.out.println("setMats");
-        List<PitchSet> mats = null;
-        PitchSets instance = new PitchSets();
-        instance.setMats(mats);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of isRandomPitchSet method, of class PitchSets.
      */
     @Test

@@ -20,8 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import tech.metacontext.ec.prototype.composer.ex.InstantiationFailedException;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.NoteNumbers;
-import tech.metacontext.ec.prototype.composer.materials.NoteRange;
+import tech.metacontext.ec.prototype.composer.materials.RhythmicPoints;
+import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
 import tech.metacontext.ec.prototype.composer.materials.PitchSets;
 
 /**
@@ -30,8 +30,9 @@ import tech.metacontext.ec.prototype.composer.materials.PitchSets;
  */
 public enum Type {
     PitchSets(PitchSets.class),
-    NoteNumbers(NoteNumbers.class),
-    NoteRange(NoteRange.class);
+    NoteNumbers(RhythmicPoints.class),
+    NoteRanges(NoteRanges.class);
+
     Class<? extends MusicMaterial> clazz;
 
     Type(Class<? extends MusicMaterial> clazz) {
@@ -41,9 +42,6 @@ public enum Type {
     public MusicMaterial getInstance() {
 
         try {
-//            System.out.println("this.clazz = " + this.clazz);
-//            System.out.println("this.clazz.getDeclaredConstructor = " + this.clazz.getDeclaredConstructor());
-//            System.out.println("this.clazz.getDeclaredConstructor.newInstance = " + this.clazz.getDeclaredConstructor().newInstance());
             return this.clazz.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | SecurityException | InstantiationException
                 | IllegalAccessException | IllegalArgumentException

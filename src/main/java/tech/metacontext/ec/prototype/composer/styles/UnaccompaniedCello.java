@@ -15,12 +15,13 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
+import tech.metacontext.ec.prototype.composer.materials.enums.Type;
 
 /**
  *
@@ -31,13 +32,15 @@ public class UnaccompaniedCello implements Style {
     /**
      * 音域
      */
-    List<Range> cell_range = Arrays.asList(
-            Range.C2,
-            Range.C3,
-            Range.C4,
-            Range.C5,
-            Range.C6
-    );
+    private static final Map<Range, Double> cello_range = new HashMap<>();
+
+    static {
+        cello_range.put(Range.C2, 1.0);
+        cello_range.put(Range.C3, 1.0);
+        cello_range.put(Range.C4, 1.0);
+        cello_range.put(Range.C5, 0.5);
+        cello_range.put(Range.C6, 0.25);
+    }
 
     public boolean isValidRange(SketchNode node) {
         //@todo: isValidRange in Style-UnaccompaniedCello
@@ -46,9 +49,27 @@ public class UnaccompaniedCello implements Style {
     }
 
     @Override
-    public boolean qualify(Composition composition) {
+    public boolean qualifySketchNode(SketchNode sketchNode) {
 
-        return new Random().nextBoolean();
+        return sketchNode.getMat(Type.NoteRanges)
+                .getMaterials()
+                .stream()
+                .allMatch(range -> cello_range.containsKey(range) && cello_range.get(range) > Math.random());
+    }
+
+    public static void main(String[] args) {
+        UnaccompaniedCello style = new UnaccompaniedCello();
+        Stream.generate(SketchNode::new)
+                .limit(50)
+                .peek(node->System.out.println(node.getMat(Type.NoteRanges)))
+                .map(style::qualifySketchNode)
+                .forEach(System.out::println);
+    }
+
+    @Override
+    public double rateComposition(Composition composition) {
+
+        return Math.random();
     }
 
 }

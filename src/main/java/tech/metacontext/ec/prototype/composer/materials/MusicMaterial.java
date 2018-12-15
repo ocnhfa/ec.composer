@@ -15,12 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import tech.metacontext.ec.prototype.composer.ex.InstantiationFailedException;
 
 /**
  *

@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.composer.styles;
 
 import tech.metacontext.ec.prototype.composer.Composition;
+import tech.metacontext.ec.prototype.composer.SketchNode;
 
 /**
  *
@@ -23,6 +24,8 @@ import tech.metacontext.ec.prototype.composer.Composition;
  */
 public interface Style {
 
-    public boolean qualify(Composition composition);
-  
+    public boolean qualifySketchNode(SketchNode sketchNode);
+
+    public double rateComposition(Composition composition);
+
 }

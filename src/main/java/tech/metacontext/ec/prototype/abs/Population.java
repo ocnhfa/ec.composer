@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.abs;
 
 import java.util.ArrayList;
 import java.util.List;
+import tech.metacontext.ec.prototype.composer.Composition;
 
 /**
  *
@@ -26,24 +27,36 @@ import java.util.List;
 public abstract class Population<E extends Individual> {
 
     private List<E> population;
+    private final List<List<E>> archive;
+    private int genCount;
 
     public Population() {
 
         this.population = new ArrayList<>();
+        this.archive = new ArrayList<>();
+        this.genCount = 0;
     }
 
     /**
      * Make population evolve.
      *
-     * @return parents.
      */
-    abstract public List<E> evolve();
+    abstract public void evolve();
 
     abstract public void render();
 
-    public int getSize() {
+    public int getPopulationSize() {
 
         return population.size();
+    }
+
+    public int genCountIncrement() {
+
+        return ++this.genCount;
+    }
+
+    public void archive(List<E> p) {
+        this.archive.add(p);
     }
 
     /*
@@ -57,4 +70,15 @@ public abstract class Population<E extends Individual> {
         this.population = population;
     }
 
+    public int getGenCount() {
+        return genCount;
+    }
+
+    public void setGenCount(int genCount) {
+        this.genCount = genCount;
+    }
+
+    public List<List<E>> getArchive() {
+        return this.archive;
+    }
 }

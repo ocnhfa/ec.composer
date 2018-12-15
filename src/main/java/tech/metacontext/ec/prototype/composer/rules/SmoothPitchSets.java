@@ -56,10 +56,10 @@ public class SmoothPitchSets implements Rule {
                                                 .getMaterials().contains(p);
                                 if (p1c || p2c) {
                                     base.getAndAdd(max - i);
-//                          System.out.println("base + " + (max - i));
+//                                    System.out.print("base + " + (max - i));
                                     if (p1c && p2c) {
                                         common.getAndAdd(max - i);
-//                            System.out.println("common + " + (max - i));
+//                                        System.out.println(", common + " + (max - i));
                                     }
                                 }
                             });

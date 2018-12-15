@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class NoteNumbers extends MusicMaterial<Integer> {
+public class RhythmicPoints extends MusicMaterial<Integer> {
 
     public static final int DEFAULT_DIVISION = 4;
     public static final int DEFAULT_MIN_DIVISION = 1;
@@ -34,7 +34,7 @@ public class NoteNumbers extends MusicMaterial<Integer> {
     private int min, max;
 
     @Override
-    public NoteNumbers reset() {
+    public RhythmicPoints reset() {
 
         this.setDivision(DEFAULT_DIVISION);
         this.min = DEFAULT_MIN_NUMBER;
@@ -43,7 +43,7 @@ public class NoteNumbers extends MusicMaterial<Integer> {
     }
 
     @Override
-    public NoteNumbers random() {
+    public RhythmicPoints random() {
 
         this.setDivision(new Random()
                 .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
@@ -52,7 +52,7 @@ public class NoteNumbers extends MusicMaterial<Integer> {
     }
 
     @Override
-    public NoteNumbers generate() {
+    public RhythmicPoints generate() {
 
         this.setMaterials(
                 new Random().ints(this.getDivision(), this.min, this.max + 1)
@@ -64,17 +64,25 @@ public class NoteNumbers extends MusicMaterial<Integer> {
 
     public static void main(String[] args) {
 
-        NoteNumbers nn = new NoteNumbers();
+        RhythmicPoints nn = new RhythmicPoints();
         Stream.generate(() -> nn.random())
                 .limit(50)
-                .map(NoteNumbers::getMaterials)
+                .map(RhythmicPoints::getMaterials)
                 .forEach(System.out::println);
+    }
+
+    @Override
+    public String toString() {
+        return "RhythmicPoints{"
+                + "div=" + this.getDivision()
+                + ", min=" + min
+                + ", max=" + max + '}'
+                + this.getMaterials();
     }
 
     /*
      * Default setters and getters
      */
-
     public int getMin() {
         return min;
     }

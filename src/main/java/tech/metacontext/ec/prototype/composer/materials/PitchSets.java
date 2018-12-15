@@ -17,7 +17,6 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
 import java.util.Random;
 import java.util.Set;
@@ -38,7 +37,6 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     private int minDivision, maxDivision;
     private boolean randomPitchSet = false;
     private int commonTone = -1;
-    private List<PitchSet> mats;
 
     @Override
     public PitchSets reset() {
@@ -63,7 +61,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public PitchSets generate() {
 
         Set<Pitch> preset = new HashSet<>();
-        mats = Stream.generate(PitchSet::new)
+        this.setMaterials(Stream.generate(PitchSet::new)
                 .limit(this.getDivision())
                 .peek(ps -> ps.setPreset(new ArrayList<>(preset)))
                 .map(PitchSet::random)
@@ -74,8 +72,8 @@ public class PitchSets extends MusicMaterial<PitchSet> {
                     }
 //              System.out.println(preset);
                 })
-                .collect(Collectors.toList());
-        this.setMaterials(mats);
+                .collect(Collectors.toList())
+        );
         return this;
     }
 
@@ -83,7 +81,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public String toString() {
 
         AtomicInteger i = new AtomicInteger(0);
-        return String.format("PitchSets[ Division=%2d ]\n%s\n---",
+        return String.format("PitchSets[ Division=%2d ]\n%s",
                 this.getDivision(),
                 this.getMaterials().stream()
                         .map(p -> "  " + i.incrementAndGet() + ". " + p.toString())
@@ -107,14 +105,6 @@ public class PitchSets extends MusicMaterial<PitchSet> {
 
     public void setMaxDivision(int maxDivision) {
         this.maxDivision = maxDivision;
-    }
-
-    public List<PitchSet> getMats() {
-        return mats;
-    }
-
-    public void setMats(List<PitchSet> mats) {
-        this.mats = mats;
     }
 
     public boolean isRandomPitchSet() {

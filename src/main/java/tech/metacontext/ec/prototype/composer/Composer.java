@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 
 /**
  *
@@ -30,27 +31,34 @@ import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
  */
 public class Composer extends Population<Composition> {
 
-    private List<Style> styles;
     private ComposerAim aim;
+    private List<Style> styles;
+    private int size;
+
     private final List<Composition> conservetory;
-    private int genCount;
+    // Constants
+    private static final double ELONGATION_RATE = 0.1;
+    private static final double CONSERVE_RATE = 0.99;
 
     /**
      * Constructor.
      *
-     * @param size number of Compositions.
+     * @param size
      * @param aim
+     * @param styles
      */
-    public Composer(int size, ComposerAim aim) {
+    public Composer(int size, ComposerAim aim, Style... styles) {
 
-        this.styles = new ArrayList<>();
         this.aim = aim;
+        this.styles = new ArrayList<>();
+        for (Style style : styles) {
+            this.styles.add(style);
+        }
+        this.size = size;
         this.conservetory = new ArrayList<>();
-        this.genCount = 0;
-        this.setPopulation(
-                Stream.generate(this::initComposition)
-                        .limit(size)
-                        .collect(Collectors.toList())
+        this.setPopulation(Stream.generate(this::initComposition)
+                .limit(size)
+                .collect(Collectors.toList())
         );
     }
 
@@ -63,28 +71,31 @@ public class Composer extends Population<Composition> {
 
     public SketchNode generateSeed() {
 
-        //@todo: apply rule
-        return new SketchNode();
+        return Stream.generate(SketchNode::new)
+                .filter(node
+                        -> this.getStyles().stream()
+                        .allMatch(s -> s.qualifySketchNode(node)))
+                .findFirst()
+                .get();
     }
 
-    public void addStyle(Style style) {
+    public void compose() {
 
-        this.styles.add(style);
+        this.getPopulation().stream()
+                .filter(c -> !aim.completed(c) || Math.random() < ELONGATION_RATE)
+                .forEach(c -> c.elongation(this.getStyles()));
+        this.getPopulation().removeIf(this::conserve);
     }
 
     @Override
-    public List<Composition> evolve() {
+    public void evolve() {
 
         List<Composition> parents = this.getPopulation().stream()
-                .peek(this::persist)
                 .map(Composition::new)
                 .collect(Collectors.toList());
-        System.out.println(
-                "// 1. compose()"
-        );
-        this.getPopulation().stream()
-                .map(Composition::compose)
-                .forEach(this::conserve);  // conserved Composition remains.
+
+        this.archive(parents);
+
         System.out.println(
                 "// 2. parents -> children via mutation, crossover..."
         );
@@ -92,37 +103,33 @@ public class Composer extends Population<Composition> {
         do {
             children.add(parents.get(new Random().nextInt(parents.size())));
             //@todo: genetic operations here -> child, add and conserve
-        } while (children.size() < this.getSize());
+        } while (children.size() < this.getPopulationSize());
         System.out.println(
                 "// 3. 符合目標、風格者保留至conservatory"
         );
         this.setPopulation(children);
-        this.genCount++;
-        return parents;
+        this.genCountIncrement();
     }
 
     public boolean conserve(Composition composition) {
 
-        if (this.styles.stream()
-                .allMatch(s -> s.qualify(composition))) {
+        if (this.getAim().completed(composition)
+                && this.styles.stream()
+                        .allMatch(s -> s.rateComposition(composition) > CONSERVE_RATE)) {
             this.conservetory.add(composition);
             return true;
         }
         return false;
     }
 
-    /**
-     * Persist population with genCount.
-     *
-     * @param composition
-     */
-    public void persist(Composition composition) {
-        System.out.println("Persist " + composition + ", in generation " + this.genCount + ".");
-    }
-
     @Override
     public void render() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void addStyle(Style style) {
+
+        this.styles.add(style);
     }
 
     /*
@@ -148,12 +155,12 @@ public class Composer extends Population<Composition> {
         return conservetory;
     }
 
-    public int getGenCount() {
-        return genCount;
+    public int getSize() {
+        return size;
     }
 
-    public void setGenCount(int genCount) {
-        this.genCount = genCount;
+    public void setSize(int size) {
+        this.size = size;
     }
 
 }

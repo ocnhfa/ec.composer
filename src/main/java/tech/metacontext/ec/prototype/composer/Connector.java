@@ -48,7 +48,7 @@ public class Connector extends Individual {
 
     @Override
     public String toString() {
-        return "Connector{" + previous + " => " + next + '}';
+        return "Connector: " + previous + " => " + next;
     }
 
     /*

@@ -16,8 +16,11 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -47,11 +50,20 @@ public class Composition extends Individual {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public Composition compose() {
+    public Composition elongation(List<? extends Style> styles) {
         //@todo: compose
         // if not meet aim, elongation
         // if meet aim, mutate or crossover
-        this.connectors.add(new Connector(this.connectors.getLast().getNext()));
+        this.connectors.add(
+                Stream.generate(() -> new Connector(this.connectors.getLast().getNext()))
+                        .filter(conn
+                                -> styles == null || styles.stream()
+                                .allMatch(style
+                                        -> style
+                                        .qualifySketchNode(conn.getNext())))
+                        .findAny()
+                        .get()
+        );
         return this;
     }
 
@@ -68,11 +80,16 @@ public class Composition extends Individual {
     @Override
     public String toString() {
 
-        return String.format("%s: (%d)\n  %s",
-                super.toString(), this.getConnectors().size(),
+        return String.format("%s (size = %d):\n  %s",
+                super.toString(), this.getSize(),
                 this.getConnectors().stream()
-                        .map(Object::toString)
-                        .collect(Collectors.joining("\n  ")));
+                        .map(Connector::toString)
+                        .collect(Collectors.joining("\n  "))) + "\n";
+    }
+
+    public int getSize() {
+
+        return this.getConnectors().size() + 1;
     }
 
     /*

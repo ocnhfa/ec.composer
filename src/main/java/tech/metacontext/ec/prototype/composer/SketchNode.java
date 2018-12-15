@@ -29,33 +29,41 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class SketchNode extends Individual {
 
-    private Map<Type, ? extends MusicMaterial> mats;
+    private Map<Type, ? extends MusicMaterial> musicMats;
 
     public SketchNode() {
 
-        this.mats = Stream.of(Type.values())
+        this.musicMats = Stream.of(Type.values())
                 .collect(Collectors.toMap(t -> t, Type::getInstance));
     }
 
     public SketchNode(SketchNode parent) {
 
         super(parent.getId());
-//        System.out.println("parent=" + parent);
-//        System.out.println("parent.getMats=" + parent.getMats());
-//        System.out.println("parent.getMats.entrySet=" + parent.getMats().entrySet());
-        this.mats = parent.getMats().entrySet().stream()
-                .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+        this.musicMats = parent.getMats().entrySet().stream()
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        e -> {
+                            MusicMaterial mm = e.getKey().getInstance();
+                            mm.setMaterials(e.getValue().getMaterials());
+                            return mm;
+                        }));
+    }
+
+    public MusicMaterial getMat(Type type) {
+
+        return musicMats.get(type);
     }
 
     /*
      * Default setters and getters
      */
     public Map<Type, ? extends MusicMaterial> getMats() {
-        return mats;
+        return musicMats;
     }
 
     public void setMats(Map<Type, MusicMaterial> mats) {
-        this.mats = mats;
+        this.musicMats = mats;
     }
 
 }

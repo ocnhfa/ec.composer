@@ -15,13 +15,35 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
+import tech.metacontext.ec.prototype.composer.Composition;
+
 /**
  *
  * @author Jonathan
  */
 public enum ComposerAim {
-    Phrase,
-    Section,
-    Movemment,
-    MultiMovement
+    Phrase(8),
+    Section(16),
+    Movement(32),
+    MultiMovement(-1);
+
+    int size;
+
+    ComposerAim(int size) {
+        this.size = size;
+    }
+
+    public boolean completed(Composition composition) {
+        switch (this) {
+            case Phrase:
+            case Section:
+            case Movement:
+//                System.out.println("composition:" + composition);
+//                System.out.println("composition.getConnectors:" + composition.getConnectors());
+                return composition.getConnectors().size() >= this.size;
+            case MultiMovement:
+            default:
+        }
+        return false;
+    }
 }
