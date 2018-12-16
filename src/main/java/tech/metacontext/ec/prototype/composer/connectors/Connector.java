@@ -28,16 +28,7 @@ public class Connector extends Individual {
 
     private SketchNode previous;
     private SketchNode next;
-    private State state;
     private Predicate<SketchNode> styleChecker;
-
-    public Connector(SketchNode previous, Predicate<SketchNode> styleChecker, State state) {
-        
-        this.previous = previous;
-        this.styleChecker = styleChecker;
-        this.state = state;
-        this.next = state.getNext(this.previous);
-    }
 
     public Connector(SketchNode previous, Predicate<SketchNode> styleChecker) {
 
@@ -54,7 +45,6 @@ public class Connector extends Individual {
         super(conn.getId());
         this.previous = new SketchNode(conn.previous);
         this.next = new SketchNode(conn.next);
-        this.state = conn.getState();
         this.styleChecker = conn.getStyleChecker();
     }
 
@@ -80,14 +70,6 @@ public class Connector extends Individual {
 
     public void setNext(SketchNode next) {
         this.next = next;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
     }
 
     public Predicate<SketchNode> getStyleChecker() {

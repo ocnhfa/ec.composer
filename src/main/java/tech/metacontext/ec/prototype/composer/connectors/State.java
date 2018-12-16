@@ -25,13 +25,11 @@ public enum State {
     Total,
     ByItem;
 
-    SketchNode getNext(SketchNode previous) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public static final double TOTAL_RATIO = 0.5;
 
     public static State getRandom() {
 
-        return Math.random() > 0.5 ? State.Total : State.ByItem;
+        return Math.random() < TOTAL_RATIO ? State.Total : State.ByItem;
     }
 
 }

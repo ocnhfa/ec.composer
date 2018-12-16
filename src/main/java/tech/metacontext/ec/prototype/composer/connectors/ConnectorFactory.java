@@ -40,8 +40,7 @@ public class ConnectorFactory {
 
     public Connector getConnector(SketchNode previous) {
 
-        Connector conn = new Connector(previous, FreeStyle::checker,
-                State.getRandom());
+        Connector conn = new Connector(previous, FreeStyle::checker);
         switch (State.getRandom()) {
             case Total:
             case ByItem:
