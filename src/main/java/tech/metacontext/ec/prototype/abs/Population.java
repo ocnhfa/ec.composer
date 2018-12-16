@@ -17,7 +17,9 @@ package tech.metacontext.ec.prototype.abs;
 
 import java.util.ArrayList;
 import java.util.List;
-import tech.metacontext.ec.prototype.composer.Composition;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -45,7 +47,7 @@ public abstract class Population<E extends Individual> {
 
     abstract public void render();
 
-    public int getPopulationSize() {
+    public int getSize() {
 
         return population.size();
     }
@@ -56,7 +58,20 @@ public abstract class Population<E extends Individual> {
     }
 
     public void archive(List<E> p) {
-        this.archive.add(p);
+
+        this.archive.add(p.stream()
+                .map(this::copyInstance)
+                .collect(Collectors.toList()));
+    }
+
+    public E copyInstance(E e) {
+
+        try {
+            return (E) e.getClass().getDeclaredConstructor(e.getClass()).newInstance(e);
+        } catch (Exception ex) {
+            Logger.getLogger(Population.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /*

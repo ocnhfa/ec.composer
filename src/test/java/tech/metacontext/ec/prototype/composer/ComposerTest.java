@@ -16,8 +16,12 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -37,6 +41,7 @@ public class ComposerTest {
      */
     @Test
     public void testCompose() {
+
         System.out.println("compose");
         int size = 20;
         Composer c = new Composer(size, ComposerAim.Phrase, new FreeStyle());
@@ -57,7 +62,22 @@ public class ComposerTest {
 //        System.out.println("--conservatory--");
 //        System.out.println(c.getConservetory());
         assertEquals(size, c.getSize());
-        assertEquals(c.getSize(), c.getPopulationSize() + c.getConservetory().size());
+        assertEquals(c.getSize(), c.getSize() + c.getConservetory().size());
+    }
+
+    /**
+     * Test of select method, of class Composer.
+     */
+    @Test
+    public void testSelect() {
+        System.out.println("select");
+        int state = 0;
+        Composer instance = null;
+        Composition expResult = null;
+        Composition result = instance.select(state);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
     }
 
     @Test
@@ -234,6 +254,39 @@ public class ComposerTest {
         int size = 0;
         Composer instance = null;
         instance.setSize(size);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of mutate method, of class Composer.
+     */
+    @Test
+    @Ignore
+    public void testMutate() {
+        System.out.println("mutate");
+        Composition origin = null;
+        Composer instance = null;
+        Composition expResult = null;
+        Composition result = instance.mutate(origin);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of crossover method, of class Composer.
+     */
+    @Test
+    @Ignore
+    public void testCrossover() {
+        System.out.println("crossover");
+        Composition parent1 = null;
+        Composition parent2 = null;
+        Composer instance = null;
+        Composition expResult = null;
+        Composition result = instance.crossover(parent1, parent2);
+        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

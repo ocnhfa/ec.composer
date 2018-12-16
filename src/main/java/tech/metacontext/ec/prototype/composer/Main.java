@@ -15,7 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
@@ -28,37 +27,39 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class Main {
 
     // 決定作品數量及演進世代
-    static int size = 5;
-    static int generation = 20;
+    static int populationSize = 15;
+    static int generation = 10;
 
     public static void main(String[] args) {
 
-        System.out.println(header("創建作曲家物件"));
-        Composer composer = new Composer(size, ComposerAim.Phrase,
+        System.out.println(header("Creating composer..."));
+        System.out.println("Population Size = " + populationSize);
+        System.out.println("Generation = " + generation);
+        Composer composer = new Composer(populationSize, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax()
         );
 
         System.out.println(header("Evolution"));
+        System.out.print("Generation...");
         do {
-            System.out.println("Generation = " + composer.getGenCount());
-            composer.getArchive().add(composer.getPopulation());
+            System.out.print(composer.getGenCount() + " ");
             composer.compose();
             composer.evolve();
         } while (composer.getGenCount() < generation);
 
-        System.out.println(header("archive"));
+        System.out.println(header("Dumping Archive"));
         IntStream.range(0, generation)
-                .peek(i -> System.out.println("Generation " + i))
+                .peek(i -> System.out.println("----------Generation " + i))
                 .mapToObj(composer.getArchive()::get)
                 .forEach(list -> list.stream().forEach(Composition::render));
 
-        System.out.println(header("conservatory"));
+        System.out.println(header("Dumping Conservatory"));
         composer.getConservetory().forEach(System.out::println);
     }
 
     static String header(String text) {
-        return "---------- " + text + " ----------";
+        return "\n---------- " + text + " ----------";
     }
 
 }

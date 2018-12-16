@@ -19,8 +19,10 @@ import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
@@ -45,6 +47,8 @@ public class Composer extends Population<Composition> {
      * 作品收入conservatory所須達到的分數。
      */
     private static final double CONSERVE_SCORE = 0.99;
+    private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
+    private static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
     /**
      * Constructor.
@@ -90,6 +94,10 @@ public class Composer extends Population<Composition> {
 
     public void compose() {
 
+        List<Composition> parents = this.getPopulation().stream()
+                .map(Composition::new)
+                .collect(Collectors.toList());
+        this.archive(parents);
         this.getPopulation().stream()
                 .filter(c -> !aim.completed(c) || Math.random() < ELONGATION_CHANCE)
                 .forEach(c -> c.elongation(this::styleChecker));
@@ -99,22 +107,45 @@ public class Composer extends Population<Composition> {
     @Override
     public void evolve() {
 
-        List<Composition> parents = this.getPopulation().stream()
-                .map(Composition::new)
-                .collect(Collectors.toList());
-        this.archive(parents);
         List<Composition> children = new ArrayList<>();
         do {
             //@todo: genetic operations here -> child, add and conserve
-//            switch () {
-//            }
-            children.add(parents.get(new Random().nextInt(parents.size())));
-            children.removeIf(this::conserve);
-        } while (children.size() < this.getPopulationSize());
-        System.out.println();
+            //1.選出一條
+            //2.若not completed則mutate -> children
+            //3.若completed則決定是否走mutate, yes -> mutate -> children
+            //4.若走crossover則選出另一條completed(也許是自己)
+            //5.crossover -> children
+            Composition sel_1 = this.select(SELECT_FROM_ALL);
+            if (this.getAim().completed(sel_1)
+                    && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED) {
+                Composition sel_2 = this.select(SELECT_ONLY_COMPLETED);
+                children.add(this.crossover(sel_1, sel_2));
+            } else {
+                children.add(this.mutate(sel_1));
+            }
+        } while (children.removeIf(this::conserve)
+                || children.size() < this.getSize());
 
         this.setPopulation(children);
         this.genCountIncrement();
+    }
+
+    public Composition select(int state) {
+
+        return new Random().ints(0, this.size)
+                .mapToObj(this.getPopulation()::get)
+                .filter(c -> state == SELECT_FROM_ALL || this.getAim().completed(c))
+                .findFirst().orElse(null);
+    }
+
+    public Composition mutate(Composition origin) {
+        //@todo Composer::mutate
+        return new Composition(origin);
+    }
+
+    public Composition crossover(Composition parent1, Composition parent2) {
+        //@todo Composer::crossover
+        return new Composition(parent1);
     }
 
     public boolean conserve(Composition composition) {
@@ -130,6 +161,8 @@ public class Composer extends Population<Composition> {
 
     @Override
     public void render() {
+
+        //@todo Composer::render
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -139,7 +172,7 @@ public class Composer extends Population<Composition> {
     }
 
     /*
-    * Default getters and setters.
+     * Default getters and setters.
      */
     public List<? extends Style> getStyles() {
         return this.styles;
