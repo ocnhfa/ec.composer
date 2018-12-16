@@ -47,7 +47,7 @@ public abstract class Population<E extends Individual> {
 
     abstract public void render();
 
-    public int getSize() {
+    public int getPopulationSize() {
 
         return population.size();
     }

@@ -15,8 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import java.util.Random;
-import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 

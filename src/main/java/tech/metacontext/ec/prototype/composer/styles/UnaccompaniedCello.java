@@ -32,14 +32,14 @@ public class UnaccompaniedCello implements Style {
     /**
      * 音域
      */
-    private static final Map<Range, Double> cello_range = new HashMap<>();
+    private static final Map<Range, Double> RANGE = new HashMap<>();
 
     static {
-        cello_range.put(Range.C2, 1.0);
-        cello_range.put(Range.C3, 1.0);
-        cello_range.put(Range.C4, 1.0);
-        cello_range.put(Range.C5, 0.5);
-        cello_range.put(Range.C6, 0.25);
+        RANGE.put(Range.C2, 1.0);
+        RANGE.put(Range.C3, 1.0);
+        RANGE.put(Range.C4, 1.0);
+        RANGE.put(Range.C5, 0.5);
+        RANGE.put(Range.C6, 0.25);
     }
 
     public boolean isValidRange(SketchNode node) {
@@ -54,14 +54,15 @@ public class UnaccompaniedCello implements Style {
         return sketchNode.getMat(Type.NoteRanges)
                 .getMaterials()
                 .stream()
-                .allMatch(range -> cello_range.containsKey(range) && cello_range.get(range) > Math.random());
+                .allMatch(range -> RANGE.containsKey(range)
+                && RANGE.get(range) > Math.random());
     }
 
     public static void main(String[] args) {
         UnaccompaniedCello style = new UnaccompaniedCello();
         Stream.generate(SketchNode::new)
                 .limit(50)
-                .peek(node->System.out.println(node.getMat(Type.NoteRanges)))
+                .peek(node -> System.out.println(node.getMat(Type.NoteRanges)))
                 .map(style::qualifySketchNode)
                 .forEach(System.out::println);
     }

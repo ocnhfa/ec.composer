@@ -16,12 +16,9 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -47,28 +44,29 @@ public class ComposerTest {
         Composer c = new Composer(size, ComposerAim.Phrase, new FreeStyle());
         for (int i = 0; i < 50; i++) {
             c.compose();
-//            System.out.print(
-//                    c.getPopulation().stream()
-//                            .map(comp -> "" + comp.getSize())
-//                            .collect(Collectors.joining(" ")));
-//            if (c.getConservetory().size() > 0) {
-//                System.out.print(" // "
-//                        + c.getConservetory().stream()
-//                                .map(comp -> "" + comp.getSize())
-//                                .collect(Collectors.joining(" ")));
-//            }
-//            System.out.println("");
+            System.out.print(
+                    c.getPopulation().stream()
+                            .map(comp -> "" + comp.getSize())
+                            .collect(Collectors.joining(" ")));
+            if (c.getConservetory().size() > 0) {
+                System.out.print(" // "
+                        + c.getConservetory().stream()
+                                .map(comp -> "" + comp.getSize())
+                                .collect(Collectors.joining(" ")));
+            }
+            System.out.println("");
         }
-//        System.out.println("--conservatory--");
-//        System.out.println(c.getConservetory());
+        System.out.println("--conservatory--");
+        System.out.println(c.getConservetory());
         assertEquals(size, c.getSize());
-        assertEquals(c.getSize(), c.getSize() + c.getConservetory().size());
+        assertEquals(c.getSize(), c.getPopulationSize() + c.getConservetory().size());
     }
 
     /**
      * Test of select method, of class Composer.
      */
     @Test
+    @Ignore
     public void testSelect() {
         System.out.println("select");
         int state = 0;
