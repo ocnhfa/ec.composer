@@ -15,6 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
+
 /**
  *
  * @author Jonathan
@@ -35,9 +38,16 @@ public class ConnectorFactory {
         return instance;
     }
 
-    public Connector getConnector() {
-        //@todo getConnector
-        return null;
+    public Connector getConnector(SketchNode previous) {
+
+        Connector conn = new Connector(previous, FreeStyle::checker,
+                ConnectorType.getRandom());
+        switch (ConnectorType.getRandom()) {
+            case Total:
+            case ByItem:
+        }
+
+        return conn;
 
     }
 

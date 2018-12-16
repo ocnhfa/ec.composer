@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.ArrayList;
 import java.util.List;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
 
 /**
  *
@@ -32,6 +33,9 @@ public abstract class MusicMaterial<E> {
     private int division;
     private List<E> materials = new ArrayList<>();
 
+//    public static MusicMaterial create() {
+//        MusicMaterial mm = new MusicMaterial
+//    }
     /**
      * Constructor with specified division and material content.
      *
@@ -75,6 +79,15 @@ public abstract class MusicMaterial<E> {
      * @return this instance for cascading.
      */
     abstract public <M extends MusicMaterial> M random();
+
+    /**
+     * Material transformation according to ConnectorType.
+     *
+     * @param <M>
+     * @param type
+     * @return
+     */
+    abstract public <M extends MusicMaterial> M transform(ConnectorType type);
 
     public int size() {
         return this.materials.size();

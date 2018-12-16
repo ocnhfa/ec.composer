@@ -15,16 +15,32 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import tech.metacontext.ec.prototype.composer.SketchNode;
+
 /**
  *
  * @author Jonathan
  */
-public enum ConnectorTypeTotal {
+public enum ConnectorType {
 
     Repetition,
     MoveForward,
     MoveBackward,
-    Retrograde,
-    ByItem
+    Retrograde;
+
+    public static enum State {
+        Total,
+        ByItem;
+
+        SketchNode getNext(SketchNode previous) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+
+    public static State getRandom() {
+        
+        return Math.random() > 0.5 ? State.Total : State.ByItem;
+    }
 
 }

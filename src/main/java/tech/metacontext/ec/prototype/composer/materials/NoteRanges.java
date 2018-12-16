@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 
 /**
@@ -63,6 +64,13 @@ public class NoteRanges extends MusicMaterial<Range> {
                 .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
                 + DEFAULT_MIN_DIVISION);
         return generate();
+    }
+
+    @Override
+    public NoteRanges transform(ConnectorType type) {
+
+        //@todo NoteRanges transform()
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override

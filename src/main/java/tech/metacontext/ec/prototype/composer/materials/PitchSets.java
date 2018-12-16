@@ -16,15 +16,11 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import tech.metacontext.ec.prototype.composer.materials.enums.PitchSet;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
 import tech.metacontext.ec.prototype.composer.materials.enums.PitchSetFactory;
 
 /**
@@ -44,14 +40,6 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     private int commonTone = 0;
     public PitchSetFactory factory;
 
-    @Override
-    public PitchSets reset() {
-
-        this.setDivision(DEFAULT_DIVISION);
-        this.factory = new PitchSetFactory();
-        return this;
-    }
-
     public static void main(String[] args) {
 
         PitchSets pss = new PitchSets();
@@ -60,6 +48,14 @@ public class PitchSets extends MusicMaterial<PitchSet> {
             System.out.println(pss.random());
             pss.factory.randomize();
         }
+    }
+
+    @Override
+    public PitchSets reset() {
+
+        this.setDivision(DEFAULT_DIVISION);
+        this.factory = new PitchSetFactory();
+        return this;
     }
 
     @Override
@@ -82,6 +78,13 @@ public class PitchSets extends MusicMaterial<PitchSet> {
         this.setDivision(new Random().nextInt(
                 DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1) + DEFAULT_MIN_DIVISION);
         return this.generate();
+    }
+
+    @Override
+    public PitchSets transform(ConnectorType type) {
+
+        //@todo Dynamics transform()
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
