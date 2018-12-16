@@ -27,7 +27,7 @@ public enum ComposerAim {
     Movement(32),
     MultiMovement(-1);
 
-    int size;
+    private int size;
 
     ComposerAim(int size) {
         this.size = size;
@@ -45,5 +45,9 @@ public enum ComposerAim {
             default:
         }
         return false;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan.
+ * Copyright 2018 Jonathan Chang.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,27 +19,18 @@ import tech.metacontext.ec.prototype.composer.SketchNode;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang
  */
-public enum ConnectorType {
+public enum State {
+    Total,
+    ByItem;
 
-    Repetition,
-    MoveForward,
-    MoveBackward,
-    Retrograde;
-
-    public static enum State {
-        Total,
-        ByItem;
-
-        SketchNode getNext(SketchNode previous) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
+    SketchNode getNext(SketchNode previous) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public static State getRandom() {
-        
+
         return Math.random() > 0.5 ? State.Total : State.ByItem;
     }
 

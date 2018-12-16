@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
-import tech.metacontext.ec.prototype.composer.materials.enums.Type;
+import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 
 /**
  *
@@ -51,7 +51,7 @@ public class UnaccompaniedCello implements Style {
     @Override
     public boolean qualifySketchNode(SketchNode sketchNode) {
 
-        return sketchNode.getMat(Type.NoteRanges)
+        return sketchNode.getMat(MaterialType.NoteRanges)
                 .getMaterials()
                 .stream()
                 .allMatch(range -> RANGE.containsKey(range)
@@ -62,7 +62,7 @@ public class UnaccompaniedCello implements Style {
         UnaccompaniedCello style = new UnaccompaniedCello();
         Stream.generate(SketchNode::new)
                 .limit(50)
-                .peek(node -> System.out.println(node.getMat(Type.NoteRanges)))
+                .peek(node -> System.out.println(node.getMat(MaterialType.NoteRanges)))
                 .map(style::qualifySketchNode)
                 .forEach(System.out::println);
     }

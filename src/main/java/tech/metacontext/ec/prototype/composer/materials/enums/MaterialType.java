@@ -22,7 +22,7 @@ import tech.metacontext.ec.prototype.composer.materials.*;
  *
  * @author Jonathan
  */
-public enum Type {
+public enum MaterialType {
 
     PitchSets(PitchSets.class),
     NoteNumbers(RhythmicPoints.class),
@@ -31,7 +31,7 @@ public enum Type {
 
     Class<? extends MusicMaterial> clazz;
 
-    Type(Class<? extends MusicMaterial> clazz) {
+    MaterialType(Class<? extends MusicMaterial> clazz) {
         this.clazz = clazz;
     }
 

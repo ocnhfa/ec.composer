@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
+import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.materials.enums.PitchSetFactory;
 
 /**
@@ -81,7 +81,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     }
 
     @Override
-    public PitchSets transform(ConnectorType type) {
+    public PitchSets transform(TransformType type) {
 
         //@todo Dynamics transform()
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

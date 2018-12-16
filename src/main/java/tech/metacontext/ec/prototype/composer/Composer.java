@@ -46,7 +46,7 @@ public class Composer extends Population<Composition> {
      */
     private static final double CONSERVE_SCORE = 0.99;
     private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
-    private static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
+    public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
     /**
      * Constructor.
@@ -97,9 +97,15 @@ public class Composer extends Population<Composition> {
                 .collect(Collectors.toList());
         this.archive(parents);
         this.getPopulation().stream()
-                .filter(c -> !aim.completed(c) || Math.random() < ELONGATION_CHANCE)
+                .filter(c -> !aim.completed(c) || this.toElongate(c))
                 .forEach(c -> c.elongation(this::styleChecker));
         this.getPopulation().removeIf(this::conserve);
+    }
+
+    private boolean toElongate(Composition c) {
+
+        return Math.random()
+                < Math.pow(ELONGATION_CHANCE, c.getSize() - this.getAim().getSize());
     }
 
     @Override
@@ -107,7 +113,6 @@ public class Composer extends Population<Composition> {
 
         List<Composition> children = new ArrayList<>();
         do {
-            //@todo: genetic operations here -> child, add and conserve
             //1.選出一條
             //2.若not completed則mutate -> children
             //3.若completed則決定是否走mutate, yes -> mutate -> children
@@ -121,8 +126,8 @@ public class Composer extends Population<Composition> {
             } else {
                 children.add(this.mutate(sel_1));
             }
-        } while (children.removeIf(this::conserve)
-                || children.size() < this.getSize());
+            children.removeIf(this::conserve);
+        } while (children.size() < this.getSize());
 
         this.setPopulation(children);
         this.genCountIncrement();
@@ -130,7 +135,7 @@ public class Composer extends Population<Composition> {
 
     public Composition select(int state) {
 
-        return new Random().ints(0, this.size)
+        return new Random().ints(0, this.getPopulationSize())
                 .mapToObj(this.getPopulation()::get)
                 .filter(c -> state == SELECT_FROM_ALL || this.getAim().completed(c))
                 .findFirst().orElse(null);

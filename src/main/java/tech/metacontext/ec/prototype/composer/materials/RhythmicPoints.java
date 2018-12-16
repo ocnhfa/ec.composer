@@ -18,7 +18,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
+import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 
 /**
  *
@@ -69,7 +69,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     }
 
     @Override
-    public RhythmicPoints transform(ConnectorType type) {
+    public RhythmicPoints transform(TransformType type) {
 
         //@todo Dynamics transform()
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

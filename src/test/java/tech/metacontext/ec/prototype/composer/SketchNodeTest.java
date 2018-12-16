@@ -24,7 +24,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.enums.Type;
+import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 
 /**
  *
@@ -40,13 +40,11 @@ public class SketchNodeTest {
         SketchNode node1 = new SketchNode(),
                 node2 = node1,
                 node3 = new SketchNode(node1);
-        node1.getMat(Type.PitchSets).random();
-        assertEquals(
-                node1.getMat(Type.PitchSets),
-                node2.getMat(Type.PitchSets));
-        assertNotEquals(
-                node1.getMat(Type.PitchSets),
-                node3.getMat(Type.PitchSets));
+        node1.getMat(MaterialType.PitchSets).random();
+        assertEquals(node1.getMat(MaterialType.PitchSets),
+                node2.getMat(MaterialType.PitchSets));
+        assertNotEquals(node1.getMat(MaterialType.PitchSets),
+                node3.getMat(MaterialType.PitchSets));
     }
 
     /**
@@ -56,7 +54,7 @@ public class SketchNodeTest {
     @Ignore
     public void testGetMat() {
         System.out.println("getMat");
-        Type type = null;
+        MaterialType type = null;
         SketchNode instance = new SketchNode();
         MusicMaterial expResult = null;
         MusicMaterial result = instance.getMat(type);
@@ -73,8 +71,8 @@ public class SketchNodeTest {
     public void testGetMats() {
         System.out.println("getMats");
         SketchNode instance = new SketchNode();
-        Map<Type, ? extends MusicMaterial> expResult = null;
-        Map<Type, ? extends MusicMaterial> result = instance.getMats();
+        Map<MaterialType, ? extends MusicMaterial> expResult = null;
+        Map<MaterialType, ? extends MusicMaterial> result = instance.getMats();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -87,7 +85,7 @@ public class SketchNodeTest {
     @Ignore
     public void testSetMats() {
         System.out.println("setMats");
-        Map<Type, MusicMaterial> mats = null;
+        Map<MaterialType, MusicMaterial> mats = null;
         SketchNode instance = new SketchNode();
         instance.setMats(mats);
         // TODO review the generated test code and remove the default call to fail.

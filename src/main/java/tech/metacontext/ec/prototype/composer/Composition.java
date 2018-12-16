@@ -51,10 +51,8 @@ public class Composition extends Individual {
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
-        
-        //@todo: compose
-        // if not meet aim, elongation
-        // if meet aim, mutate or crossover
+
+        //@todo: add connector type
         this.addConnector(
                 Stream.generate(()
                         -> new Connector(this.connectors.getLast().getNext(), styleChecker))

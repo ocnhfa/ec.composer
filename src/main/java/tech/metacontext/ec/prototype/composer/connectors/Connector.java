@@ -19,7 +19,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorType.State;
 
 /**
  *
@@ -29,15 +28,15 @@ public class Connector extends Individual {
 
     private SketchNode previous;
     private SketchNode next;
-    private State type;
+    private State state;
     private Predicate<SketchNode> styleChecker;
 
-    public Connector(SketchNode previous, Predicate<SketchNode> styleChecker, State type) {
+    public Connector(SketchNode previous, Predicate<SketchNode> styleChecker, State state) {
         
         this.previous = previous;
         this.styleChecker = styleChecker;
-        this.type = type;
-        this.next = type.getNext(this.previous);
+        this.state = state;
+        this.next = state.getNext(this.previous);
     }
 
     public Connector(SketchNode previous, Predicate<SketchNode> styleChecker) {
@@ -55,7 +54,7 @@ public class Connector extends Individual {
         super(conn.getId());
         this.previous = new SketchNode(conn.previous);
         this.next = new SketchNode(conn.next);
-        this.type = conn.getType();
+        this.state = conn.getState();
         this.styleChecker = conn.getStyleChecker();
     }
 
@@ -83,12 +82,12 @@ public class Connector extends Individual {
         this.next = next;
     }
 
-    public State getType() {
-        return type;
+    public State getState() {
+        return state;
     }
 
-    public void setType(State type) {
-        this.type = type;
+    public void setState(State state) {
+        this.state = state;
     }
 
     public Predicate<SketchNode> getStyleChecker() {

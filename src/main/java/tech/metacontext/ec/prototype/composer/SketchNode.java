@@ -16,7 +16,7 @@
 package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.enums.Type;
+import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -29,12 +29,12 @@ import tech.metacontext.ec.prototype.abs.Individual;
  */
 public class SketchNode extends Individual {
 
-    private Map<Type, ? extends MusicMaterial> musicMats;
+    private Map<MaterialType, ? extends MusicMaterial> musicMats;
 
     public SketchNode() {
 
-        this.musicMats = Stream.of(Type.values())
-                .collect(Collectors.toMap(t -> t, Type::getInstance));
+        this.musicMats = Stream.of(MaterialType.values())
+                .collect(Collectors.toMap(t -> t, MaterialType::getInstance));
     }
 
     public SketchNode(SketchNode parent) {
@@ -50,7 +50,7 @@ public class SketchNode extends Individual {
                         }));
     }
 
-    public MusicMaterial getMat(Type type) {
+    public MusicMaterial getMat(MaterialType type) {
 
         return musicMats.get(type);
     }
@@ -58,11 +58,11 @@ public class SketchNode extends Individual {
     /*
      * Default setters and getters
      */
-    public Map<Type, ? extends MusicMaterial> getMats() {
+    public Map<MaterialType, ? extends MusicMaterial> getMats() {
         return musicMats;
     }
 
-    public void setMats(Map<Type, MusicMaterial> mats) {
+    public void setMats(Map<MaterialType, MusicMaterial> mats) {
         this.musicMats = mats;
     }
 

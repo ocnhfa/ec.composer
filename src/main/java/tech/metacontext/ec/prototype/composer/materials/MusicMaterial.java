@@ -17,7 +17,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.ArrayList;
 import java.util.List;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
+import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 
 /**
  *
@@ -87,7 +87,7 @@ public abstract class MusicMaterial<E> {
      * @param type
      * @return
      */
-    abstract public <M extends MusicMaterial> M transform(ConnectorType type);
+    abstract public <M extends MusicMaterial> M transform(TransformType type);
 
     public int size() {
         return this.materials.size();

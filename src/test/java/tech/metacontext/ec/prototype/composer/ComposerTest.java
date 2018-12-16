@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -30,57 +31,53 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class ComposerTest {
 
+    Composer instance;
+
     public ComposerTest() {
     }
 
     /**
      * Test of compose method, of class Composer.
      */
-    @Test
+    @Before
     public void testCompose() {
 
         System.out.println("compose");
         int size = 20;
-        Composer c = new Composer(size, ComposerAim.Phrase, new FreeStyle());
+        instance = new Composer(size, ComposerAim.Phrase, new FreeStyle());
         for (int i = 0; i < 50; i++) {
-            c.compose();
+            instance.compose();
+            instance.evolve();
             System.out.print(
-                    c.getPopulation().stream()
+                    instance.getPopulation().stream()
                             .map(comp -> "" + comp.getSize())
                             .collect(Collectors.joining(" ")));
-            if (c.getConservetory().size() > 0) {
+            if (instance.getConservetory().size() > 0) {
                 System.out.print(" // "
-                        + c.getConservetory().stream()
-                                .map(comp -> "" + comp.getSize())
-                                .collect(Collectors.joining(" ")));
+                        + instance.getConservetory().size());
             }
             System.out.println("");
         }
         System.out.println("--conservatory--");
-        System.out.println(c.getConservetory());
-        assertEquals(size, c.getSize());
-        assertEquals(c.getSize(), c.getPopulationSize() + c.getConservetory().size());
+        System.out.println(instance.getConservetory());
+        assertEquals(size, instance.getSize());
+        assertEquals(instance.getSize(), instance.getPopulationSize());
     }
 
     /**
      * Test of select method, of class Composer.
      */
     @Test
-    @Ignore
     public void testSelect() {
         System.out.println("select");
-        int state = 0;
-        Composer instance = null;
-        Composition expResult = null;
+        int state = Composer.SELECT_ONLY_COMPLETED;
         Composition result = instance.select(state);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(instance.getAim().completed(result));
     }
 
     @Test
-    @Ignore
     public void testStyleChecker() {
+        assertTrue(instance.styleChecker(new SketchNode()));
     }
 
     /**

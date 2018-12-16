@@ -17,7 +17,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.Random;
 import java.util.stream.Collectors;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorType;
+import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.materials.enums.Intensity;
 
 /**
@@ -63,7 +63,7 @@ public class Dynamics extends MusicMaterial<Intensity> {
     }
 
     @Override
-    public Dynamics transform(ConnectorType type) {
+    public Dynamics transform(TransformType type) {
         
         //@todo Dynamics transform()
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
