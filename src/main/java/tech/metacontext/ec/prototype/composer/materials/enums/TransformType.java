@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials.enums;
 
+import java.util.Random;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 
 /**
@@ -28,4 +29,8 @@ public enum TransformType {
     MoveBackward,
     Retrograde;
 
+    public static TransformType getRandom() {
+
+        return TransformType.values()[new Random().nextInt(TransformType.values().length)];
+    }
 }

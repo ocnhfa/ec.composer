@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.composer.connectors;
 
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**
@@ -43,7 +44,16 @@ public class ConnectorFactory {
         Connector conn = new Connector(previous, FreeStyle::checker);
         switch (State.getRandom()) {
             case Total:
+                switch (TransformType.getRandom()) {
+                    case MoveBackward:
+                    case MoveForward:
+                    case Repetition:
+                    case Retrograde:
+                }
+                break;
             case ByItem:
+                
+                break;
         }
 
         return conn;

@@ -15,10 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 
 /**
  *
@@ -26,14 +30,16 @@ import tech.metacontext.ec.prototype.composer.SketchNode;
  */
 public class Connector extends Individual {
 
+    private final Map<MaterialType, TransformType> transformTypes;
+    private Predicate<SketchNode> styleChecker;
     private SketchNode previous;
     private SketchNode next;
-    private Predicate<SketchNode> styleChecker;
 
     public Connector(SketchNode previous, Predicate<SketchNode> styleChecker) {
 
-        this.previous = previous;
+        this.transformTypes = new HashMap<>();
         this.styleChecker = styleChecker;
+        this.previous = previous;
         this.next = Stream.generate(SketchNode::new)
                 .filter(this.styleChecker)
                 .findFirst()
@@ -43,9 +49,11 @@ public class Connector extends Individual {
     public Connector(Connector conn) {
 
         super(conn.getId());
+        this.transformTypes = new HashMap<>();
+        this.transformTypes.putAll(conn.getTransformTypes());
+        this.styleChecker = conn.getStyleChecker();
         this.previous = new SketchNode(conn.previous);
         this.next = new SketchNode(conn.next);
-        this.styleChecker = conn.getStyleChecker();
     }
 
     @Override
@@ -78,6 +86,10 @@ public class Connector extends Individual {
 
     public void setStyleChecker(Predicate<SketchNode> styleChecker) {
         this.styleChecker = styleChecker;
+    }
+
+    public Map<MaterialType, TransformType> getTransformTypes() {
+        return transformTypes;
     }
 
 }
