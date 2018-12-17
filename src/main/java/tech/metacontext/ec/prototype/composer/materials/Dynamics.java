@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.materials.enums.Intensity;
 
@@ -31,6 +32,16 @@ public class Dynamics extends MusicMaterial<Intensity> {
 
     Intensity lowestIntensity;
     Intensity highestIntensity;
+
+    public Dynamics() {
+    }
+
+    public Dynamics(Dynamics origin) {
+
+        super(origin.getDivision(), origin.getMaterials());
+        this.lowestIntensity = origin.lowestIntensity;
+        this.highestIntensity = origin.highestIntensity;
+    }
 
     @Override
     public Dynamics reset() {
@@ -64,9 +75,47 @@ public class Dynamics extends MusicMaterial<Intensity> {
 
     @Override
     public Dynamics transform(TransformType type) {
-        
-        //@todo Dynamics transform()
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        switch (type) {
+            case Repetition:
+                return new Dynamics(this);
+            case Retrograde:
+                return new Dynamics(this).retrograde();
+            case MoveForward:
+                return new Dynamics(this).moveForward();
+            case MoveBackward:
+                return new Dynamics(this).moveBackward();
+        }
+        return null;
+    }
+
+    private Dynamics retrograde() {
+
+        this.setMaterials(IntStream.range(0, this.size())
+                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    private Dynamics moveForward() {
+
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    int o = Math.max(this.getMaterials().get(i).ordinal() + 1,
+                            Intensity.values().length);
+                    this.getMaterials().set(i, Intensity.values()[o]);
+                });
+        return this;
+    }
+
+    private Dynamics moveBackward() {
+
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    int o = Math.min(this.getMaterials().get(i).ordinal() - 1, 0);
+                    this.getMaterials().set(i, Intensity.values()[o]);
+                });
+        return this;
     }
 
 }
