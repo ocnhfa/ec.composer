@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 
@@ -30,6 +31,16 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     public static final int DEFAULT_MAX_POINTS = 8;
 
     private int minPoints, maxPoints;
+
+    public RhythmicPoints() {
+    }
+
+    public RhythmicPoints(RhythmicPoints origin) {
+
+        super(origin.getDivision(), origin.getMaterials());
+        this.minPoints = origin.minPoints;
+        this.maxPoints = origin.maxPoints;
+    }
 
     @Override
     public RhythmicPoints reset() {
@@ -70,9 +81,46 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
     @Override
     public RhythmicPoints transform(TransformType type) {
+        switch (type) {
+            case Repetition:
+                return new RhythmicPoints(this);
+            case Retrograde:
+                return new RhythmicPoints(this).retrograde();
+            case MoveForward:
+                return new RhythmicPoints(this).moveForward();
+            case MoveBackward:
+                return new RhythmicPoints(this).moveBackward();
+        }
+        return null;
+    }
 
-        //@todo Dynamics transform()
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private RhythmicPoints retrograde() {
+
+        this.setMaterials(IntStream.range(0, this.size())
+                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    private RhythmicPoints moveForward() {
+
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    int o = Math.max(this.getMaterials().get(i) + 1,
+                            this.maxPoints);
+                    this.getMaterials().set(i, o);
+                });
+        return this;
+    }
+
+    private RhythmicPoints moveBackward() {
+
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    int o = Math.min(this.getMaterials().get(i) - 1, 0);
+                    this.getMaterials().set(i, o);
+                });
+        return this;
     }
 
     @Override

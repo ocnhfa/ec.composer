@@ -19,6 +19,7 @@ import tech.metacontext.ec.prototype.composer.materials.enums.PitchSet;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.materials.enums.PitchSetFactory;
@@ -48,6 +49,16 @@ public class PitchSets extends MusicMaterial<PitchSet> {
             System.out.println(pss.random());
             pss.factory.randomize();
         }
+    }
+
+    public PitchSets() {
+    }
+
+    public PitchSets(PitchSets origin) {
+
+        super(origin.getDivision(), origin.getMaterials());
+        this.randomDivision = origin.randomDivision;
+        this.commonTone = origin.commonTone;
     }
 
     @Override
@@ -83,8 +94,48 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     @Override
     public PitchSets transform(TransformType type) {
 
-        //@todo Dynamics transform()
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (type) {
+            case Repetition:
+                return new PitchSets(this);
+            case Retrograde:
+                return new PitchSets(this).retrograde();
+            case MoveForward:
+                return new PitchSets(this).moveForward();
+            case MoveBackward:
+                return new PitchSets(this).moveBackward();
+        }
+        return null;
+    }
+
+    private PitchSets retrograde() {
+
+        this.setMaterials(IntStream.range(0, this.size())
+                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    private PitchSets moveForward() {
+
+        //@todo: pitchset moveforward
+//        IntStream.range(0, this.size())
+//                .forEach(i -> {
+//                    int o = Math.max(this.getMaterials().get(i).ordinal() + 1,
+//                            Range.values().length);
+//                    this.getMaterials().set(i, Range.values()[o]);
+//                });
+        return this;
+    }
+
+    private PitchSets moveBackward() {
+
+        //@todo: pitchset movebackward
+//        IntStream.range(0, this.size())
+//                .forEach(i -> {
+//                    int o = Math.min(this.getMaterials().get(i).ordinal() - 1, 0);
+//                    this.getMaterials().set(i, Range.values()[o]);
+//                });
+        return this;
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 
@@ -33,6 +34,16 @@ public class NoteRanges extends MusicMaterial<Range> {
 
     private Range lowestRange;
     private Range highestRange;
+
+    public NoteRanges() {
+    }
+
+    public NoteRanges(NoteRanges origin) {
+
+        super(origin.getDivision(), origin.getMaterials());
+        this.lowestRange = origin.lowestRange;
+        this.highestRange = origin.highestRange;
+    }
 
     @Override
     public NoteRanges reset() {
@@ -69,8 +80,46 @@ public class NoteRanges extends MusicMaterial<Range> {
     @Override
     public NoteRanges transform(TransformType type) {
 
-        //@todo NoteRanges transform()
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        switch (type) {
+            case Repetition:
+                return new NoteRanges(this);
+            case Retrograde:
+                return new NoteRanges(this).retrograde();
+            case MoveForward:
+                return new NoteRanges(this).moveForward();
+            case MoveBackward:
+                return new NoteRanges(this).moveBackward();
+        }
+        return null;
+    }
+
+    private NoteRanges retrograde() {
+
+        this.setMaterials(IntStream.range(0, this.size())
+                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .collect(Collectors.toList()));
+        return this;
+    }
+
+    private NoteRanges moveForward() {
+
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    int o = Math.max(this.getMaterials().get(i).ordinal() + 1,
+                            Range.values().length);
+                    this.getMaterials().set(i, Range.values()[o]);
+                });
+        return this;
+    }
+
+    private NoteRanges moveBackward() {
+
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    int o = Math.min(this.getMaterials().get(i).ordinal() - 1, 0);
+                    this.getMaterials().set(i, Range.values()[o]);
+                });
+        return this;
     }
 
     @Override
