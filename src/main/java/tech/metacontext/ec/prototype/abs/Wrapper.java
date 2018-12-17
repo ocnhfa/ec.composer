@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan.
+ * Copyright 2018 Jonathan Chang.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials.enums;
-
-import java.util.Random;
-import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+package tech.metacontext.ec.prototype.abs;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang
  */
-public enum TransformType {
+public class Wrapper<T> {
 
-    Repetition,
-    MoveForward,
-    MoveBackward,
-    Retrograde;
+    private T wrapped;
 
-    public static TransformType getRandom() {
-
-        return TransformType.values()[new Random().nextInt(TransformType.values().length)];
+    public Wrapper(T wrapped) {
+        this.wrapped = wrapped;
     }
 
+    public T get() {
+        return wrapped;
+    }
+
+    public void set(T wrapped) {
+        this.wrapped = wrapped;
+    }
 }

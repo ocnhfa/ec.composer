@@ -42,6 +42,7 @@ public class ConnectorFactory {
 
     public Connector getConnector(Predicate<SketchNode> styleChecker) {
 
+        //@todo getConnector
         Connector conn = new Connector(styleChecker);
         switch (State.getRandom()) {
             case Total:

@@ -15,10 +15,11 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
@@ -65,10 +66,29 @@ public class Connector extends Individual {
         this.transformTypes.put(mt, tt);
     }
 
+    public SketchNode transform() {
+
+        if (this.previous == null) {
+            return null;
+        }
+        this.next = new SketchNode();
+        this.next.setMats(
+                this.getTransformTypes().entrySet().stream()
+                        .map(e -> new SimpleEntry<>(e.getKey(),
+                        /**/ this.previous.getMat(e.getKey())
+                                .transform(e.getValue())))
+                        .collect(Collectors.toMap(SimpleEntry::getKey,
+                                SimpleEntry::getValue))
+        );
+        return this.next;
+    }
+
     @Override
     public String toString() {
 
-        return "Connector: " + previous + " => " + next;
+        return super.toString() + " "
+                + ((previous == null) ? "N/A" : previous)
+                + ((next == null) ? "" : " => " + next);
     }
 
     /*

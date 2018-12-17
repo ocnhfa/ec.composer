@@ -17,10 +17,14 @@ package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.abs.Wrapper;
 
 /**
  *
@@ -54,9 +58,19 @@ public class Composition extends Individual {
         return this;
     }
 
-    public void render() {
+    public List<SketchNode> render() {
 
+        Wrapper<SketchNode> previous = new Wrapper<>(new SketchNode());
+        List<SketchNode> nodes = this.getConnectors().stream()
+                .map(conn -> {
+                    conn.setPrevious(previous.get());
+                    conn.transform();
+                    previous.set(conn.getNext());
+                    return conn.getNext();
+                })
+                .collect(Collectors.toList());
         System.out.println(this);
+        return nodes;
     }
 
     public void addConnector(Connector connector) {
