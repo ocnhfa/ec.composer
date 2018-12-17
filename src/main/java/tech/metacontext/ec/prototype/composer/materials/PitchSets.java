@@ -110,7 +110,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     private PitchSets retrograde() {
 
         this.setMaterials(IntStream.range(0, this.size())
-                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .mapToObj(i -> this.getMaterials().get(this.size() - i - 1))
                 .collect(Collectors.toList()));
         return this;
     }

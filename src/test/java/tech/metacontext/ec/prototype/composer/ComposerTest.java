@@ -58,6 +58,7 @@ public class ComposerTest {
             }
             System.out.println("");
         }
+        instance.getPopulation().forEach(Composition::render);
         System.out.println("--conservatory--");
         System.out.println(instance.getConservetory());
         assertEquals(size, instance.getSize());

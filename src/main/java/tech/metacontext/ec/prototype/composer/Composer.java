@@ -165,8 +165,10 @@ public class Composer extends Population<Composition> {
     @Override
     public void render() {
 
+        List<List<SketchNode>> list = this.getPopulation().stream()
+                .map(Composition::render)
+                .collect(Collectors.toList());
         //@todo Composer::render
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void addStyle(Style style) {

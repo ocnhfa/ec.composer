@@ -86,7 +86,7 @@ public class Connector extends Individual {
     @Override
     public String toString() {
 
-        return super.toString() + " "
+        return super.toString() + getTransformTypes() + " "
                 + ((previous == null) ? "N/A" : previous)
                 + ((next == null) ? "" : " => " + next);
     }

@@ -96,7 +96,7 @@ public class NoteRanges extends MusicMaterial<Range> {
     private NoteRanges retrograde() {
 
         this.setMaterials(IntStream.range(0, this.size())
-                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .mapToObj(i -> this.getMaterials().get(this.size() - i - 1))
                 .collect(Collectors.toList()));
         return this;
     }
@@ -105,8 +105,8 @@ public class NoteRanges extends MusicMaterial<Range> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    int o = Math.max(this.getMaterials().get(i).ordinal() + 1,
-                            Range.values().length);
+                    int o = Math.min(this.getMaterials().get(i).ordinal() + 1,
+                            Range.values().length - 1);
                     this.getMaterials().set(i, Range.values()[o]);
                 });
         return this;
@@ -116,7 +116,7 @@ public class NoteRanges extends MusicMaterial<Range> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    int o = Math.min(this.getMaterials().get(i).ordinal() - 1, 0);
+                    int o = Math.max(this.getMaterials().get(i).ordinal() - 1, 0);
                     this.getMaterials().set(i, Range.values()[o]);
                 });
         return this;

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 
 /**
  *
@@ -33,6 +34,7 @@ import tech.metacontext.ec.prototype.abs.Wrapper;
 public class Composition extends Individual {
 
     private LinkedList<Connector> connectors = new LinkedList<>();
+    private static ConnectorFactory factory = ConnectorFactory.getInstance();
 
     public Composition(Connector conn) {
 
@@ -43,18 +45,13 @@ public class Composition extends Individual {
 
         super(parent.getId());
         this.connectors = parent.connectors.stream()
-                .map(Connector::new)
+                .map(conn -> factory.getConnector(conn.getStyleChecker()))
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
 
-        //@todo: add connector type
-        this.addConnector(
-                Stream.generate(() -> new Connector(styleChecker))
-                        .findAny()
-                        .get()
-        );
+        this.addConnector(factory.getConnector(styleChecker));
         return this;
     }
 

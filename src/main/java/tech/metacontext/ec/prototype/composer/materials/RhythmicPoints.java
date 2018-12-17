@@ -97,7 +97,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     private RhythmicPoints retrograde() {
 
         this.setMaterials(IntStream.range(0, this.size())
-                .mapToObj(i -> this.getMaterials().get(this.size() - i))
+                .mapToObj(i -> this.getMaterials().get(this.size() - i - 1))
                 .collect(Collectors.toList()));
         return this;
     }

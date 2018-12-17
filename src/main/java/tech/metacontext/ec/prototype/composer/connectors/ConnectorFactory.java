@@ -16,7 +16,9 @@
 package tech.metacontext.ec.prototype.composer.connectors;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
@@ -42,24 +44,20 @@ public class ConnectorFactory {
 
     public Connector getConnector(Predicate<SketchNode> styleChecker) {
 
-        //@todo getConnector
         Connector conn = new Connector(styleChecker);
         switch (State.getRandom()) {
             case Total:
-                switch (TransformType.getRandom()) {
-                    case MoveBackward:
-                    case MoveForward:
-                    case Repetition:
-                    case Retrograde:
-                }
+                TransformType tt = TransformType.getRandom();
+                Stream.of(MaterialType.values())
+                        .forEach(mt -> conn.addTransformType(mt, tt));
                 break;
             case ByItem:
-                
+                //@todo ByItem: apply special algorithm
+                Stream.of(MaterialType.values())
+                        .forEach(mt -> conn.addTransformType(mt, TransformType.getRandom()));
                 break;
         }
-
         return conn;
-
     }
 
 }
