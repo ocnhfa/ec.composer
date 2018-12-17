@@ -35,6 +35,12 @@ public class PitchSet {
         this.pitch_set = new ArrayList<>();
     }
 
+    public PitchSet(List<Pitch> pitches) {
+
+        this();
+        this.pitch_set.addAll(pitches);
+    }
+
     @Override
     public String toString() {
         return String.format("PitchSet[ %s ]",
@@ -65,6 +71,20 @@ public class PitchSet {
             selected.add(this.pitch_set.get(new Random().nextInt(this.getSize())));
         }
         return selected;
+    }
+
+    public PitchSet moveForward() {
+
+        return new PitchSet(this.getPitch_set().stream()
+                .map(Pitch::forward)
+                .collect(Collectors.toList()));
+    }
+
+    public PitchSet moveBackward() {
+
+        return new PitchSet(this.getPitch_set().stream()
+                .map(Pitch::backward)
+                .collect(Collectors.toList()));
     }
 
 }

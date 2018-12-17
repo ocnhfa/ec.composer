@@ -85,6 +85,8 @@ public class Dynamics extends MusicMaterial<Intensity> {
                 return new Dynamics(this).moveForward();
             case MoveBackward:
                 return new Dynamics(this).moveBackward();
+            case Disconnected:
+                return new Dynamics();
         }
         return null;
     }

@@ -28,13 +28,13 @@ public class GoldenSectionClimax implements Style {
 
     public static double intensityIndex() {
 
-        //@todo
+        //@todo GoldenSectionClimax::intensityIndex
         return 0.0;
     }
 
     public static double climaxEval(Composition c) {
 
-        //@todo
+        //@todo GoldenSectionClimax::climaxEval
         return 0.0;
     }
 
@@ -51,7 +51,7 @@ public class GoldenSectionClimax implements Style {
     }
 
     /**
-     * @todo: dummy
+     * @todo: GoldenSectionClimax::rateComposition
      * @param composition
      * @return
      */

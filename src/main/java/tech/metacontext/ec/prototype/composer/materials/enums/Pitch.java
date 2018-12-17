@@ -62,4 +62,13 @@ public enum Pitch {
         return this.ordinalEnharmonic() - o.ordinalEnharmonic();
     }
 
+    public Pitch forward() {
+
+        return Pitch.values()[(this.ordinalEnharmonic() + 1) % 12];
+    }
+
+    public Pitch backward() {
+
+        return Pitch.values()[(this.ordinalEnharmonic() + 11) % 12];
+    }
 }

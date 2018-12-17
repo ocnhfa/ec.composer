@@ -31,11 +31,8 @@ public abstract class MusicMaterial<E> {
     public static final int DEFAULT_MAX_DIVISION = 4;
 
     private int division;
-    private List<E> materials = new ArrayList<>();
+    private List<E> materials;
 
-//    public static MusicMaterial create() {
-//        MusicMaterial mm = new MusicMaterial
-//    }
     /**
      * Constructor with specified division and material content.
      *
@@ -45,7 +42,8 @@ public abstract class MusicMaterial<E> {
     public MusicMaterial(int division, List<E> materials) {
 
         this.division = division;
-        this.materials = materials;
+        this.materials = new ArrayList<>();
+        this.materials.addAll(materials);
     }
 
     /**
@@ -53,7 +51,7 @@ public abstract class MusicMaterial<E> {
      */
     public MusicMaterial() {
 
-        this.reset().generate();
+        this.reset().random();
     }
 
     /**

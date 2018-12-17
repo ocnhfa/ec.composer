@@ -18,15 +18,13 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
-import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -34,23 +32,29 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class CompositionTest {
 
+    Composer composer;
+
     public CompositionTest() {
+        composer = new Composer(1, ComposerAim.Phrase,
+                new GoldenSectionClimax(),
+                new UnaccompaniedCello());
     }
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
+    /**
+     * Test of render method, of class Composition.
+     */
+    @Test
+    public void testRender() {
+        System.out.println("render");
+        for (int i = 0; i < 1; i++) {
+            composer.compose().evolve();
+        }
+        Composition instance = composer.getPopulation().get(0);
+        System.out.println(instance);
+        SketchNode seed = composer.generateSeed();
+        List<SketchNode> list = instance.render(seed);
+        list.forEach(System.out::println);
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -80,19 +84,6 @@ public class CompositionTest {
         Composition expResult = null;
         Composition result = instance.elongation((t) -> true);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of render method, of class Composition.
-     */
-    @Test
-    @Ignore
-    public void testRender() {
-        System.out.println("render");
-        Composition instance = null;
-        instance.render();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

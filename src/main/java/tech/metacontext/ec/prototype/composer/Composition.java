@@ -15,10 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -55,17 +60,22 @@ public class Composition extends Individual {
         return this;
     }
 
-    public List<SketchNode> render() {
+    public List<SketchNode> render(SketchNode seed) {
 
-        Wrapper<SketchNode> previous = new Wrapper<>(new SketchNode());
-        List<SketchNode> nodes = this.getConnectors().stream()
+        Wrapper<SketchNode> previous = new Wrapper<>(seed);
+        List<SketchNode> nodes = new ArrayList<>();
+        nodes.add(seed);
+        nodes.addAll(this.getConnectors().stream()
                 .map(conn -> {
+                    /*
+                    1. conn.setPrevious(previous.get())
+                    2. previous.set(conn.transform())
+                    3. return conn.getNext()
+                     */
                     conn.setPrevious(previous.get());
-                    conn.transform();
-                    previous.set(conn.getNext());
-                    return conn.getNext();
+                    return previous.set(conn.transform());
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
         System.out.println(this);
         return nodes;
     }
@@ -78,11 +88,11 @@ public class Composition extends Individual {
     @Override
     public String toString() {
 
-        return String.format("%s (size = %d):\n  %s",
+        return String.format("%s (size = %d):\n  %s\n",
                 super.toString(), this.getSize(),
                 this.getConnectors().stream()
                         .map(Connector::toString)
-                        .collect(Collectors.joining("\n  "))) + "\n";
+                        .collect(Collectors.joining("\n  ")));
     }
 
     public int getSize() {

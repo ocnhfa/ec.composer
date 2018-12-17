@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**
  *

@@ -25,7 +25,7 @@ import tech.metacontext.ec.prototype.composer.materials.*;
 public enum MaterialType {
 
     PitchSets(PitchSets.class),
-    NoteNumbers(RhythmicPoints.class),
+    RhythmicPoints(RhythmicPoints.class),
     NoteRanges(NoteRanges.class),
     Dynamics(Dynamics.class);
 

@@ -89,6 +89,8 @@ public class NoteRanges extends MusicMaterial<Range> {
                 return new NoteRanges(this).moveForward();
             case MoveBackward:
                 return new NoteRanges(this).moveBackward();
+            case Disconnected:
+                return new NoteRanges();
         }
         return null;
     }

@@ -32,6 +32,15 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
     private int minPoints, maxPoints;
 
+    public static void main(String[] args) {
+
+        RhythmicPoints nn = new RhythmicPoints();
+        Stream.generate(() -> nn.random())
+                .limit(50)
+                .map(RhythmicPoints::getMaterials)
+                .forEach(System.out::println);
+    }
+
     public RhythmicPoints() {
     }
 
@@ -51,21 +60,13 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
         return this;
     }
 
-    public static void main(String[] args) {
-
-        RhythmicPoints nn = new RhythmicPoints();
-        Stream.generate(() -> nn.random())
-                .limit(50)
-                .map(RhythmicPoints::getMaterials)
-                .forEach(System.out::println);
-    }
-
     @Override
     public RhythmicPoints generate() {
 
-        this.setMaterials(new Random().ints(this.getDivision(), this.minPoints, this.maxPoints + 1)
-                .boxed()
-                .collect(Collectors.toList())
+        this.setMaterials(
+                Stream.generate(() -> new Random().nextInt(this.maxPoints - this.minPoints + 1) + this.minPoints)
+                        .limit(this.getDivision())
+                        .collect(Collectors.toList())
         );
         return this;
     }
@@ -90,6 +91,8 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
                 return new RhythmicPoints(this).moveForward();
             case MoveBackward:
                 return new RhythmicPoints(this).moveBackward();
+            case Disconnected:
+                return new RhythmicPoints();
         }
         return null;
     }
@@ -106,7 +109,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    int o = Math.max(this.getMaterials().get(i) + 1,
+                    int o = Math.min(this.getMaterials().get(i) + 1,
                             this.maxPoints);
                     this.getMaterials().set(i, o);
                 });
@@ -117,7 +120,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    int o = Math.min(this.getMaterials().get(i) - 1, 0);
+                    int o = Math.max(this.getMaterials().get(i) - 1, 0);
                     this.getMaterials().set(i, o);
                 });
         return this;

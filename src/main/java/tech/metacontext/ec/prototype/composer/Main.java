@@ -52,8 +52,9 @@ public class Main {
         IntStream.range(0, generation)
                 .peek(i -> System.out.println("----------Generation " + i))
                 .mapToObj(composer.getArchive()::get)
-                .forEach(list -> list.stream().forEach(Composition::render));
-
+                .forEach(list -> list.stream()
+                /*...*/.forEach(c -> c.render(composer.generateSeed())));
+        composer.render();
         System.out.println(header("Dumping Conservatory"));
         composer.getConservetory().forEach(System.out::println);
     }

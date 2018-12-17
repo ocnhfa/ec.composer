@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -31,7 +32,7 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class ComposerTest {
 
-    Composer instance;
+    static Composer instance;
 
     public ComposerTest() {
     }
@@ -39,11 +40,11 @@ public class ComposerTest {
     /**
      * Test of compose method, of class Composer.
      */
-    @Before
-    public void testCompose() {
+    @BeforeClass
+    public static void testCompose() {
 
         System.out.println("compose");
-        int size = 20;
+        int size = 10;
         instance = new Composer(size, ComposerAim.Phrase, new FreeStyle());
         for (int i = 0; i < 50; i++) {
             instance.compose();
@@ -58,7 +59,7 @@ public class ComposerTest {
             }
             System.out.println("");
         }
-        instance.getPopulation().forEach(Composition::render);
+        instance.render();
         System.out.println("--conservatory--");
         System.out.println(instance.getConservetory());
         assertEquals(size, instance.getSize());

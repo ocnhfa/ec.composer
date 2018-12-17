@@ -28,7 +28,8 @@ public enum TransformType {
     Repetition,
     MoveForward,
     MoveBackward,
-    Retrograde;
+    Retrograde,
+    Disconnected;
 
     public static TransformType getRandom() {
 

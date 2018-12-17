@@ -31,7 +31,7 @@ public class Wrapper<T> {
         return wrapped;
     }
 
-    public void set(T wrapped) {
-        this.wrapped = wrapped;
+    public T set(T wrapped) {
+        return this.wrapped = wrapped;
     }
 }

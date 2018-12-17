@@ -37,7 +37,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public static final int DEFAULT_ENHARMONIC_ALLOWED = SHARP_NOT_ALLOWED;
     public static final int DEFAULT_SHARP_ALLOWED = SHARP_ALLOWED;
 
-    private boolean randomDivision = false;
+//    private boolean randomPitchSet = false;
     private int commonTone = 0;
     public PitchSetFactory factory;
 
@@ -57,7 +57,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public PitchSets(PitchSets origin) {
 
         super(origin.getDivision(), origin.getMaterials());
-        this.randomDivision = origin.randomDivision;
+//        this.randomPitchSet = origin.randomPitchSet;
         this.commonTone = origin.commonTone;
     }
 
@@ -103,6 +103,8 @@ public class PitchSets extends MusicMaterial<PitchSet> {
                 return new PitchSets(this).moveForward();
             case MoveBackward:
                 return new PitchSets(this).moveBackward();
+            case Disconnected:
+                return new PitchSets();
         }
         return null;
     }
@@ -117,24 +119,19 @@ public class PitchSets extends MusicMaterial<PitchSet> {
 
     private PitchSets moveForward() {
 
-        //@todo: pitchset moveforward
-//        IntStream.range(0, this.size())
-//                .forEach(i -> {
-//                    int o = Math.max(this.getMaterials().get(i).ordinal() + 1,
-//                            Range.values().length);
-//                    this.getMaterials().set(i, Range.values()[o]);
-//                });
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    this.getMaterials().set(i, this.getMaterials().get(i).moveForward());
+                });
         return this;
     }
 
     private PitchSets moveBackward() {
 
-        //@todo: pitchset movebackward
-//        IntStream.range(0, this.size())
-//                .forEach(i -> {
-//                    int o = Math.min(this.getMaterials().get(i).ordinal() - 1, 0);
-//                    this.getMaterials().set(i, Range.values()[o]);
-//                });
+        IntStream.range(0, this.size())
+                .forEach(i -> {
+                    this.getMaterials().set(i, this.getMaterials().get(i).moveBackward());
+                });
         return this;
     }
 
@@ -152,14 +149,13 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     /*
      * default setters and getters
      */
-    public boolean isRandomPitchSet() {
-        return randomDivision;
-    }
-
-    public void setRandomPitchSet(boolean randomPitchSet) {
-        this.randomDivision = randomPitchSet;
-    }
-
+//    public boolean isRandomPitchSet() {
+//        return randomPitchSet;
+//    }
+//
+//    public void setRandomPitchSet(boolean randomPitchSet) {
+//        this.randomPitchSet = randomPitchSet;
+//    }
     public int getCommonTone() {
         return commonTone;
     }

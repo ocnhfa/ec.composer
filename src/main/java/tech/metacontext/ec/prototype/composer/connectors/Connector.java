@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 
@@ -72,14 +73,15 @@ public class Connector extends Individual {
             return null;
         }
         this.next = new SketchNode();
-        this.next.setMats(
-                this.getTransformTypes().entrySet().stream()
+//        System.out.println("Connector: "+this.getTransformTypes());
+        Map<MaterialType, ? extends MusicMaterial> mats
+                = this.getTransformTypes().entrySet().stream()
                         .map(e -> new SimpleEntry<>(e.getKey(),
-                        /**/ this.previous.getMat(e.getKey())
-                                .transform(e.getValue())))
+                        /*.............*/ this.previous.getMat(e.getKey()).transform(e.getValue())))
+                        //                        .peek(e -> System.out.println("peek: " + e.getKey() + "=" + e.getValue()))
                         .collect(Collectors.toMap(SimpleEntry::getKey,
-                                SimpleEntry::getValue))
-        );
+                                SimpleEntry::getValue));
+        this.next.setMats(mats);
         return this.next;
     }
 
@@ -87,8 +89,8 @@ public class Connector extends Individual {
     public String toString() {
 
         return super.toString() + getTransformTypes() + " "
-                + ((previous == null) ? "N/A" : previous)
-                + ((next == null) ? "" : " => " + next);
+                + ((previous == null) ? "N/A" : "\nfrom: " + previous)
+                + ((next == null) ? "" : "\n => " + next);
     }
 
     /*

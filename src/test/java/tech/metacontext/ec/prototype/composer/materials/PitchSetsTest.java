@@ -53,24 +53,6 @@ public class PitchSetsTest {
     }
 
     /**
-     * Test of setRandomPitchSet method, of class PitchSets.
-     */
-    @Test
-    public void testSetRandomPitchSet() {
-        System.out.println("setRandomPitchSet");
-        AtomicInteger i = new AtomicInteger(0);
-        PitchSets pss = new PitchSets();
-        pss.setCommonTone(2);
-        pss.setRandomPitchSet(true);
-        Stream.generate(pss::random)
-                .limit(10)
-                .map(PitchSets::random)
-                .peek(ps -> System.out.print(i.incrementAndGet() + ". "))
-                .peek(System.out::println)
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Test of reset method, of class PitchSets.
      */
     @Test
@@ -125,21 +107,6 @@ public class PitchSetsTest {
         PitchSets instance = new PitchSets();
         String expResult = "";
         String result = instance.toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isRandomPitchSet method, of class PitchSets.
-     */
-    @Test
-    @Ignore
-    public void testIsRandomPitchSet() {
-        System.out.println("isRandomPitchSet");
-        PitchSets instance = new PitchSets();
-        boolean expResult = false;
-        boolean result = instance.isRandomPitchSet();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

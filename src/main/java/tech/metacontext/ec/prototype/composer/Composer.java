@@ -15,15 +15,20 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.AbstractMap;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
  *
@@ -58,10 +63,7 @@ public class Composer extends Population<Composition> {
     public Composer(int size, ComposerAim aim, Style... styles) {
 
         this.aim = aim;
-        this.styles = new ArrayList<>();
-        for (Style style : styles) {
-            this.styles.add(style);
-        }
+        this.styles = new ArrayList<>(Arrays.asList(styles));
         this.size = size;
         this.conservetory = new ArrayList<>();
         this.setPopulation(
@@ -87,7 +89,7 @@ public class Composer extends Population<Composition> {
                 .get();
     }
 
-    public void compose() {
+    public Composer compose() {
 
         List<Composition> parents = this.getPopulation().stream()
                 .map(Composition::new)
@@ -97,6 +99,7 @@ public class Composer extends Population<Composition> {
                 .filter(c -> !aim.completed(c) || this.toElongate(c))
                 .forEach(c -> c.elongation(this::styleChecker));
         this.getPopulation().removeIf(this::conserve);
+        return this;
     }
 
     private boolean toElongate(Composition c) {
@@ -165,10 +168,31 @@ public class Composer extends Population<Composition> {
     @Override
     public void render() {
 
-        List<List<SketchNode>> list = this.getPopulation().stream()
-                .map(Composition::render)
-                .collect(Collectors.toList());
-        //@todo Composer::render
+//        List<List<SketchNode>> list = this.getPopulation().stream()
+//                .map(c -> c.render(this.generateSeed()))
+//                .collect(Collectors.toList());
+        LineChart_AWT chart = new LineChart_AWT("Composition Evaluation");
+//        StringBuilder result = new StringBuilder();
+        IntStream.range(0, this.getPopulationSize())
+                .mapToObj(i -> new AbstractMap.SimpleEntry<>(i, this.getPopulation().get(i)))
+                .forEach(e -> {
+                    synchronized (this) {
+                        e.getValue().render(this.generateSeed());
+                        this.getStyles().forEach(style -> {
+                            double eval = style.rateComposition(e.getValue());
+                            chart.addData(eval, style.getClass().getSimpleName(),
+                                    "" + e.getKey());
+//                            result.append(String.format("%f %s %s\n", eval,
+//                                    style.getClass().getSimpleName(),
+//                                    e.getKey()));
+                        });
+                    }
+                });
+        chart.createLineChart("Composition Evaluation",
+                "Composition", "Evaluation", 560, 367, true);
+        RefineryUtilities.centerFrameOnScreen(chart);
+        chart.showChartWindow();
+//        System.out.println(result);
     }
 
     public void addStyle(Style style) {

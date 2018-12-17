@@ -55,6 +55,18 @@ public class SketchNode extends Individual {
         return musicMats.get(type);
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + "{\n"
+                + this.getMats().entrySet().stream()
+                        .map(e -> String.format("-   %s (div=%d): %s",
+                        /*..........*/ e.getKey(),
+                        /*..........*/ e.getValue().getDivision(),
+                        /*..........*/ e.getValue().getMaterials()))
+                        .collect(Collectors.joining("\n"))
+                + "}";
+    }
+
     /*
      * Default setters and getters
      */
@@ -62,7 +74,8 @@ public class SketchNode extends Individual {
         return musicMats;
     }
 
-    public void setMats(Map<MaterialType, MusicMaterial> mats) {
+    public void setMats(Map<MaterialType, ? extends MusicMaterial> mats) {
+        
         this.musicMats = mats;
     }
 
