@@ -35,29 +35,39 @@ public class Connector extends Individual {
     private SketchNode previous;
     private SketchNode next;
 
-    public Connector(SketchNode previous, Predicate<SketchNode> styleChecker) {
+    public Connector(
+            //            SketchNode previous,
+            Predicate<SketchNode> styleChecker
+    ) {
 
         this.transformTypes = new HashMap<>();
         this.styleChecker = styleChecker;
-        this.previous = previous;
-        this.next = Stream.generate(SketchNode::new)
-                .filter(this.styleChecker)
-                .findFirst()
-                .get();
+//        this.previous = previous;
+//        this.next = Stream.generate(SketchNode::new)
+//                .filter(this.styleChecker)
+//                .findFirst()
+//                .get();
     }
 
     public Connector(Connector conn) {
 
         super(conn.getId());
-        this.transformTypes = new HashMap<>();
-        this.transformTypes.putAll(conn.getTransformTypes());
+        this.transformTypes = new HashMap<>(conn.getTransformTypes());
         this.styleChecker = conn.getStyleChecker();
-        this.previous = new SketchNode(conn.previous);
-        this.next = new SketchNode(conn.next);
+        this.previous = (conn.previous == null)
+                ? null : new SketchNode(conn.previous);
+        this.next = (conn.next == null)
+                ? null : new SketchNode(conn.next);
+    }
+
+    public void addTransformType(MaterialType mt, TransformType tt) {
+
+        this.transformTypes.put(mt, tt);
     }
 
     @Override
     public String toString() {
+
         return "Connector: " + previous + " => " + next;
     }
 

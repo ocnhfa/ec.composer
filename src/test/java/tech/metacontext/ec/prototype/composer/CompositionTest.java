@@ -57,9 +57,7 @@ public class CompositionTest {
     public void ObjectCopy() {
 
         System.out.println("ObjectCopy");
-        SketchNode node = new SketchNode();
-        Composition c1 = new Composition(node,
-                new Connector(node, FreeStyle::checker)),
+        Composition c1 = new Composition(new Connector(FreeStyle::checker)),
                 c2 = c1,
                 c3 = new Composition(c1);
         c1.elongation(FreeStyle::checker);

@@ -65,10 +65,7 @@ public class Composer extends Population<Composition> {
         this.size = size;
         this.conservetory = new ArrayList<>();
         this.setPopulation(
-                Stream.generate(() -> generateSeed())
-                        .map(seed
-                                -> new Composition(seed,
-                                new Connector(seed, this::styleChecker)))
+                Stream.generate(() -> new Composition(new Connector(this::styleChecker)))
                         .limit(size)
                         .collect(Collectors.toList())
         );
@@ -143,11 +140,14 @@ public class Composer extends Population<Composition> {
 
     public Composition mutate(Composition origin) {
         //@todo Composer::mutate
+        //1: alter transform type
+        //2: deletion/insertion
         return new Composition(origin);
     }
 
     public Composition crossover(Composition parent1, Composition parent2) {
         //@todo Composer::crossover
+        //1: walking and switching model
         return new Composition(parent1);
     }
 

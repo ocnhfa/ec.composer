@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import java.util.function.Predicate;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -39,9 +40,9 @@ public class ConnectorFactory {
         return instance;
     }
 
-    public Connector getConnector(SketchNode previous) {
+    public Connector getConnector(Predicate<SketchNode> styleChecker) {
 
-        Connector conn = new Connector(previous, FreeStyle::checker);
+        Connector conn = new Connector(styleChecker);
         switch (State.getRandom()) {
             case Total:
                 switch (TransformType.getRandom()) {

@@ -30,16 +30,9 @@ public class Composition extends Individual {
 
     private LinkedList<Connector> connectors = new LinkedList<>();
 
-    public Composition(SketchNode seed, Connector conn) {
+    public Composition(Connector conn) {
 
         this.connectors.add(conn);
-        conn.setPrevious(seed);
-        conn.getNext();
-    }
-
-    public Composition(Connector connector) {
-
-        this.connectors.add(connector);
     }
 
     public Composition(Composition parent) {
@@ -54,8 +47,7 @@ public class Composition extends Individual {
 
         //@todo: add connector type
         this.addConnector(
-                Stream.generate(()
-                        -> new Connector(this.connectors.getLast().getNext(), styleChecker))
+                Stream.generate(() -> new Connector(styleChecker))
                         .findAny()
                         .get()
         );
