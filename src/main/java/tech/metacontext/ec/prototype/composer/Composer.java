@@ -51,7 +51,7 @@ public class Composer extends Population<Composition> {
     /**
      * 作品收入conservatory所須達到的分數。
      */
-    static final double CONSERVE_SCORE = 0.99;
+    static final double CONSERVE_SCORE = 0.8;
     private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
@@ -158,14 +158,16 @@ public class Composer extends Population<Composition> {
         MutationType type = MutationType.getRandom();
         switch (type) {
             case Alteration:
-                mutant.getConnectors().set(selected, factory.getConnector(this::styleChecker));
+                mutant.getConnectors().set(selected,
+                        factory.getConnector(this::styleChecker));
                 break;
             case Insertion:
             case Deletion:
                 if (this.getAim().completed(origin)) {
                     mutant.getConnectors().remove(selected);
                 } else {
-                    mutant.getConnectors().add(selected, factory.getConnector(this::styleChecker));
+                    mutant.getConnectors().add(selected,
+                            factory.getConnector(this::styleChecker));
                 }
                 break;
         }
@@ -181,10 +183,12 @@ public class Composer extends Population<Composition> {
         while (++index < Math.max(parent1.getSize() - 1, parent2.getSize() - 1)) {
             switch (new Random().nextBoolean() ? 1 : 2) {
                 case 1:
-                    activated = (parent1.getSize() - 1 > index) ? parent1 : parent2;
+                    activated = (parent1.getSize() - 1 > index)
+                            ? parent1 : parent2;
                     break;
                 case 2:
-                    activated = (parent2.getSize() - 1 > index) ? parent2 : parent1;
+                    activated = (parent2.getSize() - 1 > index)
+                            ? parent2 : parent1;
                     break;
             }
             child.addConnector(activated.getConnectors().get(index));
@@ -203,19 +207,12 @@ public class Composer extends Population<Composition> {
         if (!this.getAim().completed(composition)) {
             return false;
         }
-        composition.getRendered();
         if (this.styles.stream()
-//                .peek(style -> System.out.println(style.getClass().getSimpleName()
-//                + "-> " + style.rateComposition(composition)))
                 .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE)) {
-//        if (this.styles.get(0).rateComposition(composition) < CONSERVE_SCORE) {
-//            return false;
-//        }
-//        if (this.styles.get(1).rateComposition(composition) < CONSERVE_SCORE) {
             return false;
         }
-        System.out.println(this.styles.stream()
-                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE));
+//        System.out.println(this.styles.stream()
+//                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE));
         this.styles.forEach((style) -> {
             System.out.println(style.getClass().getSimpleName() + ": " + style.rateComposition(composition));
         });

@@ -63,17 +63,31 @@ public class GoldenSectionClimax implements Style {
         List<Double> climaxIndexes = composition.getRendered().stream()
                 .map(this::climaxIndex)
                 .collect(Collectors.toList());
-        Double peak = climaxIndexes.stream().max(Comparator.naturalOrder()).get();
+        Double peak = climaxIndexes.stream()
+                .max(Comparator.naturalOrder())
+                .get();
         int peakNodeIndex = (int) Math.floor(composition.getSize() / RATIO) + 1;
-        List<Double> score = new ArrayList<>();
+        List<Double> scores = new ArrayList<>();
+        double base = 0.0;
         for (int i = 0; i < composition.getSize(); i++) {
-            if (i < peakNodeIndex) {
-                score.add(Math.abs(climaxIndexes.get(i) - peak / peakNodeIndex * (i + 1)));
-            } else {
-                score.add(Math.abs(climaxIndexes.get(i) - peak / (composition.getSize() - peakNodeIndex) * i));
-            }
+//            System.out.printf("(%d)", i);
+            double standard = (i < peakNodeIndex)
+                    ? i * peak / peakNodeIndex
+                    : (composition.getSize() - i - 1) * peak
+                    / (composition.getSize() - peakNodeIndex - 1);
+            double score = standard
+                    * Math.abs(climaxIndexes.get(i) - standard);
+            scores.add(score);
+            base += standard * peak;
+//            System.out.printf("%.2f/%.2f ", score, standard);
         }
-        return score.stream().mapToDouble(d -> d).sum() / (peak * composition.getSize() / 2);
+        double sum = scores.stream().mapToDouble(d -> d).sum();
+//        System.out.println("");
+//        System.out.println("peak=" + peak);
+//        System.out.println("pki =" + peakNodeIndex);
+//        System.out.println("sum =" + sum);
+//        System.out.println("base=" + base);
+        return (base - sum) / base;
     }
 
     public double climaxIndex(SketchNode node) {
@@ -84,14 +98,21 @@ public class GoldenSectionClimax implements Style {
                     switch (mt) {
                         case Dynamics:
                             index.add(mm.getMaterials().stream()
-                                    .mapToDouble((mat) -> ((Intensity) mat).getIntensityIndex())
-                                    .average().getAsDouble());
+                                    .mapToDouble((mat)
+                                            -> ((Intensity) mat).getIntensityIndex())
+                                    .average()
+                                    .getAsDouble());
+//                            System.out.printf("DY:%.1f ", index.doubleValue());
                             break;
                         case NoteRanges:
                             index.add(mm.getMaterials().stream()
-                                    .mapToDouble((mat) -> ((Range) mat).getIntensityIndex(
-                                    sortedRanges.getFirst(), sortedRanges.getLast()))
-                                    .average().getAsDouble());
+                                    .mapToDouble((mat)
+                                            -> ((Range) mat).getIntensityIndex(
+                                            sortedRanges.getFirst(),
+                                            sortedRanges.getLast()))
+                                    .average()
+                                    .getAsDouble());
+//                            System.out.printf("NR:%.1f ", index.doubleValue());
                             break;
                         case PitchSets:
                         case RhythmicPoints:

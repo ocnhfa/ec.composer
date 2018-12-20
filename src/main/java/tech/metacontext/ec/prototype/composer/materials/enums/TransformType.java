@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials.enums;
 
-import java.util.stream.IntStream;
+import java.util.Random;
 
 /**
  *
@@ -38,7 +38,7 @@ public enum TransformType {
 
     public static TransformType getRandom() {
 
-        return IntStream.range(0, values().length)
+        return new Random().ints(0, values().length)
                 .mapToObj(i -> values()[i])
                 .filter(tt -> Math.random() < tt.weighting)
                 .findFirst().get();

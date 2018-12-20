@@ -15,8 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
-import tech.metacontext.ec.prototype.composer.SketchNode;
-
 /**
  *
  * @author Jonathan Chang

@@ -19,6 +19,7 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tech.metacontext.ec.prototype.composer.Composer;
+import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 
 /**
@@ -30,7 +31,11 @@ public class GoldenSectionClimaxTest {
     GoldenSectionClimax instance;
     Composer composer;
 
+    /**
+     * Constructor
+     */
     public GoldenSectionClimaxTest() {
+
         composer = new Composer(10, ComposerAim.Phrase,
                 instance = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()),
                 new UnaccompaniedCello());
@@ -42,15 +47,39 @@ public class GoldenSectionClimaxTest {
 
     @Test
     public void testClimaxIndex() {
-        System.out.println("climaxIndex");
-    }
 
-    @Test
-    public void testQualifySketchNode() {
+        System.out.println("climaxIndex");
+        composer.getPopulation().stream()
+                .limit(1)
+                .peek(System.out::println)
+                .map(Composition::getRendered)
+                .forEach(list -> {
+                    list.stream()
+                            .mapToDouble(instance::climaxIndex)
+                            .forEach(score -> {
+                                System.out.printf("%.1f ", score);
+                                assertTrue(score <= 2.0);
+                            });
+                    System.out.println("");
+                });
     }
 
     @Test
     public void testRateComposition() {
+
+        System.out.println("rateComposition");
+        composer.getPopulation().stream()
+                .peek(composition -> {
+//                    System.out.println(composition.getId());
+                    composition.getRendered().stream()
+                            .mapToDouble(instance::climaxIndex)
+                            .forEach(score -> {
+                                System.out.printf("%.1f ", score);
+                            });
+                    System.out.println();
+                })
+                .mapToDouble(instance::rateComposition)
+                .forEach(System.out::println);
     }
 
 }

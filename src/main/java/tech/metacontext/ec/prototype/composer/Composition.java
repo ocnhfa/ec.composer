@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -92,22 +93,73 @@ public class Composition extends Individual {
         this.connectors.add(connector);
     }
 
-    public LinkedList<SketchNode> getRendered() {
-
-        if (this.connectors.isEmpty()
-                || this.connectors.getFirst().getPrevious() != this.seed
-                || this.rendered.size() < this.getSize()
-                || IntStream.range(1, this.getSize())
-                        .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
-                        .anyMatch(e
-                                -> e.getKey().getPrevious() == null || e.getKey().getNext() == null
-                        || !e.getKey().getNext().equals(e.getValue()))) {
-            System.out.println("Rendering Composition " + this.getId());
-            this.render(seed);
+    public List<SketchNode> getRendered() {
+        boolean emptyConnectors = this.connectors.isEmpty();
+        if (emptyConnectors) {
+            System.out.println("emptyConnectors");
+        } else {
+            boolean mismatchedSeed = 
+                    this.connectors.getFirst().getPrevious() != this.seed;
+            if (mismatchedSeed) {
+                System.out.println("mismatchedSeed");
+            } else {
+                boolean mismatchedSize = this.rendered.size() < this.getSize();
+                if (mismatchedSize) {
+                    System.out.println("mismatchedSize");
+                } else {
+                    boolean nullNodes = IntStream.range(1, this.getSize())
+                            .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
+                            .anyMatch(e -> Objects.isNull(e.getKey().getPrevious())
+                            || Objects.isNull(e.getKey().getNext()));
+                    if (nullNodes) {
+                        System.out.println("nullOrMismatchedNodes");
+                    } else {
+                        boolean mismatchedNodes = IntStream.range(1, this.getSize())
+                                .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
+                                .anyMatch(e -> !Objects.equals(e.getKey().getNext(), e.getValue()));
+                        if (mismatchedNodes) {
+                            System.out.println("mismatchedNodes");
+                        } else {
+                            return this.rendered;
+                        }
+                    }
+                }
+            }
         }
-        return this.rendered;
+//        System.out.println("Rendering Composition " + this.getId());
+        return this.render(seed);
     }
 
+//    public LinkedList<SketchNode> getRendered() {
+//        boolean emptyConnectors = this.connectors.isEmpty();
+//        boolean mismatchedSeed = this.connectors.getFirst().getPrevious() != this.seed;
+//        boolean mismatchedSize = this.rendered.size() < this.getSize();
+//        boolean nullOrMismatchedNodes = IntStream.range(1, this.getSize())
+//                .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
+//                .anyMatch(e -> Objects.isNull(e.getKey().getPrevious())
+//                || Objects.isNull(e.getKey().getNext())
+//                || !Objects.equals(e.getKey().getNext(), e.getValue()));
+//
+//        if (this.connectors.isEmpty()
+//                || this.connectors.getFirst().getPrevious() != this.seed
+//                || this.rendered.size() < this.getSize()
+//                || IntStream.range(1, this.getSize())
+//                        .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
+//                        .anyMatch(e
+//                                -> e.getKey().getPrevious() == null || e.getKey().getNext() == null
+//                        || !e.getKey().getNext().equals(e.getValue()))) {
+//
+//            System.out.printf("%b,%b,%b,%b\n",
+//                    emptyConnectors,
+//                    mismatchedSeed,
+//                    mismatchedSize,
+//                    nullOrMismatchedNodes);
+//
+//            System.out.println("Rendering Composition " + this.getId());
+//            this.render(seed);
+//        }
+//        return this.rendered;
+//    }
     @Override
     public String toString() {
 
