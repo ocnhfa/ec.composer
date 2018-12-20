@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.materials.enums;
+package tech.metacontext.ec.prototype.composer.operations;
+
+import tech.metacontext.ec.prototype.composer.connectors.State;
+import static tech.metacontext.ec.prototype.composer.connectors.State.TOTAL_RATIO;
 
 /**
  *
  * @author Jonathan
  */
-public enum Range {
+public enum CrossoverType {
 
-    C0, C1, C2, C3, C4, C5, C6, C7, C8;
-
-    public double getIntensityIndex(Range lowest, Range highest) {
-
-        if (this.ordinal() < lowest.ordinal()) {
-            return 0.0;
-        }
-        if (this.ordinal() > highest.ordinal()) {
-            return 1.0;
-        }
-        return 1.0 * (this.ordinal() - lowest.ordinal()) / (highest.ordinal() - 1);
-    }
+//    public static CrossoverType getRandom() {
+//
+//        return Math.random() < TOTAL_RATIO ? State.Total : State.ByItem;
+//    }
 }

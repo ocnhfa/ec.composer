@@ -25,16 +25,18 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.render.LineChart_AWT;
+import tech.metacontext.ec.prototype.composer.operations.MutationType;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Composer extends Population<Composition> {
+
+    ConnectorFactory factory = ConnectorFactory.getInstance();
 
     private ComposerAim aim;
     private List<Style> styles;
@@ -49,7 +51,7 @@ public class Composer extends Population<Composition> {
     /**
      * 作品收入conservatory所須達到的分數。
      */
-    private static final double CONSERVE_SCORE = 0.99;
+    static final double CONSERVE_SCORE = 0.99;
     private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
@@ -67,7 +69,7 @@ public class Composer extends Population<Composition> {
         this.size = size;
         this.conservetory = new ArrayList<>();
         this.setPopulation(
-                Stream.generate(() -> new Composition(new Connector(this::styleChecker)))
+                Stream.generate(() -> new Composition(this.generateSeed(), factory.getConnector(this::styleChecker)))
                         .limit(size)
                         .collect(Collectors.toList())
         );
@@ -96,13 +98,13 @@ public class Composer extends Population<Composition> {
                 .collect(Collectors.toList());
         this.archive(parents);
         this.getPopulation().stream()
-                .filter(c -> !aim.completed(c) || this.toElongate(c))
+                .filter(c -> !aim.completed(c) || this.ifElongate(c))
                 .forEach(c -> c.elongation(this::styleChecker));
         this.getPopulation().removeIf(this::conserve);
         return this;
     }
 
-    private boolean toElongate(Composition c) {
+    private boolean ifElongate(Composition c) {
 
         return Math.random()
                 < Math.pow(ELONGATION_CHANCE, c.getSize() - this.getAim().getSize());
@@ -118,14 +120,16 @@ public class Composer extends Population<Composition> {
             //3.若completed則決定是否走mutate, yes -> mutate -> children
             //4.若走crossover則選出另一條completed(也許是自己)
             //5.crossover -> children
-            Composition sel_1 = this.select(SELECT_FROM_ALL);
+            Composition sel_1 = this.randomSelect(SELECT_FROM_ALL);
+            Composition child;
             if (this.getAim().completed(sel_1)
                     && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED) {
-                Composition sel_2 = this.select(SELECT_ONLY_COMPLETED);
-                children.add(this.crossover(sel_1, sel_2));
+                Composition sel_2 = this.randomSelect(SELECT_ONLY_COMPLETED);
+                child = this.crossover(sel_1, sel_2);
             } else {
-                children.add(this.mutate(sel_1));
+                child = this.mutate(sel_1);
             }
+            children.add(child);
             children.removeIf(this::conserve);
         } while (children.size() < this.getSize());
 
@@ -133,66 +137,107 @@ public class Composer extends Population<Composition> {
         this.genCountIncrement();
     }
 
-    public Composition select(int state) {
-
-        return new Random().ints(0, this.getPopulationSize())
+    public Composition randomSelect(int state) {
+        /*
+         new Random().ints(0, this.getPopulationSize())
                 .mapToObj(this.getPopulation()::get)
+         */
+        List<Composition> list = this.getPopulation().stream()
                 .filter(c -> state == SELECT_FROM_ALL || this.getAim().completed(c))
-                .findFirst().orElse(null);
+                .collect(Collectors.toList());
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(new Random().nextInt(list.size()));
     }
 
     public Composition mutate(Composition origin) {
-        //@todo Composer::mutate
-        //1: alter transform type
-        //2: deletion/insertion
-        return new Composition(origin);
+
+        Composition mutant = new Composition(origin);
+        int selected = new Random().nextInt(mutant.getSize() - 1);
+        MutationType type = MutationType.getRandom();
+        switch (type) {
+            case Alteration:
+                mutant.getConnectors().set(selected, factory.getConnector(this::styleChecker));
+                break;
+            case Insertion:
+            case Deletion:
+                if (this.getAim().completed(origin)) {
+                    mutant.getConnectors().remove(selected);
+                } else {
+                    mutant.getConnectors().add(selected, factory.getConnector(this::styleChecker));
+                }
+                break;
+        }
+        return mutant;
     }
 
     public Composition crossover(Composition parent1, Composition parent2) {
-        //@todo Composer::crossover
-        //1: walking and switching model
-        return new Composition(parent1);
+
+        int index = 0;
+        Composition activated = parent1,
+                child = new Composition(this.generateSeed(),
+                        factory.getConnector(this::styleChecker));
+        while (++index < Math.max(parent1.getSize() - 1, parent2.getSize() - 1)) {
+            switch (new Random().nextBoolean() ? 1 : 2) {
+                case 1:
+                    activated = (parent1.getSize() - 1 > index) ? parent1 : parent2;
+                    break;
+                case 2:
+                    activated = (parent2.getSize() - 1 > index) ? parent2 : parent1;
+                    break;
+            }
+            child.addConnector(activated.getConnectors().get(index));
+        }
+        return child;
     }
 
+    /*
+     || this.styles.stream()
+                .peek(style -> System.out.println(style.getClass().getSimpleName()
+                + "-> " + style.rateComposition(composition)))
+                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE)
+     */
     public boolean conserve(Composition composition) {
 
-        if (this.getAim().completed(composition)
-                && this.styles.stream()
-                        .allMatch(s -> s.rateComposition(composition) > CONSERVE_SCORE)) {
-            this.conservetory.add(composition);
-            return true;
+        if (!this.getAim().completed(composition)) {
+            return false;
         }
-        return false;
+        composition.getRendered();
+        if (this.styles.stream()
+//                .peek(style -> System.out.println(style.getClass().getSimpleName()
+//                + "-> " + style.rateComposition(composition)))
+                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE)) {
+//        if (this.styles.get(0).rateComposition(composition) < CONSERVE_SCORE) {
+//            return false;
+//        }
+//        if (this.styles.get(1).rateComposition(composition) < CONSERVE_SCORE) {
+            return false;
+        }
+        System.out.println(this.styles.stream()
+                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE));
+        this.styles.forEach((style) -> {
+            System.out.println(style.getClass().getSimpleName() + ": " + style.rateComposition(composition));
+        });
+        this.conservetory.add(composition);
+        return true;
     }
 
     @Override
     public void render() {
 
-//        List<List<SketchNode>> list = this.getPopulation().stream()
-//                .map(c -> c.render(this.generateSeed()))
-//                .collect(Collectors.toList());
-        LineChart_AWT chart = new LineChart_AWT("Composition Evaluation");
-//        StringBuilder result = new StringBuilder();
-        IntStream.range(0, this.getPopulationSize())
-                .mapToObj(i -> new AbstractMap.SimpleEntry<>(i, this.getPopulation().get(i)))
+        StringBuilder report = new StringBuilder();
+        IntStream.range(0, this.getConservetory().size())
+                .mapToObj(i -> new AbstractMap.SimpleEntry<>(i, this.getConservetory().get(i)))
                 .forEach(e -> {
-                    synchronized (this) {
-                        e.getValue().render(this.generateSeed());
-                        this.getStyles().forEach(style -> {
-                            double eval = style.rateComposition(e.getValue());
-                            chart.addData(eval, style.getClass().getSimpleName(),
-                                    "" + e.getKey());
-//                            result.append(String.format("%f %s %s\n", eval,
-//                                    style.getClass().getSimpleName(),
-//                                    e.getKey()));
-                        });
-                    }
+                    this.getStyles().forEach(style -> {
+                        double eval = style.rateComposition(e.getValue());
+                        report.append(String.format("%f %s %s %s\n", eval,
+                                style.getClass().getSimpleName(),
+                                e.getKey(), e.getValue().getId()));
+                    });
                 });
-        chart.createLineChart("Composition Evaluation",
-                "Composition", "Evaluation", 560, 367, true);
-        RefineryUtilities.centerFrameOnScreen(chart);
-        chart.showChartWindow();
-//        System.out.println(result);
+        System.out.println(report);
     }
 
     public void addStyle(Style style) {

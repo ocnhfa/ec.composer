@@ -27,36 +27,42 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class Main {
 
     // 決定作品數量及演進世代
-    static int populationSize = 15;
-    static int generation = 10;
+    static int populationSize = 20;
+//    static int generation = 10;
+    private static final int SELECTED_SIZE = 10;
 
     public static void main(String[] args) {
 
         System.out.println(header("Creating composer..."));
         System.out.println("Population Size = " + populationSize);
-        System.out.println("Generation = " + generation);
+//        System.out.println("Generation = " + generation);
         Composer composer = new Composer(populationSize, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
-                new GoldenSectionClimax()
+                new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
 
         System.out.println(header("Evolution"));
-        System.out.print("Generation...");
+        StringBuilder output = new StringBuilder("Generation...");
         do {
-            System.out.print(composer.getGenCount() + " ");
+            output.append(".");
+            if (output.length() >= 120) {
+                System.out.println(output);
+                output = new StringBuilder(composer.getGenCount() + ":");
+            }
             composer.compose();
             composer.evolve();
-        } while (composer.getGenCount() < generation);
+        } while (composer.getConservetory().size() < SELECTED_SIZE);
 
         System.out.println(header("Dumping Archive"));
-        IntStream.range(0, generation)
-                .peek(i -> System.out.println("----------Generation " + i))
+        IntStream.range(0, composer.getGenCount())
+                .peek(i -> System.out.print("\ni >> "))
                 .mapToObj(composer.getArchive()::get)
                 .forEach(list -> list.stream()
-                /*...*/.forEach(c -> c.render(composer.generateSeed())));
-        composer.render();
+                /*...*/.forEach(c -> System.out.print(c.getSize() + " ")));
+        
         System.out.println(header("Dumping Conservatory"));
         composer.getConservetory().forEach(System.out::println);
+        composer.render();
     }
 
     static String header(String text) {

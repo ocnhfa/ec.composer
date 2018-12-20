@@ -39,8 +39,12 @@
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>3.0.2</version>
+        </dependency>
         <dependency>  
-            <!-- https://mvnrepository.com/artifact/jfree/jfreechart -->
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.5.0</version>

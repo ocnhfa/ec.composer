@@ -15,21 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 
 /**
@@ -38,34 +32,47 @@ import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
  */
 public class Composition extends Individual {
 
-    private LinkedList<Connector> connectors = new LinkedList<>();
     private static ConnectorFactory factory = ConnectorFactory.getInstance();
+    private final LinkedList<Connector> connectors;
+    private final LinkedList<SketchNode> rendered;
+    private SketchNode seed;
 
-    public Composition(Connector conn) {
+    public Composition(SketchNode seed, Connector conn) {
 
+        this.rendered = new LinkedList<>();
+        this.connectors = new LinkedList<>();
         this.connectors.add(conn);
+        this.seed = seed;
     }
 
-    public Composition(Composition parent) {
+    public Composition(Composition origin) {
 
-        super(parent.getId());
-        this.connectors = parent.connectors.stream()
+        super(origin.getId());
+        this.rendered = new LinkedList<>(origin.rendered.stream()
+                .map(SketchNode::new)
+                .collect(Collectors.toList()));
+        this.connectors = new LinkedList<>(origin.connectors.stream()
                 .map(conn -> factory.getConnector(conn.getStyleChecker()))
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toList()));
+        this.seed = origin.seed;
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
 
         this.addConnector(factory.getConnector(styleChecker));
+        if (!rendered.isEmpty()) {
+            rendered.clear();
+        }
         return this;
     }
 
     public List<SketchNode> render(SketchNode seed) {
 
+        this.seed = seed;
+        rendered.clear();
         Wrapper<SketchNode> previous = new Wrapper<>(seed);
-        List<SketchNode> nodes = new ArrayList<>();
-        nodes.add(seed);
-        nodes.addAll(this.getConnectors().stream()
+        rendered.add(seed);
+        rendered.addAll(this.getConnectors().stream()
                 .map(conn -> {
                     /*
                     1. conn.setPrevious(previous.get())
@@ -76,13 +83,29 @@ public class Composition extends Individual {
                     return previous.set(conn.transform());
                 })
                 .collect(Collectors.toList()));
-        System.out.println(this);
-        return nodes;
+//        System.out.println(this);
+        return rendered;
     }
 
     public void addConnector(Connector connector) {
 
         this.connectors.add(connector);
+    }
+
+    public LinkedList<SketchNode> getRendered() {
+
+        if (this.connectors.isEmpty()
+                || this.connectors.getFirst().getPrevious() != this.seed
+                || this.rendered.size() < this.getSize()
+                || IntStream.range(1, this.getSize())
+                        .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
+                        .anyMatch(e
+                                -> e.getKey().getPrevious() == null || e.getKey().getNext() == null
+                        || !e.getKey().getNext().equals(e.getValue()))) {
+            System.out.println("Rendering Composition " + this.getId());
+            this.render(seed);
+        }
+        return this.rendered;
     }
 
     @Override
@@ -104,10 +127,16 @@ public class Composition extends Individual {
      * Default setters and getters
      */
     public LinkedList<Connector> getConnectors() {
+
         return connectors;
     }
 
-    public void setConnectors(LinkedList<Connector> connectors) {
-        this.connectors = connectors;
+    public SketchNode getSeed() {
+        return seed;
     }
+
+    public void setSeed(SketchNode seed) {
+        this.seed = seed;
+    }
+
 }

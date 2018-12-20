@@ -33,22 +33,15 @@ import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 public class Connector extends Individual {
 
     private final Map<MaterialType, TransformType> transformTypes;
+    //@todo consider why need stylecheker in connector
     private Predicate<SketchNode> styleChecker;
     private SketchNode previous;
     private SketchNode next;
 
-    public Connector(
-            //            SketchNode previous,
-            Predicate<SketchNode> styleChecker
-    ) {
+    public Connector(Predicate<SketchNode> styleChecker) {
 
         this.transformTypes = new HashMap<>();
         this.styleChecker = styleChecker;
-//        this.previous = previous;
-//        this.next = Stream.generate(SketchNode::new)
-//                .filter(this.styleChecker)
-//                .findFirst()
-//                .get();
     }
 
     public Connector(Connector conn) {
@@ -73,7 +66,8 @@ public class Connector extends Individual {
             return null;
         }
         this.next = new SketchNode();
-//        System.out.println("Connector: "+this.getTransformTypes());
+//        System.out.println("Connector: " + this.getTransformTypes());
+
         Map<MaterialType, ? extends MusicMaterial> mats
                 = this.getTransformTypes().entrySet().stream()
                         .map(e -> new SimpleEntry<>(e.getKey(),

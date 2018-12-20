@@ -33,7 +33,7 @@ public class FreeStyle implements Style {
     @Override
     public double rateComposition(Composition composition) {
 
-        return Math.random();
+        return 1.0;
     }
 
     public static boolean checker(SketchNode whatever) {

@@ -15,9 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials.enums;
 
-import java.util.Random;
-import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -25,15 +23,25 @@ import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
  */
 public enum TransformType {
 
-    Repetition,
-    MoveForward,
-    MoveBackward,
-    Retrograde,
-    Disconnected;
+    Repetition(0.5),
+    MoveForward(1.0),
+    MoveBackward(1.0),
+    Retrograde(0.8),
+    Disconnected(1.0);
+
+    double weighting;
+
+    private TransformType(double weighting) {
+
+        this.weighting = weighting;
+    }
 
     public static TransformType getRandom() {
 
-        return TransformType.values()[new Random().nextInt(TransformType.values().length)];
+        return IntStream.range(0, values().length)
+                .mapToObj(i -> values()[i])
+                .filter(tt -> Math.random() < tt.weighting)
+                .findFirst().get();
     }
 
 }

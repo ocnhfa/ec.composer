@@ -21,6 +21,7 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
@@ -36,8 +37,9 @@ public class CompositionTest {
 
     public CompositionTest() {
         composer = new Composer(1, ComposerAim.Phrase,
-                new GoldenSectionClimax(),
-                new UnaccompaniedCello());
+                new UnaccompaniedCello(),
+                new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
+        );
     }
 
     /**
@@ -61,7 +63,8 @@ public class CompositionTest {
     public void ObjectCopy() {
 
         System.out.println("ObjectCopy");
-        Composition c1 = new Composition(new Connector(FreeStyle::checker)),
+        Composition c1 = new Composition(composer.generateSeed(),
+                ConnectorFactory.getInstance().getConnector(composer::styleChecker)),
                 c2 = c1,
                 c3 = new Composition(c1);
         c1.elongation(FreeStyle::checker);
@@ -128,20 +131,6 @@ public class CompositionTest {
         LinkedList<Connector> expResult = null;
         LinkedList<Connector> result = instance.getConnectors();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setConnectors method, of class Composition.
-     */
-    @Test
-    @Ignore
-    public void testSetConnectors() {
-        System.out.println("setConnectors");
-        LinkedList<Connector> connectors = null;
-        Composition instance = null;
-        instance.setConnectors(connectors);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

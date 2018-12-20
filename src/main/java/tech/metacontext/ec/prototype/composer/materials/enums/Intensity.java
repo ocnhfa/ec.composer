@@ -20,6 +20,11 @@ package tech.metacontext.ec.prototype.composer.materials.enums;
  * @author Jonathan
  */
 public enum Intensity {
-    
-    pppp, ppp, pp, p, mp, mf, f, ff, fff, ffff
+
+    pppp, ppp, pp, p, mp, mf, f, ff, fff, ffff;
+
+    public double getIntensityIndex() {
+
+        return 1.0 * this.ordinal() / (values().length - 1);
+    }
 }

@@ -37,10 +37,10 @@ public class SketchNode extends Individual {
                 .collect(Collectors.toMap(t -> t, MaterialType::getInstance));
     }
 
-    public SketchNode(SketchNode parent) {
+    public SketchNode(SketchNode origin) {
 
-        super(parent.getId());
-        this.musicMats = parent.getMats().entrySet().stream()
+        super(origin.getId());
+        this.musicMats = origin.getMats().entrySet().stream()
                 .collect(Collectors.toMap(
                         Entry::getKey,
                         e -> {

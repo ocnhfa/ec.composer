@@ -15,11 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 
@@ -32,7 +36,7 @@ public class UnaccompaniedCello implements Style {
     /**
      * 音域
      */
-    private static final Map<Range, Double> RANGE = new HashMap<>();
+    public static final Map<Range, Double> RANGE = new HashMap<>();
 
     static {
         RANGE.put(Range.C2, 1.0);
@@ -40,22 +44,6 @@ public class UnaccompaniedCello implements Style {
         RANGE.put(Range.C4, 1.0);
         RANGE.put(Range.C5, 0.5);
         RANGE.put(Range.C6, 0.25);
-    }
-
-    public boolean isValidRange(SketchNode node) {
-        //@todo: isValidRange in Style-UnaccompaniedCello
-//        node.getMats().get(0)
-        return false;
-    }
-
-    @Override
-    public boolean qualifySketchNode(SketchNode sketchNode) {
-
-        return sketchNode.getMat(MaterialType.NoteRanges)
-                .getMaterials()
-                .stream()
-                .allMatch(range -> RANGE.containsKey(range)
-                && RANGE.get(range) > Math.random());
     }
 
     public static void main(String[] args) {
@@ -68,9 +56,21 @@ public class UnaccompaniedCello implements Style {
     }
 
     @Override
+    public boolean qualifySketchNode(SketchNode sketchNode) {
+
+        return sketchNode.getMat(MaterialType.NoteRanges)
+                .getMaterials()
+                .stream()
+                .allMatch(range
+                        -> RANGE.containsKey((Range) range)
+                /*...*/ && RANGE.get((Range) range) > Math.random());
+    }
+
+    @Override
     public double rateComposition(Composition composition) {
 
-        return Math.random();
+        return composition.getRendered().stream()
+                .allMatch(this::qualifySketchNode) ? 1.0 : 0.0;
     }
 
 }

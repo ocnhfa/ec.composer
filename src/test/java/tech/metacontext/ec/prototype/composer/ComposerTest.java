@@ -17,14 +17,18 @@ package tech.metacontext.ec.prototype.composer;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
+import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.materials.enums.Range;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -32,23 +36,15 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class ComposerTest {
 
-    static Composer instance;
+    Composer instance;
+    int size = 10;
 
     public ComposerTest() {
-    }
-
-    /**
-     * Test of compose method, of class Composer.
-     */
-    @BeforeClass
-    public static void testCompose() {
-
-        System.out.println("compose");
-        int size = 10;
-        instance = new Composer(size, ComposerAim.Phrase, new FreeStyle());
-        for (int i = 0; i < 50; i++) {
-            instance.compose();
-            instance.evolve();
+        instance = new Composer(size, ComposerAim.Phrase,
+                new UnaccompaniedCello(),
+                new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()));
+        do {
+            instance.compose().evolve();
             System.out.print(
                     instance.getPopulation().stream()
                             .map(comp -> "" + comp.getSize())
@@ -58,8 +54,16 @@ public class ComposerTest {
                         + instance.getConservetory().size());
             }
             System.out.println("");
-        }
+        } while (instance.getConservetory().isEmpty());
         instance.render();
+    }
+
+    /**
+     * Test of compose method, of class Composer.
+     */
+    @Test
+    public void testCompose() {
+        System.out.println("compose");
         System.out.println("--conservatory--");
         System.out.println(instance.getConservetory());
         assertEquals(size, instance.getSize());
@@ -70,16 +74,45 @@ public class ComposerTest {
      * Test of select method, of class Composer.
      */
     @Test
-    public void testSelect() {
-        System.out.println("select");
+    public void testRandomSelect() {
+        System.out.println("randomSelect");
         int state = Composer.SELECT_ONLY_COMPLETED;
-        Composition result = instance.select(state);
+        Composition result = instance.randomSelect(state);
         assertTrue(instance.getAim().completed(result));
     }
 
     @Test
     public void testStyleChecker() {
-        assertTrue(instance.styleChecker(new SketchNode()));
+        System.out.println("styleChecker");
+        SketchNode node = new SketchNode();
+        node.getMat(MaterialType.NoteRanges).setMaterials(List.of(Range.C0));
+        assertFalse(instance.styleChecker(node));
+    }
+
+    /**
+     * Test of conserve method, of class Composer.
+     */
+    @Test
+    public void testConserve() {
+        System.out.println("conserve");
+        List<Composition> list = Stream.generate(()
+                -> new Composition(instance.generateSeed(),
+                        ConnectorFactory.getInstance().getConnector(instance::styleChecker)))
+                .limit(1000)
+                .collect(Collectors.toList());
+        do {
+            list.forEach(c -> c.elongation(instance::styleChecker));
+        } while (list.stream().anyMatch(c -> !ComposerAim.Phrase.completed(c)));
+        System.out.println("");
+        list.forEach(c -> c.render(instance.generateSeed()));
+        boolean expResult
+                = list.stream()
+                        .anyMatch(c -> instance.getStyles().stream()
+                        .allMatch(s -> s.rateComposition(c) > Composer.CONSERVE_SCORE));
+        System.out.println("expResult = " + expResult);
+        boolean result = list.stream().anyMatch(instance::conserve);
+        System.out.println("Result = " + result);
+        assertEquals(expResult, result);
     }
 
     /**
@@ -106,22 +139,6 @@ public class ComposerTest {
         System.out.println("evolve");
         Composer instance = null;
         instance.evolve();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of conserve method, of class Composer.
-     */
-    @Test
-    @Ignore
-    public void testConserve() {
-        System.out.println("conserve");
-        Composition composition = null;
-        Composer instance = null;
-        boolean expResult = false;
-        boolean result = instance.conserve(composition);
-        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

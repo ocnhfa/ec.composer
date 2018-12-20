@@ -15,8 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import tech.metacontext.ec.prototype.composer.Composition;
-import tech.metacontext.ec.prototype.composer.SketchNode;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.atomic.DoubleAdder;
+import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.*;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.materials.enums.*;
 
 /**
  *
@@ -26,16 +34,11 @@ public class GoldenSectionClimax implements Style {
 
     public static final double RATIO = 1.6180339887498948482;
 
-    public static double intensityIndex() {
+    private final LinkedList<Range> sortedRanges;
 
-        //@todo GoldenSectionClimax::intensityIndex
-        return 0.0;
-    }
+    public GoldenSectionClimax(Collection<Range> ranges) {
 
-    public static double climaxEval(Composition c) {
-
-        //@todo GoldenSectionClimax::climaxEval
-        return 0.0;
+        this.sortedRanges = new LinkedList<>(ranges);
     }
 
     /**
@@ -51,14 +54,50 @@ public class GoldenSectionClimax implements Style {
     }
 
     /**
-     * @todo: GoldenSectionClimax::rateComposition
      * @param composition
      * @return
      */
     @Override
     public double rateComposition(Composition composition) {
 
-        return Math.random();
+        List<Double> climaxIndexes = composition.getRendered().stream()
+                .map(this::climaxIndex)
+                .collect(Collectors.toList());
+        Double peak = climaxIndexes.stream().max(Comparator.naturalOrder()).get();
+        int peakNodeIndex = (int) Math.floor(composition.getSize() / RATIO) + 1;
+        List<Double> score = new ArrayList<>();
+        for (int i = 0; i < composition.getSize(); i++) {
+            if (i < peakNodeIndex) {
+                score.add(Math.abs(climaxIndexes.get(i) - peak / peakNodeIndex * (i + 1)));
+            } else {
+                score.add(Math.abs(climaxIndexes.get(i) - peak / (composition.getSize() - peakNodeIndex) * i));
+            }
+        }
+        return score.stream().mapToDouble(d -> d).sum() / (peak * composition.getSize() / 2);
     }
 
+    public double climaxIndex(SketchNode node) {
+
+        DoubleAdder index = new DoubleAdder();
+        node.getMats()
+                .forEach((MaterialType mt, MusicMaterial mm) -> {
+                    switch (mt) {
+                        case Dynamics:
+                            index.add(mm.getMaterials().stream()
+                                    .mapToDouble((mat) -> ((Intensity) mat).getIntensityIndex())
+                                    .average().getAsDouble());
+                            break;
+                        case NoteRanges:
+                            index.add(mm.getMaterials().stream()
+                                    .mapToDouble((mat) -> ((Range) mat).getIntensityIndex(
+                                    sortedRanges.getFirst(), sortedRanges.getLast()))
+                                    .average().getAsDouble());
+                            break;
+                        case PitchSets:
+                        case RhythmicPoints:
+                        default:
+                    }
+                });
+        return index.doubleValue();
+    }
 }
