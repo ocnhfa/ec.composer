@@ -18,8 +18,12 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
@@ -42,11 +46,52 @@ public class CompositionTest {
         );
     }
 
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
+
+    /**
+     * Test of getRendered method, of class Composition.
+     */
+    @Test
+    public void testGetRendered() {
+        System.out.println("getRendered");
+        List<SketchNode> expResult = null;
+        List<SketchNode> result;
+        composer.compose();
+        System.out.println("1 compose");
+        result = composer.getPopulation().get(0).getRendered();
+        composer.compose();
+        System.out.println("2 compose");
+        result = composer.getPopulation().get(0).getRendered();
+        composer.compose().evolve();
+        System.out.println("3 compose and evolve");
+        result = composer.getPopulation().get(0).getRendered();
+        composer.compose().evolve();
+        System.out.println("4 compose and evolve");
+        result = composer.getPopulation().get(0).getRendered();
+//        System.out.println(result);
+//        assertEquals(expResult, result);
+    }
+
     /**
      * Test of render method, of class Composition.
      */
     @Test
     public void testRender() {
+
         System.out.println("render");
         for (int i = 0; i < 1; i++) {
             composer.compose().evolve();
@@ -131,6 +176,60 @@ public class CompositionTest {
         LinkedList<Connector> expResult = null;
         LinkedList<Connector> result = instance.getConnectors();
         assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of addConnector method, of class Composition.
+     */
+    @Test
+    public void testAddConnector() {
+        System.out.println("addConnector");
+        Connector connector = null;
+        Composition instance = null;
+        instance.addConnector(connector);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getSize method, of class Composition.
+     */
+    @Test
+    public void testGetSize() {
+        System.out.println("getSize");
+        Composition instance = null;
+        int expResult = 0;
+        int result = instance.getSize();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getSeed method, of class Composition.
+     */
+    @Test
+    public void testGetSeed() {
+        System.out.println("getSeed");
+        Composition instance = null;
+        SketchNode expResult = null;
+        SketchNode result = instance.getSeed();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of setSeed method, of class Composition.
+     */
+    @Test
+    public void testSetSeed() {
+        System.out.println("setSeed");
+        SketchNode seed = null;
+        Composition instance = null;
+        instance.setSeed(seed);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

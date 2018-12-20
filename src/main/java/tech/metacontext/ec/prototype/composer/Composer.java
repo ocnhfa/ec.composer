@@ -16,12 +16,13 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.AbstractMap;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -29,12 +30,16 @@ import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.operations.MutationType;
+import static tech.metacontext.ec.prototype.composer.operations.MutationType.Deletion;
+import static tech.metacontext.ec.prototype.composer.operations.MutationType.Insertion;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Composer extends Population<Composition> {
+
+    Logger _logger = Logger.getLogger(Composer.class.getName());
 
     ConnectorFactory factory = ConnectorFactory.getInstance();
 
@@ -64,31 +69,44 @@ public class Composer extends Population<Composition> {
      */
     public Composer(int size, ComposerAim aim, Style... styles) {
 
+        this.size = size;
         this.aim = aim;
         this.styles = new ArrayList<>(Arrays.asList(styles));
-        this.size = size;
         this.conservetory = new ArrayList<>();
         this.setPopulation(
                 Stream.generate(() -> new Composition(this.generateSeed(), factory.getConnector(this::styleChecker)))
                         .limit(size)
                         .collect(Collectors.toList())
         );
+        _logger.log(Level.INFO,
+                "Create Composer, size = {0}, aim = {1}, styles = {2}",
+                new Object[]{size, aim, this.styles.stream()
+                            .map(style -> style.getClass().getSimpleName())
+                            .collect(Collectors.joining(", "))});
     }
 
     public boolean styleChecker(SketchNode node) {
 
-        return this.getStyles().stream().allMatch(
+        boolean checker = this.getStyles().stream().allMatch(
                 style -> style.qualifySketchNode(node));
+        _logger.log(Level.INFO,
+                "Check SketchNode {0}, result = {1}",
+                new Object[]{node.getId(), checker});
+        return checker;
     }
 
     public SketchNode generateSeed() {
 
-        return Stream.generate(SketchNode::new)
+        SketchNode seed = Stream.generate(SketchNode::new)
                 .filter(node
                         -> this.getStyles().stream()
                         .allMatch(s -> s.qualifySketchNode(node)))
                 .findFirst()
                 .get();
+        _logger.log(Level.INFO,
+                "Seed {0} generated.",
+                seed.getId());
+        return seed;
     }
 
     public Composer compose() {
@@ -97,10 +115,21 @@ public class Composer extends Population<Composition> {
                 .map(Composition::new)
                 .collect(Collectors.toList());
         this.archive(parents);
-        this.getPopulation().stream()
+        _logger.log(Level.INFO,
+                "Composing, {0} Compositions archived as Generation {1}.",
+                new Object[]{parents.size(), this.getGenCount()});
+        long elongated = this.getPopulation().stream()
                 .filter(c -> !aim.completed(c) || this.ifElongate(c))
-                .forEach(c -> c.elongation(this::styleChecker));
+                .peek(c -> c.elongation(this::styleChecker))
+                .collect(Collectors.counting());
+        _logger.log(Level.INFO,
+                "Composing, {0} Compositions elongated.",
+                elongated);
+        int original = this.getSize();
         this.getPopulation().removeIf(this::conserve);
+        _logger.log(Level.INFO,
+                "Composing, {0} Compositions conserved.",
+                original - this.getSize());
         return this;
     }
 
@@ -130,9 +159,19 @@ public class Composer extends Population<Composition> {
                 child = this.mutate(sel_1);
             }
             children.add(child);
+            int original = children.size();
             children.removeIf(this::conserve);
+            _logger.log(Level.INFO,
+                    "Evloving, {0} Compositions conserved.",
+                    original - children.size());
         } while (children.size() < this.getSize());
-
+        _logger.log(Level.INFO,
+                "Evloving finished. New population: {0} Compositions: {1}",
+                new Object[]{children.size(),
+                    children.stream()
+                            .map(Composition::getSize)
+                            .map(String::valueOf)
+                            .collect(Collectors.joining(" "))});
         this.setPopulation(children);
         this.genCountIncrement();
     }
@@ -165,34 +204,35 @@ public class Composer extends Population<Composition> {
             case Deletion:
                 if (this.getAim().completed(origin)) {
                     mutant.getConnectors().remove(selected);
+                    type = Deletion;
                 } else {
                     mutant.getConnectors().add(selected,
                             factory.getConnector(this::styleChecker));
+                    type = Insertion;
                 }
                 break;
         }
+        _logger.log(Level.INFO,
+                "Mutation, origin: {0}, type: {1}, loci: {2}, length: {3} -> {4}",
+                new Object[]{origin.getId(), type, selected,
+                    origin.getSize(), mutant.getSize()});
         return mutant;
     }
 
     public Composition crossover(Composition parent1, Composition parent2) {
 
         int index = 0;
-        Composition activated = parent1,
-                child = new Composition(this.generateSeed(),
-                        factory.getConnector(this::styleChecker));
+        Composition child = new Composition(this.generateSeed(),
+                factory.getConnector(this::styleChecker));
         while (++index < Math.max(parent1.getSize() - 1, parent2.getSize() - 1)) {
-            switch (new Random().nextBoolean() ? 1 : 2) {
-                case 1:
-                    activated = (parent1.getSize() - 1 > index)
-                            ? parent1 : parent2;
-                    break;
-                case 2:
-                    activated = (parent2.getSize() - 1 > index)
-                            ? parent2 : parent1;
-                    break;
-            }
+            Composition activated = new Random().nextBoolean()
+                    ? ((parent1.getSize() - 1 > index) ? parent1 : parent2)
+                    : ((parent2.getSize() - 1 > index) ? parent2 : parent1);
             child.addConnector(activated.getConnectors().get(index));
         }
+        _logger.log(Level.INFO,
+                "Crossover, parents: {0}, {1} -> child: {2}",
+                new Object[]{parent1.getId(), parent2.getId(), child.getId()});
         return child;
     }
 

@@ -16,8 +16,6 @@
 package tech.metacontext.ec.prototype.composer.operations;
 
 import java.util.Random;
-import tech.metacontext.ec.prototype.composer.connectors.State;
-import static tech.metacontext.ec.prototype.composer.connectors.State.TOTAL_RATIO;
 
 /**
  *

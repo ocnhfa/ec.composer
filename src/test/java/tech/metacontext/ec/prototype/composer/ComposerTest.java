@@ -45,10 +45,6 @@ public class ComposerTest {
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()));
         do {
             instance.compose().evolve();
-            System.out.print(
-                    instance.getPopulation().stream()
-                            .map(comp -> "" + comp.getSize())
-                            .collect(Collectors.joining(" ")));
             if (instance.getConservetory().size() > 0) {
                 System.out.print(" // "
                         + instance.getConservetory().size());
