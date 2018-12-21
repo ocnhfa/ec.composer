@@ -93,32 +93,31 @@ public class GoldenSectionClimax implements Style {
     public double climaxIndex(SketchNode node) {
 
         DoubleAdder index = new DoubleAdder();
-        node.getMats()
-                .forEach((MaterialType mt, MusicMaterial mm) -> {
-                    switch (mt) {
-                        case Dynamics:
-                            index.add(mm.getMaterials().stream()
-                                    .mapToDouble((mat)
-                                            -> ((Intensity) mat).getIntensityIndex())
-                                    .average()
-                                    .getAsDouble());
+        node.getMats().forEach((MaterialType mt, MusicMaterial mm) -> {
+            switch (mt) {
+                case Dynamics:
+                    index.add(mm.getMaterials().stream()
+                            .mapToDouble((mat)
+                                    -> ((Intensity) mat).getIntensityIndex())
+                            .average()
+                            .getAsDouble());
 //                            System.out.printf("DY:%.1f ", index.doubleValue());
-                            break;
-                        case NoteRanges:
-                            index.add(mm.getMaterials().stream()
-                                    .mapToDouble((mat)
-                                            -> ((Range) mat).getIntensityIndex(
-                                            sortedRanges.getFirst(),
-                                            sortedRanges.getLast()))
-                                    .average()
-                                    .getAsDouble());
+                    break;
+                case NoteRanges:
+                    index.add(mm.getMaterials().stream()
+                            .mapToDouble((mat)
+                                    -> ((Range) mat).getIntensityIndex(
+                                    sortedRanges.getFirst(),
+                                    sortedRanges.getLast()))
+                            .average()
+                            .getAsDouble());
 //                            System.out.printf("NR:%.1f ", index.doubleValue());
-                            break;
-                        case PitchSets:
-                        case RhythmicPoints:
-                        default:
-                    }
-                });
+                    break;
+                case PitchSets:
+                case RhythmicPoints:
+                default:
+            }
+        });
         return index.doubleValue();
     }
 }

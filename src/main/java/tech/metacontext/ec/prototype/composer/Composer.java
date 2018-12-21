@@ -16,10 +16,14 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +45,8 @@ public class Composer extends Population<Composition> {
 
     Logger _logger = Logger.getLogger(Composer.class.getName());
 
-    ConnectorFactory factory = ConnectorFactory.getInstance();
+    CompositionFactory compositionFactory = CompositionFactory.getInstance();
+    ConnectorFactory connectorfactory = ConnectorFactory.getInstance();
 
     private ComposerAim aim;
     private List<Style> styles;
@@ -73,13 +78,13 @@ public class Composer extends Population<Composition> {
         this.aim = aim;
         this.styles = new ArrayList<>(Arrays.asList(styles));
         this.conservetory = new ArrayList<>();
-        this.setPopulation(
-                Stream.generate(() -> new Composition(this.generateSeed(), factory.getConnector(this::styleChecker)))
-                        .limit(size)
-                        .collect(Collectors.toList())
+        this.setPopulation(Stream.generate(()
+                -> compositionFactory.newInstance(this.generateSeed(), connectorfactory.getConnector(this::styleChecker)))
+                .limit(size)
+                .collect(Collectors.toList())
         );
         _logger.log(Level.INFO,
-                "Create Composer, size = {0}, aim = {1}, styles = {2}",
+                "Composer created: size = {0}, aim = {1}, styles = {2}",
                 new Object[]{size, aim, this.styles.stream()
                             .map(style -> style.getClass().getSimpleName())
                             .collect(Collectors.joining(", "))});
@@ -111,13 +116,13 @@ public class Composer extends Population<Composition> {
 
     public Composer compose() {
 
-        List<Composition> parents = this.getPopulation().stream()
-                .map(Composition::new)
-                .collect(Collectors.toList());
-        this.archive(parents);
+        this.archive(compositionFactory);
         _logger.log(Level.INFO,
                 "Composing, {0} Compositions archived as Generation {1}.",
-                new Object[]{parents.size(), this.getGenCount()});
+                new Object[]{
+                    this.getArchive().get(this.getGenCount()).size(),
+                    this.getGenCount()});
+        this.genCountIncrement();
         long elongated = this.getPopulation().stream()
                 .filter(c -> !aim.completed(c) || this.ifElongate(c))
                 .peek(c -> c.elongation(this::styleChecker))
@@ -127,9 +132,11 @@ public class Composer extends Population<Composition> {
                 elongated);
         int original = this.getSize();
         this.getPopulation().removeIf(this::conserve);
-        _logger.log(Level.INFO,
-                "Composing, {0} Compositions conserved.",
-                original - this.getSize());
+        if (original - this.getSize() > 0) {
+            _logger.log(Level.INFO,
+                    "Composing, {0} Composition(s) conserved.",
+                    original - this.getSize());
+        }
         return this;
     }
 
@@ -150,10 +157,11 @@ public class Composer extends Population<Composition> {
             //4.若走crossover則選出另一條completed(也許是自己)
             //5.crossover -> children
             Composition sel_1 = this.randomSelect(SELECT_FROM_ALL);
+            Composition sel_2 = this.randomSelect(SELECT_ONLY_COMPLETED);
             Composition child;
             if (this.getAim().completed(sel_1)
-                    && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED) {
-                Composition sel_2 = this.randomSelect(SELECT_ONLY_COMPLETED);
+                    && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED
+                    && !Objects.equals(sel_1, sel_2)) {
                 child = this.crossover(sel_1, sel_2);
             } else {
                 child = this.mutate(sel_1);
@@ -161,9 +169,11 @@ public class Composer extends Population<Composition> {
             children.add(child);
             int original = children.size();
             children.removeIf(this::conserve);
-            _logger.log(Level.INFO,
-                    "Evloving, {0} Compositions conserved.",
-                    original - children.size());
+            if (original - children.size() > 0) {
+                _logger.log(Level.INFO,
+                        "Evloving, {0} Composition(s) conserved.",
+                        original - children.size());
+            }
         } while (children.size() < this.getSize());
         _logger.log(Level.INFO,
                 "Evloving finished. New population: {0} Compositions: {1}",
@@ -173,7 +183,6 @@ public class Composer extends Population<Composition> {
                             .map(String::valueOf)
                             .collect(Collectors.joining(" "))});
         this.setPopulation(children);
-        this.genCountIncrement();
     }
 
     public Composition randomSelect(int state) {
@@ -192,13 +201,13 @@ public class Composer extends Population<Composition> {
 
     public Composition mutate(Composition origin) {
 
-        Composition mutant = new Composition(origin);
+        Composition mutant = compositionFactory.forMutation(origin);
         int selected = new Random().nextInt(mutant.getSize() - 1);
         MutationType type = MutationType.getRandom();
         switch (type) {
             case Alteration:
                 mutant.getConnectors().set(selected,
-                        factory.getConnector(this::styleChecker));
+                        connectorfactory.getConnector(this::styleChecker));
                 break;
             case Insertion:
             case Deletion:
@@ -207,7 +216,7 @@ public class Composer extends Population<Composition> {
                     type = Deletion;
                 } else {
                     mutant.getConnectors().add(selected,
-                            factory.getConnector(this::styleChecker));
+                            connectorfactory.getConnector(this::styleChecker));
                     type = Insertion;
                 }
                 break;
@@ -221,18 +230,24 @@ public class Composer extends Population<Composition> {
 
     public Composition crossover(Composition parent1, Composition parent2) {
 
-        int index = 0;
-        Composition child = new Composition(this.generateSeed(),
-                factory.getConnector(this::styleChecker));
-        while (++index < Math.max(parent1.getSize() - 1, parent2.getSize() - 1)) {
+        int index = 1;
+        Composition child = compositionFactory.forCrossover(
+                parent1.getSeed(),
+                parent1.getConnectors().get(0));
+        String crossover_state = "A";
+        do {
             Composition activated = new Random().nextBoolean()
                     ? ((parent1.getSize() - 1 > index) ? parent1 : parent2)
                     : ((parent2.getSize() - 1 > index) ? parent2 : parent1);
             child.addConnector(activated.getConnectors().get(index));
-        }
+            crossover_state += (Objects.equals(activated, parent1)) ? "A" : "B";
+        } while (++index < Math.max(parent1.getSize() - 1, parent2.getSize() - 1));
         _logger.log(Level.INFO,
-                "Crossover, parents: {0}, {1} -> child: {2}",
+                "Crossover, [{0}, {1}] -> {2}",
                 new Object[]{parent1.getId(), parent2.getId(), child.getId()});
+        _logger.log(Level.INFO,
+                "Crossover, {0} = {1}",
+                new Object[]{child.getId(), crossover_state});
         return child;
     }
 
@@ -244,19 +259,29 @@ public class Composer extends Population<Composition> {
      */
     public boolean conserve(Composition composition) {
 
+        if (this.conservetory.contains(composition)) {
+            _logger.log(Level.WARNING,
+                    "Checking composition already in the conservatory: {0}",
+                    composition.getId());
+        }
         if (!this.getAim().completed(composition)) {
             return false;
         }
+        Map<Style, Double> rating = new HashMap<>();
         if (this.styles.stream()
-                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE)) {
+                .map(s -> new SimpleEntry<>(s, s.rateComposition(composition)))
+                .peek(e -> rating.put(e.getKey(), e.getValue()))
+                .anyMatch(e -> e.getValue() < CONSERVE_SCORE)) {
             return false;
         }
-//        System.out.println(this.styles.stream()
-//                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE));
-        this.styles.forEach((style) -> {
-            System.out.println(style.getClass().getSimpleName() + ": " + style.rateComposition(composition));
-        });
+        rating.forEach((s, rate)
+                -> System.out.println(s.getClass().getSimpleName() + ": " + rate));
         this.conservetory.add(composition);
+        if (this.conservetory.contains(composition)) {
+            _logger.log(Level.INFO,
+                    "Composition {0} been conserved.",
+                    composition.getId());
+        }
         return true;
     }
 

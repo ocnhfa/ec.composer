@@ -37,9 +37,12 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class CompositionTest {
 
+    CompositionFactory compositionFactory;
     Composer composer;
 
     public CompositionTest() {
+        
+        compositionFactory = CompositionFactory.getInstance();
         composer = new Composer(1, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
@@ -67,6 +70,7 @@ public class CompositionTest {
      */
     @Test
     public void testGetRendered() {
+        
         System.out.println("getRendered");
         List<SketchNode> expResult = null;
         List<SketchNode> result;
@@ -108,10 +112,10 @@ public class CompositionTest {
     public void ObjectCopy() {
 
         System.out.println("ObjectCopy");
-        Composition c1 = new Composition(composer.generateSeed(),
+        Composition c1 = compositionFactory.newInstance(composer.generateSeed(),
                 ConnectorFactory.getInstance().getConnector(composer::styleChecker)),
                 c2 = c1,
-                c3 = new Composition(c1);
+                c3 = compositionFactory.forArchiving(c1);
         c1.elongation(FreeStyle::checker);
         assertEquals(
                 c1.getConnectors().size(),
@@ -184,6 +188,7 @@ public class CompositionTest {
      * Test of addConnector method, of class Composition.
      */
     @Test
+    @Ignore
     public void testAddConnector() {
         System.out.println("addConnector");
         Connector connector = null;
@@ -197,6 +202,7 @@ public class CompositionTest {
      * Test of getSize method, of class Composition.
      */
     @Test
+    @Ignore
     public void testGetSize() {
         System.out.println("getSize");
         Composition instance = null;
@@ -211,6 +217,7 @@ public class CompositionTest {
      * Test of getSeed method, of class Composition.
      */
     @Test
+    @Ignore
     public void testGetSeed() {
         System.out.println("getSeed");
         Composition instance = null;
@@ -225,6 +232,7 @@ public class CompositionTest {
      * Test of setSeed method, of class Composition.
      */
     @Test
+    @Ignore
     public void testSetSeed() {
         System.out.println("setSeed");
         SketchNode seed = null;

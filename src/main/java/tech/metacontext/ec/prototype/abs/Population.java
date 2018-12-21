@@ -64,6 +64,13 @@ public abstract class Population<E extends Individual> {
                 .collect(Collectors.toList()));
     }
 
+    public void archive(Factory<E> factory) {
+
+        this.archive.add(this.population.stream()
+                .map(factory::forArchiving)
+                .collect(Collectors.toList()));
+    }
+
     public E copyInstance(E e) {
 
         try {

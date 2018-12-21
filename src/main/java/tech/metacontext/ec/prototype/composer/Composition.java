@@ -15,11 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.abs.Individual;
@@ -33,29 +34,24 @@ import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
  */
 public class Composition extends Individual {
 
+    static final Logger _logger = Logger.getLogger(Composition.class.getName());
+
     private static ConnectorFactory factory = ConnectorFactory.getInstance();
     private final LinkedList<Connector> connectors;
     private final LinkedList<SketchNode> rendered;
     private SketchNode seed;
 
-    public Composition(SketchNode seed, Connector conn) {
+    public Composition() {
 
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
-        this.connectors.add(conn);
-        this.seed = seed;
     }
 
-    public Composition(Composition origin) {
+    public Composition(String id) {
 
-        super(origin.getId());
-        this.rendered = new LinkedList<>(origin.rendered.stream()
-                .map(SketchNode::new)
-                .collect(Collectors.toList()));
-        this.connectors = new LinkedList<>(origin.connectors.stream()
-                .map(conn -> factory.getConnector(conn.getStyleChecker()))
-                .collect(Collectors.toList()));
-        this.seed = origin.seed;
+        super(id);
+        this.rendered = new LinkedList<>();
+        this.connectors = new LinkedList<>();
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
@@ -94,40 +90,48 @@ public class Composition extends Individual {
     }
 
     public List<SketchNode> getRendered() {
-        boolean emptyConnectors = this.connectors.isEmpty();
-        if (emptyConnectors) {
-            System.out.println("emptyConnectors");
-        } else {
-            boolean mismatchedSeed = 
-                    this.connectors.getFirst().getPrevious() != this.seed;
-            if (mismatchedSeed) {
-                System.out.println("mismatchedSeed");
-            } else {
-                boolean mismatchedSize = this.rendered.size() < this.getSize();
-                if (mismatchedSize) {
-                    System.out.println("mismatchedSize");
-                } else {
-                    boolean nullNodes = IntStream.range(1, this.getSize())
-                            .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
-                            .anyMatch(e -> Objects.isNull(e.getKey().getPrevious())
-                            || Objects.isNull(e.getKey().getNext()));
-                    if (nullNodes) {
-                        System.out.println("nullOrMismatchedNodes");
-                    } else {
-                        boolean mismatchedNodes = IntStream.range(1, this.getSize())
-                                .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
-                                .anyMatch(e -> !Objects.equals(e.getKey().getNext(), e.getValue()));
-                        if (mismatchedNodes) {
-                            System.out.println("mismatchedNodes");
-                        } else {
-                            return this.rendered;
-                        }
-                    }
-                }
-            }
+
+        return (ifReRenderRequired()) ? this.render(seed) : this.rendered;
+    }
+
+    public boolean ifReRenderRequired() {
+
+        if (this.rendered.isEmpty()) {
+            _logger.log(Level.INFO,
+                    "Not rendered yet, rendering required for Composition {0}.",
+                    this.getId());
+            return true;
         }
-//        System.out.println("Rendering Composition " + this.getId());
-        return this.render(seed);
+        if (!Objects.equals(this.connectors.getFirst().getPrevious(), this.seed)) {
+            _logger.log(Level.INFO,
+                    "Seed mismatched, rerendering required for Composition {0}.",
+                    this.getId());
+            return true;
+        }
+        if (this.rendered.size() != this.getSize()) {
+            _logger.log(Level.INFO,
+                    "Size mismatched, rerendering required for Composition {0}.",
+                    this.getId());
+            return true;
+        }
+        if (this.connectors.stream().anyMatch(conn
+                -> Objects.isNull(conn.getPrevious()) || Objects.isNull(conn.getNext()))) {
+            _logger.log(Level.INFO,
+                    "Connector without connected SketchNode found, rerendering required for Composition {0}.",
+                    this.getId());
+            return true;
+        }
+        if (IntStream.range(1, this.getSize()).anyMatch(i
+                -> !Objects.equals(this.connectors.get(i - 1).getNext(), this.rendered.get(i)))) {
+            _logger.log(Level.INFO,
+                    "Mismatched SketchNodes, rerendering required for Composition {0}.",
+                    this.getId());
+            return true;
+        }
+        _logger.log(Level.INFO,
+                "Rendered list remained consistant, no rerendering required for {0}.",
+                this.getId());
+        return false;
     }
 
 //    public LinkedList<SketchNode> getRendered() {

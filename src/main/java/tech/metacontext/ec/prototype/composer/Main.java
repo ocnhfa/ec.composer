@@ -33,8 +33,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println(header("Creating composer..."));
-        System.out.println("Population Size = " + populationSize);
+//        System.out.println(header("Creating composer..."));
+//        System.out.println("Population Size = " + populationSize);
 //        System.out.println("Generation = " + generation);
         Composer composer = new Composer(populationSize, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
