@@ -93,7 +93,7 @@ public class ComposerTest {
         System.out.println("conserve");
         List<Composition> list = Stream.generate(()
                 -> CompositionFactory.getInstance().newInstance(instance.generateSeed(),
-                        ConnectorFactory.getInstance().getConnector(instance::styleChecker)))
+                        ConnectorFactory.getInstance().newConnector(instance::styleChecker)))
                 .limit(1000)
                 .collect(Collectors.toList());
         do {

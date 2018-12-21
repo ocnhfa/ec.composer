@@ -76,16 +76,16 @@ public class CompositionTest {
         List<SketchNode> result;
         composer.compose();
         System.out.println("1 compose");
-        result = composer.getPopulation().get(0).getRendered();
+        result = composer.getPopulation().get(0).getRenderedChecked();
         composer.compose();
         System.out.println("2 compose");
-        result = composer.getPopulation().get(0).getRendered();
+        result = composer.getPopulation().get(0).getRenderedChecked();
         composer.compose().evolve();
         System.out.println("3 compose and evolve");
-        result = composer.getPopulation().get(0).getRendered();
+        result = composer.getPopulation().get(0).getRenderedChecked();
         composer.compose().evolve();
         System.out.println("4 compose and evolve");
-        result = composer.getPopulation().get(0).getRendered();
+        result = composer.getPopulation().get(0).getRenderedChecked();
 //        System.out.println(result);
 //        assertEquals(expResult, result);
     }
@@ -113,7 +113,7 @@ public class CompositionTest {
 
         System.out.println("ObjectCopy");
         Composition c1 = compositionFactory.newInstance(composer.generateSeed(),
-                ConnectorFactory.getInstance().getConnector(composer::styleChecker)),
+                ConnectorFactory.getInstance().newConnector(composer::styleChecker)),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
         c1.elongation(FreeStyle::checker);

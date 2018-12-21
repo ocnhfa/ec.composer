@@ -15,9 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.enums.*;
 
 /**
@@ -25,6 +28,8 @@ import tech.metacontext.ec.prototype.composer.materials.enums.*;
  * @author Jonathan
  */
 public class ConnectorFactory {
+
+    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
 
     private static ConnectorFactory instance;
 
@@ -40,9 +45,10 @@ public class ConnectorFactory {
         return instance;
     }
 
-    public Connector getConnector(Predicate<SketchNode> styleChecker) {
+    public Connector newConnector(Predicate<SketchNode> styleChecker) {
 
-        Connector conn = new Connector(styleChecker);
+        Connector conn = new Connector();
+        conn.setStyleChecker(styleChecker);
         switch (State.getRandom()) {
             case Total:
                 TransformType tt = TransformType.getRandom();
@@ -58,4 +64,28 @@ public class ConnectorFactory {
         return conn;
     }
 
+    public Connector newConnectorWithSeed(Predicate<SketchNode> styleChecker) {
+
+        Connector conn = newConnector(styleChecker);
+        conn.setPrevious(sketchNodeFactory.newInstance(styleChecker));
+        return conn;
+    }
+
+    public Connector forMutation(Connector conn) {
+
+        Connector dupe = new Connector(conn.getId());
+        dupe.getTransformTypes().putAll(conn.getTransformTypes());
+        dupe.setStyleChecker(conn.getStyleChecker());
+        dupe.setPrevious(Objects.isNull(conn.getPrevious())
+                ? null : sketchNodeFactory.forArchiving(conn.getPrevious()));
+        return dupe;
+    }
+
+    public Connector forArchiving(Connector conn) {
+
+        Connector dupe = forMutation(conn);
+        dupe.setNext(Objects.isNull(conn.getNext())
+                ? null : sketchNodeFactory.forArchiving(conn.getNext()));
+        return dupe;
+    }
 }

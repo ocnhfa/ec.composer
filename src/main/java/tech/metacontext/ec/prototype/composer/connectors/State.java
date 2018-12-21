@@ -23,7 +23,7 @@ public enum State {
     Total,
     ByItem;
 
-    public static final double TOTAL_RATIO = 0.5;
+    public static final double TOTAL_RATIO = 0.4;
 
     public static State getRandom() {
 

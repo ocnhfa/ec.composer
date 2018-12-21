@@ -44,6 +44,12 @@ public class Dynamics extends MusicMaterial<Intensity> {
     }
 
     @Override
+    public Dynamics duplicate() {
+
+        return new Dynamics(this);
+    }
+
+    @Override
     public Dynamics reset() {
 
         this.setDivision(DEFAULT_DIVISION);

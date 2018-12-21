@@ -56,7 +56,7 @@ public class Composition extends Individual {
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
 
-        this.addConnector(factory.getConnector(styleChecker));
+        this.addConnector(factory.newConnector(styleChecker));
         if (!rendered.isEmpty()) {
             rendered.clear();
         }
@@ -89,7 +89,7 @@ public class Composition extends Individual {
         this.connectors.add(connector);
     }
 
-    public List<SketchNode> getRendered() {
+    public List<SketchNode> getRenderedChecked() {
 
         return (ifReRenderRequired()) ? this.render(seed) : this.rendered;
     }
@@ -99,71 +99,41 @@ public class Composition extends Individual {
         if (this.rendered.isEmpty()) {
             _logger.log(Level.INFO,
                     "Not rendered yet, rendering required for Composition {0}.",
-                    this.getId());
+                    this.getId_prefix());
             return true;
         }
         if (!Objects.equals(this.connectors.getFirst().getPrevious(), this.seed)) {
             _logger.log(Level.INFO,
                     "Seed mismatched, rerendering required for Composition {0}.",
-                    this.getId());
+                    this.getId_prefix());
             return true;
         }
         if (this.rendered.size() != this.getSize()) {
             _logger.log(Level.INFO,
                     "Size mismatched, rerendering required for Composition {0}.",
-                    this.getId());
+                    this.getId_prefix());
             return true;
         }
         if (this.connectors.stream().anyMatch(conn
                 -> Objects.isNull(conn.getPrevious()) || Objects.isNull(conn.getNext()))) {
             _logger.log(Level.INFO,
                     "Connector without connected SketchNode found, rerendering required for Composition {0}.",
-                    this.getId());
+                    this.getId_prefix());
             return true;
         }
         if (IntStream.range(1, this.getSize()).anyMatch(i
                 -> !Objects.equals(this.connectors.get(i - 1).getNext(), this.rendered.get(i)))) {
             _logger.log(Level.INFO,
                     "Mismatched SketchNodes, rerendering required for Composition {0}.",
-                    this.getId());
+                    this.getId_prefix());
             return true;
         }
         _logger.log(Level.INFO,
                 "Rendered list remained consistant, no rerendering required for {0}.",
-                this.getId());
+                this.getId_prefix());
         return false;
     }
 
-//    public LinkedList<SketchNode> getRendered() {
-//        boolean emptyConnectors = this.connectors.isEmpty();
-//        boolean mismatchedSeed = this.connectors.getFirst().getPrevious() != this.seed;
-//        boolean mismatchedSize = this.rendered.size() < this.getSize();
-//        boolean nullOrMismatchedNodes = IntStream.range(1, this.getSize())
-//                .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
-//                .anyMatch(e -> Objects.isNull(e.getKey().getPrevious())
-//                || Objects.isNull(e.getKey().getNext())
-//                || !Objects.equals(e.getKey().getNext(), e.getValue()));
-//
-//        if (this.connectors.isEmpty()
-//                || this.connectors.getFirst().getPrevious() != this.seed
-//                || this.rendered.size() < this.getSize()
-//                || IntStream.range(1, this.getSize())
-//                        .mapToObj(i -> new SimpleEntry<>(this.connectors.get(i - 1), this.rendered.get(i)))
-//                        .anyMatch(e
-//                                -> e.getKey().getPrevious() == null || e.getKey().getNext() == null
-//                        || !e.getKey().getNext().equals(e.getValue()))) {
-//
-//            System.out.printf("%b,%b,%b,%b\n",
-//                    emptyConnectors,
-//                    mismatchedSeed,
-//                    mismatchedSize,
-//                    nullOrMismatchedNodes);
-//
-//            System.out.println("Rendering Composition " + this.getId());
-//            this.render(seed);
-//        }
-//        return this.rendered;
-//    }
     @Override
     public String toString() {
 
@@ -195,4 +165,7 @@ public class Composition extends Individual {
         this.seed = seed;
     }
 
+    public List<SketchNode> getRendered() {
+        return this.rendered;
+    }
 }

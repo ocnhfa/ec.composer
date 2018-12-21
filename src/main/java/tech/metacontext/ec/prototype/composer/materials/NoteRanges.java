@@ -46,6 +46,12 @@ public class NoteRanges extends MusicMaterial<Range> {
     }
 
     @Override
+    public NoteRanges duplicate() {
+
+        return new NoteRanges(this);
+    }
+
+    @Override
     public NoteRanges reset() {
 
         this.setDivision(DEFAULT_DIVISION);

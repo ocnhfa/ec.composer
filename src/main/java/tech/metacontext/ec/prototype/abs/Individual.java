@@ -24,52 +24,60 @@ import java.util.UUID;
  */
 public abstract class Individual {
 
-   private final String id;
+    private final String id;
 
-   public Individual(String id) {
-     
-      this.id = id;
-   }
+    public Individual(String id) {
 
-   public Individual() {
-     
-      this.id = UUID.randomUUID().toString();
-   }
+        this.id = id;
+    }
 
-   public String getId() {
-     
-      return id;
-   }
+    public Individual() {
 
-   @Override
-   public int hashCode() {
-     
-      int hash = 7;
-      hash = 59 * hash + Objects.hashCode(this.id);
-      return hash;
-   }
+        this.id = UUID.randomUUID().toString();
+    }
 
-   @Override
-   public boolean equals(Object obj) {
-     
-      if (this == obj) {
-         return true;
-      }
-      if (obj == null) {
-         return false;
-      }
-      if (getClass() != obj.getClass()) {
-         return false;
-      }
-      final Individual other = (Individual) obj;
-      return Objects.equals(this.id, other.id);
-   }
+    public String getId_prefix() {
 
-   @Override
-   public String toString() {
-     
-      return String.format("%s [%s]", 
-              this.getClass().getSimpleName(), 
-              this.getId().substring(0, 13));
-   }
+        return id.substring(0, 13);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Individual other = (Individual) obj;
+        return Objects.equals(this.id, other.id);
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format("%s [%s]",
+                this.getClass().getSimpleName(),
+                this.getId_prefix());
+    }
+
+    /*
+     * Default setters and getters.
+     */
+    public String getId() {
+
+        return id;
+    }
 }

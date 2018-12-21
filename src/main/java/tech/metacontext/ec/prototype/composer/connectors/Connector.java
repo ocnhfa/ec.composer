@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
@@ -38,27 +39,22 @@ public class Connector extends Individual {
     private SketchNode previous;
     private SketchNode next;
 
-    public Connector(Predicate<SketchNode> styleChecker) {
+    public Connector() {
 
         this.transformTypes = new HashMap<>();
-        this.styleChecker = styleChecker;
     }
 
-    public Connector(Connector conn) {
+    public Connector(String id) {
 
-        super(conn.getId());
-        this.transformTypes = new HashMap<>(conn.getTransformTypes());
-        this.styleChecker = conn.getStyleChecker();
-        this.previous = (conn.previous == null)
-                ? null : new SketchNode(conn.previous);
-        this.next = (conn.next == null)
-                ? null : new SketchNode(conn.next);
+        super(id);
+        this.transformTypes = new HashMap<>();
     }
 
     public void addTransformType(MaterialType mt, TransformType tt) {
 
         this.transformTypes.put(mt, tt);
     }
+    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
 
     public SketchNode transform() {
 

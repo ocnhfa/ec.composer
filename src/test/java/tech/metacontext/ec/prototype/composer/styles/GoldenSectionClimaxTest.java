@@ -52,7 +52,7 @@ public class GoldenSectionClimaxTest {
         composer.getPopulation().stream()
                 .limit(1)
                 .peek(System.out::println)
-                .map(Composition::getRendered)
+                .map(Composition::getRenderedChecked)
                 .forEach(list -> {
                     list.stream()
                             .mapToDouble(instance::climaxIndex)
@@ -71,7 +71,7 @@ public class GoldenSectionClimaxTest {
         composer.getPopulation().stream()
                 .peek(composition -> {
 //                    System.out.println(composition.getId());
-                    composition.getRendered().stream()
+                    composition.getRenderedChecked().stream()
                             .mapToDouble(instance::climaxIndex)
                             .forEach(score -> {
                                 System.out.printf("%.1f ", score);

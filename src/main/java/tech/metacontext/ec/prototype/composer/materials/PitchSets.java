@@ -37,7 +37,6 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public static final int DEFAULT_ENHARMONIC_ALLOWED = SHARP_NOT_ALLOWED;
     public static final int DEFAULT_SHARP_ALLOWED = SHARP_ALLOWED;
 
-//    private boolean randomPitchSet = false;
     private int commonTone = 0;
     public PitchSetFactory factory;
 
@@ -57,8 +56,19 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public PitchSets(PitchSets origin) {
 
         super(origin.getDivision(), origin.getMaterials());
-//        this.randomPitchSet = origin.randomPitchSet;
         this.commonTone = origin.commonTone;
+    }
+
+    @Override
+    public PitchSets duplicate() {
+
+        PitchSets dupe = new PitchSets();
+        dupe.setDivision(this.getDivision());
+        dupe.setCommonTone(this.getCommonTone());
+        dupe.setMaterials(this.getMaterials().stream()
+                .map(PitchSet::new)
+                .collect(Collectors.toList()));
+        return dupe;
     }
 
     @Override
@@ -149,13 +159,6 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     /*
      * default setters and getters
      */
-//    public boolean isRandomPitchSet() {
-//        return randomPitchSet;
-//    }
-//
-//    public void setRandomPitchSet(boolean randomPitchSet) {
-//        this.randomPitchSet = randomPitchSet;
-//    }
     public int getCommonTone() {
         return commonTone;
     }

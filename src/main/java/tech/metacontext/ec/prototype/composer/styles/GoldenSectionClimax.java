@@ -60,7 +60,7 @@ public class GoldenSectionClimax implements Style {
     @Override
     public double rateComposition(Composition composition) {
 
-        List<Double> climaxIndexes = composition.getRendered().stream()
+        List<Double> climaxIndexes = composition.getRenderedChecked().stream()
                 .map(this::climaxIndex)
                 .collect(Collectors.toList());
         Double peak = climaxIndexes.stream()

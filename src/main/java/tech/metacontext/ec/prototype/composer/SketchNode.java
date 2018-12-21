@@ -15,10 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.HashMap;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
@@ -31,23 +31,15 @@ public class SketchNode extends Individual {
 
     private Map<MaterialType, ? extends MusicMaterial> musicMats;
 
-    public SketchNode() {
+    public SketchNode(String id) {
 
-        this.musicMats = Stream.of(MaterialType.values())
-                .collect(Collectors.toMap(t -> t, MaterialType::getInstance));
+        super(id);
+        this.musicMats = new HashMap<>();
     }
 
-    public SketchNode(SketchNode origin) {
+    public SketchNode() {
 
-        super(origin.getId());
-        this.musicMats = origin.getMats().entrySet().stream()
-                .collect(Collectors.toMap(
-                        Entry::getKey,
-                        e -> {
-                            MusicMaterial mm = e.getKey().getInstance();
-                            mm.setMaterials(e.getValue().getMaterials());
-                            return mm;
-                        }));
+        this.musicMats = new HashMap<>();
     }
 
     public MusicMaterial getMat(MaterialType type) {
@@ -75,7 +67,7 @@ public class SketchNode extends Individual {
     }
 
     public void setMats(Map<MaterialType, ? extends MusicMaterial> mats) {
-        
+
         this.musicMats = mats;
     }
 

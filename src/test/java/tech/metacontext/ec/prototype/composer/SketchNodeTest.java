@@ -16,8 +16,12 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.Map;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
@@ -28,15 +32,35 @@ import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
  */
 public class SketchNodeTest {
 
+    static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
+
     public SketchNodeTest() {
+    }
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+    }
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+    }
+
+    @Before
+    public void setUp() throws Exception {
+    }
+
+    @After
+    public void tearDown() throws Exception {
     }
 
     @Test
     public void copyObject() {
-        SketchNode node1 = new SketchNode(),
+        SketchNode node1 = sketchNodeFactory.newInstance(),
                 node2 = node1,
-                node3 = new SketchNode(node1);
+                node3 = sketchNodeFactory.forArchiving(node1);
         node1.getMat(MaterialType.PitchSets).random();
+        assertEquals(node1, node2);
+        assertEquals(node1, node3);
         assertEquals(node1.getMat(MaterialType.PitchSets),
                 node2.getMat(MaterialType.PitchSets));
         assertNotEquals(node1.getMat(MaterialType.PitchSets),
@@ -84,6 +108,21 @@ public class SketchNodeTest {
         Map<MaterialType, MusicMaterial> mats = null;
         SketchNode instance = new SketchNode();
         instance.setMats(mats);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of toString method, of class SketchNode.
+     */
+    @Test
+    @Ignore
+    public void testToString() {
+        System.out.println("toString");
+        SketchNode instance = new SketchNode();
+        String expResult = "";
+        String result = instance.toString();
+        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

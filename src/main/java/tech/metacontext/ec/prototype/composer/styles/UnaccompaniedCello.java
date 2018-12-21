@@ -15,15 +15,11 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 
@@ -69,7 +65,8 @@ public class UnaccompaniedCello implements Style {
     @Override
     public double rateComposition(Composition composition) {
 
-        return composition.getRendered().stream()
+        System.out.println(composition);
+        return composition.getRenderedChecked().stream()
                 .allMatch(this::qualifySketchNode) ? 1.0 : 0.0;
     }
 

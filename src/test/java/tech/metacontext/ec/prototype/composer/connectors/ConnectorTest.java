@@ -29,12 +29,14 @@ import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
  */
 public class ConnectorTest {
 
+    static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
+
     public ConnectorTest() {
     }
 
     @Test
     public void testTransform() {
-        Connector instance = new Connector(FreeStyle::checker);
+        Connector instance = connectorFactory.newConnector(FreeStyle::checker);
         instance.addTransformType(MaterialType.Dynamics, TransformType.MoveForward);
         instance.addTransformType(MaterialType.NoteRanges, TransformType.MoveForward);
         instance.addTransformType(MaterialType.PitchSets, TransformType.MoveForward);
@@ -44,7 +46,7 @@ public class ConnectorTest {
         instance.transform();
         System.out.println(instance.getNext());
         System.out.println("----------------------------------------------");
-        Connector instance2 = new Connector(FreeStyle::checker);
+        Connector instance2 = connectorFactory.newConnector(FreeStyle::checker);
         instance2.addTransformType(MaterialType.Dynamics, TransformType.MoveBackward);
         instance2.addTransformType(MaterialType.NoteRanges, TransformType.MoveBackward);
         instance2.addTransformType(MaterialType.PitchSets, TransformType.MoveBackward);

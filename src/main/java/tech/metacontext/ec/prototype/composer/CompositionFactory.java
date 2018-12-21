@@ -30,7 +30,9 @@ import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 public class CompositionFactory implements Factory<Composition> {
 
     private static final Logger _logger = Logger.getLogger(CompositionFactory.class.getName());
-    private static ConnectorFactory factory = ConnectorFactory.getInstance();
+    private static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
+    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
+
     private static CompositionFactory instance;
 
     private CompositionFactory() {
@@ -54,20 +56,22 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition forArchiving(Composition origin) {
 
         Composition dupe = new Composition(origin.getId());
-        dupe.getConnectors().addAll(origin.getConnectors().stream()
-                .map(conn -> factory.getConnector(conn.getStyleChecker()))
-                .collect(Collectors.toList()));
-        dupe.setSeed(new SketchNode(origin.getSeed()));
+        dupe.getConnectors().addAll(
+                origin.getConnectors().stream()
+                        .map(connectorFactory::forArchiving)
+                        .collect(Collectors.toList()));
+        dupe.setSeed(dupe.getConnectors().get(0).getPrevious());
         if (origin.ifReRenderRequired()) {
             dupe.render(dupe.getSeed());
         } else {
-            dupe.getRendered().addAll(origin.getRendered().stream()
-                    .map(SketchNode::new)
-                    .collect(Collectors.toList()));
+            dupe.getRendered().addAll(
+                    origin.getRenderedChecked().stream()
+                            .map(sketchNodeFactory::forArchiving)
+                            .collect(Collectors.toList()));
         }
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated for archiving.",
-                origin.getId());
+                origin.getId_prefix());
         return dupe;
     }
 
@@ -81,12 +85,12 @@ public class CompositionFactory implements Factory<Composition> {
 
         Composition dupe = new Composition();
         dupe.getConnectors().addAll(origin.getConnectors().stream()
-                .map(conn -> factory.getConnector(conn.getStyleChecker()))
+                .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
-        dupe.setSeed(new SketchNode(origin.getSeed()));
+        dupe.setSeed(dupe.getConnectors().getFirst().getPrevious());
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated to {1} for mutation.",
-                new Object[]{origin.getId(), dupe.getId()});
+                new Object[]{origin.getId_prefix(), dupe.getId_prefix()});
         return dupe;
     }
 
@@ -101,8 +105,9 @@ public class CompositionFactory implements Factory<Composition> {
     Composition forCrossover(SketchNode seed, Connector conn) {
 
         Composition newInstance = new Composition();
-        newInstance.addConnector(new Connector(conn));
-        newInstance.setSeed(new SketchNode(seed));
+        Connector dupeConn = connectorFactory.newConnectorWithSeed(conn.getStyleChecker());
+        newInstance.addConnector(dupeConn);
+        newInstance.setSeed(dupeConn.getPrevious());
         return newInstance;
     }
 

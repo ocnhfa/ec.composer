@@ -52,6 +52,12 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     }
 
     @Override
+    public RhythmicPoints duplicate() {
+
+        return new RhythmicPoints(this);
+    }
+
+    @Override
     public RhythmicPoints reset() {
 
         this.setDivision(DEFAULT_DIVISION);

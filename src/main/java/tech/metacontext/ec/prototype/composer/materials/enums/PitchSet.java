@@ -41,6 +41,11 @@ public class PitchSet {
         this.pitch_set.addAll(pitches);
     }
 
+    public PitchSet(PitchSet origin) {
+
+        this(origin.getPitch_set());
+    }
+
     @Override
     public String toString() {
         return String.format("PitchSet[ %s ]",

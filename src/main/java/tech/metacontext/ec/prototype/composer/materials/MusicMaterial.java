@@ -42,8 +42,7 @@ public abstract class MusicMaterial<E> {
     public MusicMaterial(int division, List<E> materials) {
 
         this.division = division;
-        this.materials = new ArrayList<>();
-        this.materials.addAll(materials);
+        this.materials = new ArrayList<>(materials);
     }
 
     /**
@@ -87,6 +86,8 @@ public abstract class MusicMaterial<E> {
      */
     abstract public <M extends MusicMaterial> M transform(TransformType type);
 
+    abstract public <M extends MusicMaterial> M duplicate();
+    
     public int size() {
         return this.materials.size();
     }
