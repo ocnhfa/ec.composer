@@ -69,8 +69,8 @@ public class CompositionFactoryTest {
                         .forEach(e -> rating2.put(e.getKey(), e.getValue()));
                 rating2.forEach((s, rate)
                         -> System.out.println(s.getClass().getSimpleName() + ": " + rate));
-                rating1.entrySet().stream().forEach(e1 -> {
-                    assertEquals(e1.getValue(), rating2.get(e1.getKey()));
+                rating1.entrySet().stream().forEach(e_rating1 -> {
+                    assertEquals(e_rating1.getValue(), rating2.get(e_rating1.getKey()));
                 });
                 quit = rating1.values().stream().allMatch(r -> r > Composer.CONSERVE_SCORE);
             }

@@ -38,7 +38,7 @@ public abstract class Individual {
 
     public String getId_prefix() {
 
-        return id.substring(0, 13);
+        return "[" + id.substring(0, 13) + "]";
     }
 
     @Override
@@ -68,9 +68,7 @@ public abstract class Individual {
     @Override
     public String toString() {
 
-        return String.format("%s [%s]",
-                this.getClass().getSimpleName(),
-                this.getId_prefix());
+        return this.getClass().getSimpleName() + " " + this.getId_prefix();
     }
 
     /*
