@@ -52,6 +52,16 @@ public class SketchNodeFactory implements Factory<SketchNode> {
         return node;
     }
 
+    public SketchNode forMutation(SketchNode origin) {
+
+        SketchNode node = new SketchNode();
+        node.setMats(origin.getMats().entrySet().stream()
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        e -> e.getValue().duplicate())));
+        return node;
+    }
+
     public SketchNode newInstance() {
 
         SketchNode newInstance = new SketchNode();
@@ -62,12 +72,10 @@ public class SketchNodeFactory implements Factory<SketchNode> {
 
     public SketchNode newInstance(Predicate<SketchNode> styleChecker) {
 
-        SketchNode newInstance = Stream.generate(this::newInstance)
+        return Stream.generate(this::newInstance)
                 .filter(styleChecker)
                 .findFirst()
                 .get();
-
-        return newInstance;
     }
 
 }

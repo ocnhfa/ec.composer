@@ -61,7 +61,7 @@ public class Connector extends Individual {
         if (this.previous == null) {
             return null;
         }
-        this.next = new SketchNode();
+        this.next = sketchNodeFactory.newInstance();
 //        System.out.println("Connector: " + this.getTransformTypes());
 
         Map<MaterialType, ? extends MusicMaterial> mats

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.Composition;
 import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 
@@ -43,8 +44,9 @@ public class UnaccompaniedCello implements Style {
     }
 
     public static void main(String[] args) {
+        
         UnaccompaniedCello style = new UnaccompaniedCello();
-        Stream.generate(SketchNode::new)
+        Stream.generate(SketchNodeFactory.getInstance()::newInstance)
                 .limit(50)
                 .peek(node -> System.out.println(node.getMat(MaterialType.NoteRanges)))
                 .map(style::qualifySketchNode)
@@ -65,7 +67,6 @@ public class UnaccompaniedCello implements Style {
     @Override
     public double rateComposition(Composition composition) {
 
-        System.out.println(composition);
         return composition.getRenderedChecked().stream()
                 .allMatch(this::qualifySketchNode) ? 1.0 : 0.0;
     }

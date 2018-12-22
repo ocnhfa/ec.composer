@@ -73,17 +73,21 @@ public class ConnectorFactory {
 
     public Connector forMutation(Connector conn) {
 
-        Connector dupe = new Connector(conn.getId());
+        Connector dupe = new Connector();
         dupe.getTransformTypes().putAll(conn.getTransformTypes());
         dupe.setStyleChecker(conn.getStyleChecker());
         dupe.setPrevious(Objects.isNull(conn.getPrevious())
-                ? null : sketchNodeFactory.forArchiving(conn.getPrevious()));
+                ? null : sketchNodeFactory.forMutation(conn.getPrevious()));
         return dupe;
     }
 
     public Connector forArchiving(Connector conn) {
 
-        Connector dupe = forMutation(conn);
+        Connector dupe = new Connector(conn.getId());
+        dupe.getTransformTypes().putAll(conn.getTransformTypes());
+        dupe.setStyleChecker(conn.getStyleChecker());
+        dupe.setPrevious(Objects.isNull(conn.getPrevious())
+                ? null : sketchNodeFactory.forArchiving(conn.getPrevious()));
         dupe.setNext(Objects.isNull(conn.getNext())
                 ? null : sketchNodeFactory.forArchiving(conn.getNext()));
         return dupe;

@@ -279,7 +279,7 @@ public class Composer extends Population<Composition> {
         }
         rating.forEach((s, rate)
                 -> System.out.println(s.getClass().getSimpleName() + ": " + rate));
-        this.conservetory.add(composition);
+        this.conservetory.add(compositionFactory.forArchiving(composition));
         if (this.conservetory.contains(composition)) {
             _logger.log(Level.INFO,
                     "Composition {0} been conserved.",

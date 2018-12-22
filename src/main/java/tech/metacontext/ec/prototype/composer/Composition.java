@@ -163,6 +163,7 @@ public class Composition extends Individual {
 
     public void setSeed(SketchNode seed) {
         this.seed = seed;
+        this.connectors.getFirst().setPrevious(seed);
     }
 
     public List<SketchNode> getRendered() {
