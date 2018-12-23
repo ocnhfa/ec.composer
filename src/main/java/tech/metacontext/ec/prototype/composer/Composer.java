@@ -15,20 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
@@ -81,7 +76,8 @@ public class Composer extends Population<Composition> {
         this.setPopulation(Stream.generate(()
                 -> compositionFactory.newInstance(
                         this.generateSeed(),
-                        connectorfactory.newConnector(this::styleChecker)))
+                        connectorfactory.newConnector(this::styleChecker),
+                        this.styles))
                 .limit(size)
                 .collect(Collectors.toList())
         );
@@ -233,7 +229,8 @@ public class Composer extends Population<Composition> {
         int index = 1;
         Composition child = compositionFactory.forCrossover(
                 parent1.getSeed(),
-                parent1.getConnectors().get(0));
+                parent1.getConnectors().get(0),
+                this.styles);
         String crossover_state = "A";
         do {
             Composition activated = new Random().nextBoolean()
@@ -270,15 +267,15 @@ public class Composer extends Population<Composition> {
         if (!this.getAim().completed(composition)) {
             return false;
         }
-        Map<Style, Double> rating = new HashMap<>();
+        composition.getRenderedChecked();
         if (this.styles.stream()
-                .map(s -> new SimpleEntry<>(s, s.rateComposition(composition)))
-                .peek(e -> rating.put(e.getKey(), e.getValue()))
-                .anyMatch(e -> e.getValue() < CONSERVE_SCORE)) {
+                .anyMatch(s -> composition.getScore(s) < CONSERVE_SCORE)) {
             return false;
         }
-        rating.forEach((s, rate)
-                -> System.out.println(s.getClass().getSimpleName() + ": " + rate));
+        this.styles.forEach(s
+                -> System.out.println(
+                        s.getClass().getSimpleName() + ": "
+                        + composition.getScore(s)));
         this.conservetory.add(compositionFactory.forArchiving(composition));
         if (this.conservetory.contains(composition)) {
             _logger.log(Level.INFO,
@@ -292,16 +289,12 @@ public class Composer extends Population<Composition> {
     public void render() {
 
         StringBuilder report = new StringBuilder();
-        IntStream.range(0, this.getConservetory().size())
-                .mapToObj(i -> new AbstractMap.SimpleEntry<>(i, this.getConservetory().get(i)))
-                .forEach(e -> {
-                    this.getStyles().forEach(style -> {
-                        double eval = style.rateComposition(e.getValue());
-                        report.append(String.format("%f %s %s %s\n", eval,
-                                style.getClass().getSimpleName(),
-                                e.getKey(), e.getValue().getId_prefix()));
-                    });
-                });
+        this.getConservetory().stream()
+                .forEach(composition -> this.getStyles().forEach(style
+                -> report.append(String.format("%.4f %s %s\n",
+                        composition.getScore(style),
+                        style.getClass().getSimpleName(),
+                        composition.getId_prefix()))));
         System.out.println(report);
     }
 

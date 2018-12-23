@@ -22,9 +22,10 @@ import java.util.UUID;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public abstract class Individual {
+public abstract class Individual<E> {
 
     private final String id;
+    private E eval;
 
     public Individual(String id) {
 
@@ -33,7 +34,7 @@ public abstract class Individual {
 
     public Individual() {
 
-        this.id = UUID.randomUUID().toString();
+        this(UUID.randomUUID().toString());
     }
 
     public String getId_prefix() {
@@ -75,7 +76,14 @@ public abstract class Individual {
      * Default setters and getters.
      */
     public String getId() {
-
         return id;
+    }
+
+    public E getEval() {
+        return eval;
+    }
+
+    public void setEval(E eval) {
+        this.eval = eval;
     }
 }

@@ -17,7 +17,14 @@ package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.rules.Rule;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -25,27 +32,41 @@ import java.util.List;
  */
 public class CompositionEval {
 
-    private List<Rule> rules;
+    private final Map<Style, Double> scores;
+//    private List<Rule> rules;
 
-    public CompositionEval() {
+    public CompositionEval(Map<? extends Style, Double> scores) {
 
-        this.rules = new ArrayList<>();
+        this.scores = new HashMap<>(scores);
+//        this.rules = new ArrayList<>();
     }
 
-    public void addRule(Rule rule) {
+    public CompositionEval(Collection<? extends Style> styles) {
 
-        this.rules.add(rule);
+        this(styles.stream().collect(Collectors.toMap(s -> s, s -> 0.0)));
+    }
+
+//    public void addRule(Rule rule) {
+//
+//        this.rules.add(rule);
+//    }
+    public Set<? extends Style> getStyles() {
+
+        return this.getScores().keySet();
     }
 
     /*
      * Default setters and getters
      */
-    public List<Rule> getRules() {
-        return rules;
+    public Map<Style, Double> getScores() {
+        return scores;
     }
-
-    public void setRules(List<Rule> rules) {
-        this.rules = rules;
-    }
+//    public List<Rule> getRules() {
+//        return rules;
+//    }
+//
+//    public void setRules(List<Rule> rules) {
+//        this.rules = rules;
+//    }
 
 }

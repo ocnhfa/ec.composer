@@ -37,11 +37,11 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class CompositionTest {
 
-    CompositionFactory compositionFactory;
-    Composer composer;
+    static CompositionFactory compositionFactory;
+    static Composer composer;
 
-    public CompositionTest() {
-        
+    @BeforeClass
+    public static void setUpClass() throws Exception {
         compositionFactory = CompositionFactory.getInstance();
         composer = new Composer(1, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
@@ -49,28 +49,12 @@ public class CompositionTest {
         );
     }
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
-
     /**
      * Test of getRendered method, of class Composition.
      */
     @Test
     public void testGetRendered() {
-        
+
         System.out.println("getRendered");
         List<SketchNode> expResult = null;
         List<SketchNode> result;
@@ -102,8 +86,7 @@ public class CompositionTest {
         }
         Composition instance = composer.getPopulation().get(0);
         System.out.println(instance);
-        SketchNode seed = composer.generateSeed();
-        List<SketchNode> list = instance.render(seed);
+        List<SketchNode> list = instance.render();
         list.forEach(System.out::println);
 
     }
@@ -113,7 +96,8 @@ public class CompositionTest {
 
         System.out.println("ObjectCopy");
         Composition c1 = compositionFactory.newInstance(composer.generateSeed(),
-                ConnectorFactory.getInstance().newConnector(composer::styleChecker)),
+                ConnectorFactory.getInstance().newConnector(composer::styleChecker),
+                composer.getStyles()),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
         c1.elongation(FreeStyle::checker);

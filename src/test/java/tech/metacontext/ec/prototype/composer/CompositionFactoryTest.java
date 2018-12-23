@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
@@ -33,10 +34,11 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class CompositionFactoryTest {
 
     static final CompositionFactory instance = CompositionFactory.getInstance();
+    static Composer composer;
     Composition composition;
-    Composer composer;
 
-    public CompositionFactoryTest() {
+    @BeforeClass
+    public static void prepare() {
         composer = new Composer(10, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
@@ -49,30 +51,22 @@ public class CompositionFactoryTest {
 
     @Test
     public void testForArchiving() {
-        Map<Style, Double> rating1 = new HashMap<>(),
-                rating2 = new HashMap<>();
         boolean quit = false;
         do {
             composer.compose().evolve();
             composition = composer.randomSelect(Composer.SELECT_ONLY_COMPLETED);
             if (Objects.nonNull(composition)) {
-                rating1.clear();
-                rating2.clear();
-                composer.getStyles().stream()
-                        .map(s -> new SimpleEntry<>(s, s.rateComposition(composition)))
-                        .forEach(e -> rating1.put(e.getKey(), e.getValue()));
-                rating1.forEach((s, rate)
-                        -> System.out.println(s.getClass().getSimpleName() + ": " + rate));
+                composition.render();
+                composer.getStyles().stream().forEach(composition::getScore);
+                composition.getEval().getScores().entrySet().forEach(System.out::println);
                 Composition result = instance.forArchiving(composition);
-                composer.getStyles().stream()
-                        .map(s -> new SimpleEntry<>(s, s.rateComposition(result)))
-                        .forEach(e -> rating2.put(e.getKey(), e.getValue()));
-                rating2.forEach((s, rate)
-                        -> System.out.println(s.getClass().getSimpleName() + ": " + rate));
-                rating1.entrySet().stream().forEach(e_rating1 -> {
-                    assertEquals(e_rating1.getValue(), rating2.get(e_rating1.getKey()));
+                composer.getStyles().stream().forEach(result::getScore);
+                result.getEval().getScores().entrySet().forEach(System.out::println);
+                composer.getStyles().stream().forEach(s -> {
+                    assertEquals(composition.getScore(s), result.getScore(s));
                 });
-                quit = rating1.values().stream().allMatch(r -> r > Composer.CONSERVE_SCORE);
+                quit = composition.getEval().getScores().entrySet().stream()
+                        .allMatch(e -> e.getValue() > Composer.CONSERVE_SCORE);
             }
         } while (!quit);
     }

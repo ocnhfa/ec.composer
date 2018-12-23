@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -27,12 +28,13 @@ import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Composition extends Individual {
+public class Composition extends Individual<CompositionEval> {
 
     static final Logger _logger = Logger.getLogger(Composition.class.getName());
 
@@ -41,31 +43,34 @@ public class Composition extends Individual {
     private final LinkedList<SketchNode> rendered;
     private SketchNode seed;
 
-    public Composition() {
+    public Composition(Collection<? extends Style> styles) {
 
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
+        this.setEval(new CompositionEval(styles));
     }
 
-    public Composition(String id) {
+    public Composition(String id, Collection<? extends Style> styles) {
 
         super(id);
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
+        this.setEval(new CompositionEval(styles));
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
 
         this.addConnector(factory.newConnector(styleChecker));
-        if (!rendered.isEmpty()) {
-            rendered.clear();
-        }
         return this;
     }
 
-    public List<SketchNode> render(SketchNode seed) {
+    public void addConnector(Connector connector) {
 
-        this.seed = seed;
+        this.connectors.add(connector);
+    }
+
+    public List<SketchNode> render() {
+
         rendered.clear();
         Wrapper<SketchNode> previous = new Wrapper<>(seed);
         rendered.add(seed);
@@ -84,14 +89,14 @@ public class Composition extends Individual {
         return rendered;
     }
 
-    public void addConnector(Connector connector) {
-
-        this.connectors.add(connector);
-    }
-
     public List<SketchNode> getRenderedChecked() {
 
-        return (ifReRenderRequired()) ? this.render(seed) : this.rendered;
+        if (!this.ifReRenderRequired()) {
+            return this.rendered;
+        }
+        List<SketchNode> result = this.render();
+        updateEval();
+        return result;
     }
 
     public boolean ifReRenderRequired() {
@@ -134,6 +139,28 @@ public class Composition extends Individual {
         return false;
     }
 
+    private void updateEval() {
+
+        this.getEval().getStyles().stream()
+                .forEach(this::updateScore);
+    }
+
+    public void updateScore(Style style) {
+
+        this.getEval().getScores()
+                .put(style, style.rateComposition(this));
+    }
+
+    public Double getScore(Style style) {
+
+        return this.getEval().getScores().get(style);
+    }
+
+    public int getSize() {
+
+        return this.getConnectors().size() + 1;
+    }
+
     @Override
     public String toString() {
 
@@ -142,11 +169,6 @@ public class Composition extends Individual {
                 this.getConnectors().stream()
                         .map(Connector::toString)
                         .collect(Collectors.joining("\n  ")));
-    }
-
-    public int getSize() {
-
-        return this.getConnectors().size() + 1;
     }
 
     /*
@@ -169,4 +191,5 @@ public class Composition extends Individual {
     public List<SketchNode> getRendered() {
         return this.rendered;
     }
+
 }

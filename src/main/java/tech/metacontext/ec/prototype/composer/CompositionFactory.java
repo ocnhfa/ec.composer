@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Factory;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -50,18 +53,20 @@ public class CompositionFactory implements Factory<Composition> {
      * Create duplicated Composition instance for archiving.
      *
      * @param origin
+     * @param styles
      * @return
      */
     @Override
     public Composition forArchiving(Composition origin) {
 
-        Composition dupe = new Composition(origin.getId());
+        Composition dupe = new Composition(origin.getId(),
+                origin.getEval().getStyles());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forArchiving)
                 .collect(Collectors.toList()));
         dupe.setSeed(dupe.getConnectors().get(0).getPrevious());
         if (origin.ifReRenderRequired()) {
-            dupe.render(dupe.getSeed());
+            dupe.render();
         } else {
             dupe.getRendered().addAll(
                     origin.getRenderedChecked().stream()
@@ -82,7 +87,7 @@ public class CompositionFactory implements Factory<Composition> {
      */
     public Composition forMutation(Composition origin) {
 
-        Composition dupe = new Composition();
+        Composition dupe = new Composition(origin.getEval().getScores().keySet());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
@@ -93,18 +98,21 @@ public class CompositionFactory implements Factory<Composition> {
         return dupe;
     }
 
-    public Composition newInstance(SketchNode seed, Connector conn) {
+    public Composition newInstance(SketchNode seed, Connector conn,
+            Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition();
+        Composition newInstance = new Composition(styles);
         newInstance.addConnector(conn);
         newInstance.setSeed(seed);
         return newInstance;
     }
 
-    Composition forCrossover(SketchNode seed, Connector conn) {
+    Composition forCrossover(SketchNode seed, Connector conn,
+            Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition();
-        Connector dupeConn = connectorFactory.newConnectorWithSeed(conn.getStyleChecker());
+        Composition newInstance = new Composition(styles);
+        Connector dupeConn = connectorFactory
+                .newConnectorWithSeed(conn.getStyleChecker());
         newInstance.addConnector(dupeConn);
         newInstance.setSeed(dupeConn.getPrevious());
         return newInstance;

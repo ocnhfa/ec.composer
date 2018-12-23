@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
@@ -39,7 +40,8 @@ public class ComposerTest {
     Composer instance;
     int size = 10;
 
-    public ComposerTest() {
+    @Before
+    public void prepare() {
         instance = new Composer(size, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()));
@@ -80,7 +82,7 @@ public class ComposerTest {
     @Test
     public void testStyleChecker() {
         System.out.println("styleChecker");
-        SketchNode node = new SketchNode();
+        SketchNode node = SketchNodeFactory.getInstance().newInstance();
         node.getMat(MaterialType.NoteRanges).setMaterials(List.of(Range.C0));
         assertFalse(instance.styleChecker(node));
     }
@@ -92,15 +94,18 @@ public class ComposerTest {
     public void testConserve() {
         System.out.println("conserve");
         List<Composition> list = Stream.generate(()
-                -> CompositionFactory.getInstance().newInstance(instance.generateSeed(),
-                        ConnectorFactory.getInstance().newConnector(instance::styleChecker)))
+                -> CompositionFactory.getInstance()
+                        .newInstance(instance.generateSeed(),
+                                ConnectorFactory.getInstance()
+                                        .newConnector(instance::styleChecker),
+                                instance.getStyles()))
                 .limit(1000)
                 .collect(Collectors.toList());
         do {
             list.forEach(c -> c.elongation(instance::styleChecker));
         } while (list.stream().anyMatch(c -> !ComposerAim.Phrase.completed(c)));
         System.out.println("");
-        list.forEach(c -> c.render(instance.generateSeed()));
+        list.forEach(Composition::render);
         boolean expResult
                 = list.stream()
                         .anyMatch(c -> instance.getStyles().stream()
