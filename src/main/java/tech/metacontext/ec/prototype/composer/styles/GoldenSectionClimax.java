@@ -30,7 +30,7 @@ import tech.metacontext.ec.prototype.composer.materials.enums.*;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class GoldenSectionClimax implements Style {
+public class GoldenSectionClimax extends Style {
 
     public static final double RATIO = 1.6180339887498948482;
 
@@ -53,10 +53,6 @@ public class GoldenSectionClimax implements Style {
         return true;
     }
 
-    /**
-     * @param composition
-     * @return
-     */
     @Override
     public double rateComposition(Composition composition) {
 

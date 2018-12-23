@@ -28,7 +28,7 @@ import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class UnaccompaniedCello implements Style {
+public class UnaccompaniedCello extends Style {
 
     /**
      * 音域

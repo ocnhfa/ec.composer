@@ -15,14 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import tech.metacontext.ec.prototype.composer.rules.Rule;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 
@@ -46,6 +42,12 @@ public class CompositionEval {
         this(styles.stream().collect(Collectors.toMap(s -> s, s -> 0.0)));
     }
 
+    public CompositionEval(CompositionEval eval) {
+        
+        this.scores=new HashMap<>();
+        eval.getScores().forEach(scores::put);
+    }
+    
 //    public void addRule(Rule rule) {
 //
 //        this.rules.add(rule);

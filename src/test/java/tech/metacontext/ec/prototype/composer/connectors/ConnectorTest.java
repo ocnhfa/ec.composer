@@ -16,9 +16,8 @@
 package tech.metacontext.ec.prototype.composer.connectors;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.Ignore;
-import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -30,6 +29,7 @@ import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 public class ConnectorTest {
 
     static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
+    static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
 
     public ConnectorTest() {
     }
@@ -41,7 +41,7 @@ public class ConnectorTest {
         instance.addTransformType(MaterialType.NoteRanges, TransformType.MoveForward);
         instance.addTransformType(MaterialType.PitchSets, TransformType.MoveForward);
         instance.addTransformType(MaterialType.RhythmicPoints, TransformType.MoveForward);
-        instance.setPrevious(new SketchNode());
+        instance.setPrevious(sketchNodeFactory.newInstance());
         System.out.println(instance.getPrevious());
         instance.transform();
         System.out.println(instance.getNext());
@@ -51,7 +51,7 @@ public class ConnectorTest {
         instance2.addTransformType(MaterialType.NoteRanges, TransformType.MoveBackward);
         instance2.addTransformType(MaterialType.PitchSets, TransformType.MoveBackward);
         instance2.addTransformType(MaterialType.RhythmicPoints, TransformType.MoveBackward);
-        instance2.setPrevious(new SketchNode());
+        instance2.setPrevious(sketchNodeFactory.newInstance());
         System.out.println(instance2.getPrevious());
         instance2.transform();
         System.out.println(instance2.getNext());

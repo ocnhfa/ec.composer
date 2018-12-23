@@ -15,16 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
@@ -43,6 +39,9 @@ public class CompositionFactoryTest {
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
+        do {
+            composer.compose().evolve();
+        } while (!composer.getPopulation().stream().allMatch(composer.getAim()::completed));
     }
 
     @Test
@@ -51,28 +50,31 @@ public class CompositionFactoryTest {
 
     @Test
     public void testForArchiving() {
-        boolean quit = false;
-        do {
-            composer.compose().evolve();
-            composition = composer.randomSelect(Composer.SELECT_ONLY_COMPLETED);
-            if (Objects.nonNull(composition)) {
-                composition.render();
-                composer.getStyles().stream().forEach(composition::getScore);
-                composition.getEval().getScores().entrySet().forEach(System.out::println);
-                Composition result = instance.forArchiving(composition);
-                composer.getStyles().stream().forEach(result::getScore);
-                result.getEval().getScores().entrySet().forEach(System.out::println);
-                composer.getStyles().stream().forEach(s -> {
-                    assertEquals(composition.getScore(s), result.getScore(s));
-                });
-                quit = composition.getEval().getScores().entrySet().stream()
-                        .allMatch(e -> e.getValue() > Composer.CONSERVE_SCORE);
-            }
-        } while (!quit);
+        composer.getPopulation().stream().forEach(c -> {
+            c.ifReRenderRequired();
+            c.getEval().getScores().entrySet()
+                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            Composition result = instance.forArchiving(c);
+            result.getEval().getScores().entrySet()
+                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            composer.getStyles().stream().forEach(s -> {
+                assertEquals(c.getScore(s), result.getScore(s));
+            });
+        });
     }
 
     @Test
     public void testForMutation() {
+        composer.getPopulation().stream().forEach(c -> {
+            c.ifReRenderRequired();
+            c.getEval().getScores().entrySet()
+                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            Composition result = instance.forMutation(c);
+            result.getEval().getScores().entrySet()
+                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            assertFalse(composer.getStyles().stream()
+                    .allMatch(s -> Objects.equals(c.getScore(s), result.getScore(s))));
+        });
     }
 
     @Test

@@ -29,7 +29,7 @@ public class Main {
     // 決定作品數量及演進世代
     static int populationSize = 10;
 //    static int generation = 10;
-    private static final int SELECTED_SIZE = 5;
+    private static final int SELECTED_SIZE = 3;
 
     public static void main(String[] args) {
 
@@ -49,8 +49,7 @@ public class Main {
                 System.out.println(output);
                 output = new StringBuilder(composer.getGenCount() + ":");
             }
-            composer.compose();
-            composer.evolve();
+            composer.compose().evolve();
         } while (composer.getConservetory().size() < SELECTED_SIZE);
 
         System.out.println(header("Dumping Archive"));
@@ -63,6 +62,7 @@ public class Main {
         System.out.println(header("Dumping Conservatory"));
         composer.getConservetory().forEach(System.out::println);
         composer.render();
+        composer.persistAll();
     }
 
     static String header(String text) {

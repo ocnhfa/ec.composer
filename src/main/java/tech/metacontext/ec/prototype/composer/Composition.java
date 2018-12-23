@@ -15,6 +15,13 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,8 +122,10 @@ public class Composition extends Individual<CompositionEval> {
         }
         if (this.rendered.size() != this.getSize()) {
             _logger.log(Level.INFO,
-                    "Size mismatched, rerendering required for Composition {0}.",
-                    this.getId_prefix());
+                    "Size mismatched: {0} to {1}, rerendering required for Composition {2}.", new Object[]{
+                        this.rendered.size(),
+                        this.getSize(),
+                        this.getId_prefix()});
             return true;
         }
         if (this.connectors.stream().anyMatch(conn
@@ -171,11 +180,41 @@ public class Composition extends Individual<CompositionEval> {
                         .collect(Collectors.joining("\n  ")));
     }
 
+    public Path persistent() {
+
+        Path destination = new File("src/main/resources/composition", this.getId() + ".txt").toPath();
+        try (BufferedWriter out = Files.newBufferedWriter(
+                destination, StandardCharsets.UTF_8)) {
+            out.write(this.toString());
+            out.flush();
+        } catch (IOException ex) {
+            _logger.log(Level.SEVERE, "Failed to persist {0}. {1}", new Object[]{
+                this.getId_prefix(), ex.getMessage()});
+        }
+        _logger.log(Level.INFO, "{0} has been persisted to {1}", new Object[]{
+            this.getId_prefix(),
+            destination.getFileName()});
+        return destination;
+    }
+
+    public void resetSeed(SketchNode seed) {
+
+        this.seed = seed;
+        this.connectors.getFirst().setPrevious(seed);
+        if (!this.rendered.contains(seed)) {
+            if (this.rendered.size() < this.getSize()) {
+                this.rendered.add(0, seed);
+            } else {
+                _logger.warning("Rendered size mismatch of missing seed, rerendering.");
+                this.render();
+            }
+        }
+    }
+
     /*
      * Default setters and getters
      */
     public LinkedList<Connector> getConnectors() {
-
         return connectors;
     }
 
@@ -185,7 +224,6 @@ public class Composition extends Individual<CompositionEval> {
 
     public void setSeed(SketchNode seed) {
         this.seed = seed;
-        this.connectors.getFirst().setPrevious(seed);
     }
 
     public List<SketchNode> getRendered() {

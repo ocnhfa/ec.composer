@@ -15,17 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
@@ -53,25 +52,36 @@ public class CompositionTest {
      * Test of getRendered method, of class Composition.
      */
     @Test
-    public void testGetRendered() {
+    public void testGetRendered() throws IOException {
 
         System.out.println("getRendered");
-        List<SketchNode> expResult = null;
-        List<SketchNode> result;
         composer.compose();
         System.out.println("1 compose");
-        result = composer.getPopulation().get(0).getRenderedChecked();
+        Composition composition = composer.getPopulation().get(0);
+        SketchNode expResult = composition.getSeed();
+        assertTrue(composition.ifReRenderRequired());
+        SketchNode result = composition.getRenderedChecked().get(0);
+        assertEquals(expResult, result);
         composer.compose();
         System.out.println("2 compose");
-        result = composer.getPopulation().get(0).getRenderedChecked();
+        composition = composer.getPopulation().get(0);
+        assertTrue(composition.ifReRenderRequired());
+        result = composition.getRenderedChecked().get(0);
+        assertEquals(expResult, result);
         composer.compose().evolve();
         System.out.println("3 compose and evolve");
-        result = composer.getPopulation().get(0).getRenderedChecked();
+        composition = composer.getPopulation().get(0);
+        assertTrue(composition.ifReRenderRequired());
+        result = composition.getRenderedChecked().get(0);
+        assertNotEquals(expResult, result);
         composer.compose().evolve();
         System.out.println("4 compose and evolve");
-        result = composer.getPopulation().get(0).getRenderedChecked();
-//        System.out.println(result);
-//        assertEquals(expResult, result);
+        composition = composer.getPopulation().get(0);
+        assertTrue(composition.ifReRenderRequired());
+        result = composition.getRenderedChecked().get(0);
+        assertNotEquals(expResult, result);
+        Path path = composition.persistent();
+        Files.delete(path);
     }
 
     /**
@@ -95,8 +105,8 @@ public class CompositionTest {
     public void ObjectCopy() {
 
         System.out.println("ObjectCopy");
-        Composition c1 = compositionFactory.newInstance(composer.generateSeed(),
-                ConnectorFactory.getInstance().newConnector(composer::styleChecker),
+        Composition c1 = compositionFactory.newInstance(
+                composer::styleChecker,
                 composer.getStyles()),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
@@ -221,7 +231,7 @@ public class CompositionTest {
         System.out.println("setSeed");
         SketchNode seed = null;
         Composition instance = null;
-        instance.setSeed(seed);
+        instance.resetSeed(seed);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

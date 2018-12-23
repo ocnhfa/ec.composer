@@ -16,14 +16,12 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import tech.metacontext.ec.prototype.composer.connectors.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.enums.Range;
@@ -37,23 +35,16 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class ComposerTest {
 
-    Composer instance;
-    int size = 10;
+    static Composer instance;
+    static final int PRESET_POPULATION_SIZE = 10;
 
-    @Before
-    public void prepare() {
-        instance = new Composer(size, ComposerAim.Phrase,
+    @BeforeClass
+    public static void prepare() {
+        instance = new Composer(PRESET_POPULATION_SIZE, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()));
-        do {
-            instance.compose().evolve();
-            if (instance.getConservetory().size() > 0) {
-                System.out.print(" // "
-                        + instance.getConservetory().size());
-            }
-            System.out.println("");
-        } while (instance.getConservetory().isEmpty());
-        instance.render();
+        assertEquals(PRESET_POPULATION_SIZE, instance.getSize());
+        assertEquals(instance.getSize(), instance.getPopulationSize());
     }
 
     /**
@@ -62,10 +53,12 @@ public class ComposerTest {
     @Test
     public void testCompose() {
         System.out.println("compose");
+        while (instance.getConservetory().size() < 5) {
+            instance.compose().evolve();
+        }
         System.out.println("--conservatory--");
         System.out.println(instance.getConservetory());
-        assertEquals(size, instance.getSize());
-        assertEquals(instance.getSize(), instance.getPopulationSize());
+        instance.render();
     }
 
     /**
@@ -75,14 +68,22 @@ public class ComposerTest {
     public void testRandomSelect() {
         System.out.println("randomSelect");
         int state = Composer.SELECT_ONLY_COMPLETED;
-        Composition result = instance.randomSelect(state);
+        Composition result = Stream.generate(() -> {
+            instance.compose().evolve();
+            return instance.randomSelect(state);
+        })
+                .filter(Objects::nonNull)
+                .findFirst()
+                .get();
         assertTrue(instance.getAim().completed(result));
     }
 
     @Test
     public void testStyleChecker() {
         System.out.println("styleChecker");
-        SketchNode node = SketchNodeFactory.getInstance().newInstance();
+        System.out.println("generateSeed");
+        SketchNode node = instance.generateSeed();
+        assertTrue(instance.styleChecker(node));
         node.getMat(MaterialType.NoteRanges).setMaterials(List.of(Range.C0));
         assertFalse(instance.styleChecker(node));
     }
@@ -93,42 +94,29 @@ public class ComposerTest {
     @Test
     public void testConserve() {
         System.out.println("conserve");
-        List<Composition> list = Stream.generate(()
-                -> CompositionFactory.getInstance()
-                        .newInstance(instance.generateSeed(),
-                                ConnectorFactory.getInstance()
-                                        .newConnector(instance::styleChecker),
-                                instance.getStyles()))
-                .limit(1000)
-                .collect(Collectors.toList());
-        do {
-            list.forEach(c -> c.elongation(instance::styleChecker));
-        } while (list.stream().anyMatch(c -> !ComposerAim.Phrase.completed(c)));
-        System.out.println("");
-        list.forEach(Composition::render);
-        boolean expResult
-                = list.stream()
-                        .anyMatch(c -> instance.getStyles().stream()
-                        .allMatch(s -> s.rateComposition(c) > Composer.CONSERVE_SCORE));
-        System.out.println("expResult = " + expResult);
-        boolean result = list.stream().anyMatch(instance::conserve);
-        System.out.println("Result = " + result);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of generateSeed method, of class Composer.
-     */
-    @Test
-    @Ignore
-    public void testGenerateSeed() {
-        System.out.println("generateSeed");
-        Composer instance = null;
-        SketchNode expResult = null;
-        SketchNode result = instance.generateSeed();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        while (instance.getConservetory().size() < 3) {
+            instance.compose().evolve();
+        }
+        System.out.println(Composer.output(instance.getConservetory().toArray(Composition[]::new)));
+        instance.getConservetory().forEach(c->{
+            System.out.println(c.getId_prefix());
+            System.out.println(c.getConnectors().size());
+            System.out.println(c.getRendered().size());
+        });
+//        System.out.println(instance.getConservetory().get(0));
+        while (instance.getConservetory().size() > 0) {
+            Composition c = instance.getConservetory().remove(0);
+            System.out.println(Composer.output(c));
+            boolean expResult = instance.getStyles().stream()
+                    .map(c::getScore)
+                    .allMatch(score -> score > Composer.CONSERVE_SCORE);
+            System.out.println(Composer.output(c));
+            System.out.println("expResult = " + expResult);
+            boolean result = instance.conserve(c);
+            System.out.println("Result = " + result);
+            assertEquals(expResult, result);
+            instance.getConservetory().remove(c);
+        }
     }
 
     /**

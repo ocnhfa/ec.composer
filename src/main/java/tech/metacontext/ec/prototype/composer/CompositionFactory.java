@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -53,26 +54,20 @@ public class CompositionFactory implements Factory<Composition> {
      * Create duplicated Composition instance for archiving.
      *
      * @param origin
-     * @param styles
      * @return
      */
     @Override
     public Composition forArchiving(Composition origin) {
 
+        origin.ifReRenderRequired();
         Composition dupe = new Composition(origin.getId(),
                 origin.getEval().getStyles());
+        dupe.getRendered().addAll(origin.getRenderedChecked());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forArchiving)
                 .collect(Collectors.toList()));
-        dupe.setSeed(dupe.getConnectors().get(0).getPrevious());
-        if (origin.ifReRenderRequired()) {
-            dupe.render();
-        } else {
-            dupe.getRendered().addAll(
-                    origin.getRenderedChecked().stream()
-                            .map(sketchNodeFactory::forArchiving)
-                            .collect(Collectors.toList()));
-        }
+        dupe.resetSeed(dupe.getConnectors().get(0).getPrevious());
+        dupe.setEval(new CompositionEval(origin.getEval()));
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated for archiving.",
                 origin.getId_prefix());
@@ -87,23 +82,24 @@ public class CompositionFactory implements Factory<Composition> {
      */
     public Composition forMutation(Composition origin) {
 
-        Composition dupe = new Composition(origin.getEval().getScores().keySet());
+        Composition dupe = new Composition(origin.getEval().getStyles());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
-        dupe.setSeed(sketchNodeFactory.forMutation(origin.getSeed()));
+        dupe.resetSeed(sketchNodeFactory.forMutation(origin.getSeed()));
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated to {1} for mutation.",
                 new Object[]{origin.getId_prefix(), dupe.getId_prefix()});
         return dupe;
     }
 
-    public Composition newInstance(SketchNode seed, Connector conn,
+    public Composition newInstance(Predicate<SketchNode> styleChecker,
             Collection<? extends Style> styles) {
 
         Composition newInstance = new Composition(styles);
+        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker);
         newInstance.addConnector(conn);
-        newInstance.setSeed(seed);
+        newInstance.setSeed(conn.getPrevious());
         return newInstance;
     }
 
@@ -114,7 +110,7 @@ public class CompositionFactory implements Factory<Composition> {
         Connector dupeConn = connectorFactory
                 .newConnectorWithSeed(conn.getStyleChecker());
         newInstance.addConnector(dupeConn);
-        newInstance.setSeed(dupeConn.getPrevious());
+        newInstance.resetSeed(dupeConn.getPrevious());
         return newInstance;
     }
 

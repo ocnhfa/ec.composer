@@ -75,8 +75,7 @@ public class Composer extends Population<Composition> {
         this.conservetory = new ArrayList<>();
         this.setPopulation(Stream.generate(()
                 -> compositionFactory.newInstance(
-                        this.generateSeed(),
-                        connectorfactory.newConnector(this::styleChecker),
+                        this::styleChecker,
                         this.styles))
                 .limit(size)
                 .collect(Collectors.toList())
@@ -251,12 +250,6 @@ public class Composer extends Population<Composition> {
         return child;
     }
 
-    /*
-     || this.styles.stream()
-                .peek(style -> System.out.println(style.getClass().getSimpleName()
-                + "-> " + style.rateComposition(composition)))
-                .anyMatch(s -> s.rateComposition(composition) < CONSERVE_SCORE)
-     */
     public boolean conserve(Composition composition) {
 
         if (this.conservetory.contains(composition)) {
@@ -272,10 +265,7 @@ public class Composer extends Population<Composition> {
                 .anyMatch(s -> composition.getScore(s) < CONSERVE_SCORE)) {
             return false;
         }
-        this.styles.forEach(s
-                -> System.out.println(
-                        s.getClass().getSimpleName() + ": "
-                        + composition.getScore(s)));
+        System.out.println(output(composition));
         this.conservetory.add(compositionFactory.forArchiving(composition));
         if (this.conservetory.contains(composition)) {
             _logger.log(Level.INFO,
@@ -288,14 +278,25 @@ public class Composer extends Population<Composition> {
     @Override
     public void render() {
 
+        System.out.println(
+                output(this.getConservetory().toArray(Composition[]::new)));
+    }
+
+    public static String output(Composition... list) {
+
         StringBuilder report = new StringBuilder();
-        this.getConservetory().stream()
-                .forEach(composition -> this.getStyles().forEach(style
-                -> report.append(String.format("%.4f %s %s\n",
-                        composition.getScore(style),
-                        style.getClass().getSimpleName(),
-                        composition.getId_prefix()))));
-        System.out.println(report);
+        Stream.of(list).forEach(composition -> report
+                .append(composition.getId_prefix()).append(" ")
+                .append(composition.getEval().getStyles().stream()
+                        .map(s -> String.format("%s: %.3f", s.toString(), composition.getScore(s)))
+                        .collect(Collectors.joining(" | ")))
+                .append('\n'));
+        return report.toString();
+    }
+
+    public void persistAll() {
+
+        this.getConservetory().stream().forEach(Composition::persistent);
     }
 
     public void addStyle(Style style) {

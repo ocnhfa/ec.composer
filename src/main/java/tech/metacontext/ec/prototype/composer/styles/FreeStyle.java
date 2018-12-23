@@ -22,7 +22,7 @@ import tech.metacontext.ec.prototype.composer.SketchNode;
  *
  * @author Jonathan Chang
  */
-public class FreeStyle implements Style {
+public class FreeStyle extends Style {
 
     @Override
     public boolean qualifySketchNode(SketchNode sketchNode) {

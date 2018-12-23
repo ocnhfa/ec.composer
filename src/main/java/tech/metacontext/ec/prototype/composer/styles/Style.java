@@ -22,9 +22,34 @@ import tech.metacontext.ec.prototype.composer.SketchNode;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public interface Style {
+public abstract class Style {
 
-    public boolean qualifySketchNode(SketchNode sketchNode);
+    /**
+     * Qualify a newly produced SketchNode. This function should only be called
+     * when evaluating a SketchNode newly generated to prevent potentially
+     * unpredictable outcome, for example, those containing some random rating
+     * factors. One should only retrieves scores from CompositionEval storage
+     * afterwards.
+     *
+     * @param sketchNode
+     * @return true if qualified, otherwise false.
+     */
+    public abstract boolean qualifySketchNode(SketchNode sketchNode);
 
-    public double rateComposition(Composition composition);
+    /**
+     * Rate composition. This function should not be called other than by
+     * Composition::updateScore to prevent potentially unwanted score changes,
+     * for example, those containing some random rating factors. One should only
+     * retrieves scores from CompositionEval storage.
+     *
+     * @param composition
+     * @return double value score ranging from 0.0 to 1.0.
+     */
+    public abstract double rateComposition(Composition composition);
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
 }
