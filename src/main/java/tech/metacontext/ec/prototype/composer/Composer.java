@@ -56,7 +56,7 @@ public class Composer extends Population<Composition> {
     /**
      * 作品收入conservatory所須達到的分數。
      */
-    static final double CONSERVE_SCORE = 0.8;
+    static final double CONSERVE_SCORE = 0.85;
     private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
@@ -287,8 +287,8 @@ public class Composer extends Population<Composition> {
         StringBuilder report = new StringBuilder();
         Stream.of(list).forEach(composition -> report
                 .append(composition.getId_prefix()).append(" ")
-                .append(composition.getEval().getStyles().stream()
-                        .map(s -> String.format("%s: %.3f", s.toString(), composition.getScore(s)))
+                .append(composition.getEval().getScores().entrySet().stream()
+                        .map(e -> String.format("%s: %.3f", e.getKey(), e.getValue()))
                         .collect(Collectors.joining(" | ")))
                 .append('\n'));
         return report.toString();

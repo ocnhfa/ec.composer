@@ -17,7 +17,6 @@ package tech.metacontext.ec.prototype.composer;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Stream;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -37,7 +36,7 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class ComposerTest {
 
     static Composer instance;
-    static final int PRESET_POPULATION_SIZE = 10;
+    static final int PRESET_POPULATION_SIZE = 30;
 
     @BeforeClass
     public static void prepare() {
@@ -54,7 +53,7 @@ public class ComposerTest {
     @Test
     public void testCompose() {
         System.out.println("compose");
-        while (instance.getConservetory().size() < 5) {
+        while (instance.getConservetory().size() < 3) {
             instance.compose().evolve();
         }
         System.out.println("--conservatory--");

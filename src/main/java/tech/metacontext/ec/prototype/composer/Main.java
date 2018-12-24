@@ -27,20 +27,15 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class Main {
 
     // 決定作品數量及演進世代
-    static int populationSize = 10;
-//    static int generation = 10;
+    static int populationSize = 50;
     private static final int SELECTED_SIZE = 3;
 
     public static void main(String[] args) {
 
-//        System.out.println(header("Creating composer..."));
-//        System.out.println("Population Size = " + populationSize);
-//        System.out.println("Generation = " + generation);
         Composer composer = new Composer(populationSize, ComposerAim.Phrase,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
-
         System.out.println(header("Evolution"));
         StringBuilder output = new StringBuilder("Generation...");
         do {
