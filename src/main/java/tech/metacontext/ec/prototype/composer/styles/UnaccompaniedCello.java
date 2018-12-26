@@ -43,16 +43,6 @@ public class UnaccompaniedCello extends Style {
         RANGE.put(Range.C6, 0.25);
     }
 
-    public static void main(String[] args) {
-        
-        UnaccompaniedCello style = new UnaccompaniedCello();
-        Stream.generate(SketchNodeFactory.getInstance()::newInstance)
-                .limit(50)
-                .peek(node -> System.out.println(node.getMat(MaterialType.NoteRanges)))
-                .map(style::qualifySketchNode)
-                .forEach(System.out::println);
-    }
-
     @Override
     public boolean qualifySketchNode(SketchNode sketchNode) {
 

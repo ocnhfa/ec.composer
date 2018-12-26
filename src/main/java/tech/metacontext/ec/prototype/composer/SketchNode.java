@@ -20,7 +20,6 @@ import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
 
 /**

@@ -15,7 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.logging.FileHandler;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -29,13 +31,18 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class CompositionFactoryTest {
 
-    static final CompositionFactory instance = CompositionFactory.getInstance();
+    static CompositionFactory instance;
     static Composer composer;
     Composition composition;
 
+    static String logfile = "src/main/resources/log/test/"
+            + LocalDateTime.now().toString().replace(":", "-") + ".log";
+
     @BeforeClass
-    public static void prepare() {
-        composer = new Composer(10, ComposerAim.Phrase,
+    public static void prepare() throws Exception {
+        FileHandler fh = new FileHandler(logfile);
+        instance = CompositionFactory.getInstance(fh);
+        composer = new Composer(10, ComposerAim.Phrase, logfile,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );

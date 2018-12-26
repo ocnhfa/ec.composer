@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer.connectors;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.FileHandler;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.SketchNode;
 import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
@@ -29,25 +30,27 @@ import tech.metacontext.ec.prototype.composer.materials.enums.*;
  */
 public class ConnectorFactory {
 
-    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
-
+    private static SketchNodeFactory sketchNodeFactory;
     private static ConnectorFactory instance;
+    private static FileHandler fh;
 
-    private ConnectorFactory() {
+    private ConnectorFactory(FileHandler fh) {
 
+        ConnectorFactory.fh = fh;
+        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
     }
 
-    public static ConnectorFactory getInstance() {
+    public static ConnectorFactory getInstance(FileHandler fh) {
 
         if (instance == null) {
-            instance = new ConnectorFactory();
+            instance = new ConnectorFactory(fh);
         }
         return instance;
     }
 
     public Connector newConnector(Predicate<SketchNode> styleChecker) {
 
-        Connector conn = new Connector();
+        Connector conn = new Connector(fh);
         conn.setStyleChecker(styleChecker);
         switch (State.getRandom()) {
             case Total:
@@ -73,7 +76,7 @@ public class ConnectorFactory {
 
     public Connector forMutation(Connector conn) {
 
-        Connector dupe = new Connector();
+        Connector dupe = new Connector(fh);
         dupe.getTransformTypes().putAll(conn.getTransformTypes());
         dupe.setStyleChecker(conn.getStyleChecker());
         dupe.setPrevious(Objects.isNull(conn.getPrevious())
@@ -83,7 +86,7 @@ public class ConnectorFactory {
 
     public Connector forArchiving(Connector conn) {
 
-        Connector dupe = new Connector(conn.getId());
+        Connector dupe = new Connector(conn.getId(), fh);
         dupe.getTransformTypes().putAll(conn.getTransformTypes());
         dupe.setStyleChecker(conn.getStyleChecker());
         dupe.setPrevious(Objects.isNull(conn.getPrevious())

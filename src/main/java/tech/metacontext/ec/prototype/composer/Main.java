@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.time.LocalDateTime;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
@@ -27,12 +28,15 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class Main {
 
     // 決定作品數量及演進世代
-    static int populationSize = 100;
+    static int popSize = 100;
     private static final int SELECTED_SIZE = 3;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        Composer composer = new Composer(populationSize, ComposerAim.Phrase,
+        String logfile = "src/main/resources/log/"
+                + LocalDateTime.now().toString().replace(":", "-") + ".log";
+
+        Composer composer = new Composer(popSize, ComposerAim.Phrase, logfile,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
@@ -53,7 +57,7 @@ public class Main {
                 .mapToObj(composer.getArchive()::get)
                 .forEach(list -> list.stream()
                 /*...*/.forEach(c -> System.out.print(c.getSize() + " ")));
-        
+
         System.out.println(header("Dumping Conservatory"));
         composer.getConservetory().forEach(System.out::println);
         composer.render();

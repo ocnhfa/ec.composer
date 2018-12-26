@@ -34,9 +34,9 @@ public class GoldenSectionClimaxTest {
     /**
      * Constructor
      */
-    public GoldenSectionClimaxTest() {
+    public GoldenSectionClimaxTest() throws Exception {
 
-        composer = new Composer(10, ComposerAim.Phrase,
+        composer = new Composer(10, ComposerAim.Phrase, null,
                 instance = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()),
                 new UnaccompaniedCello());
         IntStream.range(0, 20)

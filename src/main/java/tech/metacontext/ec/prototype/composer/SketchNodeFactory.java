@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.FileHandler;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Factory;
@@ -30,13 +31,15 @@ import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
 public class SketchNodeFactory implements Factory<SketchNode> {
 
     private static SketchNodeFactory instance;
+    private FileHandler fh;
 
-    private SketchNodeFactory() {
+    private SketchNodeFactory(FileHandler fh) {
+        this.fh = fh;
     }
 
-    public static SketchNodeFactory getInstance() {
+    public static SketchNodeFactory getInstance(FileHandler fh) {
         if (Objects.isNull(instance)) {
-            instance = new SketchNodeFactory();
+            instance = new SketchNodeFactory(fh);
         }
         return instance;
     }

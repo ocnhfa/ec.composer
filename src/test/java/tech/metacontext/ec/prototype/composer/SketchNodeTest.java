@@ -15,7 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.logging.FileHandler;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -32,9 +35,14 @@ import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
  */
 public class SketchNodeTest {
 
-    static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
+    static String logfile = "src/main/resources/log/test/"
+            + LocalDateTime.now().toString().replace(":", "-") + ".log";
+    static SketchNodeFactory sketchNodeFactory;
 
-    public SketchNodeTest() {
+    public SketchNodeTest() throws IOException {
+
+        FileHandler fh = new FileHandler(logfile);
+        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
     }
 
     @BeforeClass

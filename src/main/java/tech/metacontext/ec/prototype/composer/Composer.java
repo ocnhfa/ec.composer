@@ -22,8 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Population;
@@ -39,10 +41,12 @@ import static tech.metacontext.ec.prototype.composer.operations.MutationType.Ins
  */
 public class Composer extends Population<Composition> {
 
-    Logger _logger = Logger.getLogger(Composer.class.getName());
+    private final static Logger _logger = Logger.getLogger(Composer.class.getName());
+    public static FileHandler fh;
 
-    CompositionFactory compositionFactory = CompositionFactory.getInstance();
-    ConnectorFactory connectorfactory = ConnectorFactory.getInstance();
+    private static CompositionFactory compositionFactory;
+    private static ConnectorFactory connectorfactory;
+    private static SketchNodeFactory sketchNodeFactory;
 
     private ComposerAim aim;
     private List<Style> styles;
@@ -57,7 +61,7 @@ public class Composer extends Population<Composition> {
     /**
      * 作品收入conservatory所須達到的分數。
      */
-    static final double CONSERVE_SCORE = 0.9;
+    static final double CONSERVE_SCORE = 0.85;
     private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
@@ -65,10 +69,22 @@ public class Composer extends Population<Composition> {
      * Constructor.
      *
      * @param size
+     * @param logFilePath
      * @param aim
      * @param styles
+     * @throws java.lang.Exception
      */
-    public Composer(int size, ComposerAim aim, Style... styles) {
+    public Composer(int size, ComposerAim aim, String logFilePath, Style... styles)
+            throws Exception {
+
+        fh = new FileHandler(logFilePath, true);
+        fh.setEncoding("UTF-8");
+        fh.setFormatter(new SimpleFormatter());
+        _logger.setUseParentHandlers(false);
+        _logger.addHandler(fh);
+        this.connectorfactory = ConnectorFactory.getInstance(fh);
+        this.compositionFactory = CompositionFactory.getInstance(fh);
+        this.sketchNodeFactory = SketchNodeFactory.getInstance(fh);
 
         this.size = size;
         this.aim = aim;
@@ -81,6 +97,7 @@ public class Composer extends Population<Composition> {
                 .limit(size)
                 .collect(Collectors.toList())
         );
+
         _logger.log(Level.INFO,
                 "Composer created: size = {0}, aim = {1}, styles = {2}",
                 new Object[]{size, aim, this.styles.stream()
@@ -92,13 +109,12 @@ public class Composer extends Population<Composition> {
 
         boolean checker = this.getStyles().stream().allMatch(
                 style -> style.qualifySketchNode(node));
-        _logger.log(Level.INFO,
-                "Check SketchNode {0}, result = {1}", new Object[]{
-                    node.getId_prefix(),
-                    checker});
+//        _logger.log(Level.INFO,
+//                "Check SketchNode {0}, result = {1}", new Object[]{
+//                    node.getId_prefix(),
+//                    checker});
         return checker;
     }
-    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
 
     public SketchNode generateSeed() {
 
@@ -152,8 +168,8 @@ public class Composer extends Population<Composition> {
                 .map(e -> (this.getAim().completed(e.getKey())
                 /*...*/ && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED
                 /*...*/ && !Objects.equals(e.getKey(), e.getValue()))
-                /*.........*/? this.crossover(e.getKey(), e.getValue())
-                /*.........*/: this.mutate(e.getKey()))
+                /*.........*/ ? this.crossover(e.getKey(), e.getValue())
+                /*.........*/ : this.mutate(e.getKey()))
                 .filter(child -> !this.conserve(child))
                 .sequential()
                 .limit(size)

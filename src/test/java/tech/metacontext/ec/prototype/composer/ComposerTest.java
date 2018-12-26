@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -37,11 +38,14 @@ public class ComposerTest {
 
     static Composer instance;
     static final int PRESET_POPULATION_SIZE = 30;
+    static String logfile = "src/main/resources/log/"
+            + LocalDateTime.now().toString().replace(":", "-") + ".log";
 
     @BeforeClass
-    public static void prepare() {
+    public static void prepare() throws Exception {
         instance = new Composer(PRESET_POPULATION_SIZE, ComposerAim.Phrase,
-                new UnaccompaniedCello(),
+                logfile,
+                new UnaccompaniedCello(), 
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()));
         assertEquals(PRESET_POPULATION_SIZE, instance.getSize());
         assertEquals(instance.getSize(), instance.getPopulationSize());

@@ -19,6 +19,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.logging.FileHandler;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.SketchNode;
@@ -34,27 +35,30 @@ import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
 public class Connector extends Individual {
 
     private final Map<MaterialType, TransformType> transformTypes;
+    private static SketchNodeFactory sketchNodeFactory;
     //@todo consider why need stylecheker in connector
     private Predicate<SketchNode> styleChecker;
     private SketchNode previous;
     private SketchNode next;
 
-    public Connector() {
+    public Connector(FileHandler fh) {
 
         this.transformTypes = new HashMap<>();
+        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
+
     }
 
-    public Connector(String id) {
+    public Connector(String id, FileHandler fh) {
 
         super(id);
         this.transformTypes = new HashMap<>();
+        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
     }
 
     public void addTransformType(MaterialType mt, TransformType tt) {
 
         this.transformTypes.put(mt, tt);
     }
-    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
 
     public SketchNode transform() {
 

@@ -15,6 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.logging.FileHandler;
 import org.junit.Test;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
@@ -28,10 +31,16 @@ import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
  */
 public class ConnectorTest {
 
-    static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
-    static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
+    static ConnectorFactory connectorFactory;
+    static SketchNodeFactory sketchNodeFactory;
+    static String logfile = "src/main/resources/log/test/"
+            + LocalDateTime.now().toString().replace(":", "-") + ".log";
 
-    public ConnectorTest() {
+    public ConnectorTest() throws IOException {
+        
+        FileHandler fh = new FileHandler(logfile);
+        connectorFactory = ConnectorFactory.getInstance(fh);
+        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
     }
 
     @Test

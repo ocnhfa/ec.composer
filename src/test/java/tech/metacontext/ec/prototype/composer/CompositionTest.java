@@ -18,9 +18,11 @@ package tech.metacontext.ec.prototype.composer;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.FileHandler;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -38,11 +40,14 @@ public class CompositionTest {
 
     static CompositionFactory compositionFactory;
     static Composer composer;
+    static String logfile = "src/main/resources/log/test/"
+            + LocalDateTime.now().toString().replace(":", "-") + ".log";
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        compositionFactory = CompositionFactory.getInstance();
-        composer = new Composer(1, ComposerAim.Phrase,
+        FileHandler fh = new FileHandler(logfile);
+        compositionFactory = CompositionFactory.getInstance(fh);
+        composer = new Composer(1, ComposerAim.Phrase, logfile,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );

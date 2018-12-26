@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -45,29 +46,34 @@ public class Composition extends Individual<CompositionEval> {
 
     static final Logger _logger = Logger.getLogger(Composition.class.getName());
 
-    private static ConnectorFactory factory = ConnectorFactory.getInstance();
-    private final LinkedList<Connector> connectors;
-    private final LinkedList<SketchNode> rendered;
+    private static ConnectorFactory connectorFactory;
+    private LinkedList<Connector> connectors;
+    private LinkedList<SketchNode> rendered;
     private SketchNode seed;
 
-    public Composition(Collection<? extends Style> styles) {
+    public Composition(FileHandler fh, Collection<? extends Style> styles) {
 
-        this.rendered = new LinkedList<>();
-        this.connectors = new LinkedList<>();
-        this.setEval(new CompositionEval(styles));
+        setup(fh, styles);
     }
 
-    public Composition(String id, Collection<? extends Style> styles) {
+    public Composition(FileHandler fh, String id, Collection<? extends Style> styles) {
 
         super(id);
+        setup(fh, styles);
+    }
+
+    public void setup(FileHandler fh, Collection<? extends Style> styles) {
+
+        _logger.addHandler(fh);
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));
+        connectorFactory = ConnectorFactory.getInstance(fh);
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
 
-        this.addConnector(factory.newConnector(styleChecker));
+        this.addConnector(connectorFactory.newConnector(styleChecker));
         return this;
     }
 

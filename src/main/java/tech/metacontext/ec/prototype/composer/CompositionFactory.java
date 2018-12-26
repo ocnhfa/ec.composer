@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -33,19 +34,27 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class CompositionFactory implements Factory<Composition> {
 
-    private static final Logger _logger = Logger.getLogger(CompositionFactory.class.getName());
-    private static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
-    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
-
+    private static final Logger _logger
+            = Logger.getLogger(Composition.class.getName());
+    private static ConnectorFactory connectorFactory;
+    private static SketchNodeFactory sketchNodeFactory;
     private static CompositionFactory instance;
 
-    private CompositionFactory() {
+    private static FileHandler fh;
+
+    private CompositionFactory(FileHandler fh) {
+
+        this.fh = fh;
+        _logger.setUseParentHandlers(false);
+        _logger.addHandler(fh);
+        connectorFactory = ConnectorFactory.getInstance(fh);
+        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
     }
 
-    public static CompositionFactory getInstance() {
+    public static CompositionFactory getInstance(FileHandler fh) {
 
         if (Objects.isNull(instance)) {
-            instance = new CompositionFactory();
+            instance = new CompositionFactory(fh);
         }
         return instance;
     }
@@ -60,7 +69,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition forArchiving(Composition origin) {
 
         origin.ifReRenderRequired();
-        Composition dupe = new Composition(origin.getId(),
+        Composition dupe = new Composition(fh, origin.getId(),
                 origin.getEval().getStyles());
         dupe.getRendered().addAll(origin.getRenderedChecked());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
@@ -82,7 +91,7 @@ public class CompositionFactory implements Factory<Composition> {
      */
     public Composition forMutation(Composition origin) {
 
-        Composition dupe = new Composition(origin.getEval().getStyles());
+        Composition dupe = new Composition(fh, origin.getEval().getStyles());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
@@ -96,7 +105,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition newInstance(Predicate<SketchNode> styleChecker,
             Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition(styles);
+        Composition newInstance = new Composition(fh, styles);
         Connector conn = connectorFactory.newConnectorWithSeed(styleChecker);
         newInstance.addConnector(conn);
         newInstance.setSeed(conn.getPrevious());
@@ -106,7 +115,7 @@ public class CompositionFactory implements Factory<Composition> {
     Composition forCrossover(SketchNode seed, Connector conn,
             Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition(styles);
+        Composition newInstance = new Composition(fh, styles);
         Connector dupeConn = connectorFactory
                 .newConnectorWithSeed(conn.getStyleChecker());
         newInstance.addConnector(dupeConn);
