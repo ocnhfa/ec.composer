@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.AbstractMap.SimpleEntry;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +57,7 @@ public class Composer extends Population<Composition> {
     /**
      * 作品收入conservatory所須達到的分數。
      */
-    static final double CONSERVE_SCORE = 0.85;
+    static final double CONSERVE_SCORE = 0.9;
     private static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
@@ -143,32 +144,46 @@ public class Composer extends Population<Composition> {
     @Override
     public void evolve() {
 
-        List<Composition> children = new ArrayList<>();
-        do {
-            //1.選出一條
-            //2.若not completed則mutate -> children
-            //3.若completed則決定是否走mutate, yes -> mutate -> children
-            //4.若走crossover則選出另一條completed(也許是自己)
-            //5.crossover -> children
-            Composition sel_1 = this.randomSelect(SELECT_FROM_ALL);
-            Composition sel_2 = this.randomSelect(SELECT_ONLY_COMPLETED);
-            Composition child;
-            if (this.getAim().completed(sel_1)
-                    && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED
-                    && !Objects.equals(sel_1, sel_2)) {
-                child = this.crossover(sel_1, sel_2);
-            } else {
-                child = this.mutate(sel_1);
-            }
-            children.add(child);
-            int original = children.size();
-            children.removeIf(this::conserve);
-            if (original - children.size() > 0) {
-                _logger.log(Level.INFO,
-                        "Evloving, {0} Composition(s) conserved.",
-                        original - children.size());
-            }
-        } while (children.size() < this.getSize());
+        List<Composition> children = Stream.generate(()
+                -> new SimpleEntry<>(this.randomSelect(SELECT_FROM_ALL),
+                        this.randomSelect(SELECT_ONLY_COMPLETED)))
+                .unordered()
+                .parallel()
+                .map(e -> (this.getAim().completed(e.getKey())
+                /*...*/ && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED
+                /*...*/ && !Objects.equals(e.getKey(), e.getValue()))
+                /*.........*/? this.crossover(e.getKey(), e.getValue())
+                /*.........*/: this.mutate(e.getKey()))
+                .filter(child -> !this.conserve(child))
+                .sequential()
+                .limit(size)
+                .collect(Collectors.toList());
+
+//        do {
+//            //1.選出一條
+//            //2.若not completed則mutate -> children
+//            //3.若completed則決定是否走mutate, yes -> mutate -> children
+//            //4.若走crossover則選出另一條completed(也許是自己)
+//            //5.crossover -> children
+//            Composition sel_1 = this.randomSelect(SELECT_FROM_ALL);
+//            Composition sel_2 = this.randomSelect(SELECT_ONLY_COMPLETED);
+//            Composition child;
+//            if (this.getAim().completed(sel_1)
+//                    && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED
+//                    && !Objects.equals(sel_1, sel_2)) {
+//                child = this.crossover(sel_1, sel_2);
+//            } else {
+//                child = this.mutate(sel_1);
+//            }
+//            children.add(child);
+//            int original = children.size();
+//            children.removeIf(this::conserve);
+//            if (original - children.size() > 0) {
+//                _logger.log(Level.INFO,
+//                        "Evloving, {0} Composition(s) conserved.",
+//                        original - children.size());
+//            }
+//        } while (children.size() < this.getSize());
         _logger.log(Level.INFO,
                 "Evloving finished. New population: {0} Compositions: {1}",
                 new Object[]{children.size(),

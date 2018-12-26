@@ -173,11 +173,12 @@ public class Composition extends Individual<CompositionEval> {
     @Override
     public String toString() {
 
-        return String.format("%s (size = %d):\n  %s\n",
-                super.toString(), this.getSize(),
-                this.getConnectors().stream()
+        String result = super.toString() + String.format("(size = %d):\n", this.getSize())
+                + String.format(Composer.output(this))
+                + this.getConnectors().stream()
                         .map(Connector::toString)
-                        .collect(Collectors.joining("\n  ")));
+                        .collect(Collectors.joining("\n "));
+        return result;
     }
 
     public Path persistent() {

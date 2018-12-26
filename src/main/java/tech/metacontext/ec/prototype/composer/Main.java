@@ -27,7 +27,7 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class Main {
 
     // 決定作品數量及演進世代
-    static int populationSize = 50;
+    static int populationSize = 100;
     private static final int SELECTED_SIZE = 3;
 
     public static void main(String[] args) {
