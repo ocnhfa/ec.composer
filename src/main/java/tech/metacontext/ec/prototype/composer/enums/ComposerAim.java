@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
-import tech.metacontext.ec.prototype.composer.Composition;
+import tech.metacontext.ec.prototype.composer.model.Composition;
 
 /**
  *

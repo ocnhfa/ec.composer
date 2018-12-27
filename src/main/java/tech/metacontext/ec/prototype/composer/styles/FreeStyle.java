@@ -15,8 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import tech.metacontext.ec.prototype.composer.Composition;
-import tech.metacontext.ec.prototype.composer.SketchNode;
+import tech.metacontext.ec.prototype.composer.model.Composition;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
 
 /**
  *

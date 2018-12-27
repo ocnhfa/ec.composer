@@ -15,6 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import tech.metacontext.ec.prototype.composer.model.*;
+import tech.metacontext.ec.prototype.composer.enums.mats.*;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -22,9 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
-import tech.metacontext.ec.prototype.composer.*;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.enums.*;
 
 /**
  *
@@ -66,7 +67,6 @@ public class GoldenSectionClimax extends Style {
         List<Double> scores = new ArrayList<>();
         double base = 0.0;
         for (int i = 0; i < composition.getSize(); i++) {
-//            System.out.printf("(%d)", i);
             double standard = (i < peakNodeIndex)
                     ? i * peak / peakNodeIndex
                     : (composition.getSize() - i - 1) * peak
@@ -75,14 +75,8 @@ public class GoldenSectionClimax extends Style {
                     * Math.abs(climaxIndexes.get(i) - standard);
             scores.add(score);
             base += standard * peak;
-//            System.out.printf("%.2f/%.2f ", score, standard);
         }
         double sum = scores.stream().mapToDouble(d -> d).sum();
-//        System.out.println("");
-//        System.out.println("peak=" + peak);
-//        System.out.println("pki =" + peakNodeIndex);
-//        System.out.println("sum =" + sum);
-//        System.out.println("base=" + base);
         return (base - sum) / base;
     }
 

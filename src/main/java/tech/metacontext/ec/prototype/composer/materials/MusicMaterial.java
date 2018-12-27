@@ -17,7 +17,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.ArrayList;
 import java.util.List;
-import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
 
 /**
  *

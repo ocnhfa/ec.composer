@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.operations;
-
-import tech.metacontext.ec.prototype.composer.enums.ConnectingState;
-import static tech.metacontext.ec.prototype.composer.enums.ConnectingState.TOTAL_RATIO;
+package tech.metacontext.ec.prototype.composer.enums.mats;
 
 /**
  *
  * @author Jonathan
  */
-public enum CrossoverType {
+public enum Intensity {
 
-//    public static CrossoverType getRandom() {
-//
-//        return Math.random() < TOTAL_RATIO ? State.Total : State.ByItem;
-//    }
+    pppp, ppp, pp, p, mp, mf, f, ff, fff, ffff;
+
+    public double getIntensityIndex() {
+
+        return 1.0 * this.ordinal() / (values().length - 1);
+    }
 }

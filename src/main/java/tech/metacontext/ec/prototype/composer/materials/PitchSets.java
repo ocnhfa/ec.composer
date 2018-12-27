@@ -15,14 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
-import tech.metacontext.ec.prototype.composer.materials.enums.PitchSet;
+import tech.metacontext.ec.prototype.composer.enums.mats.PitchSet;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.materials.enums.PitchSetFactory;
+import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
 
 /**
  *

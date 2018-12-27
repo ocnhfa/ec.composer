@@ -18,8 +18,10 @@ package tech.metacontext.ec.prototype.composer.styles;
 import java.util.stream.IntStream;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tech.metacontext.ec.prototype.composer.Composer;
-import tech.metacontext.ec.prototype.composer.Composition;
+import tech.metacontext.ec.prototype.composer.Settings;
+import static tech.metacontext.ec.prototype.composer.Settings.logfile_test;
+import tech.metacontext.ec.prototype.composer.model.Composer;
+import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 
 /**
@@ -36,7 +38,7 @@ public class GoldenSectionClimaxTest {
      */
     public GoldenSectionClimaxTest() throws Exception {
 
-        composer = new Composer(10, ComposerAim.Phrase, null,
+        composer = new Composer(10, ComposerAim.Phrase, Settings.RENEW_TEST,
                 instance = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()),
                 new UnaccompaniedCello());
         IntStream.range(0, 20)

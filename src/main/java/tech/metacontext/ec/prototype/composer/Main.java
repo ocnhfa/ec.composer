@@ -15,8 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.time.LocalDateTime;
+import tech.metacontext.ec.prototype.composer.model.Composer;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Settings.logfile;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
@@ -33,10 +34,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        String logfile = "src/main/resources/log/"
-                + LocalDateTime.now().toString().replace(":", "-") + ".log";
-
-        Composer composer = new Composer(popSize, ComposerAim.Phrase, logfile,
+        Composer composer = new Composer(popSize, ComposerAim.Phrase,
+                Settings.RENEW,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
@@ -44,7 +43,7 @@ public class Main {
         StringBuilder output = new StringBuilder("Generation...");
         do {
             output.append(".");
-            if (output.length() >= 120) {
+            if (output.length() >= 100) {
                 System.out.println(output);
                 output = new StringBuilder(composer.getGenCount() + ":");
             }

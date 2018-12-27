@@ -15,14 +15,13 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
+import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.logging.FileHandler;
 import org.junit.Test;
 import org.junit.Ignore;
-import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**
@@ -33,14 +32,11 @@ public class ConnectorTest {
 
     static ConnectorFactory connectorFactory;
     static SketchNodeFactory sketchNodeFactory;
-    static String logfile = "src/main/resources/log/test/"
-            + LocalDateTime.now().toString().replace(":", "-") + ".log";
 
     public ConnectorTest() throws IOException {
-        
-        FileHandler fh = new FileHandler(logfile);
-        connectorFactory = ConnectorFactory.getInstance(fh);
-        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
+
+        connectorFactory = ConnectorFactory.getInstance();
+        sketchNodeFactory = SketchNodeFactory.getInstance();
     }
 
     @Test

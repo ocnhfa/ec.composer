@@ -22,11 +22,11 @@ import java.util.function.Predicate;
 import java.util.logging.FileHandler;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.materials.enums.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
 
 /**
  *
@@ -41,18 +41,18 @@ public class Connector extends Individual {
     private SketchNode previous;
     private SketchNode next;
 
-    public Connector(FileHandler fh) {
+    public Connector() {
 
         this.transformTypes = new HashMap<>();
-        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
+        sketchNodeFactory = SketchNodeFactory.getInstance();
 
     }
 
-    public Connector(String id, FileHandler fh) {
+    public Connector(String id) {
 
         super(id);
         this.transformTypes = new HashMap<>();
-        sketchNodeFactory = SketchNodeFactory.getInstance(fh);
+        sketchNodeFactory = SketchNodeFactory.getInstance();
     }
 
     public void addTransformType(MaterialType mt, TransformType tt) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Jonathan.
+ * Copyright 2018 Jonathan Chang.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.operations;
-
-import tech.metacontext.ec.prototype.composer.enums.ConnectingState;
-import static tech.metacontext.ec.prototype.composer.enums.ConnectingState.TOTAL_RATIO;
+package tech.metacontext.ec.prototype.composer.enums;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang
  */
-public enum CrossoverType {
+public enum ConnectingState {
+    Total,
+    ByItem;
 
-//    public static CrossoverType getRandom() {
-//
-//        return Math.random() < TOTAL_RATIO ? State.Total : State.ByItem;
-//    }
+    public static final double TOTAL_RATIO = 0.4;
+
+    public static ConnectingState getRandom() {
+
+        return Math.random() < TOTAL_RATIO ? ConnectingState.Total : ConnectingState.ByItem;
+    }
+
 }

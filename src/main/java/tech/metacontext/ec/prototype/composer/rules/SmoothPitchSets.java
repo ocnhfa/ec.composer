@@ -18,7 +18,7 @@ package tech.metacontext.ec.prototype.composer.rules;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.materials.enums.Pitch;
+import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 import tech.metacontext.ec.prototype.composer.materials.PitchSets;
 
 /**

@@ -1,0 +1,90 @@
+Composition [0aab8391-ed08](size = 9):
+[0aab8391-ed08] UnaccompaniedCello: 1.000 | GoldenSectionClimax: 0.891
+Connector [64c72fd5-77e0]{NoteRanges=MoveBackward, PitchSets=MoveBackward, Dynamics=MoveBackward, RhythmicPoints=MoveBackward} 
+from: SketchNode [cf7e29d1-fdd4]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ D_flat, E, B_flat ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ => SketchNode [d4963e5d-511c]{
+-   NoteRanges (div=2): [C2, C3]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [p, f]
+-   RhythmicPoints (div=1): [3]}
+ Connector [547ab746-34af]{NoteRanges=MoveForward, PitchSets=MoveForward, Dynamics=MoveForward, RhythmicPoints=MoveForward} 
+from: SketchNode [d4963e5d-511c]{
+-   NoteRanges (div=2): [C2, C3]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [p, f]
+-   RhythmicPoints (div=1): [3]}
+ => SketchNode [ba28bc80-5187]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ D_flat, E, B_flat ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ Connector [ef900cce-4ac9]{NoteRanges=MoveBackward, PitchSets=MoveBackward, Dynamics=MoveBackward, RhythmicPoints=MoveBackward} 
+from: SketchNode [ba28bc80-5187]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ D_flat, E, B_flat ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ => SketchNode [85002bc2-9547]{
+-   NoteRanges (div=2): [C2, C3]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [p, f]
+-   RhythmicPoints (div=1): [3]}
+ Connector [a52763a4-4508]{NoteRanges=MoveForward, PitchSets=Repetition, Dynamics=Repetition, RhythmicPoints=Retrograde} 
+from: SketchNode [85002bc2-9547]{
+-   NoteRanges (div=2): [C2, C3]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [p, f]
+-   RhythmicPoints (div=1): [3]}
+ => SketchNode [5eebadf3-0264]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [p, f]
+-   RhythmicPoints (div=1): [3]}
+ Connector [0f7b7d5c-7e26]{NoteRanges=MoveForward, PitchSets=MoveForward, Dynamics=MoveForward, RhythmicPoints=MoveForward} 
+from: SketchNode [5eebadf3-0264]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [p, f]
+-   RhythmicPoints (div=1): [3]}
+ => SketchNode [8ea4afb3-8944]{
+-   NoteRanges (div=2): [C4, C5]
+-   PitchSets (div=1): [PitchSet[ D_flat, E, B_flat ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ Connector [5a4cfd30-b2dc]{NoteRanges=Repetition, PitchSets=MoveBackward, Dynamics=MoveForward, RhythmicPoints=MoveForward} 
+from: SketchNode [8ea4afb3-8944]{
+-   NoteRanges (div=2): [C4, C5]
+-   PitchSets (div=1): [PitchSet[ D_flat, E, B_flat ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ => SketchNode [2b2aefab-ee26]{
+-   NoteRanges (div=2): [C4, C5]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [mf, fff]
+-   RhythmicPoints (div=1): [5]}
+ Connector [c9cda5fd-a3ff]{NoteRanges=MoveBackward, PitchSets=MoveBackward, Dynamics=MoveBackward, RhythmicPoints=MoveBackward} 
+from: SketchNode [2b2aefab-ee26]{
+-   NoteRanges (div=2): [C4, C5]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [mf, fff]
+-   RhythmicPoints (div=1): [5]}
+ => SketchNode [7b30f5bc-b277]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ D, A_flat, B ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ Connector [e5431434-ae21]{NoteRanges=MoveBackward, PitchSets=MoveForward, Dynamics=Repetition, RhythmicPoints=Disconnected} 
+from: SketchNode [7b30f5bc-b277]{
+-   NoteRanges (div=2): [C3, C4]
+-   PitchSets (div=1): [PitchSet[ D, A_flat, B ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=1): [4]}
+ => SketchNode [46eba8c5-89e4]{
+-   NoteRanges (div=2): [C2, C3]
+-   PitchSets (div=1): [PitchSet[ C, E_flat, A ]]
+-   Dynamics (div=2): [mp, ff]
+-   RhythmicPoints (div=2): [5, 3]}

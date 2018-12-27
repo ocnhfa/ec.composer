@@ -18,11 +18,11 @@ package tech.metacontext.ec.prototype.composer.styles;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.Composition;
-import tech.metacontext.ec.prototype.composer.SketchNode;
-import tech.metacontext.ec.prototype.composer.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer.materials.enums.Range;
-import tech.metacontext.ec.prototype.composer.materials.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.model.Composition;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.enums.mats.Range;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 
 /**
  *

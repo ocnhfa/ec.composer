@@ -13,19 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.operations;
+package tech.metacontext.ec.prototype.composer.enums.mats;
 
-import tech.metacontext.ec.prototype.composer.enums.ConnectingState;
-import static tech.metacontext.ec.prototype.composer.enums.ConnectingState.TOTAL_RATIO;
+import java.util.Random;
 
 /**
  *
  * @author Jonathan
  */
-public enum CrossoverType {
+public enum TransformType {
 
-//    public static CrossoverType getRandom() {
-//
-//        return Math.random() < TOTAL_RATIO ? State.Total : State.ByItem;
-//    }
+    Repetition(0.5),
+    MoveForward(1.0),
+    MoveBackward(1.0),
+    Retrograde(0.8),
+    Disconnected(1.0);
+
+    double weighting;
+
+    private TransformType(double weighting) {
+
+        this.weighting = weighting;
+    }
+
+    public static TransformType getRandom() {
+
+        return new Random().ints(0, values().length)
+                .mapToObj(i -> values()[i])
+                .filter(tt -> Math.random() < tt.weighting)
+                .findFirst().get();
+    }
+
 }
