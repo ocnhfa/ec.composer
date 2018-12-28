@@ -25,10 +25,10 @@ import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.enums.mats.Range;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
+import tech.metacontext.ec.prototype.composer.TestCenter;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 
 /**
  *
@@ -36,17 +36,33 @@ import static tech.metacontext.ec.prototype.composer.Settings.*;
  */
 public class ComposerTest {
 
-    static Composer instance;
-    static final int PRESET_POPULATION_SIZE = 30;
+    static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
+
+    static TestCenter tc;
 
     @BeforeClass
-    public static void prepare() throws Exception {
-        instance = new Composer(PRESET_POPULATION_SIZE, ComposerAim.Phrase,
-                RENEW_TEST,
-                new UnaccompaniedCello(),
-                new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()));
-        assertEquals(PRESET_POPULATION_SIZE, instance.getSize());
-        assertEquals(instance.getSize(), instance.getPopulationSize());
+    public static void prepare() {
+        tc = TestCenter.getInstance();
+        assertEquals(tc.PRESET_POPULATION_SIZE, tc.getComposer().getSize());
+        assertEquals(tc.getComposer().getSize(), tc.getComposer().getPopulationSize());
+    }
+
+    /**
+     * Test of crossover method, of class Composer.
+     */
+    @Test
+    public void testCrossover() {
+        System.out.println("crossover");
+        Composition p1, p2;
+        do {
+            tc.getComposer().compose().evolve();
+            p1 = tc.getComposer().randomSelect(Composer.SELECT_ONLY_COMPLETED);
+            p2 = tc.getComposer().randomSelect(Composer.SELECT_ONLY_COMPLETED);
+        } while (tc.getComposer().randomSelect(Composer.SELECT_ONLY_COMPLETED) == null
+                || Objects.equals(p1, p2)
+                || p1.getSize() == p2.getSize());
+        Composition result = tc.getComposer().crossover(p1, p2);
+        assertEquals(result.getSize(), Math.max(p1.getSize(), p2.getSize()));
     }
 
     /**
@@ -55,12 +71,12 @@ public class ComposerTest {
     @Test
     public void testCompose() {
         System.out.println("compose");
-        while (instance.getConservetory().size() < 2) {
-            instance.compose().evolve();
+        while (tc.getComposer().getConservetory().size() < 2) {
+            tc.getComposer().compose().evolve();
         }
         System.out.println("--conservatory--");
-        System.out.println(instance.getConservetory());
-        instance.render();
+        System.out.println(tc.getComposer().getConservetory());
+        tc.getComposer().render();
     }
 
     /**
@@ -71,28 +87,23 @@ public class ComposerTest {
         System.out.println("randomSelect");
         int state = Composer.SELECT_ONLY_COMPLETED;
         Composition result = Stream.generate(() -> {
-            instance.compose().evolve();
-            return instance.randomSelect(state);
+            tc.getComposer().compose().evolve();
+            return tc.getComposer().randomSelect(state);
         })
                 .filter(Objects::nonNull)
                 .findFirst()
                 .get();
-        assertTrue(instance.getAim().completed(result));
+        assertTrue(tc.getComposer().getAim().completed(result));
     }
 
     @Test
     public void testStyleChecker() {
         System.out.println("styleChecker");
-        System.out.println("generateSeed");
-        SketchNode node = instance.generateSeed();
-        assertTrue(Stream.generate(() -> instance.styleChecker(node))
-                .filter(b -> b)
-                .findFirst()
-                .get());
+        SketchNode node = sketchNodeFactory.newInstance(tc.getComposer().styleChecker);
         node.getMat(MaterialType.NoteRanges).setMaterials(List.of(Range.C0));
-        assertFalse(Stream.generate(() -> instance.styleChecker(node))
+        assertFalse(Stream.generate(() -> tc.getComposer().styleChecker)
                 .limit(100)
-                .allMatch(b -> b));
+                .allMatch(b -> b.test(node)));
     }
 
     /**
@@ -101,28 +112,28 @@ public class ComposerTest {
     @Test
     public void testConserve() {
         System.out.println("conserve");
-        while (instance.getConservetory().size() < 3) {
-            instance.compose().evolve();
+        while (tc.getComposer().getConservetory().size() < 3) {
+            tc.getComposer().compose().evolve();
         }
-        System.out.println(Composer.output(instance.getConservetory().toArray(Composition[]::new)));
-        instance.getConservetory().forEach(c -> {
+        System.out.println(Composer.output(tc.getComposer().getConservetory().toArray(Composition[]::new)));
+        tc.getComposer().getConservetory().forEach(c -> {
             System.out.println(c.getId_prefix());
             System.out.println(c.getConnectors().size());
             System.out.println(c.getRendered().size());
         });
-//        System.out.println(instance.getConservetory().get(0));
-        while (instance.getConservetory().size() > 0) {
-            Composition c = instance.getConservetory().remove(0);
+//        System.out.println( tc.getComposer().getConservetory().get(0));
+        while (tc.getComposer().getConservetory().size() > 0) {
+            Composition c = tc.getComposer().getConservetory().remove(0);
             System.out.println(Composer.output(c));
-            boolean expResult = instance.getStyles().stream()
+            boolean expResult = tc.getComposer().getStyles().stream()
                     .map(c::getScore)
                     .allMatch(score -> score > CONSERVE_SCORE);
             System.out.println(Composer.output(c));
             System.out.println("expResult = " + expResult);
-            boolean result = instance.conserve(c);
+            boolean result = tc.getComposer().conserve(c);
             System.out.println("Result = " + result);
             assertEquals(expResult, result);
-            instance.getConservetory().remove(c);
+            tc.getComposer().getConservetory().remove(c);
         }
     }
 
@@ -134,7 +145,7 @@ public class ComposerTest {
     public void testEvolve() {
         System.out.println("evolve");
         Composer instance = null;
-        instance.evolve();
+        tc.getComposer().evolve();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -147,7 +158,7 @@ public class ComposerTest {
     public void testRender() {
         System.out.println("render");
         Composer instance = null;
-        instance.render();
+        tc.getComposer().render();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -161,7 +172,7 @@ public class ComposerTest {
         System.out.println("addStyle");
         Style style = null;
         Composer instance = null;
-        instance.addStyle(style);
+        tc.getComposer().addStyle(style);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -175,7 +186,7 @@ public class ComposerTest {
         System.out.println("getStyles");
         Composer instance = null;
         List<? extends Style> expResult = null;
-        List<? extends Style> result = instance.getStyles();
+        List<? extends Style> result = tc.getComposer().getStyles();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -190,7 +201,7 @@ public class ComposerTest {
         System.out.println("setStyles");
         List<Style> styles = null;
         Composer instance = null;
-        instance.setStyles(styles);
+        tc.getComposer().setStyles(styles);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -204,7 +215,7 @@ public class ComposerTest {
         System.out.println("getAim");
         Composer instance = null;
         ComposerAim expResult = null;
-        ComposerAim result = instance.getAim();
+        ComposerAim result = tc.getComposer().getAim();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -219,7 +230,7 @@ public class ComposerTest {
         System.out.println("setAim");
         ComposerAim aim = null;
         Composer instance = null;
-        instance.setAim(aim);
+        tc.getComposer().setAim(aim);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -233,7 +244,7 @@ public class ComposerTest {
         System.out.println("getConservetory");
         Composer instance = null;
         List<Composition> expResult = null;
-        List<Composition> result = instance.getConservetory();
+        List<Composition> result = tc.getComposer().getConservetory();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -248,7 +259,7 @@ public class ComposerTest {
         System.out.println("getSize");
         Composer instance = null;
         int expResult = 0;
-        int result = instance.getSize();
+        int result = tc.getComposer().getSize();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -263,7 +274,7 @@ public class ComposerTest {
         System.out.println("setSize");
         int size = 0;
         Composer instance = null;
-        instance.setSize(size);
+        tc.getComposer().setSize(size);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -278,24 +289,7 @@ public class ComposerTest {
         Composition origin = null;
         Composer instance = null;
         Composition expResult = null;
-        Composition result = instance.mutate(origin);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of crossover method, of class Composer.
-     */
-    @Test
-    @Ignore
-    public void testCrossover() {
-        System.out.println("crossover");
-        Composition parent1 = null;
-        Composition parent2 = null;
-        Composer instance = null;
-        Composition expResult = null;
-        Composition result = instance.crossover(parent1, parent2);
+        Composition result = tc.getComposer().mutate(origin);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

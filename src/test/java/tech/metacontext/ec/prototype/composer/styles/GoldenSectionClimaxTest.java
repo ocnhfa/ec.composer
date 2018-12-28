@@ -15,14 +15,11 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import java.util.stream.IntStream;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tech.metacontext.ec.prototype.composer.Settings;
-import static tech.metacontext.ec.prototype.composer.Settings.logfile_test;
-import tech.metacontext.ec.prototype.composer.model.Composer;
+import org.junit.BeforeClass;
+import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.model.Composition;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 
 /**
  *
@@ -31,27 +28,18 @@ import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 public class GoldenSectionClimaxTest {
 
     GoldenSectionClimax instance;
-    Composer composer;
+    static TestCenter tc;
 
-    /**
-     * Constructor
-     */
-    public GoldenSectionClimaxTest() throws Exception {
-
-        composer = new Composer(10, ComposerAim.Phrase, Settings.RENEW_TEST,
-                instance = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet()),
-                new UnaccompaniedCello());
-        IntStream.range(0, 20)
-                //                .peek(System.out::println)
-                .forEach(i -> composer.compose().evolve());
-//        System.out.println(composer.getConservetory().size());
+    @BeforeClass
+    public static void prepare() {
+        tc = TestCenter.getInstance();
     }
 
     @Test
     public void testClimaxIndex() {
 
         System.out.println("climaxIndex");
-        composer.getPopulation().stream()
+        tc.getComposer().getPopulation().stream()
                 .limit(1)
                 .peek(System.out::println)
                 .map(Composition::getRenderedChecked)
@@ -70,7 +58,7 @@ public class GoldenSectionClimaxTest {
     public void testRateComposition() {
 
         System.out.println("rateComposition");
-        composer.getPopulation().stream()
+        tc.getComposer().getPopulation().stream()
                 .peek(composition -> {
 //                    System.out.println(composition.getId());
                     composition.getRenderedChecked().stream()

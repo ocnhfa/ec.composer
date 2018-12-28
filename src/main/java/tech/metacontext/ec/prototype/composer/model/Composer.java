@@ -15,25 +15,23 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
-import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.composer.factory.*;
 import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.operations.MutationType;
+import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.abs.Population;
-import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.operations.MutationType;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import static tech.metacontext.ec.prototype.composer.operations.MutationType.Deletion;
-import static tech.metacontext.ec.prototype.composer.operations.MutationType.Insertion;
 
 /**
  *
@@ -46,7 +44,6 @@ public class Composer extends Population<Composition> {
 
     private static CompositionFactory compositionFactory;
     private static ConnectorFactory connectorfactory;
-    private static SketchNodeFactory sketchNodeFactory;
 
     private ComposerAim aim;
     private List<Style> styles;
@@ -60,15 +57,15 @@ public class Composer extends Population<Composition> {
      * Constructor.
      *
      * @param size
-     * @param state
+     * @param logState: USE_EXISTING = 0, RENEW = 1, RENEW_TEST = 2;
      * @param aim
      * @param styles
      * @throws java.lang.Exception
      */
-    public Composer(int size, ComposerAim aim, int state, Style... styles)
+    public Composer(int size, ComposerAim aim, int logState, Style... styles)
             throws Exception {
 
-        setFileHandler(state, _logger);
+        setFileHandler(logState, _logger);
 
         _logger.log(Level.INFO,
                 "Initializing ConnectorFactory...");
@@ -77,10 +74,6 @@ public class Composer extends Population<Composition> {
         _logger.log(Level.INFO,
                 "Initializing CompositionFactory...");
         Composer.compositionFactory = CompositionFactory.getInstance();
-
-        _logger.log(Level.INFO,
-                "Initializing SketchNodeFactory...");
-        Composer.sketchNodeFactory = SketchNodeFactory.getInstance();
 
         this.size = size;
         this.aim = aim;
@@ -91,7 +84,7 @@ public class Composer extends Population<Composition> {
                 "Initializing Composition Population...");
         this.setPopulation(Stream.generate(()
                 -> compositionFactory.newInstance(
-                        this::styleChecker, this.styles))
+                        styleChecker, this.styles))
                 .limit(size)
                 .collect(Collectors.toList()));
 
@@ -102,27 +95,8 @@ public class Composer extends Population<Composition> {
                             .collect(Collectors.joining(", "))});
     }
 
-    /**
-     * Check if a newly generate SketchNode matches the required styles.
-     *
-     * @param node
-     * @return
-     */
-    public boolean styleChecker(SketchNode node) {
-
-//        _logger.log(Level.INFO,
-//                "Qualifying SketchNode {0}", node.getId_prefix());
-        return this.getStyles().stream()
-                .allMatch(style -> style.qualifySketchNode(node));
-    }
-
-    public SketchNode generateSeed() {
-
-        SketchNode seed = sketchNodeFactory.newInstance(this::styleChecker);
-        _logger.log(Level.INFO,
-                "Seed {0} generated.", seed.getId_prefix());
-        return seed;
-    }
+    public Predicate<SketchNode> styleChecker = (node) -> this.getStyles().stream()
+            .allMatch(s -> s.qualifySketchNode(node));
 
     public Composer compose() {
 
@@ -136,7 +110,7 @@ public class Composer extends Population<Composition> {
         long num_elongated = this.getPopulation().stream()
                 .filter(this::toBeElongated)
                 .peek(c -> {
-                    c.elongation(this::styleChecker);
+                    c.elongation(this.styleChecker);
                     _logger.log(Level.INFO,
                             "Composition {0} been elongated.",
                             c.getId_prefix());
@@ -227,7 +201,7 @@ public class Composer extends Population<Composition> {
         if (this.getAim().completed(p0)
                 && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED) {
             Composition p1 = this.randomSelect(SELECT_ONLY_COMPLETED);
-            if (Objects.equals(p0, p1)) {
+            if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
             }
         }
@@ -260,7 +234,7 @@ public class Composer extends Population<Composition> {
         switch (type) {
             case Alteration:
                 mutant.getConnectors().set(selected,
-                        connectorfactory.newConnector(this::styleChecker));
+                        connectorfactory.newConnector(this.styleChecker));
                 break;
             case Insertion:
             case Deletion:
@@ -269,7 +243,7 @@ public class Composer extends Population<Composition> {
                     type = Deletion;
                 } else {
                     mutant.getConnectors().add(selected,
-                            connectorfactory.newConnector(this::styleChecker));
+                            connectorfactory.newConnector(this.styleChecker));
                     type = Insertion;
                 }
                 break;

@@ -15,18 +15,17 @@
  */
 package tech.metacontext.ec.prototype.composer.connectors;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.logging.FileHandler;
-import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -36,7 +35,6 @@ public class Connector extends Individual {
 
     private final Map<MaterialType, TransformType> transformTypes;
     private static SketchNodeFactory sketchNodeFactory;
-    //@todo consider why need stylecheker in connector
     private Predicate<SketchNode> styleChecker;
     private SketchNode previous;
     private SketchNode next;
@@ -70,9 +68,7 @@ public class Connector extends Individual {
 
         Map<MaterialType, ? extends MusicMaterial> mats
                 = this.getTransformTypes().entrySet().stream()
-                        .map(e -> new SimpleEntry<>(e.getKey(),
-                        /*.............*/ this.previous.getMat(e.getKey()).transform(e.getValue())))
-                        //                        .peek(e -> System.out.println("peek: " + e.getKey() + "=" + e.getValue()))
+                        .map(e -> new SimpleEntry<>(e.getKey(), this.previous.getMat(e.getKey()).transform(e.getValue())))
                         .collect(Collectors.toMap(SimpleEntry::getKey,
                                 SimpleEntry::getValue));
         this.next.setMats(mats);

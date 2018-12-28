@@ -15,16 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import tech.metacontext.ec.prototype.composer.model.Composer;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import java.util.Objects;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import static tech.metacontext.ec.prototype.composer.Settings.RENEW_TEST;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
+import tech.metacontext.ec.prototype.composer.TestCenter;
 
 /**
  *
@@ -33,20 +29,12 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class CompositionFactoryTest {
 
     static CompositionFactory instance;
-    static Composer composer;
-    Composition composition;
+    static TestCenter tc;
 
     @BeforeClass
-    public static void prepare() throws Exception {
-
+    public static void prepare() {
+        tc = TestCenter.getInstance();
         instance = CompositionFactory.getInstance();
-        composer = new Composer(10, ComposerAim.Phrase, RENEW_TEST,
-                new UnaccompaniedCello(),
-                new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
-        );
-        do {
-            composer.compose().evolve();
-        } while (!composer.getPopulation().stream().allMatch(composer.getAim()::completed));
     }
 
     @Test
@@ -56,14 +44,15 @@ public class CompositionFactoryTest {
     @Test
     public void testForArchiving() {
 
-        composer.getPopulation().stream().forEach(c -> {
+        System.out.println("forArchiving");
+        tc.getComposer().getPopulation().stream().forEach(c -> {
             c.ifReRenderRequired();
             c.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
             Composition result = instance.forArchiving(c);
             result.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
-            composer.getStyles().stream().forEach(s -> {
+            tc.getComposer().getStyles().stream().forEach(s -> {
                 assertEquals(c.getScore(s), result.getScore(s));
             });
         });
@@ -72,14 +61,15 @@ public class CompositionFactoryTest {
     @Test
     public void testForMutation() {
 
-        composer.getPopulation().stream().forEach(c -> {
+        System.out.println("forMutation");
+        tc.getComposer().getPopulation().stream().forEach(c -> {
             c.ifReRenderRequired();
             c.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
             Composition result = instance.forMutation(c);
             result.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
-            assertFalse(composer.getStyles().stream()
+            assertFalse(tc.getComposer().getStyles().stream()
                     .allMatch(s -> Objects.equals(c.getScore(s), result.getScore(s))));
         });
     }

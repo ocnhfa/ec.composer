@@ -22,16 +22,13 @@ import java.nio.file.Path;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.FileHandler;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import tech.metacontext.ec.prototype.composer.Settings;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.TestCenter;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -39,16 +36,15 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class CompositionTest {
 
+    static SketchNodeFactory sketchNodeFactory;
     static CompositionFactory compositionFactory;
-    static Composer composer;
+    static TestCenter tc;
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
+    public static void prepare() {
+        tc = TestCenter.getInstance();
         compositionFactory = CompositionFactory.getInstance();
-        composer = new Composer(1, ComposerAim.Phrase, Settings.RENEW_TEST,
-                new UnaccompaniedCello(),
-                new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
-        );
+        sketchNodeFactory = SketchNodeFactory.getInstance();
     }
 
     /**
@@ -58,28 +54,29 @@ public class CompositionTest {
     public void testGetRendered() throws IOException {
 
         System.out.println("getRendered");
-        composer.compose();
+        tc.getComposer().compose();
         System.out.println("1 compose");
-        Composition composition = composer.getPopulation().get(0);
-        SketchNode expResult = composition.getSeed();
+        Composition composition = tc.getComposer().getPopulation().get(0);
+        SketchNode expResult =sketchNodeFactory.newInstance(tc.getComposer().styleChecker);
+        composition.setSeed(expResult);
         assertTrue(composition.ifReRenderRequired());
         SketchNode result = composition.getRenderedChecked().get(0);
         assertEquals(expResult, result);
-        composer.compose();
+        tc.getComposer().compose();
         System.out.println("2 compose");
-        composition = composer.getPopulation().get(0);
+        composition = tc.getComposer().getPopulation().get(0);
         assertTrue(composition.ifReRenderRequired());
         result = composition.getRenderedChecked().get(0);
         assertEquals(expResult, result);
-        composer.compose().evolve();
+        tc.getComposer().compose().evolve();
         System.out.println("3 compose and evolve");
-        composition = composer.getPopulation().get(0);
+        composition = tc.getComposer().getPopulation().get(0);
         assertTrue(composition.ifReRenderRequired());
         result = composition.getRenderedChecked().get(0);
         assertNotEquals(expResult, result);
-        composer.compose().evolve();
+        tc.getComposer().compose().evolve();
         System.out.println("4 compose and evolve");
-        composition = composer.getPopulation().get(0);
+        composition = tc.getComposer().getPopulation().get(0);
         assertTrue(composition.ifReRenderRequired());
         result = composition.getRenderedChecked().get(0);
         assertNotEquals(expResult, result);
@@ -95,9 +92,9 @@ public class CompositionTest {
 
         System.out.println("render");
         for (int i = 0; i < 1; i++) {
-            composer.compose().evolve();
+            tc.getComposer().compose().evolve();
         }
-        Composition instance = composer.getPopulation().get(0);
+        Composition instance = tc.getComposer().getPopulation().get(0);
         System.out.println(instance);
         List<SketchNode> list = instance.render();
         list.forEach(System.out::println);
@@ -109,8 +106,8 @@ public class CompositionTest {
 
         System.out.println("ObjectCopy");
         Composition c1 = compositionFactory.newInstance(
-                composer::styleChecker,
-                composer.getStyles()),
+                tc.getComposer().styleChecker,
+                tc.getComposer().getStyles()),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
         c1.elongation(FreeStyle::checker);

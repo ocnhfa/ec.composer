@@ -17,7 +17,6 @@ package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.model.Composer;
 import java.util.stream.IntStream;
-import static tech.metacontext.ec.prototype.composer.Settings.logfile;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
