@@ -17,10 +17,7 @@ package tech.metacontext.ec.prototype.composer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.model.Composer;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -28,11 +25,12 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
  */
 public class TestCenter {
 
-    public static final int PRESET_POPULATION_SIZE = 50;
+    public static final int PRESET_POPULATION_SIZE = 100;
+    public static final int GOAL_CONSERVATORY_SIZE = 3;
     private static TestCenter instance;
     private static Composer composer;
 
-    public static TestCenter getInstance() {
+    public static synchronized TestCenter getInstance() {
         if (instance == null) {
             instance = new TestCenter();
         }
@@ -41,14 +39,11 @@ public class TestCenter {
 
     private TestCenter() {
         try {
-            composer = new Composer(PRESET_POPULATION_SIZE, ComposerAim.Phrase, Settings.RENEW_TEST,
-                    new UnaccompaniedCello(),
-                    new GoldenSectionClimax(UnaccompaniedCello.getRange()));
-            do {
-                composer.compose().evolve();
-            } while (composer.getConservetory().size() < 3);
+            composer = new Main(PRESET_POPULATION_SIZE,
+                    GOAL_CONSERVATORY_SIZE,
+                    Settings.TEST).getComposer();
         } catch (Exception ex) {
-            Logger.getLogger(TestCenter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(composer.getId()).log(Level.SEVERE, null, ex);
         }
     }
 

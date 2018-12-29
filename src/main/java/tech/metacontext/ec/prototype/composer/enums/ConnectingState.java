@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
+import static tech.metacontext.ec.prototype.composer.Settings.CHANCE_TOTAL_CONNECTING_STATE;
+
 /**
  *
  * @author Jonathan Chang
@@ -23,11 +25,11 @@ public enum ConnectingState {
     Total,
     ByItem;
 
-    public static final double TOTAL_RATIO = 0.4;
+
 
     public static ConnectingState getRandom() {
 
-        return Math.random() < TOTAL_RATIO ? ConnectingState.Total : ConnectingState.ByItem;
+        return Math.random() < CHANCE_TOTAL_CONNECTING_STATE ? ConnectingState.Total : ConnectingState.ByItem;
     }
 
 }

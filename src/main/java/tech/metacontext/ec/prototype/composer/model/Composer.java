@@ -16,21 +16,28 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.composer.Settings;
+import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
 import tech.metacontext.ec.prototype.composer.factory.*;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.operations.MutationType;
 import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
+import tech.metacontext.ec.prototype.render.ScatterPlot_AWT;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -39,8 +46,7 @@ import java.util.stream.Stream;
  */
 public class Composer extends Population<Composition> {
 
-    private final static Logger _logger
-            = Logger.getLogger(Composer.class.getName());
+    private static Logger _logger;
 
     private static CompositionFactory compositionFactory;
     private static ConnectorFactory connectorfactory;
@@ -49,7 +55,7 @@ public class Composer extends Population<Composition> {
     private List<Style> styles;
     private int size;
 
-    private final List<Composition> conservetory;
+    private final Map<Composition, Integer> conservetory;
 
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
 
@@ -65,7 +71,11 @@ public class Composer extends Population<Composition> {
     public Composer(int size, ComposerAim aim, int logState, Style... styles)
             throws Exception {
 
+        _logger = Logger.getLogger(getId());
         setFileHandler(logState, _logger);
+
+        _logger.log(Level.INFO,
+                "Initilizing Composer [{0}]", this.getId());
 
         _logger.log(Level.INFO,
                 "Initializing ConnectorFactory...");
@@ -73,12 +83,12 @@ public class Composer extends Population<Composition> {
 
         _logger.log(Level.INFO,
                 "Initializing CompositionFactory...");
-        Composer.compositionFactory = CompositionFactory.getInstance();
+        Composer.compositionFactory = CompositionFactory.getInstance(this.getId());
 
         this.size = size;
         this.aim = aim;
         this.styles = new ArrayList<>(Arrays.asList(styles));
-        this.conservetory = new ArrayList<>();
+        this.conservetory = new HashMap<>();
 
         _logger.log(Level.INFO,
                 "Initializing Composition Population...");
@@ -106,7 +116,7 @@ public class Composer extends Population<Composition> {
                 new Object[]{
                     this.getArchive().get(this.getGenCount()).size(),
                     this.getGenCount()});
-
+        this.genCountIncrement();
         long num_elongated = this.getPopulation().stream()
                 .filter(this::toBeElongated)
                 .peek(c -> {
@@ -117,7 +127,7 @@ public class Composer extends Population<Composition> {
                 })
                 .collect(Collectors.counting());
         _logger.log(Level.INFO,
-                "Composing, {0} Compositions elongated.", num_elongated);
+                "Composing, totally {0} Compositions been elongated.", num_elongated);
 
         int original = this.getSize();
         this.getPopulation().removeIf(this::conserve);
@@ -140,66 +150,46 @@ public class Composer extends Population<Composition> {
     private boolean toBeElongated(Composition c) {
 
         return !aim.completed(c) || Math.random()
-                < Math.pow(ELONGATION_CHANCE,
+                < Math.pow(CHANCE_ELONGATION_IF_COMPLETED,
                         c.getSize() - this.getAim().getSize());
     }
 
     @Override
     public void evolve() {
 
-        _logger.log(Level.INFO,
-                "Evolving from {0} parents.", this.getPopulationSize());
-        List<Composition> children = Stream.generate(
-                () -> this.randomSelect(SELECT_FROM_ALL))
-                .unordered()
-                .parallel()
-                .map(this::getChild)
-                .filter(child -> !this.conserve(child))
-                .sequential()
-                .limit(size)
-                .collect(Collectors.toList());
         /*
-        do {
-            //1.選出一條
-            //2.若not completed則mutate -> children
-            //3.若completed則決定是否走mutate, yes -> mutate -> children
-            //4.若走crossover則選出另一條completed(也許是自己)
-            //5.crossover -> children
-            Composition sel_1 = this.randomSelect(SELECT_FROM_ALL);
-            Composition sel_2 = this.randomSelect(SELECT_ONLY_COMPLETED);
-            Composition child;
-            if (this.getAim().completed(sel_1)
-                    && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED
-                    && !Objects.equals(sel_1, sel_2)) {
-                child = this.crossover(sel_1, sel_2);
-            } else {
-                child = this.mutate(sel_1);
-            }
-            children.add(child);
-            int original = children.size();
-            children.removeIf(this::conserve);
-            if (original - children.size() > 0) {
-                _logger.log(Level.INFO,
-                        "Evloving, {0} Composition(s) conserved.",
-                        original - children.size());
-            }
-        } while (children.size() < this.getSize()); 
+            1.選出一條
+            2.若not completed則mutate -> children
+            3.若completed則決定是否走mutate, yes -> mutate -> children
+            4.若走crossover則選出另一條completed(也許是自己)
+            5.crossover -> children
          */
         _logger.log(Level.INFO,
-                "Evloving finished. New population: {0} Compositions: {1}",
-                new Object[]{children.size(),
-                    children.stream()
-                            .map(Composition::getSize)
-                            .map(String::valueOf)
-                            .collect(Collectors.joining(" "))});
+                "Evolving from {0} parents.", this.getPopulationSize());
+        List<Composition> children = Stream.generate(() -> randomSelect(SELECT_FROM_ALL))
+                .map(this::getChild)
+                .filter(child -> !this.conserve(child))
+                .limit(size)
+                .collect(Collectors.toList());
+        _logger.log(Level.INFO,
+                "Evloving finished, gen = {0}, size = {1}, {2}",
+                new Object[]{this.getGenCount(), children.size(), getSummary(children)});
         this.setPopulation(children);
-        this.genCountIncrement();
+    }
+
+    public static String getSummary(List<Composition> list) {
+
+        return list.stream()
+                .collect(Collectors.groupingBy(Composition::getSize))
+                .entrySet().stream()
+                .map(e -> String.format("%2d x %2d", e.getKey(), e.getValue().size()))
+                .collect(Collectors.joining(", "));
     }
 
     public Composition getChild(Composition p0) {
 
         if (this.getAim().completed(p0)
-                && Math.random() < CROSSOVER_CHANCE_IF_COMPLETED) {
+                && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED) {
             Composition p1 = this.randomSelect(SELECT_ONLY_COMPLETED);
             if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
@@ -287,9 +277,9 @@ public class Composer extends Population<Composition> {
         return child;
     }
 
-    public boolean conserve(Composition composition) {
+    public boolean conserve(Composition composition) throws ConservationFailedException {
 
-        if (this.conservetory.contains(composition)) {
+        if (this.conservetory.containsKey(composition)) {
             _logger.log(Level.WARNING,
                     "Checking composition already in the conservatory: {0}",
                     composition.getId_prefix());
@@ -298,19 +288,23 @@ public class Composer extends Population<Composition> {
             return false;
         }
         composition.getRenderedChecked();
-        if (this.styles.stream()
-                .anyMatch(s -> composition.getScore(s) < CONSERVE_SCORE)) {
+        if (getMinScore(composition) < SCORE_CONSERVE_IF_COMPLETED) {
             return false;
         }
-        System.out.println(output(composition));
+        _logger.log(Level.INFO, "Qualified Composition been located: {0}",
+                output(composition));
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated for conservation.",
                 composition.getId_prefix());
-        this.conservetory.add(compositionFactory.forArchiving(composition));
-        if (this.conservetory.contains(composition)) {
+        Composition dupe = compositionFactory.forArchiving(composition);
+        this.conservetory.put(dupe, this.getGenCount());
+        if (this.conservetory.containsKey(dupe)) {
             _logger.log(Level.INFO,
                     "Composition {0} been conserved.",
                     composition.getId_prefix());
+        } else {
+            throw new ConservationFailedException(
+                    "id = " + dupe.getId_prefix() + ", gen = " + this.getGenCount());
         }
         return true;
     }
@@ -318,8 +312,38 @@ public class Composer extends Population<Composition> {
     @Override
     public void render() {
 
-        System.out.println(
-                output(this.getConservetory().toArray(Composition[]::new)));
+        _logger.log(Level.INFO, "Rendering Composer {0}", this.getId());
+        ScatterPlot_AWT plot = new ScatterPlot_AWT("Composer " + this.getId());
+        List<SimpleEntry<Integer, Double>> popScores = IntStream.range(0, this.getGenCount())
+                .mapToObj(i
+                        -> this.getArchive().get(i).stream()
+                        .filter(this.getAim()::completed)
+                        .filter(c -> getMinScore(c) > 0.0)
+                        .peek(c -> {
+                            if (getMinScore(c) > Settings.SCORE_CONSERVE_IF_COMPLETED) {
+                                System.out.println("Qualified composition left in population at gen#" + i);
+                                System.out.println(c);
+                            }
+                        })
+                        .mapToDouble(Composer::getMinScore)
+                        .mapToObj(s -> new SimpleEntry<>(i, s)))
+                .flatMap(s -> s)
+                .collect(Collectors.toList());
+        plot.addSeries("Population", popScores);
+        List<SimpleEntry<Integer, Double>> conserveScores = this.getConservetory().entrySet().stream()
+                .map(e -> new SimpleEntry<>(e.getValue(), getMinScore(e.getKey())))
+                .collect(Collectors.toList());
+        plot.addSeries("Conservatory", conserveScores);
+        plot.createScatterPlot("Evolutionary Computation", "Generation", "Score", 560, 367, true);
+        plot.showPlotWindow();
+    }
+
+    public static double getMinScore(Composition c) {
+
+        return c.getEval().getScores().values().stream()
+                .mapToDouble(s -> s)
+                .min()
+                .getAsDouble();
     }
 
     public static String output(Composition... list) {
@@ -329,14 +353,13 @@ public class Composer extends Population<Composition> {
                 .append(composition.getId_prefix()).append(" ")
                 .append(composition.getEval().getScores().entrySet().stream()
                         .map(e -> String.format("%s: %.3f", e.getKey(), e.getValue()))
-                        .collect(Collectors.joining(" | ")))
-                .append('\n'));
+                        .collect(Collectors.joining(" | "))));
         return report.toString();
     }
 
     public void persistAll() {
 
-        this.getConservetory().stream().forEach(Composition::persistent);
+        this.getConservetory().keySet().stream().forEach(Composition::persistent);
     }
 
     public void addStyle(Style style) {
@@ -363,7 +386,7 @@ public class Composer extends Population<Composition> {
         this.aim = aim;
     }
 
-    public List<Composition> getConservetory() {
+    public Map<Composition, Integer> getConservetory() {
         return conservetory;
     }
 

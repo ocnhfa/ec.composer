@@ -19,7 +19,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
  *

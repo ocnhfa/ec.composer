@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.enums.mats;
 
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import java.util.stream.Stream;
 import org.junit.After;
 import org.junit.AfterClass;

@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**

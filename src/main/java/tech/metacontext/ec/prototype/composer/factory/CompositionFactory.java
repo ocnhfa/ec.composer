@@ -15,14 +15,11 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Factory;
 import tech.metacontext.ec.prototype.composer.model.Composition;
@@ -37,24 +34,22 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class CompositionFactory implements Factory<Composition> {
 
-    private static final Logger _logger
-            = Logger.getLogger(Composition.class.getName());
-    private static ConnectorFactory connectorFactory;
-    private static SketchNodeFactory sketchNodeFactory;
-    private static CompositionFactory instance;
+    private static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
+    private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
+    private static final Map<String, CompositionFactory> instances = new HashMap<>();
+    private final String composer_id;
 
-    private CompositionFactory() {
+    private CompositionFactory(String composer_id) {
 
-        connectorFactory = ConnectorFactory.getInstance();
-        sketchNodeFactory = SketchNodeFactory.getInstance();
+        this.composer_id = composer_id;
     }
 
-    public static CompositionFactory getInstance() {
+    public static CompositionFactory getInstance(String composer_id) {
 
-        if (Objects.isNull(instance)) {
-            instance = new CompositionFactory();
+        if (Objects.isNull(instances.get(composer_id))) {
+            instances.put(composer_id, new CompositionFactory(composer_id));
         }
-        return instance;
+        return instances.get(composer_id);
     }
 
     /**
@@ -67,7 +62,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition forArchiving(Composition origin) {
 
         origin.ifReRenderRequired();
-        Composition dupe = new Composition(origin.getId(),
+        Composition dupe = new Composition(this.composer_id, origin.getId(),
                 origin.getEval().getStyles());
         dupe.getRendered().addAll(origin.getRenderedChecked());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
@@ -75,7 +70,6 @@ public class CompositionFactory implements Factory<Composition> {
                 .collect(Collectors.toList()));
         dupe.resetSeed(dupe.getConnectors().get(0).getPrevious());
         dupe.setEval(new CompositionEval(origin.getEval()));
-
         return dupe;
     }
 
@@ -87,7 +81,7 @@ public class CompositionFactory implements Factory<Composition> {
      */
     public Composition forMutation(Composition origin) {
 
-        Composition dupe = new Composition(origin.getEval().getStyles());
+        Composition dupe = new Composition(this.composer_id, origin.getEval().getStyles());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
@@ -98,7 +92,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition newInstance(Predicate<SketchNode> styleChecker,
             Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition(styles);
+        Composition newInstance = new Composition(this.composer_id, styles);
         Connector conn = connectorFactory.newConnectorWithSeed(styleChecker);
         newInstance.addConnector(conn);
         newInstance.setSeed(conn.getPrevious());
@@ -108,7 +102,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition forCrossover(SketchNode seed, Connector conn,
             Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition(styles);
+        Composition newInstance = new Composition(this.composer_id, styles);
         Connector dupeConn = connectorFactory
                 .newConnectorWithSeed(conn.getStyleChecker());
         newInstance.addConnector(dupeConn);

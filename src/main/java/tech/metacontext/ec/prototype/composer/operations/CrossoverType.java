@@ -15,9 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.operations;
 
-import tech.metacontext.ec.prototype.composer.enums.ConnectingState;
-import static tech.metacontext.ec.prototype.composer.enums.ConnectingState.TOTAL_RATIO;
-
 /**
  *
  * @author Jonathan

@@ -17,6 +17,7 @@ package tech.metacontext.ec.prototype.abs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -28,12 +29,14 @@ import java.util.stream.Collectors;
  */
 public abstract class Population<E extends Individual> {
 
+    private final UUID id;
     private List<E> population;
     private final List<List<E>> archive;
     private int genCount;
 
     public Population() {
 
+        this.id = UUID.randomUUID();
         this.population = new ArrayList<>();
         this.archive = new ArrayList<>();
         this.genCount = 0;
@@ -81,6 +84,11 @@ public abstract class Population<E extends Individual> {
         return null;
     }
 
+    public String getId() {
+    
+        return id.toString();
+    }
+    
     /*
      * Default setters and getters.
      */
@@ -103,4 +111,5 @@ public abstract class Population<E extends Individual> {
     public List<List<E>> getArchive() {
         return this.archive;
     }
+
 }

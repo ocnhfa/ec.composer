@@ -20,7 +20,7 @@ import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +80,12 @@ public class Connector extends Individual {
 
         return super.toString() + getTransformTypes() + " "
                 + ((previous == null) ? "N/A" : "\nfrom: " + previous)
+                + ((next == null) ? "" : "\n => " + next);
+    }
+
+    public String toStringNext() {
+
+        return super.toString() + getTransformTypes() + " "
                 + ((next == null) ? "" : "\n => " + next);
     }
 

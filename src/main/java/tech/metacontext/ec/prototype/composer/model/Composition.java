@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
-import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
 import tech.metacontext.ec.prototype.composer.styles.Style;
@@ -43,27 +42,27 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
  */
 public class Composition extends Individual<CompositionEval> {
 
-    static final Logger _logger = Logger.getLogger(Composition.class.getName());
+    private Logger _logger;
 
     private static ConnectorFactory connectorFactory;
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
 
-    public Composition(String id, Collection<? extends Style> styles) {
+    public Composition(String composer_id, String id, Collection<? extends Style> styles) {
 
         super(id);
-        setup(styles);
+        setup(composer_id, styles);
     }
 
-    public Composition(Collection<? extends Style> styles) {
+    public Composition(String composer_id, Collection<? extends Style> styles) {
 
-        setup(styles);
+        setup(composer_id, styles);
     }
 
-    public void setup(Collection<? extends Style> styles) {
+    public void setup(String composer_id, Collection<? extends Style> styles) {
 
-        Settings.setFileHandler(_logger);
+        this._logger = Logger.getLogger(composer_id);
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));
@@ -147,9 +146,9 @@ public class Composition extends Individual<CompositionEval> {
                     this.getId_prefix());
             return true;
         }
-//        _logger.log(Level.INFO,
-//                "Rendered list remained consistant, no rerendering required for {0}.",
-//                this.getId_prefix());
+        _logger.log(Level.FINE,
+                "Rendered list remained consistant, no rerendering required for {0}.",
+                this.getId_prefix());
         return false;
     }
 
@@ -173,17 +172,6 @@ public class Composition extends Individual<CompositionEval> {
     public int getSize() {
 
         return this.getConnectors().size() + 1;
-    }
-
-    @Override
-    public String toString() {
-
-        String result = super.toString() + String.format("(size = %d):\n", this.getSize())
-                + String.format(Composer.output(this))
-                + this.getConnectors().stream()
-                        .map(Connector::toString)
-                        .collect(Collectors.joining("\n "));
-        return result;
     }
 
     public Path persistent() {
@@ -215,6 +203,50 @@ public class Composition extends Individual<CompositionEval> {
                 this.render();
             }
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Composition other = (Composition) obj;
+        return Objects.equals(this.getId(), other.getId());
+    }
+
+    @Override
+    public String toString() {
+        String result
+                = String.format("%s(size = %d, Composer = [%s])\n",
+                        super.toString(), this.getSize(), _logger.getName())
+                + String.format("%s\n", Composer.output(this))
+                + String.format("Seed: %s\n", this.getSeed())
+                + this.getConnectors().stream()
+                        .peek(c -> {
+                            if (Objects.isNull(c.getPrevious())) {
+                                _logger.log(Level.WARNING,
+                                        "Null SketchNode found in {0}.getPrevious().", c.getId_prefix());
+                            }
+                            if (Objects.isNull(c.getNext())) {
+                                _logger.log(Level.WARNING,
+                                        "Null SketchNode found in {0}.getNext().", c.getId_prefix());
+                            }
+                        })
+                        .filter(c -> Objects.nonNull(c.getNext()))
+                        .map(Connector::toStringNext)
+                        .collect(Collectors.joining("\n"));
+        return result;
     }
 
     /*

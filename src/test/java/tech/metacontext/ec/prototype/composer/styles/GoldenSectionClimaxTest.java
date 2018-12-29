@@ -15,9 +15,11 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 
@@ -27,11 +29,12 @@ import tech.metacontext.ec.prototype.composer.model.Composition;
  */
 public class GoldenSectionClimaxTest {
 
-    GoldenSectionClimax instance;
+    static GoldenSectionClimax instance;
     static TestCenter tc;
 
     @BeforeClass
     public static void prepare() {
+        instance = new GoldenSectionClimax(UnaccompaniedCello.getRange());
         tc = TestCenter.getInstance();
     }
 
@@ -39,37 +42,23 @@ public class GoldenSectionClimaxTest {
     public void testClimaxIndex() {
 
         System.out.println("climaxIndex");
-        tc.getComposer().getPopulation().stream()
-                .limit(1)
+        tc.getComposer().getConservetory().keySet().stream()
                 .peek(System.out::println)
-                .map(Composition::getRenderedChecked)
-                .forEach(list -> {
-                    list.stream()
-                            .mapToDouble(instance::climaxIndex)
-                            .forEach(score -> {
-                                System.out.printf("%.1f ", score);
-                                assertTrue(score <= 2.0);
-                            });
-                    System.out.println("");
-                });
+                .flatMap(c -> c.getRendered().stream())
+                .map(instance::climaxIndex)
+                .map(score -> score <= 1.0)
+                .forEach(Assert::assertTrue);
     }
 
     @Test
     public void testRateComposition() {
 
         System.out.println("rateComposition");
-        tc.getComposer().getPopulation().stream()
-                .peek(composition -> {
-//                    System.out.println(composition.getId());
-                    composition.getRenderedChecked().stream()
-                            .mapToDouble(instance::climaxIndex)
-                            .forEach(score -> {
-                                System.out.printf("%.1f ", score);
-                            });
-                    System.out.println();
-                })
-                .mapToDouble(instance::rateComposition)
-                .forEach(System.out::println);
+        tc.getComposer().getConservetory().keySet().stream()
+                .peek(Composition::getRenderedChecked)
+                .map(instance::rateComposition)
+                .map(score -> score >= Settings.SCORE_CONSERVE_IF_COMPLETED)
+                .forEach(Assert::assertTrue);
     }
 
 }

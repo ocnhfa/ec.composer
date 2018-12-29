@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
-import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
  *

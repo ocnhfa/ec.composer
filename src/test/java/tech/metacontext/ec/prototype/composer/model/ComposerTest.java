@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.junit.Test;
@@ -115,19 +116,24 @@ public class ComposerTest {
         while (tc.getComposer().getConservetory().size() < 3) {
             tc.getComposer().compose().evolve();
         }
-        System.out.println(Composer.output(tc.getComposer().getConservetory().toArray(Composition[]::new)));
-        tc.getComposer().getConservetory().forEach(c -> {
+        System.out.println(Composer.output(tc.getComposer().getConservetory()
+                .keySet().toArray(Composition[]::new)));
+        tc.getComposer().getConservetory().keySet().forEach(c -> {
             System.out.println(c.getId_prefix());
             System.out.println(c.getConnectors().size());
             System.out.println(c.getRendered().size());
         });
 //        System.out.println( tc.getComposer().getConservetory().get(0));
         while (tc.getComposer().getConservetory().size() > 0) {
-            Composition c = tc.getComposer().getConservetory().remove(0);
+            Composition c = tc.getComposer().getConservetory().entrySet().stream()
+                    .findFirst()
+                    .get()
+                    .getKey();
+            tc.getComposer().getConservetory().remove(c);
             System.out.println(Composer.output(c));
             boolean expResult = tc.getComposer().getStyles().stream()
                     .map(c::getScore)
-                    .allMatch(score -> score > CONSERVE_SCORE);
+                    .allMatch(score -> score > SCORE_CONSERVE_IF_COMPLETED);
             System.out.println(Composer.output(c));
             System.out.println("expResult = " + expResult);
             boolean result = tc.getComposer().conserve(c);
@@ -244,7 +250,7 @@ public class ComposerTest {
         System.out.println("getConservetory");
         Composer instance = null;
         List<Composition> expResult = null;
-        List<Composition> result = tc.getComposer().getConservetory();
+        Map<Composition,Integer> result = tc.getComposer().getConservetory();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

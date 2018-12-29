@@ -43,45 +43,8 @@ public class CompositionTest {
     @BeforeClass
     public static void prepare() {
         tc = TestCenter.getInstance();
-        compositionFactory = CompositionFactory.getInstance();
+        compositionFactory = CompositionFactory.getInstance(tc.getComposer().getId());
         sketchNodeFactory = SketchNodeFactory.getInstance();
-    }
-
-    /**
-     * Test of getRendered method, of class Composition.
-     */
-    @Test
-    public void testGetRendered() throws IOException {
-
-        System.out.println("getRendered");
-        tc.getComposer().compose();
-        System.out.println("1 compose");
-        Composition composition = tc.getComposer().getPopulation().get(0);
-        SketchNode expResult =sketchNodeFactory.newInstance(tc.getComposer().styleChecker);
-        composition.setSeed(expResult);
-        assertTrue(composition.ifReRenderRequired());
-        SketchNode result = composition.getRenderedChecked().get(0);
-        assertEquals(expResult, result);
-        tc.getComposer().compose();
-        System.out.println("2 compose");
-        composition = tc.getComposer().getPopulation().get(0);
-        assertTrue(composition.ifReRenderRequired());
-        result = composition.getRenderedChecked().get(0);
-        assertEquals(expResult, result);
-        tc.getComposer().compose().evolve();
-        System.out.println("3 compose and evolve");
-        composition = tc.getComposer().getPopulation().get(0);
-        assertTrue(composition.ifReRenderRequired());
-        result = composition.getRenderedChecked().get(0);
-        assertNotEquals(expResult, result);
-        tc.getComposer().compose().evolve();
-        System.out.println("4 compose and evolve");
-        composition = tc.getComposer().getPopulation().get(0);
-        assertTrue(composition.ifReRenderRequired());
-        result = composition.getRenderedChecked().get(0);
-        assertNotEquals(expResult, result);
-        Path path = composition.persistent();
-        Files.delete(path);
     }
 
     /**

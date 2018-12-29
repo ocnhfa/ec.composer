@@ -29,50 +29,68 @@ import java.util.logging.SimpleFormatter;
 public class Settings {
 
     /**
-     * 當作品達到目標之後，還繼續加長的機率。
+     * Score for a mature composition to reach to be conserved.
      */
-    public static final double ELONGATION_CHANCE = 0.1;
+    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.9;
     /**
-     * 作品收入conservatory所須達到的分數。
+     * Chance for a mature composition to be elongated.
      */
-    public static final double CONSERVE_SCORE = 0.9;
-    public static final double CROSSOVER_CHANCE_IF_COMPLETED = 0.8;
+    public static final double CHANCE_ELONGATION_IF_COMPLETED = 0.1;
+    /**
+     * Chance for a mature composition to do crossover than mutation.
+     */
+    public static final double CHANCE_CROSSOVER_IF_COMPLETED = 0.6;
+
+    /**
+     * Chance to produce a Total Connecting State
+     */
+    public static final double CHANCE_TOTAL_CONNECTING_STATE = 0.2;
+    /**
+     * Chance to preserve when producing a Repetition Transform Type
+     */
+    public static final double CHANCE_REPETITION = 0.2;
+    /**
+     * Chance to preserve when producing a MoveForward Transform Type
+     */
+    public static final double CHANCE_MOVEFORWARD = 0.8;
+    /**
+     * Chance to preserve when producing a MoveBackward Transform Type
+     */
+    public static final double CHANCE_MOVEBACKWARD = 0.8;
+    /**
+     * Chance to preserve when producing a Retrograde Transform Type
+     */
+    public static final double CHANCE_RETROGRADE = 0.6;
+    /**
+     * Chance to preserve when producing a Disconnected Transform Type
+     */
+    public static final double CHANCE_DISCONNECTED = 1.0;
 
     public static String getTimeBasedFilename() {
-        return LocalDateTime.now().toString().replace(":", "-");
+        return LocalDateTime.now().toString().replace(":", "-").substring(0, 25);
     }
 
     public static String logfile = "src/main/resources/log/";
 
     public static String logfile_test = "src/main/resources/log/test/";
 
-    public static FileHandler fh;
-    public static String path;
-
-    public static void setFileHandler(Logger logger) {
-
-        if (Objects.isNull(fh)) {
-            return;
-        }
-        logger.setUseParentHandlers(false);
-        logger.addHandler(fh);
-    }
-
-    public static int USE_EXISTING = 0, RENEW = 1, RENEW_TEST = 2;
+    public static int DEFAULT = 0, TEST = 1;
 
     public static void setFileHandler(int STATE, Logger logger)
             throws Exception {
 
-//        if (Objects.isNull(fh) || STATE != USE_EXISTING) {
-//            fh = new FileHandler(
-//                    ((STATE == RENEW_TEST) ? logfile_test : logfile)
-//                    + getTimeBasedFilename() + ".log",
-//                    true);
-//            fh.setEncoding("UTF-8");
-//            fh.setFormatter(new SimpleFormatter());
-//        }
-//        setFileHandler(logger);
         logger.log(Level.INFO,
                 "Setting FileHandler, STATE = {0}", STATE);
+
+        FileHandler fh;
+        fh = new FileHandler(
+                ((STATE == TEST) ? logfile_test : logfile)
+                + getTimeBasedFilename() + ".log",
+                true);
+        fh.setEncoding("UTF-8");
+        fh.setFormatter(new SimpleFormatter());
+//        setFileHandler(logger);
+        logger.setUseParentHandlers(false);
+        logger.addHandler(fh);
     }
 }

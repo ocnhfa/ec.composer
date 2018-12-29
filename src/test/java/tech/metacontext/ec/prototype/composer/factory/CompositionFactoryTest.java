@@ -34,7 +34,7 @@ public class CompositionFactoryTest {
     @BeforeClass
     public static void prepare() {
         tc = TestCenter.getInstance();
-        instance = CompositionFactory.getInstance();
+        instance = CompositionFactory.getInstance(tc.getComposer().getId());
     }
 
     @Test
@@ -47,9 +47,11 @@ public class CompositionFactoryTest {
         System.out.println("forArchiving");
         tc.getComposer().getPopulation().stream().forEach(c -> {
             c.ifReRenderRequired();
+            System.out.printf("Composition %s from population.\n", c.getId_prefix());
             c.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
             Composition result = instance.forArchiving(c);
+            System.out.printf("Composition %s for Archiving.\n", result.getId_prefix());
             result.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
             tc.getComposer().getStyles().stream().forEach(s -> {

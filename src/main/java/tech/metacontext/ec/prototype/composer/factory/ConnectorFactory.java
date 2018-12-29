@@ -16,7 +16,7 @@
 package tech.metacontext.ec.prototype.composer.factory;
 
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
