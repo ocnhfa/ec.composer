@@ -43,7 +43,7 @@ public class TestCenter {
                     GOAL_CONSERVATORY_SIZE,
                     Settings.TEST).getComposer();
         } catch (Exception ex) {
-            Logger.getLogger(composer.getId()).log(Level.SEVERE, null, ex);
+            Logger.getGlobal().log(Level.SEVERE, null, ex);
         }
     }
 

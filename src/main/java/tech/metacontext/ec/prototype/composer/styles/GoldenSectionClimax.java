@@ -25,7 +25,9 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.DoubleAdder;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.materials.RhythmicPoints;
 
 /**
  *
@@ -86,28 +88,32 @@ public class GoldenSectionClimax extends Style {
         node.getMats().forEach((MaterialType mt, MusicMaterial mm) -> {
             switch (mt) {
                 case Dynamics:
-                    index.add(mm.getMaterials().stream()
-                            .mapToDouble((mat)
-                                    -> ((Intensity) mat).getIntensityIndex())
-                            .average()
-                            .getAsDouble());
-//                            System.out.printf("DY:%.1f ", index.doubleValue());
+                    addIndex(index, mm, (mat)
+                            -> ((Intensity) mat).getIntensityIndex());
                     break;
                 case NoteRanges:
-                    index.add(mm.getMaterials().stream()
-                            .mapToDouble((mat)
-                                    -> ((Range) mat).getIntensityIndex(
+                    addIndex(index, mm, (mat)
+                            -> ((Range) mat).getIntensityIndex(
                                     sortedRanges.getFirst(),
-                                    sortedRanges.getLast()))
-                            .average()
-                            .getAsDouble());
-//                            System.out.printf("NR:%.1f ", index.doubleValue());
+                                    sortedRanges.getLast()));
                     break;
                 case PitchSets:
+                    break;
                 case RhythmicPoints:
+                    addIndex(index, mm, (mat)
+                            -> 1.0 * (int) mat * mm.getDivision() / RhythmicPoints.DEFAULT_MAX_POINTS);
+                    break;
                 default:
             }
         });
         return index.doubleValue();
+    }
+
+    private void addIndex(DoubleAdder index, MusicMaterial mm,
+            ToDoubleFunction<Object> mapper) {
+        index.add(mm.getMaterials().stream()
+                .mapToDouble(mapper)
+                .average()
+                .getAsDouble());
     }
 }

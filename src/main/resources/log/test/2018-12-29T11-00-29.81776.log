@@ -1,0 +1,12 @@
+12月 29, 2018 11:00:29 上午 tech.metacontext.ec.prototype.composer.model.Composer <init>
+INFO: Initilizing Composer [8dc0cc6d-734c-49b6-a59d-b5a1615c4e46]
+12月 29, 2018 11:00:29 上午 tech.metacontext.ec.prototype.composer.model.Composer <init>
+INFO: Initializing ConnectorFactory...
+12月 29, 2018 11:00:29 上午 tech.metacontext.ec.prototype.composer.model.Composer <init>
+INFO: Initializing CompositionFactory...
+12月 29, 2018 11:00:29 上午 tech.metacontext.ec.prototype.composer.model.Composer <init>
+INFO: Initializing Composition Population...
+12月 29, 2018 11:00:29 上午 tech.metacontext.ec.prototype.composer.model.Composer <init>
+INFO: Composer created: size = 100, aim = Phrase, styles = UnaccompaniedCello, GoldenSectionClimax
+12月 29, 2018 11:00:29 上午 tech.metacontext.ec.prototype.composer.model.Composition ifReRenderRequired
+INFO: Not rendered yet, rendering required for Composition [19bf95f8-3f37].

@@ -110,6 +110,7 @@ public class Composer extends Population<Composition> {
 
     public Composer compose() {
 
+        this.getPopulation().removeIf(this::conserve);
         this.archive(compositionFactory);
         _logger.log(Level.INFO,
                 "Compose... {0} Compositions archived as Generation {1}.",
@@ -157,23 +158,18 @@ public class Composer extends Population<Composition> {
     @Override
     public void evolve() {
 
-        /*
-            1.選出一條
-            2.若not completed則mutate -> children
-            3.若completed則決定是否走mutate, yes -> mutate -> children
-            4.若走crossover則選出另一條completed(也許是自己)
-            5.crossover -> children
-         */
         _logger.log(Level.INFO,
                 "Evolving from {0} parents.", this.getPopulationSize());
-        List<Composition> children = Stream.generate(() -> randomSelect(SELECT_FROM_ALL))
-                .map(this::getChild)
-                .filter(child -> !this.conserve(child))
-                .limit(size)
-                .collect(Collectors.toList());
+        List<Composition> children
+                = Stream.generate(() -> randomSelect(SELECT_FROM_ALL))
+                        .map(this::getChild)
+                        .limit(size)
+                        .collect(Collectors.toList());
         _logger.log(Level.INFO,
                 "Evloving finished, gen = {0}, size = {1}, {2}",
-                new Object[]{this.getGenCount(), children.size(), getSummary(children)});
+                new Object[]{this.getGenCount(),
+                    children.size(),
+                    getSummary(children)});
         this.setPopulation(children);
     }
 
@@ -186,8 +182,20 @@ public class Composer extends Population<Composition> {
                 .collect(Collectors.joining(", "));
     }
 
+    /**
+     * Get child via mutation or crossover.
+     *
+     * @param p0 if not completed, mutate; if completed there's a chance to
+     * crossover.
+     * @return the child produced.
+     */
     public Composition getChild(Composition p0) {
 
+        /*
+            1.若p0 not completed則mutate -> children
+            2.若completed則仍有一定機率走mutate -> children
+            3.若則選出另一條p1 completed(不能是自己), crossover -> children
+         */
         if (this.getAim().completed(p0)
                 && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED) {
             Composition p1 = this.randomSelect(SELECT_ONLY_COMPLETED);
@@ -227,17 +235,17 @@ public class Composer extends Population<Composition> {
                         connectorfactory.newConnector(this.styleChecker));
                 break;
             case Insertion:
-            case Deletion:
-                if (this.getAim().completed(origin)) {
-                    mutant.getConnectors().remove(selected);
-                    type = Deletion;
-                } else {
+                if (!this.getAim().completed(origin)) {
                     mutant.getConnectors().add(selected,
                             connectorfactory.newConnector(this.styleChecker));
-                    type = Insertion;
+                    break;
                 }
+                type = Deletion;
+            case Deletion:
+                mutant.getConnectors().remove(selected);
                 break;
         }
+
         _logger.log(Level.INFO,
                 "Mutation, mutant: {0}, type: {1}, loci: {2}, length: {3} -> {4}",
                 new Object[]{
@@ -277,13 +285,15 @@ public class Composer extends Population<Composition> {
         return child;
     }
 
+    /**
+     * Conserve qualified composition into conservatory.
+     *
+     * @param composition
+     * @return TRUE: if successfully conserved; FALSE: if not conserved.
+     * @throws ConservationFailedException
+     */
     public boolean conserve(Composition composition) throws ConservationFailedException {
 
-        if (this.conservetory.containsKey(composition)) {
-            _logger.log(Level.WARNING,
-                    "Checking composition already in the conservatory: {0}",
-                    composition.getId_prefix());
-        }
         if (!this.getAim().completed(composition)) {
             return false;
         }
@@ -297,7 +307,11 @@ public class Composer extends Population<Composition> {
                 "Composition {0} being duplicated for conservation.",
                 composition.getId_prefix());
         Composition dupe = compositionFactory.forArchiving(composition);
-        this.conservetory.put(dupe, this.getGenCount());
+        if (Objects.nonNull(this.conservetory.put(dupe, this.getGenCount()))) {
+            _logger.log(Level.WARNING,
+                    "Conserving with an Id already existing in conservatory: {0}",
+                    composition.getId_prefix());
+        }
         if (this.conservetory.containsKey(dupe)) {
             _logger.log(Level.INFO,
                     "Composition {0} been conserved.",
@@ -334,7 +348,9 @@ public class Composer extends Population<Composition> {
                 .map(e -> new SimpleEntry<>(e.getValue(), getMinScore(e.getKey())))
                 .collect(Collectors.toList());
         plot.addSeries("Conservatory", conserveScores);
-        plot.createScatterPlot("Evolutionary Computation", "Generation", "Score", 560, 367, true);
+        plot.createScatterPlot("Evolutionary Computation",
+                "Generation", "Score",
+                1702, 630, true);
         plot.showPlotWindow();
     }
 

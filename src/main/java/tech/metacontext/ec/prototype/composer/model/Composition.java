@@ -32,9 +32,15 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
+import tech.metacontext.ec.prototype.composer.Main;
+import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -80,6 +86,28 @@ public class Composition extends Individual<CompositionEval> {
         this.connectors.add(connector);
     }
 
+    public static void main(String[] args) throws Exception {
+        Main main = new Main(100, 1, Settings.TEST);
+        Composer composer = main.getComposer();
+        Composition p0, p1;
+        do {
+            p0 = composer.randomSelect(Composer.SELECT_ONLY_COMPLETED);
+            p1 = composer.randomSelect(Composer.SELECT_ONLY_COMPLETED);
+        } while (Objects.equals(p0, p1));
+        Composition child, dupe;
+        int counter = 0;
+        CompositionFactory cf = CompositionFactory.getInstance(composer.getId());
+        do {
+            System.out.print(".");
+            child = composer.crossover(p0, p1);
+            child.getRenderedChecked();
+            dupe = cf.forArchiving(child);
+            if (counter++ % 50 == 0) {
+                System.out.println();
+            }
+        } while (!dupe.ifReRenderRequired());
+    }
+
     public List<SketchNode> render() {
 
         rendered.clear();
@@ -102,12 +130,11 @@ public class Composition extends Individual<CompositionEval> {
 
     public List<SketchNode> getRenderedChecked() {
 
-        if (!this.ifReRenderRequired()) {
-            return this.rendered;
+        if (this.ifReRenderRequired()) {
+            this.render();
+            updateEval();
         }
-        List<SketchNode> result = this.render();
-        updateEval();
-        return result;
+        return this.rendered;
     }
 
     public boolean ifReRenderRequired() {
@@ -152,7 +179,7 @@ public class Composition extends Individual<CompositionEval> {
         return false;
     }
 
-    private void updateEval() {
+    public void updateEval() {
 
         this.getEval().getStyles().stream()
                 .forEach(this::updateScore);

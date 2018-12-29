@@ -18,6 +18,8 @@ package tech.metacontext.ec.prototype.composer.model;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.composer.styles.Style;
@@ -43,11 +45,11 @@ public class CompositionEval {
     }
 
     public CompositionEval(CompositionEval eval) {
-        
-        this.scores=new HashMap<>();
+
+        this.scores = new HashMap<>();
         eval.getScores().forEach(scores::put);
     }
-    
+
 //    public void addRule(Rule rule) {
 //
 //        this.rules.add(rule);
@@ -55,6 +57,35 @@ public class CompositionEval {
     public Set<? extends Style> getStyles() {
 
         return this.getScores().keySet();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        for (Style s : this.scores.keySet()) {
+            hash = 23 * hash + s.hashCode();
+            hash = 23 * hash + this.scores.get(s).hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CompositionEval other = (CompositionEval) obj;
+        if (this.scores.size() != other.scores.size()) {
+            return false;
+        }
+        return this.scores.entrySet().stream()
+                .allMatch(e -> other.scores.get(e.getKey()).equals(e.getValue()));
     }
 
     /*

@@ -32,7 +32,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        int POP_SIZE = 100;
+        int POP_SIZE = 50;
         int SELECTED_SIZE = 3;
         Main main = new Main(POP_SIZE, SELECTED_SIZE, Settings.DEFAULT);
 

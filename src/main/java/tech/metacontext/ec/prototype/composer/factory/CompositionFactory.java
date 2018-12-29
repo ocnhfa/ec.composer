@@ -23,7 +23,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Factory;
 import tech.metacontext.ec.prototype.composer.model.Composition;
-import tech.metacontext.ec.prototype.composer.model.CompositionEval;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.styles.Style;
@@ -61,15 +60,16 @@ public class CompositionFactory implements Factory<Composition> {
     @Override
     public Composition forArchiving(Composition origin) {
 
-        origin.ifReRenderRequired();
+        origin.getRenderedChecked();
         Composition dupe = new Composition(this.composer_id, origin.getId(),
                 origin.getEval().getStyles());
-        dupe.getRendered().addAll(origin.getRenderedChecked());
+        dupe.getRendered().addAll(origin.getRendered());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forArchiving)
                 .collect(Collectors.toList()));
         dupe.resetSeed(dupe.getConnectors().get(0).getPrevious());
-        dupe.setEval(new CompositionEval(origin.getEval()));
+        dupe.updateEval();
+        assert (origin.getEval().equals(dupe.getEval()));
         return dupe;
     }
 
