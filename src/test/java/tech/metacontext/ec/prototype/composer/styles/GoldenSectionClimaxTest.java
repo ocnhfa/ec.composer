@@ -55,7 +55,8 @@ public class GoldenSectionClimaxTest {
 
         System.out.println("rateComposition");
         tc.getComposer().getConservetory().keySet().stream()
-                .peek(Composition::getRenderedChecked)
+                .peek(c -> c.getRenderedChecked(
+                this.getClass().getSimpleName() + "::testRateComposition"))
                 .map(instance::rateComposition)
                 .map(score -> score >= Settings.SCORE_CONSERVE_IF_COMPLETED)
                 .forEach(Assert::assertTrue);

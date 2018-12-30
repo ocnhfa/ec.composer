@@ -21,10 +21,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,12 +37,9 @@ import tech.metacontext.ec.prototype.abs.Wrapper;
 import tech.metacontext.ec.prototype.composer.Main;
 import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -54,13 +53,36 @@ public class Composition extends Individual<CompositionEval> {
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
+    //for debugging
+    private List<String> debug;
 
+    public void addDebugMsg(String msg) {
+        debug.add(msg);
+    }
+
+    public List<String> getDebug() {
+        return debug;
+    }
+
+    /**
+     * Constructor with id specified.
+     *
+     * @param composer_id
+     * @param id
+     * @param styles
+     */
     public Composition(String composer_id, String id, Collection<? extends Style> styles) {
 
         super(id);
         setup(composer_id, styles);
     }
 
+    /**
+     * Constructor without id specified.
+     *
+     * @param composer_id
+     * @param styles
+     */
     public Composition(String composer_id, Collection<? extends Style> styles) {
 
         setup(composer_id, styles);
@@ -73,6 +95,9 @@ public class Composition extends Individual<CompositionEval> {
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));
         connectorFactory = ConnectorFactory.getInstance();
+        //for debugging
+        this.debug = new ArrayList<>();
+        this.addDebugMsg("Initilization completed.");
     }
 
     public Composition elongation(Predicate<SketchNode> styleChecker) {
@@ -87,7 +112,7 @@ public class Composition extends Individual<CompositionEval> {
     }
 
     public static void main(String[] args) throws Exception {
-        Main main = new Main(100, 1, Settings.TEST);
+        Main main = new Main(100, 1, 1500, Settings.TEST);
         Composer composer = main.getComposer();
         Composition p0, p1;
         do {
@@ -100,7 +125,7 @@ public class Composition extends Individual<CompositionEval> {
         do {
             System.out.print(".");
             child = composer.crossover(p0, p1);
-            child.getRenderedChecked();
+            child.getRenderedChecked("Composition::main");
             dupe = cf.forArchiving(child);
             if (counter++ % 50 == 0) {
                 System.out.println();
@@ -128,8 +153,11 @@ public class Composition extends Individual<CompositionEval> {
         return rendered;
     }
 
-    public List<SketchNode> getRenderedChecked() {
+    public List<SketchNode> getRenderedChecked(String request) {
 
+        _logger.log(Level.INFO,
+                "{0}: getRenderedChecked, request from {1}",
+                new Object[]{this.getId_prefix(), request});
         if (this.ifReRenderRequired()) {
             this.render();
             updateEval();
@@ -166,11 +194,18 @@ public class Composition extends Individual<CompositionEval> {
                     this.getId_prefix());
             return true;
         }
-        if (IntStream.range(1, this.getSize()).anyMatch(i
-                -> !Objects.equals(this.connectors.get(i - 1).getNext(), this.rendered.get(i)))) {
+        OptionalInt mismatchIndex = IntStream.range(1, this.getSize())
+                .filter(i
+                        -> !Objects.equals(
+                        this.connectors.get(i - 1).getNext(),
+                        this.rendered.get(i)))
+                .findFirst();
+        if (mismatchIndex.isPresent()) {
             _logger.log(Level.INFO,
-                    "Mismatched SketchNodes, rerendering required for Composition {0}.",
-                    this.getId_prefix());
+                    "Mismatched SketchNodes at {0}, rerendering required for Composition {1}.",
+                    new Object[]{
+                        mismatchIndex.getAsInt(),
+                        this.getId_prefix()});
             return true;
         }
         _logger.log(Level.FINE,
@@ -294,5 +329,4 @@ public class Composition extends Individual<CompositionEval> {
     public List<SketchNode> getRendered() {
         return this.rendered;
     }
-
 }

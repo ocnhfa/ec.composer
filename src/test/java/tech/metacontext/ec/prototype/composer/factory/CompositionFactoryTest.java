@@ -66,9 +66,11 @@ public class CompositionFactoryTest {
         System.out.println("forMutation");
         tc.getComposer().getPopulation().stream().forEach(c -> {
             c.ifReRenderRequired();
+            System.out.printf("Composition %s from population.\n", c.getId_prefix());
             c.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
             Composition result = instance.forMutation(c);
+            System.out.printf("Composition %s for Mutation.\n", result.getId_prefix());
             result.getEval().getScores().entrySet()
                     .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
             assertFalse(tc.getComposer().getStyles().stream()

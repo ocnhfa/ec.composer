@@ -51,6 +51,16 @@ public class CompositionFactory implements Factory<Composition> {
         return instances.get(composer_id);
     }
 
+    public Composition newInstance(Predicate<SketchNode> styleChecker,
+            Collection<? extends Style> styles) {
+
+        Composition newInstance = new Composition(this.composer_id, styles);
+        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker);
+        newInstance.addConnector(conn);
+        newInstance.setSeed(conn.getPrevious());
+        return newInstance;
+    }
+
     /**
      * Create duplicated Composition instance for archiving.
      *
@@ -60,7 +70,9 @@ public class CompositionFactory implements Factory<Composition> {
     @Override
     public Composition forArchiving(Composition origin) {
 
-        origin.getRenderedChecked();
+        origin.addDebugMsg("forArchiving: "
+                + origin.getId_prefix() + "been checked/rendered.");
+        origin.getRenderedChecked(this.getClass().getSimpleName() + "::forArchiving");
         Composition dupe = new Composition(this.composer_id, origin.getId(),
                 origin.getEval().getStyles());
         dupe.getRendered().addAll(origin.getRendered());
@@ -81,7 +93,10 @@ public class CompositionFactory implements Factory<Composition> {
      */
     public Composition forMutation(Composition origin) {
 
-        Composition dupe = new Composition(this.composer_id, origin.getEval().getStyles());
+        origin.addDebugMsg("forMutation: "
+                + origin.getId_prefix() + "been checked/rendered.");
+        Composition dupe = new Composition(this.composer_id,
+                origin.getEval().getStyles());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
@@ -89,24 +104,13 @@ public class CompositionFactory implements Factory<Composition> {
         return dupe;
     }
 
-    public Composition newInstance(Predicate<SketchNode> styleChecker,
+    public Composition forCrossover(Connector conn,
             Collection<? extends Style> styles) {
 
         Composition newInstance = new Composition(this.composer_id, styles);
-        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker);
-        newInstance.addConnector(conn);
-        newInstance.setSeed(conn.getPrevious());
-        return newInstance;
-    }
-
-    public Composition forCrossover(SketchNode seed, Connector conn,
-            Collection<? extends Style> styles) {
-
-        Composition newInstance = new Composition(this.composer_id, styles);
-        Connector dupeConn = connectorFactory
-                .newConnectorWithSeed(conn.getStyleChecker());
-        newInstance.addConnector(dupeConn);
-        newInstance.resetSeed(dupeConn.getPrevious());
+        Connector dupe = connectorFactory.forMutation(conn);
+        newInstance.addConnector(dupe);
+        newInstance.resetSeed(dupe.getPrevious());
         return newInstance;
     }
 

@@ -22,6 +22,7 @@ import java.util.Random;
  * @author Jonathan
  */
 public enum MutationType {
+
     Insertion(),
     Deletion(),
     Alteration();

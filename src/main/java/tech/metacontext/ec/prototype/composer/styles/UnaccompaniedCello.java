@@ -56,9 +56,10 @@ public class UnaccompaniedCello extends Style {
     @Override
     public double rateComposition(Composition composition) {
 
-        if (!composition.getRenderedChecked().stream()
+        if (!composition.getRenderedChecked(this.getClass().getSimpleName() + "::rateComposition")
+                .stream()
                 .flatMap(node -> node.getMat(MaterialType.NoteRanges)
-                        .getMaterials().stream())
+                .getMaterials().stream())
                 .allMatch(getRange()::contains)) {
             return 0.0;
         }

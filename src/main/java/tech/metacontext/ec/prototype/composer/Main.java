@@ -18,8 +18,7 @@ package tech.metacontext.ec.prototype.composer;
 import tech.metacontext.ec.prototype.composer.model.Composer;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
+import tech.metacontext.ec.prototype.composer.styles.*;
 
 /**
  *
@@ -30,19 +29,38 @@ public class Main {
     // 決定作品數量及演進世代
     private Composer composer;
 
+    /**
+     * Entry point of main.
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         int POP_SIZE = 50;
-        int SELECTED_SIZE = 3;
-        Main main = new Main(POP_SIZE, SELECTED_SIZE, Settings.DEFAULT);
+        int SELECTED_SIZE = 10;
+        int GENERATION = 1500;
+        Main main = new Main(POP_SIZE, SELECTED_SIZE, GENERATION, Settings.DEFAULT);
 
-        main.composer.render();
+        main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
+        main.composer.render(Composer.RENDERTYPE_SCATTERPLOT);
         System.out.println(header("Persisting Conservatory"));
         main.composer.persistAll();
-
     }
 
-    public Main(int popSize, int goalSize, int logState) throws Exception {
+    /**
+     * Main constructor.
+     *
+     * @param popSize
+     * @param goalSize
+     * @param generation
+     * @param logState
+     * @throws Exception
+     */
+    public Main(int popSize,
+            int goalSize,
+            int generation,
+            int logState) throws Exception {
 
         this.composer = new Composer(popSize, ComposerAim.Phrase,
                 logState,
@@ -51,11 +69,17 @@ public class Main {
         );
         System.out.println(header("Evolutionary Computation"));
         System.out.printf("Composer = [%s]\n", composer.getId());
+        System.out.println("Population size = " + popSize);
+        System.out.println("Expected selected size = " + goalSize);
         System.out.println(header("Evolution"));
         int conserved = 0;
         do {
-            if (composer.getGenCount() > 0 && composer.getGenCount() % 50 == 0) {
-                System.out.println(" (" + composer.getGenCount() + ")");
+            if (composer.getGenCount() > 0) {
+                if (composer.getGenCount() % 100 == 0) {
+                    System.out.println(" (" + composer.getGenCount() + ")");
+                } else if (composer.getGenCount() % 50 == 0) {
+                    System.out.print("|");
+                }
             }
             composer.compose().evolve();
             if (composer.getConservetory().size() > conserved) {
@@ -64,7 +88,8 @@ public class Main {
             } else {
                 System.out.print(".");
             }
-        } while (composer.getConservetory().size() < goalSize);
+        } while (composer.getConservetory().size() < goalSize
+                && composer.getGenCount() < generation);
         System.out.println(" (" + composer.getGenCount() + ")");
 
         System.out.println(header("Dumping Archive"));

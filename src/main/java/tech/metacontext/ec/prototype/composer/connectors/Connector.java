@@ -33,8 +33,9 @@ import java.util.stream.Collectors;
  */
 public class Connector extends Individual {
 
-    private final Map<MaterialType, TransformType> transformTypes;
     private static SketchNodeFactory sketchNodeFactory;
+
+    private final Map<MaterialType, TransformType> transformTypes;
     private Predicate<SketchNode> styleChecker;
     private SketchNode previous;
     private SketchNode next;
