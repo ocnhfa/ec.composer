@@ -274,17 +274,17 @@ public class Composer extends Population<Composition> {
          new Random().ints(0, this.getPopulationSize())
                 .mapToObj(this.getPopulation()::get)
          */
-        double avg = this.getPopulation().stream()
+        double std = this.getPopulation().stream()
                 //                .filter(this.getAim()::completed)
                 .peek(Composition::updateEval)
                 .mapToDouble(this::getMinScore)
                 //                .peek(System.out::println)
-                .average()
-                .orElse(0.0);
+                .summaryStatistics()
+                .getMax() * 0.9;
 //        System.out.println("average = " + average);
         List<Composition> list = this.getPopulation().stream()
                 .filter(c -> state == SELECT_FROM_ALL
-                || (this.getAim().completed(c) && this.getMinScore(c) >= avg))
+                || (this.getAim().completed(c) && this.getMinScore(c) >= std))
                 .collect(Collectors.toList());
         if (list.isEmpty()) {
             return null;
