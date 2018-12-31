@@ -25,9 +25,9 @@ import tech.metacontext.ec.prototype.composer.model.Composer;
  */
 public class TestCenter {
 
-    public static final int PRESET_POPULATION_SIZE = 100;
+    public static final int PRESET_POPULATION_SIZE = 20;
     public static final int GOAL_CONSERVATORY_SIZE = 3;
-    public static final int GOAL_GENERATION = 1500;
+    public static final int GOAL_GENERATION = 50;
     private static TestCenter instance;
     private static Composer composer;
 

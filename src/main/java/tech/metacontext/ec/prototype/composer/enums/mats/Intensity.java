@@ -23,8 +23,8 @@ public enum Intensity {
 
     pppp, ppp, pp, p, mp, mf, f, ff, fff, ffff;
 
-    public double getIntensityIndex() {
+    public static double getIntensityIndex(Intensity intensity) {
 
-        return 1.0 * this.ordinal() / (values().length - 1);
+        return 1.0 * intensity.ordinal() / (values().length - 1);
     }
 }

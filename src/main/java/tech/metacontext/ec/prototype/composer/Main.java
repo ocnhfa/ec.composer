@@ -15,10 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.util.function.ToDoubleBiFunction;
+import java.util.function.ToDoubleFunction;
+import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.composer.model.Composer;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.model.Composition;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
  *
@@ -38,14 +44,37 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         int POP_SIZE = 50;
-        int SELECTED_SIZE = 10;
-        int GENERATION = 1500;
+        int SELECTED_SIZE = 5;
+        int GENERATION = 200;
         Main main = new Main(POP_SIZE, SELECTED_SIZE, GENERATION, Settings.DEFAULT);
 
         main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
         main.composer.render(Composer.RENDERTYPE_SCATTERPLOT);
         System.out.println(header("Persisting Conservatory"));
         main.composer.persistAll();
+
+//        LineChart_AWT chart = new LineChart_AWT("Composer " + main.composer.getId());
+        var chart = new LineChart_AWT("Composer " + main.composer.getId());
+
+        GoldenSectionClimax gc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
+        ToDoubleFunction<SketchNode> mapper = node
+                -> gc.climaxIndex(node);
+        ToDoubleBiFunction<Composition, Integer> mapper2 = (c, i)
+                -> gc.getStandard(c, i);
+
+        main.composer.getConservetory().keySet().stream()
+                .sorted((o1,o2)->o1.getId().compareTo(o2.getId()))
+                .peek(gc::updateClimaxIndexes)
+                .forEach(c -> {
+                    IntStream.range(0, c.getSize())
+                            .forEach(i -> {
+                                chart.addData(mapper.applyAsDouble(c.getRendered().get(i)), c.getId_prefix(), "" + i);
+                                chart.addData(mapper2.applyAsDouble(c, i), "standard", "" + i);
+                            });
+                });
+        chart.createLineChart("SketchNode Rating Chart",
+                "Generation", "Score", 560, 367, true);
+        chart.showChartWindow();
     }
 
     /**
@@ -71,16 +100,10 @@ public class Main {
         System.out.printf("Composer = [%s]\n", composer.getId());
         System.out.println("Population size = " + popSize);
         System.out.println("Expected selected size = " + goalSize);
+        System.out.println("Generation = " + generation);
         System.out.println(header("Evolution"));
         int conserved = 0;
         do {
-            if (composer.getGenCount() > 0) {
-                if (composer.getGenCount() % 100 == 0) {
-                    System.out.println(" (" + composer.getGenCount() + ")");
-                } else if (composer.getGenCount() % 50 == 0) {
-                    System.out.print("|");
-                }
-            }
             composer.compose().evolve();
             if (composer.getConservetory().size() > conserved) {
                 System.out.print(composer.getConservetory().size() - conserved);
@@ -88,8 +111,13 @@ public class Main {
             } else {
                 System.out.print(".");
             }
+            if (composer.getGenCount() % 100 == 0) {
+                System.out.println(" (" + composer.getGenCount() + ")");
+            } else if (composer.getGenCount() % 50 == 0) {
+                System.out.print("|");
+            }
         } while (composer.getConservetory().size() < goalSize
-                && composer.getGenCount() < generation);
+                || composer.getGenCount() < generation);
         System.out.println(" (" + composer.getGenCount() + ")");
 
         System.out.println(header("Dumping Archive"));
@@ -99,8 +127,13 @@ public class Main {
                 .forEach(System.out::println);
 
         composer.getConservetory().keySet().stream()
-                .map(Composer::output)
-                .forEach(System.out::println);
+                .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
+                .forEach(c
+                        -> System.out.println("GSC: " + c.getRendered().stream()
+                        .map(new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())::climaxIndex)
+                        .map(s -> String.format("%.2f", s))
+                        .collect(Collectors.joining(" "))));
+
     }
 
     static String header(String text) {

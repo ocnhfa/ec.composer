@@ -17,11 +17,9 @@ package tech.metacontext.ec.prototype.composer.styles;
 
 import org.junit.Assert;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.TestCenter;
-import tech.metacontext.ec.prototype.composer.model.Composition;
 
 /**
  *

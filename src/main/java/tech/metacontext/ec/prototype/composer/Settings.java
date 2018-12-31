@@ -16,7 +16,6 @@
 package tech.metacontext.ec.prototype.composer;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +30,7 @@ public class Settings {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.9;
+    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.90;
     /**
      * Chance for a mature composition to be elongated.
      */
@@ -66,13 +65,17 @@ public class Settings {
      */
     public static final double CHANCE_DISCONNECTED = 1.0;
 
+    public static final int DEFAULT_DIVISION = 2;
+    public static final int DEFAULT_MIN_DIVISION = 1;
+    public static final int DEFAULT_MAX_DIVISION = 4;
+
     public static String getTimeBasedFilename() {
         return LocalDateTime.now().toString().replace(":", "-").substring(0, 25);
     }
 
-    public static String logfile = "src/main/resources/log/";
+    public static String logfile = "log/";
 
-    public static String logfile_test = "src/main/resources/log/test/";
+    public static String logfile_test = "log/test/";
 
     public static int DEFAULT = 0, TEST = 1;
 

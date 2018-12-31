@@ -117,7 +117,7 @@ public class ComposerTest {
         while (tc.getComposer().getConservetory().size() < 3) {
             tc.getComposer().compose().evolve();
         }
-        System.out.println(Composer.output(tc.getComposer().getConservetory()
+        System.out.println(Composer.simpleScoreOutput(tc.getComposer().getConservetory()
                 .keySet().toArray(Composition[]::new)));
         tc.getComposer().getConservetory().keySet().forEach(c -> {
             System.out.println(c.getId_prefix());
@@ -131,11 +131,11 @@ public class ComposerTest {
                     .get()
                     .getKey();
             tc.getComposer().getConservetory().remove(c);
-            System.out.println(Composer.output(c));
+            System.out.println(Composer.simpleScoreOutput(c));
             boolean expResult = tc.getComposer().getStyles().stream()
                     .map(c::getScore)
                     .allMatch(score -> score > SCORE_CONSERVE_IF_COMPLETED);
-            System.out.println(Composer.output(c));
+            System.out.println(Composer.simpleScoreOutput(c));
             System.out.println("expResult = " + expResult);
             boolean result = tc.getComposer().conserve(c);
             System.out.println("Result = " + result);

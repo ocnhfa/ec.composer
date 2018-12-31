@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.materials.PitchSets;
 
 /**
  *
@@ -44,6 +45,11 @@ public class PitchSet {
     public PitchSet(PitchSet origin) {
 
         this(origin.getPitch_set());
+    }
+
+    public static double getIntensityIndex(PitchSet ps) {
+
+        return 1.0 * ps.getSize() / PitchSets.DEFAULT_MAX_PITCH_NUMBER;
     }
 
     @Override

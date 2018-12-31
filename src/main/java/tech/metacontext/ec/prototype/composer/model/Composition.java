@@ -28,10 +28,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
 import tech.metacontext.ec.prototype.composer.Main;
@@ -39,7 +41,9 @@ import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
  *
@@ -138,17 +142,17 @@ public class Composition extends Individual<CompositionEval> {
         rendered.clear();
         Wrapper<SketchNode> previous = new Wrapper<>(seed);
         rendered.add(seed);
+        /*
+        1. conn.setPrevious(previous.get())
+        2. previous.set(conn.transform())
+        3. return conn.getNext()
+         */
         rendered.addAll(this.getConnectors().stream()
-                .map(conn -> {
-                    /*
-                    1. conn.setPrevious(previous.get())
-                    2. previous.set(conn.transform())
-                    3. return conn.getNext()
-                     */
-                    conn.setPrevious(previous.get());
-                    return previous.set(conn.transform());
-                })
-                .collect(Collectors.toList()));
+                .peek(conn -> conn.setPrevious(previous.get()))
+                .map(Connector::transform)
+                .map(previous::set)
+                .collect(Collectors.toList())
+        );
 //        System.out.println(this);
         return rendered;
     }
@@ -231,6 +235,11 @@ public class Composition extends Individual<CompositionEval> {
         return this.getEval().getScores().get(style);
     }
 
+    /**
+     * Estimated size of rendered SketchNode from the size of connectors.
+     *
+     * @return
+     */
     public int getSize() {
 
         return this.getConnectors().size() + 1;
@@ -255,16 +264,21 @@ public class Composition extends Individual<CompositionEval> {
 
     public void resetSeed(SketchNode seed) {
 
+        if (Objects.equals(this.seed, seed) && this.connectors.getFirst().getPrevious().equals(seed)
+                && this.rendered.size() == this.getSize()) {
+            return;
+        }
         this.seed = seed;
         this.connectors.getFirst().setPrevious(seed);
-        if (!this.rendered.contains(seed)) {
-            if (this.rendered.size() < this.getSize()) {
-                this.rendered.add(0, seed);
-            } else {
-                _logger.warning("Rendered size mismatch of missing seed, rerendering.");
-                this.render();
-            }
-        }
+        this.getRenderedChecked("Composition::resetSeed");
+//        if (!this.rendered.contains(seed)) {
+//            if (this.rendered.size() < this.getSize()) {
+//                this.rendered.set(0, seed);
+//            } else {
+//                _logger.warning("Rendered size mismatch of missing seed, rerendering.");
+//                this.render();
+//            }
+//        }
     }
 
     @Override
@@ -292,7 +306,7 @@ public class Composition extends Individual<CompositionEval> {
         String result
                 = String.format("%s(size = %d, Composer = [%s])\n",
                         super.toString(), this.getSize(), _logger.getName())
-                + String.format("%s\n", Composer.output(this))
+                + String.format("%s\n", Composer.simpleScoreOutput(this))
                 + String.format("Seed: %s\n", this.getSeed())
                 + this.getConnectors().stream()
                         .peek(c -> {

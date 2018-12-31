@@ -17,6 +17,8 @@ package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.ToDoubleFunction;
+import static tech.metacontext.ec.prototype.composer.Settings.DEFAULT_MAX_DIVISION;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
@@ -25,10 +27,6 @@ import tech.metacontext.ec.prototype.composer.enums.TransformType;
  * @param <E>
  */
 public abstract class MusicMaterial<E> {
-
-    public static final int DEFAULT_DIVISION = 2;
-    public static final int DEFAULT_MIN_DIVISION = 1;
-    public static final int DEFAULT_MAX_DIVISION = 4;
 
     private int division;
     private List<E> materials;
@@ -86,8 +84,15 @@ public abstract class MusicMaterial<E> {
      */
     abstract public <M extends MusicMaterial> M transform(TransformType type);
 
+    public double getAverageIntensityIndex(ToDoubleFunction<E> mapper) {
+
+        return this.getMaterials().stream().mapToDouble(mapper)
+                .average().getAsDouble()
+                * this.getDivision() / DEFAULT_MAX_DIVISION;
+    }
+
     abstract public <M extends MusicMaterial> M duplicate();
-    
+
     public int size() {
         return this.materials.size();
     }

@@ -56,7 +56,7 @@ public class IntensityTest {
         System.out.println("getIntensityIndex");
         Arrays.asList(Intensity.values()).stream()
                 .forEach(instance -> {
-                    double result = instance.getIntensityIndex();
+                    double result = Intensity.getIntensityIndex(instance);
                     double expResult = 1.0;
                     System.out.println(instance + "=" + result);
                     assertTrue(result <= expResult);

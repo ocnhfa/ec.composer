@@ -18,11 +18,13 @@ package tech.metacontext.ec.prototype.composer.materials;
 import tech.metacontext.ec.prototype.composer.enums.mats.PitchSet;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *

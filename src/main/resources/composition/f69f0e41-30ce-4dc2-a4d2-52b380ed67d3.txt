@@ -1,0 +1,67 @@
+Composition [f69f0e41-30ce](size = 11, Composer = [75ed3c2e-c769-4ecf-86c8-e5ff0bf1e93b])
+[f69f0e41-30ce] GoldenSectionClimax: 0.911 | UnaccompaniedCello: 1.000
+Seed: SketchNode [0f91b68c-a68d]{
+-   Dynamics (div=3): [mp, mp, p]
+-   RhythmicPoints (div=4): [8, 3, 7, 2]
+-   PitchSets (div=1): [PitchSet[ E_flat, G_flat, A ]]
+-   NoteRanges (div=1): [C2]}
+Connector [070e815a-70d7]{RhythmicPoints=MoveBackward, PitchSets=MoveBackward, Dynamics=MoveBackward, NoteRanges=MoveForward} 
+ => SketchNode [48f58c65-3644]{
+-   Dynamics (div=3): [p, p, pp]
+-   RhythmicPoints (div=4): [7, 2, 6, 1]
+-   PitchSets (div=1): [PitchSet[ D, F, A_flat ]]
+-   NoteRanges (div=1): [C3]}
+Connector [84494ea8-b14f]{RhythmicPoints=Disconnected, PitchSets=MoveBackward, Dynamics=Repetition, NoteRanges=MoveForward} 
+ => SketchNode [fb1f1ea2-1382]{
+-   Dynamics (div=3): [p, p, pp]
+-   RhythmicPoints (div=2): [4, 4]
+-   PitchSets (div=1): [PitchSet[ D_flat, E, G ]]
+-   NoteRanges (div=1): [C4]}
+Connector [8e07965c-6e16]{RhythmicPoints=MoveForward, PitchSets=MoveForward, Dynamics=Retrograde, NoteRanges=MoveBackward} 
+ => SketchNode [50686e53-3f15]{
+-   Dynamics (div=3): [pp, p, p]
+-   RhythmicPoints (div=2): [5, 5]
+-   PitchSets (div=1): [PitchSet[ D, F, A_flat ]]
+-   NoteRanges (div=1): [C3]}
+Connector [dcbb776b-b9a7]{RhythmicPoints=Disconnected, PitchSets=Disconnected, Dynamics=Disconnected, NoteRanges=Retrograde} 
+ => SketchNode [0ab17b1e-c6d5]{
+-   Dynamics (div=2): [pp, mf]
+-   RhythmicPoints (div=1): [8]
+-   PitchSets (div=4): [PitchSet[ D_flat, E_flat, A ], PitchSet[ D_flat, G_flat, B_flat ], PitchSet[ E_flat, G, A_flat ], PitchSet[ E_flat, F, G_flat ]]
+-   NoteRanges (div=1): [C3]}
+Connector [6a5e50f7-c0d5]{RhythmicPoints=Disconnected, PitchSets=MoveForward, Dynamics=Disconnected, NoteRanges=Repetition} 
+ => SketchNode [ddbfdc0c-ae59]{
+-   Dynamics (div=2): [p, mp]
+-   RhythmicPoints (div=2): [4, 5]
+-   PitchSets (div=4): [PitchSet[ D, E, B_flat ], PitchSet[ D, G, B ], PitchSet[ E, A_flat, A ], PitchSet[ E, G_flat, G ]]
+-   NoteRanges (div=1): [C3]}
+Connector [1d08585d-f824]{RhythmicPoints=Disconnected, PitchSets=MoveForward, Dynamics=Disconnected, NoteRanges=Repetition} 
+ => SketchNode [cd4ec13b-fa43]{
+-   Dynamics (div=3): [p, mp, mf]
+-   RhythmicPoints (div=4): [6, 1, 5, 1]
+-   PitchSets (div=4): [PitchSet[ E_flat, F, B ], PitchSet[ C, E_flat, A_flat ], PitchSet[ F, A, B_flat ], PitchSet[ F, G, A_flat ]]
+-   NoteRanges (div=1): [C3]}
+Connector [545dfb0d-174e]{RhythmicPoints=Disconnected, PitchSets=MoveForward, Dynamics=Disconnected, NoteRanges=Repetition} 
+ => SketchNode [c19d216c-157d]{
+-   Dynamics (div=4): [mp, f, ff, pp]
+-   RhythmicPoints (div=4): [6, 5, 6, 5]
+-   PitchSets (div=4): [PitchSet[ C, E, G_flat ], PitchSet[ D_flat, E, A ], PitchSet[ G_flat, B_flat, B ], PitchSet[ G_flat, A_flat, A ]]
+-   NoteRanges (div=1): [C3]}
+Connector [4095767c-658c]{RhythmicPoints=Disconnected, PitchSets=MoveBackward, Dynamics=Disconnected, NoteRanges=Retrograde} 
+ => SketchNode [06b05603-5516]{
+-   Dynamics (div=1): [f]
+-   RhythmicPoints (div=4): [6, 4, 5, 3]
+-   PitchSets (div=4): [PitchSet[ E_flat, F, B ], PitchSet[ C, E_flat, A_flat ], PitchSet[ F, A, B_flat ], PitchSet[ F, G, A_flat ]]
+-   NoteRanges (div=1): [C3]}
+Connector [b775c01b-4fd0]{RhythmicPoints=Disconnected, PitchSets=MoveForward, Dynamics=Disconnected, NoteRanges=Repetition} 
+ => SketchNode [6e4f5a05-afe7]{
+-   Dynamics (div=2): [mp, f]
+-   RhythmicPoints (div=3): [1, 4, 7]
+-   PitchSets (div=4): [PitchSet[ C, E, G_flat ], PitchSet[ D_flat, E, A ], PitchSet[ G_flat, B_flat, B ], PitchSet[ G_flat, A_flat, A ]]
+-   NoteRanges (div=1): [C3]}
+Connector [bb65afdd-7960]{RhythmicPoints=Disconnected, PitchSets=MoveBackward, Dynamics=Disconnected, NoteRanges=Retrograde} 
+ => SketchNode [3d17664e-9f6f]{
+-   Dynamics (div=4): [ff, ff, f, pp]
+-   RhythmicPoints (div=3): [5, 3, 3]
+-   PitchSets (div=4): [PitchSet[ E_flat, F, B ], PitchSet[ C, E_flat, A_flat ], PitchSet[ F, A, B_flat ], PitchSet[ F, G, A_flat ]]
+-   NoteRanges (div=1): [C3]}

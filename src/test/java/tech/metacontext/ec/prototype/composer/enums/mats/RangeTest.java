@@ -58,7 +58,7 @@ public class RangeTest {
         Range highest = Range.C4;
         Arrays.asList(Range.values()).stream()
                 .forEach(instance -> {
-                    double result = instance.getIntensityIndex(lowest, highest);
+                    double result = Range.getIntensityIndex(instance, lowest, highest);
                     double expResult = 1.0;
                     System.out.println(instance + "=" + result);
                     assertTrue(result <= expResult);

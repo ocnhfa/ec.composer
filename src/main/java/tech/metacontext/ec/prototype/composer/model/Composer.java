@@ -307,12 +307,12 @@ public class Composer extends Population<Composition> {
         c.getRenderedChecked(this.getClass().getSimpleName() + "::conserve");
         c.addDebugMsg("under conservation check.");
         if (getMinScore(c) < SCORE_CONSERVE_IF_COMPLETED) {
-            c.addDebugMsg("fail conservation check: " + output(c));
+            c.addDebugMsg("fail conservation check: " + simpleScoreOutput(c));
             return false;
         }
-        c.addDebugMsg("pass conservation check: " + output(c));
+        c.addDebugMsg("pass conservation check: " + simpleScoreOutput(c));
         _logger.log(Level.INFO, "Qualified Composition been located: {0}",
-                output(c));
+                simpleScoreOutput(c));
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated for conservation.",
                 c.getId_prefix());
@@ -356,7 +356,7 @@ public class Composer extends Population<Composition> {
                     List<Composition> list = this.getArchive().get(i);
                     double average = list.stream()
                             .mapToDouble(this::getMinScore)
-                            .filter(s -> s > 0.0)
+//                            .filter(s -> s > 0.0)
                             .average()
                             .orElse(0.0);
                     chart.addData(average, "average", "" + i);
@@ -411,7 +411,7 @@ public class Composer extends Population<Composition> {
                 : 0.0;
     }
 
-    public static String output(Composition... list) {
+    public static String simpleScoreOutput(Composition... list) {
 
         StringBuilder report = new StringBuilder();
         Stream.of(list).forEach(composition -> report

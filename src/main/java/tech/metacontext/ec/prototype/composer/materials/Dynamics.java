@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
 
