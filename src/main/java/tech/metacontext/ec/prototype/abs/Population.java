@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.abs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -49,6 +50,17 @@ public abstract class Population<E extends Individual> {
     abstract public void evolve();
 
     abstract public void render();
+
+    /**
+     * Randomly select an Individual from subset selected with a criteria and a
+     * threshold.
+     *
+     * @param criteria to select a subset from population.
+     * @param threshold in percentage. For eg., 0.9 stands for that selected
+     * score must be higher than 90% population.
+     * @return the selected individual.
+     */
+    abstract public E select(Predicate<E> criteria, double threshold);
 
     public int getPopulationSize() {
 
@@ -85,10 +97,10 @@ public abstract class Population<E extends Individual> {
     }
 
     public String getId() {
-    
+
         return id.toString();
     }
-    
+
     /*
      * Default setters and getters.
      */

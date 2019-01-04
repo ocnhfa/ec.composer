@@ -26,7 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.Range;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
 import tech.metacontext.ec.prototype.composer.TestCenter;
@@ -58,9 +58,9 @@ public class ComposerTest {
         Composition p1, p2;
         do {
             tc.getComposer().compose().evolve();
-            p1 = tc.getComposer().randomSelect(Composer.SELECT_ONLY_COMPLETED);
-            p2 = tc.getComposer().randomSelect(Composer.SELECT_ONLY_COMPLETED);
-        } while (tc.getComposer().randomSelect(Composer.SELECT_ONLY_COMPLETED) == null
+            p1 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
+            p2 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
+        } while (tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD) == null
                 || Objects.equals(p1, p2)
                 || p1.getSize() == p2.getSize());
         Composition result = tc.getComposer().crossover(p1, p2);
@@ -90,19 +90,19 @@ public class ComposerTest {
         int state = Composer.SELECT_ONLY_COMPLETED;
         Composition result = Stream.generate(() -> {
             tc.getComposer().compose().evolve();
-            return tc.getComposer().randomSelect(state);
+            return tc.getComposer().select(state, SELECTION_THRESHOLD);
         })
                 .filter(Objects::nonNull)
                 .findFirst()
                 .get();
-        assertTrue(tc.getComposer().getAim().completed(result));
+        assertTrue(tc.getComposer().getAim().isCompleted(result));
     }
 
     @Test
     public void testStyleChecker() {
         System.out.println("styleChecker");
         SketchNode node = sketchNodeFactory.newInstance(tc.getComposer().styleChecker);
-        node.getMat(MaterialType.NoteRanges).setMaterials(List.of(Range.C0));
+        node.getMat(MaterialType.NoteRanges).setMaterials(List.of(SciRange.C0));
         assertFalse(Stream.generate(() -> tc.getComposer().styleChecker)
                 .limit(100)
                 .allMatch(b -> b.test(node)));
@@ -251,14 +251,14 @@ public class ComposerTest {
         System.out.println("getConservetory");
         Composer instance = null;
         List<Composition> expResult = null;
-        Map<Composition,Integer> result = tc.getComposer().getConservetory();
+        Map<Composition, Integer> result = tc.getComposer().getConservetory();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of getSize method, of class Composer.
+     * Test of getAimSize method, of class Composer.
      */
     @Test
     @Ignore

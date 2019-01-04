@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.enums.mats.Range;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 
 /**
@@ -32,14 +32,14 @@ public class UnaccompaniedCello extends Style {
     /**
      * 音域
      */
-    public static final Map<Range, Double> RANGE = new HashMap<>();
+    public static final Map<SciRange, Double> RANGE = new HashMap<>();
 
     static {
-        RANGE.put(Range.C2, 1.0);
-        RANGE.put(Range.C3, 1.0);
-        RANGE.put(Range.C4, 1.0);
-        RANGE.put(Range.C5, 0.5);
-        RANGE.put(Range.C6, 0.25);
+        RANGE.put(SciRange.C2, 1.0);
+        RANGE.put(SciRange.C3, 1.0);
+        RANGE.put(SciRange.C4, 1.0);
+        RANGE.put(SciRange.C5, 0.5);
+        RANGE.put(SciRange.C6, 0.25);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class UnaccompaniedCello extends Style {
                 .getMaterials()
                 .stream()
                 .allMatch(range
-                        -> RANGE.containsKey((Range) range)
-                /*...*/ && RANGE.get((Range) range) > Math.random());
+                        -> RANGE.containsKey((SciRange) range)
+                /*...*/ && RANGE.get((SciRange) range) > Math.random());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class UnaccompaniedCello extends Style {
         return 1.0;
     }
 
-    public static Collection<Range> getRange() {
+    public static Collection<SciRange> getRange() {
 
         return RANGE.keySet();
     }

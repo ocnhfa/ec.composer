@@ -1,0 +1,61 @@
+Composition [4ebd6a9e-213e](size = 10, Composer = [06052a01-950c-4635-bf55-e0ed39bae979])
+[4ebd6a9e-213e] UnaccompaniedCello: 1.000 | GoldenSectionClimax: 0.906
+Seed: SketchNode [5bc3d9f2-9501]{
+-   RhythmicPoints (div=1): [1]
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=3): [ff, p, p]
+-   PitchSets (div=2): [PitchSet[ A_flat, A, B ], PitchSet[ E_flat, F, A_flat ]]}
+Connector [f54d532f-cfdb]{RhythmicPoints=MoveBackward, NoteRanges=MoveBackward, PitchSets=Repetition, Dynamics=MoveBackward} 
+ => SketchNode [72c6fb50-5c2f]{
+-   RhythmicPoints (div=1): [0]
+-   NoteRanges (div=1): [C2]
+-   Dynamics (div=3): [f, pp, pp]
+-   PitchSets (div=2): [PitchSet[ A_flat, A, B ], PitchSet[ E_flat, F, A_flat ]]}
+Connector [9de59af3-e1b0]{RhythmicPoints=Repetition, NoteRanges=Repetition, PitchSets=MoveBackward, Dynamics=MoveForward} 
+ => SketchNode [09e9d924-f209]{
+-   RhythmicPoints (div=1): [0]
+-   NoteRanges (div=1): [C2]
+-   Dynamics (div=3): [ff, p, p]
+-   PitchSets (div=2): [PitchSet[ G, A_flat, B_flat ], PitchSet[ D, E, G ]]}
+Connector [1f47befb-3cc2]{RhythmicPoints=Disconnected, NoteRanges=MoveForward, PitchSets=MoveForward, Dynamics=Disconnected} 
+ => SketchNode [6efa6a2c-6267]{
+-   RhythmicPoints (div=2): [7, 1]
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=3): [mp, mf, pp]
+-   PitchSets (div=2): [PitchSet[ A_flat, A, B ], PitchSet[ E_flat, F, A_flat ]]}
+Connector [35d4edb8-8cdd]{RhythmicPoints=MoveBackward, NoteRanges=Retrograde, PitchSets=MoveForward, Dynamics=Repetition} 
+ => SketchNode [51e32da4-5235]{
+-   RhythmicPoints (div=2): [6, 0]
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=3): [mp, mf, pp]
+-   PitchSets (div=2): [PitchSet[ C, A, B_flat ], PitchSet[ E, G_flat, A ]]}
+Connector [c957ab29-6654]{RhythmicPoints=MoveForward, NoteRanges=MoveForward, PitchSets=MoveForward, Dynamics=MoveForward} 
+ => SketchNode [7cdf0656-7b04]{
+-   RhythmicPoints (div=2): [7, 1]
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=3): [mf, f, p]
+-   PitchSets (div=2): [PitchSet[ D_flat, B_flat, B ], PitchSet[ F, G, B_flat ]]}
+Connector [d2aac0d7-28c7]{RhythmicPoints=Disconnected, NoteRanges=Retrograde, PitchSets=Disconnected, Dynamics=Retrograde} 
+ => SketchNode [853c0a17-e128]{
+-   RhythmicPoints (div=2): [7, 1]
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=3): [p, f, mf]
+-   PitchSets (div=4): [PitchSet[ G_flat, A_flat, B_flat ], PitchSet[ G_flat, A_flat, B_flat ], PitchSet[ G_flat, A_flat, B ], PitchSet[ C, D_flat, D ]]}
+Connector [ad829eae-7a31]{RhythmicPoints=MoveForward, NoteRanges=MoveForward, PitchSets=MoveForward, Dynamics=MoveForward} 
+ => SketchNode [4b650428-6b5b]{
+-   RhythmicPoints (div=2): [8, 2]
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=3): [mp, ff, f]
+-   PitchSets (div=4): [PitchSet[ G, A, B ], PitchSet[ G, A, B ], PitchSet[ C, G, A ], PitchSet[ D_flat, D, E_flat ]]}
+Connector [73f8f11b-8e08]{RhythmicPoints=Disconnected, NoteRanges=Retrograde, PitchSets=Disconnected, Dynamics=Retrograde} 
+ => SketchNode [a78d4b5e-76d9]{
+-   RhythmicPoints (div=1): [7]
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=3): [f, ff, mp]
+-   PitchSets (div=4): [PitchSet[ D, E, B_flat ], PitchSet[ C, B_flat, B ], PitchSet[ D_flat, G, A ], PitchSet[ G_flat, B_flat, B ]]}
+Connector [24830c43-f637]{RhythmicPoints=Disconnected, NoteRanges=Retrograde, PitchSets=Disconnected, Dynamics=Retrograde} 
+ => SketchNode [a16120d4-fabc]{
+-   RhythmicPoints (div=4): [5, 5, 8, 1]
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=3): [mp, ff, f]
+-   PitchSets (div=2): [PitchSet[ D_flat, F, G_flat ], PitchSet[ C, G, B ]]}

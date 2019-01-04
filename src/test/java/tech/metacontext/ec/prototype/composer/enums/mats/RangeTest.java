@@ -54,11 +54,11 @@ public class RangeTest {
     @Test
     public void testGetIntensityIndex() {
         System.out.println("getIntensityIndex");
-        Range lowest = Range.C1;
-        Range highest = Range.C4;
-        Arrays.asList(Range.values()).stream()
+        SciRange lowest = SciRange.C1;
+        SciRange highest = SciRange.C4;
+        Arrays.asList(SciRange.values()).stream()
                 .forEach(instance -> {
-                    double result = Range.getIntensityIndex(instance, lowest, highest);
+                    double result = SciRange.getIntensityIndex(instance, lowest, highest);
                     double expResult = 1.0;
                     System.out.println(instance + "=" + result);
                     assertTrue(result <= expResult);

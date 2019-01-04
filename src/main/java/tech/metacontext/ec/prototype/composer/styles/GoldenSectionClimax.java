@@ -40,13 +40,13 @@ public class GoldenSectionClimax extends Style {
 
     public static final double RATIO = 1.6180339887498948482;
 
-    public final Range lowest, highest;
+    public final SciRange lowest, highest;
     List<Double> climaxIndexes;
     double peak;
 
-    public GoldenSectionClimax(Collection<Range> ranges) {
+    public GoldenSectionClimax(Collection<SciRange> ranges) {
 
-        TreeSet<Range> sortedRanges = new TreeSet<>(ranges);
+        TreeSet<SciRange> sortedRanges = new TreeSet<>(ranges);
         this.lowest = sortedRanges.first();
         this.highest = sortedRanges.last();
     }
@@ -94,6 +94,9 @@ public class GoldenSectionClimax extends Style {
 
     public double getStandard(Composition composition, int index) {
 
+        if (index < 0 || index > composition.getSize() - 1) {
+            return 0.0;
+        }
         int peakNodeIndex = (int) Math.floor(composition.getSize() / RATIO) + 1;
         return (index < peakNodeIndex)
                 ? index * peak / peakNodeIndex
@@ -111,8 +114,7 @@ public class GoldenSectionClimax extends Style {
                     mti = ((Dynamics) mm).getAverageIntensityIndex(Intensity::getIntensityIndex);
                     break;
                 case NoteRanges:
-                    mti = ((NoteRanges) mm).getAverageIntensityIndex(
-                            mat -> Range.getIntensityIndex(mat, lowest, highest));
+                    mti = ((NoteRanges) mm).getAverageIntensityIndex(mat -> SciRange.getIntensityIndex(mat, lowest, highest));
                     break;
                 case PitchSets:
                     mti = ((PitchSets) mm).getAverageIntensityIndex(PitchSet::getIntensityIndex);
@@ -126,7 +128,7 @@ public class GoldenSectionClimax extends Style {
 //            System.out.println(mt + ":" + mti);
             index.add(mti);
         });
-        return index.doubleValue();
+        return index.doubleValue() / node.getMats().size();
     }
 
     public static void main(String[] args) throws Exception {

@@ -27,10 +27,18 @@ import java.util.logging.SimpleFormatter;
  */
 public class Settings {
 
+    /*
+     * Chance to reset seed when mutation happens.
+     */
+    public static final double CHANCE_RESEEDING = 0.5;
+    /**
+     * Score threshold percentage for selection.
+     */
+    public static final double SELECTION_THRESHOLD = 0.9;
     /**
      * Score for a mature composition to reach to be conserved.
      */
-    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.90;
+    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.95;
     /**
      * Chance for a mature composition to be elongated.
      */

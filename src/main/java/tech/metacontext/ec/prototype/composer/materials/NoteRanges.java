@@ -22,20 +22,20 @@ import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.enums.mats.Range;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *
  * @author Jonathan
  */
-public class NoteRanges extends MusicMaterial<Range> {
+public class NoteRanges extends MusicMaterial<SciRange> {
 
-    public static final Range DEFAULT_LOWEST_RANGE = Range.C0;
-    public static final Range DEFAULT_HIGHEST_RANGE = Range.C8;
+    public static final SciRange DEFAULT_LOWEST_RANGE = SciRange.C0;
+    public static final SciRange DEFAULT_HIGHEST_RANGE = SciRange.C8;
 
-    private Range lowestRange;
-    private Range highestRange;
+    private SciRange lowestRange;
+    private SciRange highestRange;
 
     public NoteRanges() {
     }
@@ -65,7 +65,7 @@ public class NoteRanges extends MusicMaterial<Range> {
     @Override
     public NoteRanges generate() {
 
-        List<Range> rangeList = Arrays.asList(Range.values());
+        List<SciRange> rangeList = Arrays.asList(SciRange.values());
         int lowest_value = rangeList.indexOf(this.lowestRange);
         int highest_value = rangeList.indexOf(this.highestRange);
         this.setMaterials(
@@ -116,8 +116,8 @@ public class NoteRanges extends MusicMaterial<Range> {
         IntStream.range(0, this.size())
                 .forEach(i -> {
                     int o = Math.min(this.getMaterials().get(i).ordinal() + 1,
-                            Range.values().length - 1);
-                    this.getMaterials().set(i, Range.values()[o]);
+                            SciRange.values().length - 1);
+                    this.getMaterials().set(i, SciRange.values()[o]);
                 });
         return this;
     }
@@ -127,7 +127,7 @@ public class NoteRanges extends MusicMaterial<Range> {
         IntStream.range(0, this.size())
                 .forEach(i -> {
                     int o = Math.max(this.getMaterials().get(i).ordinal() - 1, 0);
-                    this.getMaterials().set(i, Range.values()[o]);
+                    this.getMaterials().set(i, SciRange.values()[o]);
                 });
         return this;
     }
@@ -145,19 +145,19 @@ public class NoteRanges extends MusicMaterial<Range> {
     /*
      * Default setters and getters.
      */
-    public Range getLowest() {
+    public SciRange getLowest() {
         return lowestRange;
     }
 
-    public void setLowest(Range lowest) {
+    public void setLowest(SciRange lowest) {
         this.lowestRange = lowest;
     }
 
-    public Range getHighest() {
+    public SciRange getHighest() {
         return highestRange;
     }
 
-    public void setHighest(Range highest) {
+    public void setHighest(SciRange highest) {
         this.highestRange = highest;
     }
 

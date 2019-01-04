@@ -15,11 +15,24 @@
  */
 package tech.metacontext.ec.prototype.render;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.DoubleAdder;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.StatisticalLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.statistics.DefaultStatisticalCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
@@ -30,39 +43,130 @@ import org.jfree.ui.RefineryUtilities;
  */
 public class LineChart_AWT extends ApplicationFrame {
 
-  DefaultCategoryDataset dataset;
-  JFreeChart lineChart;
+    public static void main(String[] args) {
 
-  public LineChart_AWT(String applicationTitle) {
+        LineChart_AWT chart = new LineChart_AWT("Demo");
+        IntStream.range(0, 50)
+                .forEach(i -> {
+                    List<Double> data = new ArrayList<>();
+                    chart.addStatData(
+                            Stream.generate(Math::random)
+                                    .limit(10)
+                                    .collect(Collectors.toList()),
+                            "demo", "" + i);
+                });
+        chart.createStatLineChart("HelloWorld", "Generation", "Score", 560, 367, true);
+        chart.showChartWindow();
+    }
 
-    super(applicationTitle);
-    dataset = new DefaultCategoryDataset();
-  }
+    private DefaultCategoryDataset dataset;
+    private DefaultStatisticalCategoryDataset statDataset;
+    private JFreeChart lineChart;
 
-  public void addData(double value, String rowKey, String colKey) {
+    public LineChart_AWT(String applicationTitle) {
 
-    dataset.addValue(value, rowKey, colKey);
-  }
+        super(applicationTitle);
+        dataset = new DefaultCategoryDataset();
+        statDataset = new DefaultStatisticalCategoryDataset();
+    }
 
-  public void createLineChart(String chartTitle, String xLabel, String yLabel,
-          int x, int y, boolean legend) {
+    public void addData(Number value, String rowKey, String colKey) {
 
-    lineChart = ChartFactory.createLineChart(
-            chartTitle, xLabel, yLabel, dataset,
-            PlotOrientation.VERTICAL,
-            legend, true, false);
+        dataset.addValue(value, rowKey, colKey);
+    }
 
-    ChartPanel chartPanel = new ChartPanel(lineChart);
-    chartPanel.setPreferredSize(new java.awt.Dimension(x, y));
-    setContentPane(chartPanel);
+    public void addData(List<Double> data, String rowKey, String colKey) {
 
-    this.pack();
-    RefineryUtilities.centerFrameOnScreen(this);
-  }
+        dataset.addValue(
+                data.stream().mapToDouble(v -> v).average().orElse(0.0),
+                rowKey, colKey);
+    }
 
-  public void showChartWindow() {
+    public void addStatData(List<Double> data, String rowKey, String colKey) {
 
-    this.setVisible(true);
-  }
+        final DoubleAdder stdDv = new DoubleAdder();
+        final double ave = data.stream().mapToDouble(v -> v).average().orElse(0.0);
+        data.stream().forEach(value -> stdDv.add(Math.pow(value - ave, 2)));
+        statDataset.add(
+                ave, Math.sqrt(stdDv.sum() / data.size()),
+                rowKey, colKey);
+    }
 
+    public void createChart(JFreeChart chart, int x, int y) {
+
+        lineChart = chart;
+
+        ChartPanel chartPanel = new ChartPanel(lineChart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(x, y));
+        setContentPane(chartPanel);
+
+        this.pack();
+        RefineryUtilities.centerFrameOnScreen(this);
+
+        CategoryPlot plot = chart.getCategoryPlot();
+        CategoryAxis xAxis = plot.getDomainAxis();
+        xAxis.setCategoryLabelPositions(
+                CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 2.0));
+    }
+
+    public void createLineChart(String chartTitle, String xLabel, String yLabel,
+            int x, int y, boolean legend) {
+
+        createChart(
+                ChartFactory.createLineChart(
+                        chartTitle, xLabel, yLabel, dataset,
+                        PlotOrientation.VERTICAL,
+                        legend, true, false),
+                x, y
+        );
+    }
+
+    public void createStatLineChart(String chartTitle, String xLabel, String yLabel,
+            int x, int y, boolean legend) {
+
+        createChart(
+                ChartFactory.createLineChart(
+                        chartTitle, xLabel, yLabel, statDataset,
+                        PlotOrientation.VERTICAL,
+                        legend, true, false),
+                x, y
+        );
+
+        StatisticalLineAndShapeRenderer statisticalRenderer = new StatisticalLineAndShapeRenderer(true, false);
+        lineChart.getCategoryPlot().setRenderer(statisticalRenderer);
+        statisticalRenderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", NumberFormat.getNumberInstance()));
+        statisticalRenderer.setDefaultItemLabelsVisible(true);
+    }
+
+    public void showChartWindow() {
+
+        this.setVisible(true);
+    }
+
+    /*
+     * Default setters and getters.
+     */
+    public DefaultCategoryDataset getDataset() {
+        return dataset;
+    }
+
+    public void setDataset(DefaultCategoryDataset dataset) {
+        this.dataset = dataset;
+    }
+
+    public JFreeChart getLineChart() {
+        return lineChart;
+    }
+
+    public void setLineChart(JFreeChart lineChart) {
+        this.lineChart = lineChart;
+    }
+
+    public DefaultStatisticalCategoryDataset getStatDataset() {
+        return statDataset;
+    }
+
+    public void setStatDataset(DefaultStatisticalCategoryDataset statDataset) {
+        this.statDataset = statDataset;
+    }
 }

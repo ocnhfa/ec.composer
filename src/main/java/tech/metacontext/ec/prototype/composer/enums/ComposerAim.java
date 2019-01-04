@@ -27,27 +27,22 @@ public enum ComposerAim {
     Movement(32),
     MultiMovement(-1);
 
-    private int size;
+    private final int aimSize;
 
-    ComposerAim(int size) {
-        this.size = size;
+    ComposerAim(int aimSize) {
+
+        this.aimSize = aimSize;
     }
 
-    public boolean completed(Composition composition) {
-        switch (this) {
-            case Phrase:
-            case Section:
-            case Movement:
-//                System.out.println("composition:" + composition);
-//                System.out.println("composition.getConnectors:" + composition.getConnectors());
-                return composition.getConnectors().size() >= this.size;
-            case MultiMovement:
-            default:
-        }
-        return false;
+    public boolean isCompleted(Composition composition) {
+
+        return composition.getConnectors().size() >= this.aimSize;
     }
 
-    public int getSize() {
-        return size;
+    /*
+     * Default getter.
+     */
+    public int getAimSize() {
+        return aimSize;
     }
 }

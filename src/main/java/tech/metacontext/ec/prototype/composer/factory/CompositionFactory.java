@@ -80,16 +80,18 @@ public class CompositionFactory implements Factory<Composition> {
                 .map(connectorFactory::forArchiving)
                 .collect(Collectors.toList()));
         dupe.resetSeed(dupe.getConnectors().get(0).getPrevious());
+        dupe.getRenderedChecked("Composition::resetSeed");
         dupe.updateEval();
         assert (origin.getEval().equals(dupe.getEval()));
         return dupe;
     }
 
     /**
-     * Create duplicated Composition instance for mutation.
+     * Create Composition instance for mutation, with all connector duplicated
+     * with their previous nodes.
      *
      * @param origin
-     * @return
+     * @return Composition instance ready for mutation.
      */
     public Composition forMutation(Composition origin) {
 
@@ -104,6 +106,14 @@ public class CompositionFactory implements Factory<Composition> {
         return dupe;
     }
 
+    /**
+     * Create Composition instance for crossover, with a preset first Connector
+     * and its previous node as seed.
+     *
+     * @param conn
+     * @param styles
+     * @return Composition instance ready for crossover.
+     */
     public Composition forCrossover(Connector conn,
             Collection<? extends Style> styles) {
 

@@ -25,8 +25,6 @@ public enum ConnectingState {
     Total,
     ByItem;
 
-
-
     public static ConnectingState getRandom() {
 
         return Math.random() < CHANCE_TOTAL_CONNECTING_STATE ? ConnectingState.Total : ConnectingState.ByItem;

@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import java.text.NumberFormat;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
 import tech.metacontext.ec.prototype.composer.factory.*;
@@ -27,17 +28,24 @@ import tech.metacontext.ec.prototype.render.ScatterPlot_AWT;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.atomic.DoubleAdder;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.StatisticalLineAndShapeRenderer;
 import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
@@ -50,6 +58,7 @@ public class Composer extends Population<Composition> {
 
     private static CompositionFactory compositionFactory;
     private static ConnectorFactory connectorfactory;
+    private static SketchNodeFactory sketchNodeFactory;
 
     private ComposerAim aim;
     private List<Style> styles;
@@ -62,6 +71,7 @@ public class Composer extends Population<Composition> {
                     .allMatch(s -> s.qualifySketchNode(node));
 
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
+    public static final int RENDERTYPE_SCATTERPLOT = 0, RENDERTYPE_AVERAGELINECHART = 1;
 
     /**
      * Constructor.
@@ -88,6 +98,10 @@ public class Composer extends Population<Composition> {
         _logger.log(Level.INFO,
                 "Initializing CompositionFactory...");
         Composer.compositionFactory = CompositionFactory.getInstance(this.getId());
+
+        _logger.log(Level.INFO,
+                "Initializing SketchNodeFactory...");
+        Composer.sketchNodeFactory = SketchNodeFactory.getInstance();
 
         this.size = size;
         this.aim = aim;
@@ -151,9 +165,9 @@ public class Composer extends Population<Composition> {
      */
     private boolean toBeElongated(Composition c) {
 
-        return !aim.completed(c) || Math.random()
+        return !aim.isCompleted(c) || Math.random()
                 < Math.pow(CHANCE_ELONGATION_IF_COMPLETED,
-                        c.getSize() - this.getAim().getSize());
+                        c.getSize() - this.getAim().getAimSize());
     }
 
     @Override
@@ -162,7 +176,7 @@ public class Composer extends Population<Composition> {
         _logger.log(Level.INFO,
                 "Evolving from {0} parents.", this.getPopulationSize());
         List<Composition> children
-                = Stream.generate(() -> randomSelect(SELECT_FROM_ALL))
+                = Stream.generate(() -> select(SELECT_FROM_ALL, SELECTION_THRESHOLD))
                         .map(this::getChild)
                         .filter(c -> !this.conserve(c))
                         .limit(size)
@@ -198,9 +212,9 @@ public class Composer extends Population<Composition> {
             2.若completed則仍有一定機率走mutate -> children
             3.若則選出另一條p1 completed(不能是自己), crossover -> children
          */
-        if (this.getAim().completed(p0)
+        if (this.getAim().isCompleted(p0)
                 && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED) {
-            Composition p1 = this.randomSelect(SELECT_ONLY_COMPLETED);
+            Composition p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
             if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
             }
@@ -222,7 +236,7 @@ public class Composer extends Population<Composition> {
                         connectorfactory.newConnector(this.styleChecker));
                 break;
             case Insertion:
-                if (!this.getAim().completed(origin)) {
+                if (!this.getAim().isCompleted(origin)) {
                     mutant.getConnectors().add(selected,
                             connectorfactory.newConnector(this.styleChecker));
                     break;
@@ -232,12 +246,18 @@ public class Composer extends Population<Composition> {
                 mutant.getConnectors().remove(selected);
                 break;
         }
-
+        boolean reseeding = Math.random() < CHANCE_RESEEDING;
+        if (reseeding) {
+            mutant.resetSeed(sketchNodeFactory.newInstance(styleChecker));
+        }
         _logger.log(Level.INFO,
-                "Mutation, mutant: {0}, type: {1}, loci: {2}, length: {3} -> {4}",
+                "Mutation, mutant: {0}, type: {1}, loci: {2}, reseed = {3}, length: {4} -> {5}",
                 new Object[]{
-                    mutant.getId_prefix(), type, selected,
-                    origin.getSize(), mutant.getSize()});
+                    mutant.getId_prefix(),
+                    type, selected,
+                    origin.getSize(),
+                    reseeding,
+                    mutant.getSize()});
         return mutant;
     }
 
@@ -269,27 +289,56 @@ public class Composer extends Population<Composition> {
         return child;
     }
 
-    public Composition randomSelect(int state) {
-        /*
-         new Random().ints(0, this.getPopulationSize())
-                .mapToObj(this.getPopulation()::get)
-         */
-        double std = this.getPopulation().stream()
-                //                .filter(this.getAim()::completed)
+    @Override
+    public Composition select(Predicate<Composition> criteria, double threshold) {
+
+        List<Composition> subset = this.getPopulation().stream()
                 .peek(Composition::updateEval)
-                .mapToDouble(this::getMinScore)
-                //                .peek(System.out::println)
-                .summaryStatistics()
-                .getMax() * 0.9;
-//        System.out.println("average = " + average);
-        List<Composition> list = this.getPopulation().stream()
-                .filter(c -> state == SELECT_FROM_ALL
-                || (this.getAim().completed(c) && this.getMinScore(c) >= std))
+                .filter(criteria)
+                .sorted((c1, c2) -> (int) (this.getMinScore(c2) - this.getMinScore(c1)))
                 .collect(Collectors.toList());
-        if (list.isEmpty()) {
+        if (subset.isEmpty() || threshold > 1.0 || threshold < 0.0) {
             return null;
         }
-        return list.get(new Random().nextInt(list.size()));
+        int thresholdIndex = (int) ((subset.size() - 1) * threshold);
+        double std = this.getMinScore(subset.get(thresholdIndex));
+        List<Composition> selectedSubset = subset.stream()
+                .filter(c -> this.getMinScore(c) >= std)
+                .collect(Collectors.toList());
+//        if (selectedSubset.size() < subset.size() && subset.size() < this.getSize()) {
+//            System.out.println("->" + selectedSubset.stream()
+//                    .map(this::getMinScore)
+//                    .sorted()
+//                    .map(s -> String.format("%.2f", s))
+//                    .collect(Collectors.joining(", ")));
+//            System.out.println("subsetsize = " + subset.size());
+//            System.out.println("thresholdIndex = " + thresholdIndex);
+//            System.out.println("std = " + std);
+//            System.out.println("selectedSubset size = " + selectedSubset.size());
+//        }
+        /*
+        subsetsize = 100
+        threshold = 7.5
+        thresholdIndex = 100*7.5 = 75
+        filtered subset size = 25
+        subset.size - thresholdIndex = 25.
+         */
+        return selectedSubset.get(new Random().nextInt(selectedSubset.size()));
+    }
+
+    /**
+     * Randomly select composition from population with specified state and
+     * threshold.
+     *
+     * @param state SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1.
+     * @param threshold in percentage. For eg., 0.9 stands for that selected
+     * score must be higher than 90% population.
+     * @return Selected composition.
+     */
+    public Composition select(int state, double threshold) {
+
+        return select(c -> state == SELECT_FROM_ALL || this.getAim().isCompleted(c),
+                threshold);
     }
 
     /**
@@ -301,7 +350,7 @@ public class Composer extends Population<Composition> {
      */
     public boolean conserve(Composition c) throws ConservationFailedException {
 
-        if (!this.getAim().completed(c)) {
+        if (!this.getAim().isCompleted(c)) {
             return false;
         }
         c.getRenderedChecked(this.getClass().getSimpleName() + "::conserve");
@@ -332,8 +381,6 @@ public class Composer extends Population<Composition> {
         }
         return true;
     }
-    public static final int RENDERTYPE_SCATTERPLOT = 0;
-    public static final int RENDERTYPE_AVERAGELINECHART = 1;
 
     public void render(int type) {
 
@@ -351,20 +398,48 @@ public class Composer extends Population<Composition> {
     public void renderAveLineChart() {
 
         LineChart_AWT chart = new LineChart_AWT("Composer " + this.getId());
+        LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
+
         IntStream.range(0, this.getGenCount())
                 .forEach(i -> {
                     List<Composition> list = this.getArchive().get(i);
-                    double average = list.stream()
-                            .mapToDouble(this::getMinScore)
-//                            .filter(s -> s > 0.0)
-                            .average()
-                            .orElse(0.0);
-                    chart.addData(average, "average", "" + i);
+                    List<Double> values = list.stream()
+                            .map(this::getMinScore)
+//                            .filter(score -> score > 0.0)
+                            .collect(Collectors.toList());
+                    chart.addData(values, "average", "" + i);
+                    chartStat.addStatData(values, "score", "" + i);
                 });
         chart.createLineChart("Evolutionary Computation",
                 "Generation", "Score",
                 1600, 630, true);
         chart.showChartWindow();
+
+        chartStat.createStatLineChart("Evolutionary Computation",
+                "Generation", "Score",
+                1600, 630, true);
+//        final CategoryPlot plot = (CategoryPlot) chartStat.getLineChart().getPlot();
+//        final CategoryAxis categoryAxis = (CategoryAxis) plot.getDomainAxis();
+//        categoryAxis.setAxisLineVisible(false);
+//        categoryAxis.setTickMarksVisible(false);
+        chartStat.showChartWindow();
+    }
+
+    public static double calculateSD(List<Double> numArray) {
+        double sum = 0.0, standardDeviation = 0.0;
+        int length = numArray.size();
+
+        for (double num : numArray) {
+            sum += num;
+        }
+
+        double mean = sum / length;
+
+        for (double num : numArray) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+
+        return Math.sqrt(standardDeviation / length);
     }
 
     @Override
@@ -374,7 +449,7 @@ public class Composer extends Population<Composition> {
         List<SimpleEntry<Integer, Double>> popScores = IntStream.range(0, this.getGenCount())
                 .mapToObj(i
                         -> this.getArchive().get(i).stream()
-                        .filter(this.getAim()::completed)
+                        .filter(this.getAim()::isCompleted)
                         .filter(c -> this.getMinScore(c) > 0.0)
                         //.peek(c -> this.scanQualifiedComposition(c, i))
                         .mapToDouble(this::getMinScore)
@@ -404,7 +479,7 @@ public class Composer extends Population<Composition> {
      */
     public double getMinScore(Composition c) {
 
-        return this.getAim().completed(c)
+        return this.getAim().isCompleted(c)
                 ? c.getEval().getScores().values().stream()
                         .mapToDouble(s -> s)
                         .min().getAsDouble()

@@ -32,7 +32,6 @@ import tech.metacontext.ec.prototype.render.LineChart_AWT;
  */
 public class Main {
 
-    // 決定作品數量及演進世代
     private Composer composer;
 
     /**
@@ -42,10 +41,11 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-
-        int POP_SIZE = 50;
-        int SELECTED_SIZE = 5;
-        int GENERATION = 200;
+        
+        // 決定作品數量及演進世代
+        int POP_SIZE = 100;
+        int SELECTED_SIZE = 10;
+        int GENERATION = 300;
         Main main = new Main(POP_SIZE, SELECTED_SIZE, GENERATION, Settings.DEFAULT);
 
         main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
@@ -63,7 +63,7 @@ public class Main {
                 -> gc.getStandard(c, i);
 
         main.composer.getConservetory().keySet().stream()
-                .sorted((o1,o2)->o1.getId().compareTo(o2.getId()))
+                .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
                 .peek(gc::updateClimaxIndexes)
                 .forEach(c -> {
                     IntStream.range(0, c.getSize())
@@ -117,7 +117,7 @@ public class Main {
                 System.out.print("|");
             }
         } while (composer.getConservetory().size() < goalSize
-                || composer.getGenCount() < generation);
+                && composer.getGenCount() < generation);
         System.out.println(" (" + composer.getGenCount() + ")");
 
         System.out.println(header("Dumping Archive"));

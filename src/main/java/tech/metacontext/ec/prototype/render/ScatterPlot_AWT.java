@@ -16,12 +16,8 @@
 package tech.metacontext.ec.prototype.render;
 
 import java.awt.Color;
-import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,8 +25,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.ScatterRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
@@ -57,6 +51,7 @@ public class ScatterPlot_AWT extends ApplicationFrame {
                 .limit(50)
                 .collect(Collectors.toList());
     }
+    
     XYSeriesCollection dataset;
     JFreeChart scatterPlot;
 

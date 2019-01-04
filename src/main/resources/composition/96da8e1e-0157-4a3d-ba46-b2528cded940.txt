@@ -1,0 +1,67 @@
+Composition [96da8e1e-0157](size = 11, Composer = [c56c57dc-8a48-4236-acba-d2b7fcbc80fa])
+[96da8e1e-0157] UnaccompaniedCello: 1.000 | GoldenSectionClimax: 0.929
+Seed: SketchNode [8a4f5ec6-2173]{
+-   NoteRanges (div=1): [C2]
+-   Dynamics (div=4): [ff, p, ff, f]
+-   PitchSets (div=2): [PitchSet[ E, A_flat, B ], PitchSet[ C, D_flat, D ]]
+-   RhythmicPoints (div=1): [3]}
+Connector [c754446f-5c90]{NoteRanges=MoveForward, Dynamics=MoveBackward, PitchSets=MoveBackward, RhythmicPoints=MoveBackward} 
+ => SketchNode [ee8f2a91-2516]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=4): [f, pp, f, mf]
+-   PitchSets (div=2): [PitchSet[ E_flat, G, B_flat ], PitchSet[ C, D_flat, B ]]
+-   RhythmicPoints (div=1): [2]}
+Connector [dfb7476f-e2db]{NoteRanges=Repetition, Dynamics=MoveBackward, PitchSets=MoveBackward, RhythmicPoints=MoveBackward} 
+ => SketchNode [7e429d28-11f6]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=4): [mf, ppp, mf, mp]
+-   PitchSets (div=2): [PitchSet[ D, G_flat, A ], PitchSet[ C, B_flat, B ]]
+-   RhythmicPoints (div=1): [1]}
+Connector [bbdf9a45-0de1]{NoteRanges=Retrograde, Dynamics=MoveForward, PitchSets=Disconnected, RhythmicPoints=Retrograde} 
+ => SketchNode [35bdf50a-d839]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=4): [f, pp, f, mf]
+-   PitchSets (div=4): [PitchSet[ E, A_flat, B ], PitchSet[ D_flat, D, A ], PitchSet[ C, D_flat, G ], PitchSet[ E_flat, E, B ]]
+-   RhythmicPoints (div=1): [1]}
+Connector [186def68-878e]{NoteRanges=Retrograde, Dynamics=MoveForward, PitchSets=Disconnected, RhythmicPoints=Retrograde} 
+ => SketchNode [c90665f2-9630]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=4): [ff, p, ff, f]
+-   PitchSets (div=4): [PitchSet[ D_flat, G_flat, A_flat ], PitchSet[ D_flat, E_flat, F ], PitchSet[ E_flat, B_flat, B ], PitchSet[ D_flat, E, A ]]
+-   RhythmicPoints (div=1): [1]}
+Connector [aab56ac3-0e7a]{NoteRanges=MoveForward, Dynamics=MoveForward, PitchSets=Retrograde, RhythmicPoints=MoveForward} 
+ => SketchNode [0d69a6ac-0f33]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=4): [fff, mp, fff, ff]
+-   PitchSets (div=4): [PitchSet[ D_flat, E, A ], PitchSet[ E_flat, B_flat, B ], PitchSet[ D_flat, E_flat, F ], PitchSet[ D_flat, G_flat, A_flat ]]
+-   RhythmicPoints (div=1): [2]}
+Connector [c4e9d3ef-708a]{NoteRanges=Retrograde, Dynamics=MoveForward, PitchSets=MoveForward, RhythmicPoints=Disconnected} 
+ => SketchNode [efc03ec4-b690]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=4): [ffff, mf, ffff, fff]
+-   PitchSets (div=4): [PitchSet[ D, F, B_flat ], PitchSet[ C, E, B ], PitchSet[ D, E, G_flat ], PitchSet[ D, G, A ]]
+-   RhythmicPoints (div=3): [8, 8, 3]}
+Connector [50419a10-ec8e]{NoteRanges=Repetition, Dynamics=Repetition, PitchSets=MoveForward, RhythmicPoints=MoveForward} 
+ => SketchNode [02688a1c-20f5]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=4): [ffff, mf, ffff, fff]
+-   PitchSets (div=4): [PitchSet[ E_flat, G_flat, B ], PitchSet[ C, D_flat, F ], PitchSet[ E_flat, F, G ], PitchSet[ E_flat, A_flat, B_flat ]]
+-   RhythmicPoints (div=3): [8, 8, 4]}
+Connector [1ee4639f-ed70]{NoteRanges=MoveForward, Dynamics=Disconnected, PitchSets=Disconnected, RhythmicPoints=Retrograde} 
+ => SketchNode [f751c6b3-6692]{
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=1): [mf]
+-   PitchSets (div=2): [PitchSet[ E_flat, G, A_flat ], PitchSet[ D_flat, D, B_flat ]]
+-   RhythmicPoints (div=3): [4, 8, 8]}
+Connector [e671cd11-0deb]{NoteRanges=Retrograde, Dynamics=MoveForward, PitchSets=MoveForward, RhythmicPoints=Disconnected} 
+ => SketchNode [bd626206-d4ca]{
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=1): [f]
+-   PitchSets (div=2): [PitchSet[ E, A_flat, A ], PitchSet[ D, E_flat, B ]]
+-   RhythmicPoints (div=1): [1]}
+Connector [d3965f9d-420d]{NoteRanges=MoveBackward, Dynamics=MoveBackward, PitchSets=MoveBackward, RhythmicPoints=Disconnected} 
+ => SketchNode [a5d898c7-9fb9]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=1): [mf]
+-   PitchSets (div=2): [PitchSet[ E_flat, G, A_flat ], PitchSet[ D_flat, D, B_flat ]]
+-   RhythmicPoints (div=2): [2, 3]}

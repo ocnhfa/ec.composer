@@ -28,22 +28,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.function.Predicate;
-import java.util.function.ToDoubleFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.jfree.ui.RefineryUtilities;
 import tech.metacontext.ec.prototype.abs.Individual;
 import tech.metacontext.ec.prototype.abs.Wrapper;
 import tech.metacontext.ec.prototype.composer.Main;
 import tech.metacontext.ec.prototype.composer.Settings;
+import static tech.metacontext.ec.prototype.composer.Settings.SELECTION_THRESHOLD;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
-import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
  *
@@ -53,7 +50,8 @@ public class Composition extends Individual<CompositionEval> {
 
     private Logger _logger;
 
-    private static ConnectorFactory connectorFactory;
+    private static ConnectorFactory connectorFactory 
+            = ConnectorFactory.getInstance();
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
@@ -98,7 +96,6 @@ public class Composition extends Individual<CompositionEval> {
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));
-        connectorFactory = ConnectorFactory.getInstance();
         //for debugging
         this.debug = new ArrayList<>();
         this.addDebugMsg("Initilization completed.");
@@ -120,8 +117,8 @@ public class Composition extends Individual<CompositionEval> {
         Composer composer = main.getComposer();
         Composition p0, p1;
         do {
-            p0 = composer.randomSelect(Composer.SELECT_ONLY_COMPLETED);
-            p1 = composer.randomSelect(Composer.SELECT_ONLY_COMPLETED);
+            p0 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
+            p1 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
         } while (Objects.equals(p0, p1));
         Composition child, dupe;
         int counter = 0;
@@ -270,7 +267,7 @@ public class Composition extends Individual<CompositionEval> {
         }
         this.seed = seed;
         this.connectors.getFirst().setPrevious(seed);
-        this.getRenderedChecked("Composition::resetSeed");
+//        this.getRenderedChecked("Composition::resetSeed");
 //        if (!this.rendered.contains(seed)) {
 //            if (this.rendered.size() < this.getSize()) {
 //                this.rendered.set(0, seed);

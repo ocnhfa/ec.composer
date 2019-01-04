@@ -1,0 +1,67 @@
+Composition [84a73481-1394](size = 11, Composer = [bcb54b46-aa18-4af2-a5aa-d5a6505d88ea])
+[84a73481-1394] UnaccompaniedCello: 1.000 | GoldenSectionClimax: 0.900
+Seed: SketchNode [767a2ad7-942c]{
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=4): [ff, mf, mp, mp]
+-   PitchSets (div=4): [PitchSet[ D_flat, A_flat, B_flat ], PitchSet[ D_flat, D, G_flat ], PitchSet[ C, G, A_flat ], PitchSet[ E_flat, A_flat, A ]]
+-   RhythmicPoints (div=2): [6, 4]}
+Connector [7c5e4225-0f2f]{NoteRanges=Repetition, Dynamics=Retrograde, PitchSets=Disconnected, RhythmicPoints=MoveForward} 
+ => SketchNode [407ff0ee-376d]{
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=4): [mp, mp, mf, ff]
+-   PitchSets (div=1): [PitchSet[ E, F, G_flat ]]
+-   RhythmicPoints (div=2): [7, 5]}
+Connector [391c646b-2ff7]{NoteRanges=MoveBackward, Dynamics=MoveForward, PitchSets=MoveBackward, RhythmicPoints=MoveBackward} 
+ => SketchNode [c1fb5397-e31f]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=4): [mf, mf, f, fff]
+-   PitchSets (div=1): [PitchSet[ E_flat, E, F ]]
+-   RhythmicPoints (div=2): [6, 4]}
+Connector [e12b5c8f-4706]{NoteRanges=MoveBackward, Dynamics=Disconnected, PitchSets=Disconnected, RhythmicPoints=MoveForward} 
+ => SketchNode [dcd0712d-3ca8]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=3): [p, pp, mf]
+-   PitchSets (div=3): [PitchSet[ E_flat, A_flat, B_flat ], PitchSet[ D_flat, E_flat, G_flat ], PitchSet[ E_flat, F, G ]]
+-   RhythmicPoints (div=2): [7, 5]}
+Connector [d56b6c74-d70b]{NoteRanges=Retrograde, Dynamics=Disconnected, PitchSets=MoveForward, RhythmicPoints=MoveBackward} 
+ => SketchNode [586e56a7-f6fe]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=4): [mf, mf, f, f]
+-   PitchSets (div=3): [PitchSet[ E, A, B ], PitchSet[ D, E, G ], PitchSet[ E, G_flat, A_flat ]]
+-   RhythmicPoints (div=2): [6, 4]}
+Connector [06e700a3-9bed]{NoteRanges=Retrograde, Dynamics=Retrograde, PitchSets=Disconnected, RhythmicPoints=Disconnected} 
+ => SketchNode [b423653d-eadc]{
+-   NoteRanges (div=1): [C3]
+-   Dynamics (div=4): [f, f, mf, mf]
+-   PitchSets (div=3): [PitchSet[ D_flat, E_flat, B ], PitchSet[ D_flat, G_flat, A_flat ], PitchSet[ D, E_flat, G ]]
+-   RhythmicPoints (div=4): [6, 8, 4, 7]}
+Connector [aadb87d7-691a]{NoteRanges=MoveForward, Dynamics=MoveForward, PitchSets=MoveForward, RhythmicPoints=MoveForward} 
+ => SketchNode [3a6a593b-1d89]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=4): [ff, ff, f, f]
+-   PitchSets (div=3): [PitchSet[ C, D, E ], PitchSet[ D, G, A ], PitchSet[ E_flat, E, A_flat ]]
+-   RhythmicPoints (div=4): [7, 8, 5, 8]}
+Connector [8acad4aa-28b7]{NoteRanges=MoveForward, Dynamics=Retrograde, PitchSets=MoveBackward, RhythmicPoints=MoveForward} 
+ => SketchNode [b5ba03d2-5f32]{
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=4): [f, f, ff, ff]
+-   PitchSets (div=3): [PitchSet[ D_flat, E_flat, B ], PitchSet[ D_flat, G_flat, A_flat ], PitchSet[ D, E_flat, G ]]
+-   RhythmicPoints (div=4): [8, 8, 6, 8]}
+Connector [116f76dd-5022]{NoteRanges=MoveBackward, Dynamics=Retrograde, PitchSets=MoveBackward, RhythmicPoints=Disconnected} 
+ => SketchNode [ef6f4e60-8d22]{
+-   NoteRanges (div=1): [C4]
+-   Dynamics (div=4): [ff, ff, f, f]
+-   PitchSets (div=3): [PitchSet[ C, D, B_flat ], PitchSet[ C, F, G ], PitchSet[ D_flat, D, G_flat ]]
+-   RhythmicPoints (div=3): [5, 5, 0]}
+Connector [ba9c5d15-85b0]{NoteRanges=MoveForward, Dynamics=Disconnected, PitchSets=Retrograde, RhythmicPoints=Retrograde} 
+ => SketchNode [c0cc6c26-fd89]{
+-   NoteRanges (div=1): [C5]
+-   Dynamics (div=3): [mp, mp, f]
+-   PitchSets (div=3): [PitchSet[ D_flat, D, G_flat ], PitchSet[ C, F, G ], PitchSet[ C, D, B_flat ]]
+-   RhythmicPoints (div=3): [0, 5, 5]}
+Connector [56bbab6d-73ef]{NoteRanges=MoveForward, Dynamics=MoveForward, PitchSets=MoveForward, RhythmicPoints=MoveForward} 
+ => SketchNode [ca9b5887-6d21]{
+-   NoteRanges (div=1): [C6]
+-   Dynamics (div=3): [mf, mf, ff]
+-   PitchSets (div=3): [PitchSet[ D, E_flat, G ], PitchSet[ D_flat, G_flat, A_flat ], PitchSet[ D_flat, E_flat, B ]]
+-   RhythmicPoints (div=3): [1, 6, 6]}
