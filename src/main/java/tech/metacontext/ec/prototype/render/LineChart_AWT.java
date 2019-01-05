@@ -15,8 +15,9 @@
  */
 package tech.metacontext.ec.prototype.render;
 
+import java.awt.Color;
 import java.text.NumberFormat;
-import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
@@ -48,7 +49,6 @@ public class LineChart_AWT extends ApplicationFrame {
         LineChart_AWT chart = new LineChart_AWT("Demo");
         IntStream.range(0, 50)
                 .forEach(i -> {
-                    List<Double> data = new ArrayList<>();
                     chart.addStatData(
                             Stream.generate(Math::random)
                                     .limit(10)
@@ -84,11 +84,24 @@ public class LineChart_AWT extends ApplicationFrame {
 
     public void addStatData(List<Double> data, String rowKey, String colKey) {
 
-        final DoubleAdder stdDv = new DoubleAdder();
-        final double ave = data.stream().mapToDouble(v -> v).average().orElse(0.0);
-        data.stream().forEach(value -> stdDv.add(Math.pow(value - ave, 2)));
+        final DoubleAdder powSum = new DoubleAdder();
+        final double avg = data.stream()
+                .mapToDouble(v -> v)
+                .average().orElse(0.0);
+        System.out.println(colKey);
+        DoubleSummaryStatistics stdss = data.stream()
+                .mapToDouble(s->s)
+                .filter(v -> v > 0.0)
+                .peek(System.out::println)
+                .peek(value -> powSum.add(Math.pow(value, 2)))
+                .summaryStatistics();
+        System.out.println("avg=" + avg);
+        System.out.println("stdDev_count=" + stdss.getCount());
+        double stdDev = Math.sqrt(powSum.sum() / stdss.getCount() - Math.pow(stdss.getAverage(), 2));
+        stdDev = Double.isNaN(stdDev)? 0.0: stdDev;
+        System.out.println("dev=" + stdDev);
         statDataset.add(
-                ave, Math.sqrt(stdDv.sum() / data.size()),
+                avg, stdDev,
                 rowKey, colKey);
     }
 
@@ -131,7 +144,6 @@ public class LineChart_AWT extends ApplicationFrame {
                         legend, true, false),
                 x, y
         );
-
         StatisticalLineAndShapeRenderer statisticalRenderer = new StatisticalLineAndShapeRenderer(true, false);
         lineChart.getCategoryPlot().setRenderer(statisticalRenderer);
         statisticalRenderer.setDefaultItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", NumberFormat.getNumberInstance()));

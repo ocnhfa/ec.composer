@@ -25,9 +25,9 @@ import tech.metacontext.ec.prototype.composer.model.Composer;
  */
 public class TestCenter {
 
-    public static final int PRESET_POPULATION_SIZE = 20;
-    public static final int GOAL_CONSERVATORY_SIZE = 3;
-    public static final int GOAL_GENERATION = 50;
+    public static final int PRESET_POPULATION_SIZE = 200;
+    public static final int GOAL_CONSERVATORY_SIZE = 2;
+    public static final int GOAL_GENERATION = 0;
     private static TestCenter instance;
     private static Composer composer;
 
@@ -47,6 +47,8 @@ public class TestCenter {
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }
+        composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
+        composer.render(Composer.RENDERTYPE_SCATTERPLOT);
     }
 
     public Composer getComposer() {

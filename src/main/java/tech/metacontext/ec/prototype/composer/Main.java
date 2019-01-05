@@ -41,7 +41,7 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        
+
         // 決定作品數量及演進世代
         int POP_SIZE = 100;
         int SELECTED_SIZE = 10;
@@ -49,22 +49,22 @@ public class Main {
         Main main = new Main(POP_SIZE, SELECTED_SIZE, GENERATION, Settings.DEFAULT);
 
         main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
-        main.composer.render(Composer.RENDERTYPE_SCATTERPLOT);
+        main.composer.render(Composer.RENDERTYPE_COMBINEDCHART);
         System.out.println(header("Persisting Conservatory"));
         main.composer.persistAll();
 
 //        LineChart_AWT chart = new LineChart_AWT("Composer " + main.composer.getId());
         var chart = new LineChart_AWT("Composer " + main.composer.getId());
 
-        GoldenSectionClimax gc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
+        GoldenSectionClimax gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
         ToDoubleFunction<SketchNode> mapper = node
-                -> gc.climaxIndex(node);
+                -> gsc.climaxIndex(node);
         ToDoubleBiFunction<Composition, Integer> mapper2 = (c, i)
-                -> gc.getStandard(c, i);
+                -> gsc.getStandard(c, i);
 
         main.composer.getConservetory().keySet().stream()
                 .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
-                .peek(gc::updateClimaxIndexes)
+                .peek(gsc::updateClimaxIndexes)
                 .forEach(c -> {
                     IntStream.range(0, c.getSize())
                             .forEach(i -> {
@@ -99,11 +99,18 @@ public class Main {
         System.out.println(header("Evolutionary Computation"));
         System.out.printf("Composer = [%s]\n", composer.getId());
         System.out.println("Population size = " + popSize);
-        System.out.println("Expected selected size = " + goalSize);
+        System.out.println("Expected conservatory size = " + goalSize);
         System.out.println("Generation = " + generation);
         System.out.println(header("Evolution"));
         int conserved = 0;
         do {
+            if (composer.getGenCount() > 0) {
+                if (composer.getGenCount() % 100 == 0) {
+                    System.out.println(" (" + composer.getGenCount() + ")");
+                } else if (composer.getGenCount() % 50 == 0) {
+                    System.out.print("|");
+                }
+            }
             composer.compose().evolve();
             if (composer.getConservetory().size() > conserved) {
                 System.out.print(composer.getConservetory().size() - conserved);
@@ -111,13 +118,8 @@ public class Main {
             } else {
                 System.out.print(".");
             }
-            if (composer.getGenCount() % 100 == 0) {
-                System.out.println(" (" + composer.getGenCount() + ")");
-            } else if (composer.getGenCount() % 50 == 0) {
-                System.out.print("|");
-            }
         } while (composer.getConservetory().size() < goalSize
-                && composer.getGenCount() < generation);
+                || composer.getGenCount() < generation);
         System.out.println(" (" + composer.getGenCount() + ")");
 
         System.out.println(header("Dumping Archive"));

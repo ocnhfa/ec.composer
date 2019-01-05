@@ -93,14 +93,12 @@ public class Settings {
         logger.log(Level.INFO,
                 "Setting FileHandler, STATE = {0}", STATE);
 
-        FileHandler fh;
-        fh = new FileHandler(
+        FileHandler fh = new FileHandler(
                 ((STATE == TEST) ? logfile_test : logfile)
                 + getTimeBasedFilename() + ".log",
                 true);
         fh.setEncoding("UTF-8");
         fh.setFormatter(new SimpleFormatter());
-//        setFileHandler(logger);
         logger.setUseParentHandlers(false);
         logger.addHandler(fh);
     }

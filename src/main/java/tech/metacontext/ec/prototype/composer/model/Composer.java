@@ -15,7 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import java.text.NumberFormat;
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
 import tech.metacontext.ec.prototype.composer.factory.*;
@@ -28,24 +30,21 @@ import tech.metacontext.ec.prototype.render.ScatterPlot_AWT;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.atomic.DoubleAdder;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.renderer.category.StatisticalLineAndShapeRenderer;
+import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.renderer.category.ScatterRenderer;
+import tech.metacontext.ec.prototype.render.CombinedChart_AWT;
 import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
@@ -71,7 +70,9 @@ public class Composer extends Population<Composition> {
                     .allMatch(s -> s.qualifySketchNode(node));
 
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
-    public static final int RENDERTYPE_SCATTERPLOT = 0, RENDERTYPE_AVERAGELINECHART = 1;
+    public static final int RENDERTYPE_SCATTERPLOT = 0,
+            RENDERTYPE_AVERAGELINECHART = 1,
+            RENDERTYPE_COMBINEDCHART = 2;
 
     /**
      * Constructor.
@@ -87,6 +88,7 @@ public class Composer extends Population<Composition> {
 
         _logger = Logger.getLogger(getId());
         setFileHandler(logState, _logger);
+        _logger.setFilter((r) -> false);
 
         _logger.log(Level.INFO,
                 "Initilizing Composer [{0}]", this.getId());
@@ -167,7 +169,7 @@ public class Composer extends Population<Composition> {
 
         return !aim.isCompleted(c) || Math.random()
                 < Math.pow(CHANCE_ELONGATION_IF_COMPLETED,
-                        c.getSize() - this.getAim().getAimSize());
+                        c.getSize() - this.getAim().getAimSize() - 1);
     }
 
     @Override
@@ -176,8 +178,7 @@ public class Composer extends Population<Composition> {
         _logger.log(Level.INFO,
                 "Evolving from {0} parents.", this.getPopulationSize());
         List<Composition> children
-                = Stream.generate(() -> select(SELECT_FROM_ALL, SELECTION_THRESHOLD))
-                        .map(this::getChild)
+                = Stream.generate(this::getChild)
                         .filter(c -> !this.conserve(c))
                         .limit(size)
                         .collect(Collectors.toList());
@@ -205,13 +206,14 @@ public class Composer extends Population<Composition> {
      * crossover.
      * @return the child produced.
      */
-    public Composition getChild(Composition p0) {
+    public Composition getChild() {
 
         /*
             1.若p0 not completed則mutate -> children
             2.若completed則仍有一定機率走mutate -> children
             3.若則選出另一條p1 completed(不能是自己), crossover -> children
          */
+        Composition p0 = select(SELECT_FROM_ALL, SELECTION_THRESHOLD);
         if (this.getAim().isCompleted(p0)
                 && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED) {
             Composition p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
@@ -293,8 +295,8 @@ public class Composer extends Population<Composition> {
     public Composition select(Predicate<Composition> criteria, double threshold) {
 
         List<Composition> subset = this.getPopulation().stream()
-                .peek(Composition::updateEval)
                 .filter(criteria)
+                .peek(Composition::updateEval)
                 .sorted((c1, c2) -> (int) (this.getMinScore(c2) - this.getMinScore(c1)))
                 .collect(Collectors.toList());
         if (subset.isEmpty() || threshold > 1.0 || threshold < 0.0) {
@@ -390,12 +392,57 @@ public class Composer extends Population<Composition> {
                 render();
                 break;
             case 1:
-                renderAveLineChart();
+                renderAvgLineChart();
                 break;
+            case 2:
+                renderCombinedChart();
         }
     }
 
-    public void renderAveLineChart() {
+    public void renderCombinedChart() {
+
+        CombinedChart_AWT chart = new CombinedChart_AWT("Composer " + this.getId());
+        List<SimpleEntry<Integer, Double>> avgs, xys, xyc;
+        avgs = IntStream.range(0, this.getGenCount())
+                .mapToObj(i -> new SimpleEntry<>(i, this.getArchive().get(i).stream()
+                /*...*/.mapToDouble(this::getMinScore)
+                /*...*/.average().getAsDouble()))
+                .collect(Collectors.toList());
+
+        xys = IntStream.range(0, this.getGenCount())
+                .mapToObj(i -> this.getArchive().get(i).stream()
+                /*...*/.map(this::getMinScore)
+                /*...*/.map(s -> new SimpleEntry<>(i, s))
+                /*...*/.collect(Collectors.toList()).stream())
+                .flatMap(s -> s)
+                .collect(Collectors.toList());
+
+        xyc = this.getConservetory().entrySet().stream()
+                .map(e -> new SimpleEntry<>(e.getValue(), this.getMinScore(e.getKey())))
+                .collect(Collectors.toList());
+
+        double dotSize = 3.0;
+        double delta = dotSize / 2.0;
+        Shape shape = new Ellipse2D.Double(-delta, -delta, dotSize, dotSize);
+        ScatterRenderer scatterRenderer0 = new ScatterRenderer();
+        scatterRenderer0.setSeriesPaint(0, Color.GRAY);
+        scatterRenderer0.setSeriesShape(0, shape);
+        ScatterRenderer scatterRenderer1 = new ScatterRenderer();
+        scatterRenderer1.setSeriesPaint(0, Color.RED);
+        scatterRenderer1.setSeriesShape(0, shape);
+
+        chart.addRenderer(0, "score", xys, scatterRenderer0);
+        chart.addRenderer(1, "conservatory", xyc, scatterRenderer1);
+        chart.addRenderer(2, "average", avgs, new LineAndShapeRenderer());
+        ValueMarker marker = new ValueMarker(SCORE_CONSERVE_IF_COMPLETED);
+        marker.setPaint(Color.BLACK);
+        chart.getPlot().addRangeMarker(marker);
+
+        chart.createChart("Evolutionary Computation", "Generation", "Score", 1600, 630, true);
+        chart.showChartWindow();
+    }
+
+    public void renderAvgLineChart() {
 
         LineChart_AWT chart = new LineChart_AWT("Composer " + this.getId());
         LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
@@ -405,7 +452,7 @@ public class Composer extends Population<Composition> {
                     List<Composition> list = this.getArchive().get(i);
                     List<Double> values = list.stream()
                             .map(this::getMinScore)
-//                            .filter(score -> score > 0.0)
+                            //                            .filter(score -> score > 0.0)
                             .collect(Collectors.toList());
                     chart.addData(values, "average", "" + i);
                     chartStat.addStatData(values, "score", "" + i);
@@ -418,28 +465,7 @@ public class Composer extends Population<Composition> {
         chartStat.createStatLineChart("Evolutionary Computation",
                 "Generation", "Score",
                 1600, 630, true);
-//        final CategoryPlot plot = (CategoryPlot) chartStat.getLineChart().getPlot();
-//        final CategoryAxis categoryAxis = (CategoryAxis) plot.getDomainAxis();
-//        categoryAxis.setAxisLineVisible(false);
-//        categoryAxis.setTickMarksVisible(false);
         chartStat.showChartWindow();
-    }
-
-    public static double calculateSD(List<Double> numArray) {
-        double sum = 0.0, standardDeviation = 0.0;
-        int length = numArray.size();
-
-        for (double num : numArray) {
-            sum += num;
-        }
-
-        double mean = sum / length;
-
-        for (double num : numArray) {
-            standardDeviation += Math.pow(num - mean, 2);
-        }
-
-        return Math.sqrt(standardDeviation / length);
     }
 
     @Override
@@ -464,6 +490,9 @@ public class Composer extends Population<Composition> {
         plot.createScatterPlot("Evolutionary Computation",
                 "Generation", "Score",
                 1600, 630, true);
+        plot.setSeriesDot(0, 3.0, Color.GRAY);
+        plot.setSeriesDot(1, 3.0, Color.RED);
+        plot.addHorizontalLine(SCORE_CONSERVE_IF_COMPLETED, Color.BLACK);
         plot.showPlotWindow();
     }
 

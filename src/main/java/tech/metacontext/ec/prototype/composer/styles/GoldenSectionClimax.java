@@ -19,16 +19,13 @@ import tech.metacontext.ec.prototype.composer.model.*;
 import tech.metacontext.ec.prototype.composer.enums.mats.*;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.RhythmicPoints;
 import tech.metacontext.ec.prototype.composer.materials.*;
 
@@ -38,11 +35,28 @@ import tech.metacontext.ec.prototype.composer.materials.*;
  */
 public class GoldenSectionClimax extends Style {
 
+    public static void main(String[] args) throws Exception {
+
+        var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
+        var composer = new Composer(10, ComposerAim.Phrase, 2, new UnaccompaniedCello(), gsc);
+        do {
+            composer.compose().evolve();
+        } while (composer.getPopulation().stream().anyMatch(c -> !composer.getAim().isCompleted(c)));
+        composer.getPopulation().stream().map(gsc::rateComposition).forEach(System.out::println);
+        
+//        Stream.generate(() -> SketchNodeFactory.getInstance().newInstance(composer.styleChecker))
+//                .limit(50)
+//                .peek(System.out::println)
+//                .map(gsc::climaxIndex)
+//                .forEach(System.out::println);
+
+    }
+
     public static final double RATIO = 1.6180339887498948482;
 
     public final SciRange lowest, highest;
-    List<Double> climaxIndexes;
-    double peak;
+    List<Double> climaxIndexes, standards;
+    double peak, base;
 
     public GoldenSectionClimax(Collection<SciRange> ranges) {
 
@@ -66,17 +80,18 @@ public class GoldenSectionClimax extends Style {
     @Override
     public double rateComposition(Composition composition) {
 
-        updateClimaxIndexes(composition);
-        List<Double> scores = new ArrayList<>();
-        double base = 0.0;
-        for (int i = 0; i < composition.getSize(); i++) {
-            double standard = getStandard(composition, i);
-            double score = standard
-                    * Math.abs(climaxIndexes.get(i) - standard);
-            scores.add(score);
-            base += standard * peak;
-        }
-        double sum = scores.stream().mapToDouble(d -> d).sum();
+//        for (int i = 0; i < composition.getSize(); i++) {
+//            double standard = getStandard(composition, i);
+//            double score = standard
+//                    * Math.abs(climaxIndexes.get(i) - standard);
+//            scores.add(score);
+//            base += standard * peak;
+//        }
+        this.updateClimaxIndexes(composition);
+        double sum = IntStream.range(0, composition.getSize())
+                .mapToDouble(i
+                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
+                .sum();
         return (base - sum) / base;
     }
 
@@ -88,19 +103,25 @@ public class GoldenSectionClimax extends Style {
                 .map(this::climaxIndex)
                 .collect(Collectors.toList());
         this.peak = climaxIndexes.stream()
-                .max(Comparator.naturalOrder())
-                .get();
+                .mapToDouble(s -> s)
+                .max().orElse(0.0);
+        this.base = 0.0;
+        this.standards = IntStream.range(0, composition.getSize())
+                .mapToDouble(i -> this.getStandard(composition, i))
+                .peek(s -> this.base += s * peak)
+                .boxed()
+                .collect(Collectors.toList());
     }
 
-    public double getStandard(Composition composition, int index) {
+    public double getStandard(Composition composition, int i) {
 
-        if (index < 0 || index > composition.getSize() - 1) {
+        if (i < 0 || i > composition.getSize() - 1) {
             return 0.0;
         }
-        int peakNodeIndex = (int) Math.floor(composition.getSize() / RATIO) + 1;
-        return (index < peakNodeIndex)
-                ? index * peak / peakNodeIndex
-                : (composition.getSize() - index - 1) * peak
+        long peakNodeIndex = Math.round((composition.getSize() - 1) / RATIO);
+        return (i < peakNodeIndex)
+                ? i * peak / peakNodeIndex
+                : (composition.getSize() - i - 1) * peak
                 / (composition.getSize() - peakNodeIndex - 1);
     }
 
@@ -111,16 +132,16 @@ public class GoldenSectionClimax extends Style {
             double mti = 0.0;
             switch (mt) {
                 case Dynamics:
-                    mti = ((Dynamics) mm).getAverageIntensityIndex(Intensity::getIntensityIndex);
+                    mti = ((Dynamics) mm).getAvgIntensityIndex(Intensity::getIntensityIndex);
                     break;
                 case NoteRanges:
-                    mti = ((NoteRanges) mm).getAverageIntensityIndex(mat -> SciRange.getIntensityIndex(mat, lowest, highest));
+                    mti = ((NoteRanges) mm).getAvgIntensityIndex(mat -> SciRange.getIntensityIndex(mat, lowest, highest));
                     break;
                 case PitchSets:
-                    mti = ((PitchSets) mm).getAverageIntensityIndex(PitchSet::getIntensityIndex);
+                    mti = ((PitchSets) mm).getAvgIntensityIndex(PitchSet::getIntensityIndex);
                     break;
                 case RhythmicPoints:
-                    mti = ((RhythmicPoints) mm).getAverageIntensityIndex(
+                    mti = ((RhythmicPoints) mm).getAvgIntensityIndex(
                             mat -> 1.0 * mat / RhythmicPoints.DEFAULT_MAX_POINTS);
                     break;
                 default:
@@ -131,14 +152,4 @@ public class GoldenSectionClimax extends Style {
         return index.doubleValue() / node.getMats().size();
     }
 
-    public static void main(String[] args) throws Exception {
-        var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
-        var composer = new Composer(1, ComposerAim.Movement, 0, new UnaccompaniedCello(), gsc);
-        Stream.generate(() -> SketchNodeFactory.getInstance().newInstance(composer.styleChecker))
-                .limit(50)
-                .peek(System.out::println)
-                .map(gsc::climaxIndex)
-                .forEach(System.out::println);
-
-    }
 }

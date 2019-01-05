@@ -50,7 +50,7 @@ public class Composition extends Individual<CompositionEval> {
 
     private Logger _logger;
 
-    private static ConnectorFactory connectorFactory 
+    private static ConnectorFactory connectorFactory
             = ConnectorFactory.getInstance();
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
@@ -93,6 +93,7 @@ public class Composition extends Individual<CompositionEval> {
     public void setup(String composer_id, Collection<? extends Style> styles) {
 
         this._logger = Logger.getLogger(composer_id);
+        _logger.setFilter((r) -> false);
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));

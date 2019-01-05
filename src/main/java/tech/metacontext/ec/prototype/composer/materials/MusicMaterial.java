@@ -84,7 +84,7 @@ public abstract class MusicMaterial<E> {
      */
     abstract public <M extends MusicMaterial> M transform(TransformType type);
 
-    public double getAverageIntensityIndex(ToDoubleFunction<E> mapper) {
+    public double getAvgIntensityIndex(ToDoubleFunction<E> mapper) {
 
         return this.getMaterials().stream().mapToDouble(mapper)
                 .average().getAsDouble()

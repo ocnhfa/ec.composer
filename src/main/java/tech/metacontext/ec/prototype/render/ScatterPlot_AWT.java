@@ -16,6 +16,9 @@
 package tech.metacontext.ec.prototype.render;
 
 import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Random;
@@ -25,6 +28,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
@@ -43,6 +48,9 @@ public class ScatterPlot_AWT extends ApplicationFrame {
         plot.addSeries("series1", series1);
         plot.addSeries("series2", series2);
         plot.createScatterPlot("HelloWorld", "Generation", "Score", 560, 367, true);
+        plot.addHorizontalLine(0.9, Color.yellow);
+//        plot.setSeriesDot(0, 3.0, Color.GRAY);
+//        plot.setSeriesDot(1, 3.0, Color.RED);
         plot.showPlotWindow();
     }
 
@@ -51,7 +59,7 @@ public class ScatterPlot_AWT extends ApplicationFrame {
                 .limit(50)
                 .collect(Collectors.toList());
     }
-    
+
     XYSeriesCollection dataset;
     JFreeChart scatterPlot;
 
@@ -69,6 +77,24 @@ public class ScatterPlot_AWT extends ApplicationFrame {
         dataset.addSeries(series);
     }
 
+    public void setSeriesDot(int series, double size, Color color) {
+
+        XYItemRenderer renderer = scatterPlot.getXYPlot().getRenderer();
+        renderer.setSeriesPaint(series, color);
+        double delta = size / 2.0;
+        Shape shape = new Ellipse2D.Double(-delta, -delta, size, size);
+        renderer.setSeriesShape(series, shape);
+    }
+
+    public void addHorizontalLine(double position, Color color) {
+        
+        ValueMarker marker = new ValueMarker(position);
+        marker.setPaint(color);
+        //marker.setLabel("here"); // see JavaDoc for labels, colors, strokes
+        //plot.addDomainMarker(marker); for vertical line
+        scatterPlot.getXYPlot().addRangeMarker(marker);
+    }
+
     public void createScatterPlot(String chartTitle, String xLabel, String yLabel,
             int x, int y, boolean legend) {
 
@@ -76,18 +102,19 @@ public class ScatterPlot_AWT extends ApplicationFrame {
                 chartTitle, xLabel, yLabel, dataset,
                 PlotOrientation.VERTICAL,
                 legend, true, false);
-        scatterPlot.getXYPlot().getRenderer(0).setSeriesPaint(0, Color.BLUE);
-        scatterPlot.getXYPlot().getRenderer(0).setSeriesPaint(1, Color.RED);
+        this.setSeriesDot(0, 3.0, Color.BLUE);
+        this.setSeriesDot(1, 3.0, Color.RED);
+//        scatterPlot.getXYPlot().getRenderer(0).setSeriesPaint(0, Color.BLUE);
+//        scatterPlot.getXYPlot().getRenderer(0).setSeriesPaint(1, Color.RED);
         ChartPanel chartPanel = new ChartPanel(scatterPlot);
         chartPanel.setPreferredSize(new java.awt.Dimension(x, y));
         setContentPane(chartPanel);
-
-        this.pack();
-        RefineryUtilities.centerFrameOnScreen(this);
     }
 
     public void showPlotWindow() {
 
+        this.pack();
+        RefineryUtilities.centerFrameOnScreen(this);
         this.setVisible(true);
     }
 

@@ -71,7 +71,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition forArchiving(Composition origin) {
 
         origin.addDebugMsg("forArchiving: "
-                + origin.getId_prefix() + "been checked/rendered.");
+                + origin.getId_prefix() + " been checked/rendered.");
         origin.getRenderedChecked(this.getClass().getSimpleName() + "::forArchiving");
         Composition dupe = new Composition(this.composer_id, origin.getId(),
                 origin.getEval().getStyles());
