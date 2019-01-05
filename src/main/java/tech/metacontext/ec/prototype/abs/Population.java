@@ -49,7 +49,7 @@ public abstract class Population<E extends Individual> {
      */
     abstract public void evolve();
 
-    abstract public void render();
+    abstract public void render(int type);
 
     /**
      * Randomly select an Individual from subset selected with a criteria and a

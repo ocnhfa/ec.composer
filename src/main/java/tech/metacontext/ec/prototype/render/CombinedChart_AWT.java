@@ -16,11 +16,12 @@
 package tech.metacontext.ec.prototype.render;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,11 +31,13 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.CombinedDomainCategoryPlot;
+import org.jfree.chart.plot.CombinedRangeCategoryPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
+import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.ScatterRenderer;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.statistics.DefaultMultiValueCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
@@ -50,36 +53,43 @@ public class CombinedChart_AWT extends ApplicationFrame {
     public static void main(String[] args) {
 
         CombinedChart_AWT chart = new CombinedChart_AWT("Demo");
-
-        List<SimpleEntry<Integer, Double>> series1A = new ArrayList<>(),
-                series1B = new ArrayList<>(),
-                series2 = new ArrayList<>();
-
-        IntStream.range(1, 50)
-                .forEach(i -> {
-                    new Random().doubles(10, Math.random(), (50.0 + i) / 50 + Math.random())
-                            .mapToObj(value -> new SimpleEntry<>(i, value))
-                            .forEach(series1A::add);
-                    new Random().doubles(10, Math.random(), (50.0 + i) / 50 + Math.random())
-                            .mapToObj(value -> new SimpleEntry<>(i, value))
-                            .forEach(series1B::add);
-                    series2.add(new SimpleEntry<>(i, series1A.stream()
-                            .mapToDouble(SimpleEntry::getValue)
-                            .average().getAsDouble()));
-                });
+        Map<Integer, List<Double>> series1A = new HashMap<>(),
+                series1B = new HashMap<>();
+        Map<Integer, Double> series2 = new HashMap<>();
+        IntStream.range(0, 50).forEach(i -> {
+            series1A.put(i, new Random().doubles(10, Math.random(), (50.0 + i) / 50 + Math.random())
+                    .boxed().collect(Collectors.toList()));
+            System.out.println("###" + i);
+            System.out.println("series1A");
+            System.out.println(series1A.get(i));
+            if (i % 2 == 0) {
+                series1B.put(i, new Random().doubles(10, Math.random(), 1.0 + Math.random())
+                        .boxed().sorted().collect(Collectors.toList()));
+                System.out.println("series1B");
+                System.out.println(series1B.get(i));
+            }
+            series2.put(i, series1A.get(i).stream()
+                    .mapToDouble(s -> s).average().getAsDouble());
+        });
         double size = 3.0;
         double delta = size / 2.0;
         Shape shape = new Ellipse2D.Double(-delta, -delta, size, size);
-        ScatterRenderer sr1 = new ScatterRenderer();
+        var sr1 = new ScatterRenderer();
+        var sr2 = new ScatterRenderer();
+
         sr1.setSeriesPaint(0, Color.GRAY);
         sr1.setSeriesShape(0, shape);
-        ScatterRenderer sr2 = new ScatterRenderer();
         sr2.setSeriesPaint(0, Color.RED);
         sr2.setSeriesShape(0, shape);
-        chart.addRenderer(0, "Series1A", series1A, sr1);
-        chart.addRenderer(1, "Series1B", series1B, sr2);
+        chart.addRenderer(new String[]{"Series1A", "Series1B"},
+                new CategoryItemRenderer[]{sr1, sr2}, series1A, series1B);
+//        chart.addRenderer(1, "Series1B", sr2, series1B);
 
-        chart.addRenderer(2, "Series2", series2, new LineAndShapeRenderer());
+        var lasr = new LineAndShapeRenderer();
+        lasr.setSeriesPaint(0, Color.BLUE);
+        lasr.setSeriesShape(0, shape);
+        chart.addRenderer(2, "Series2", lasr, series2);
+
         chart.createChart("HelloWorld", "Generation", "Score", 560, 367, true);
         chart.showChartWindow();
     }
@@ -93,24 +103,29 @@ public class CombinedChart_AWT extends ApplicationFrame {
         plot = new CategoryPlot();
     }
 
-    public void addRenderer(
-            int index, String series,
-            List<SimpleEntry<Integer, Double>> data,
-            CategoryItemRenderer renderer) {
-        CategoryDataset dataset;
-        if (renderer instanceof ScatterRenderer) {
-            System.out.println("ScatterRenderer");
-            dataset = new DefaultMultiValueCategoryDataset();
-            data.stream()
-                    .collect(Collectors.groupingBy(e -> e.getKey()))
-                    .forEach((key, list)
-                            -> ((DefaultMultiValueCategoryDataset) dataset).add(list.stream()
-                            .map(SimpleEntry::getValue).collect(Collectors.toList()), series, key));
-        } else {
-            dataset = new DefaultCategoryDataset();
-            data.stream()
-                    .forEach(e -> ((DefaultCategoryDataset) dataset).addValue(e.getValue(), series, e.getKey()));
-        }
+    public void addRenderer(String[] series,
+            CategoryItemRenderer[] renderer,
+            Map<Integer, List<Double>>... data) {
+
+        IntStream.range(0, data.length).forEach(i -> {
+            var dataset = new DefaultMultiValueCategoryDataset();
+            data[i].entrySet().forEach(e
+                    -> dataset.add(e.getValue(), series[i], e.getKey()));
+            plot.setDataset(i, dataset);
+            plot.setRenderer(i, renderer[i], true);
+        });
+    }
+
+    public void addRenderer(int index, String series,
+            CategoryItemRenderer renderer,
+            Map<Integer, Double> data) {
+
+        var dataset = new DefaultCategoryDataset();
+        data.forEach((key, value)
+                -> ((DefaultCategoryDataset) dataset)
+                        .addValue(value,
+                                series,
+                                "" + key));
         plot.setDataset(index, dataset);
         plot.setRenderer(index, renderer);
     }
@@ -130,8 +145,14 @@ public class CombinedChart_AWT extends ApplicationFrame {
         this.pack();
         RefineryUtilities.centerFrameOnScreen(this);
         CategoryAxis xAxis = plot.getDomainAxis();
-        xAxis.setCategoryLabelPositions(
-                CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 2.0));
+        Font f = xAxis.getTickLabelFont().deriveFont(0.8f);
+        xAxis.setTickLabelFont(f);
+    }
+
+    public void addMarker(double position, Color color) {
+        ValueMarker marker = new ValueMarker(position);
+        marker.setPaint(color);
+        plot.addRangeMarker(marker);
     }
 
     public void showChartWindow() {

@@ -16,9 +16,6 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
@@ -80,21 +77,6 @@ public class CompositionTest {
         assertNotEquals(
                 c1.getConnectors().size(),
                 c3.getConnectors().size());
-    }
-
-    /**
-     * Test of elongation method, of class Composition.
-     */
-    @Test
-    @Ignore
-    public void testElongation() {
-        System.out.println("elongation");
-        Composition instance = null;
-        Composition expResult = null;
-        Composition result = instance.elongation((t) -> true);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**

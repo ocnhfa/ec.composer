@@ -38,7 +38,7 @@ public class Settings {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.95;
+    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.9;
     /**
      * Chance for a mature composition to be elongated.
      */

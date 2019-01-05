@@ -15,6 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import tech.metacontext.ec.prototype.composer.connectors.Connector;
+import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.abs.*;
+import tech.metacontext.ec.prototype.composer.*;
+import tech.metacontext.ec.prototype.composer.factory.*;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -32,15 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.abs.Wrapper;
-import tech.metacontext.ec.prototype.composer.Main;
-import tech.metacontext.ec.prototype.composer.Settings;
-import static tech.metacontext.ec.prototype.composer.Settings.SELECTION_THRESHOLD;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
-import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
-import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -93,7 +90,7 @@ public class Composition extends Individual<CompositionEval> {
     public void setup(String composer_id, Collection<? extends Style> styles) {
 
         this._logger = Logger.getLogger(composer_id);
-        _logger.setFilter((r) -> false);
+        //_logger.setFilter((r) -> false);
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));
@@ -102,10 +99,9 @@ public class Composition extends Individual<CompositionEval> {
         this.addDebugMsg("Initilization completed.");
     }
 
-    public Composition elongation(Predicate<SketchNode> styleChecker) {
+    public void elongation(Predicate<SketchNode> styleChecker) {
 
         this.addConnector(connectorFactory.newConnector(styleChecker));
-        return this;
     }
 
     public void addConnector(Connector connector) {

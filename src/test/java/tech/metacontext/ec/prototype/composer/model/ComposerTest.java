@@ -78,7 +78,7 @@ public class ComposerTest {
         }
         System.out.println("--conservatory--");
         System.out.println(tc.getComposer().getConservetory());
-        tc.getComposer().render();
+        tc.getComposer().renderScatterPlot();
     }
 
     /**
@@ -165,7 +165,7 @@ public class ComposerTest {
     public void testRender() {
         System.out.println("render");
         Composer instance = null;
-        tc.getComposer().render();
+        tc.getComposer().renderScatterPlot();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

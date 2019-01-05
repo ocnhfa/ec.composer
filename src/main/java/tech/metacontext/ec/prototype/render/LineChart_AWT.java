@@ -15,7 +15,6 @@
  */
 package tech.metacontext.ec.prototype.render;
 
-import java.awt.Color;
 import java.text.NumberFormat;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -88,21 +87,19 @@ public class LineChart_AWT extends ApplicationFrame {
         final double avg = data.stream()
                 .mapToDouble(v -> v)
                 .average().orElse(0.0);
-        System.out.println(colKey);
+//        System.out.println(colKey);
         DoubleSummaryStatistics stdss = data.stream()
-                .mapToDouble(s->s)
+                .mapToDouble(s -> s)
                 .filter(v -> v > 0.0)
-                .peek(System.out::println)
+                //                .peek(System.out::println)
                 .peek(value -> powSum.add(Math.pow(value, 2)))
                 .summaryStatistics();
-        System.out.println("avg=" + avg);
-        System.out.println("stdDev_count=" + stdss.getCount());
+//        System.out.println("avg=" + avg);
+//        System.out.println("stdDev_count=" + stdss.getCount());
         double stdDev = Math.sqrt(powSum.sum() / stdss.getCount() - Math.pow(stdss.getAverage(), 2));
-        stdDev = Double.isNaN(stdDev)? 0.0: stdDev;
-        System.out.println("dev=" + stdDev);
-        statDataset.add(
-                avg, stdDev,
-                rowKey, colKey);
+        stdDev = Double.isNaN(stdDev) ? 0.0 : stdDev;
+//        System.out.println("dev=" + stdDev);
+        statDataset.add(avg, stdDev, rowKey, colKey);
     }
 
     public void createChart(JFreeChart chart, int x, int y) {

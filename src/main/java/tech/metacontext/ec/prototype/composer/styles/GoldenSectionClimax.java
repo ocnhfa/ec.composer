@@ -17,17 +17,14 @@ package tech.metacontext.ec.prototype.composer.styles;
 
 import tech.metacontext.ec.prototype.composer.model.*;
 import tech.metacontext.ec.prototype.composer.enums.mats.*;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.composer.materials.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.materials.RhythmicPoints;
-import tech.metacontext.ec.prototype.composer.materials.*;
 
 /**
  *
@@ -43,13 +40,12 @@ public class GoldenSectionClimax extends Style {
             composer.compose().evolve();
         } while (composer.getPopulation().stream().anyMatch(c -> !composer.getAim().isCompleted(c)));
         composer.getPopulation().stream().map(gsc::rateComposition).forEach(System.out::println);
-        
+
 //        Stream.generate(() -> SketchNodeFactory.getInstance().newInstance(composer.styleChecker))
 //                .limit(50)
 //                .peek(System.out::println)
 //                .map(gsc::climaxIndex)
 //                .forEach(System.out::println);
-
     }
 
     public static final double RATIO = 1.6180339887498948482;

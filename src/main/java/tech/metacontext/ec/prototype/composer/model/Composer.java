@@ -15,18 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import java.awt.Color;
-import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 import tech.metacontext.ec.prototype.abs.Population;
 import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
-import tech.metacontext.ec.prototype.composer.factory.*;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.operations.MutationType;
+import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.composer.factory.*;
+import tech.metacontext.ec.prototype.render.*;
 import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
-import tech.metacontext.ec.prototype.render.ScatterPlot_AWT;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,17 +38,28 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.awt.Color;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.util.Map.Entry;
+import java.util.function.Function;
 import org.jfree.chart.plot.ValueMarker;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.ScatterRenderer;
-import tech.metacontext.ec.prototype.render.CombinedChart_AWT;
-import tech.metacontext.ec.prototype.render.LineChart_AWT;
+import tech.metacontext.ec.prototype.composer.Main;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Composer extends Population<Composition> {
+
+    public static void main(String[] args) throws Exception {
+
+        Main main = new Main(50, 1, 0, TEST);
+        main.getComposer().render(RENDERTYPE_COMBINEDCHART);
+    }
 
     private static Logger _logger;
 
@@ -88,7 +96,7 @@ public class Composer extends Population<Composition> {
 
         _logger = Logger.getLogger(getId());
         setFileHandler(logState, _logger);
-        _logger.setFilter((r) -> false);
+//        _logger.setFilter((r) -> false);
 
         _logger.log(Level.INFO,
                 "Initilizing Composer [{0}]", this.getId());
@@ -136,13 +144,10 @@ public class Composer extends Population<Composition> {
                     this.getGenCount()});
         this.genCountIncrement();
         long num_elongated = this.getPopulation().stream()
+                .parallel()
                 .filter(this::toBeElongated)
-                .peek(c -> {
-                    c.elongation(this.styleChecker);
-                    _logger.log(Level.INFO,
-                            "Composition {0} been elongated.",
-                            c.getId_prefix());
-                })
+                .peek(c -> _logger.log(Level.INFO, "Composition {0} been elongated.", c.getId_prefix()))
+                .sequential()
                 .collect(Collectors.counting());
         _logger.log(Level.INFO,
                 "Composing, totally {0} Compositions been elongated.", num_elongated);
@@ -167,9 +172,13 @@ public class Composer extends Population<Composition> {
      */
     private boolean toBeElongated(Composition c) {
 
-        return !aim.isCompleted(c) || Math.random()
-                < Math.pow(CHANCE_ELONGATION_IF_COMPLETED,
-                        c.getSize() - this.getAim().getAimSize() - 1);
+        if (aim.isCompleted(c) && Math.random()
+                >= Math.pow(CHANCE_ELONGATION_IF_COMPLETED,
+                        c.getSize() - this.getAim().getAimSize() - 1)) {
+            return false;
+        }
+        c.elongation(this.styleChecker);
+        return true;
     }
 
     @Override
@@ -179,8 +188,10 @@ public class Composer extends Population<Composition> {
                 "Evolving from {0} parents.", this.getPopulationSize());
         List<Composition> children
                 = Stream.generate(this::getChild)
+                        .parallel()
                         .filter(c -> !this.conserve(c))
                         .limit(size)
+                        .sequential()
                         .collect(Collectors.toList());
         _logger.log(Level.INFO,
                 "Evloving finished, gen = {0}, size = {1}, {2}",
@@ -384,60 +395,70 @@ public class Composer extends Population<Composition> {
         return true;
     }
 
+    @Override
     public void render(int type) {
 
         _logger.log(Level.INFO, "Rendering Composer {0}", this.getId());
         switch (type) {
             case 0:
-                render();
+                renderScatterPlot();
                 break;
             case 1:
                 renderAvgLineChart();
                 break;
             case 2:
                 renderCombinedChart();
+                break;
         }
     }
 
     public void renderCombinedChart() {
 
         CombinedChart_AWT chart = new CombinedChart_AWT("Composer " + this.getId());
-        List<SimpleEntry<Integer, Double>> avgs, xys, xyc;
+        Map<Integer, Double> avgs;
         avgs = IntStream.range(0, this.getGenCount())
-                .mapToObj(i -> new SimpleEntry<>(i, this.getArchive().get(i).stream()
-                /*...*/.mapToDouble(this::getMinScore)
-                /*...*/.average().getAsDouble()))
-                .collect(Collectors.toList());
+                .boxed()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        i -> this.getArchive().get(i).stream()
+                                /*...*/.mapToDouble(this::getMinScore)
+                                /*...*/.filter(score -> score > 0.0)
+                                /*...*/.average().orElse(0.0)));
 
+        Map<Integer, List<Double>> xys, xyc;
         xys = IntStream.range(0, this.getGenCount())
-                .mapToObj(i -> this.getArchive().get(i).stream()
-                /*...*/.map(this::getMinScore)
-                /*...*/.map(s -> new SimpleEntry<>(i, s))
-                /*...*/.collect(Collectors.toList()).stream())
-                .flatMap(s -> s)
-                .collect(Collectors.toList());
+                .boxed()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        i -> this.getArchive().get(i).stream()
+                                /*...*/.map(this::getMinScore)
+                                /*...*/.filter(score -> score > 0.0)
+                                /*...*/.collect(Collectors.toList())));
 
         xyc = this.getConservetory().entrySet().stream()
-                .map(e -> new SimpleEntry<>(e.getValue(), this.getMinScore(e.getKey())))
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(Entry::getValue,
+                        Collectors.mapping(e -> this.getMinScore(e.getKey()),
+                                Collectors.toList())));
 
         double dotSize = 3.0;
         double delta = dotSize / 2.0;
         Shape shape = new Ellipse2D.Double(-delta, -delta, dotSize, dotSize);
-        ScatterRenderer scatterRenderer0 = new ScatterRenderer();
+        var scatterRenderer0 = new ScatterRenderer();
+        var scatterRenderer1 = new ScatterRenderer();
+        var lineAndShapeRenderer = new LineAndShapeRenderer();
         scatterRenderer0.setSeriesPaint(0, Color.GRAY);
         scatterRenderer0.setSeriesShape(0, shape);
-        ScatterRenderer scatterRenderer1 = new ScatterRenderer();
         scatterRenderer1.setSeriesPaint(0, Color.RED);
         scatterRenderer1.setSeriesShape(0, shape);
-
-        chart.addRenderer(0, "score", xys, scatterRenderer0);
-        chart.addRenderer(1, "conservatory", xyc, scatterRenderer1);
-        chart.addRenderer(2, "average", avgs, new LineAndShapeRenderer());
-        ValueMarker marker = new ValueMarker(SCORE_CONSERVE_IF_COMPLETED);
-        marker.setPaint(Color.BLACK);
-        chart.getPlot().addRangeMarker(marker);
-
+        lineAndShapeRenderer.setDefaultShapesVisible(false);
+        chart.addRenderer(
+                new String[]{"score", "conservatory"},
+                new CategoryItemRenderer[]{scatterRenderer0, scatterRenderer1},
+                xys, xyc);
+        lineAndShapeRenderer.setSeriesPaint(0, Color.BLUE);
+        lineAndShapeRenderer.setSeriesShapesVisible(0, false);
+        chart.addRenderer(2, "average", lineAndShapeRenderer, avgs);
+        chart.addMarker(SCORE_CONSERVE_IF_COMPLETED, Color.BLACK);
         chart.createChart("Evolutionary Computation", "Generation", "Score", 1600, 630, true);
         chart.showChartWindow();
     }
@@ -445,40 +466,37 @@ public class Composer extends Population<Composition> {
     public void renderAvgLineChart() {
 
         LineChart_AWT chart = new LineChart_AWT("Composer " + this.getId());
-        LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
+//        LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
 
         IntStream.range(0, this.getGenCount())
                 .forEach(i -> {
                     List<Composition> list = this.getArchive().get(i);
                     List<Double> values = list.stream()
                             .map(this::getMinScore)
-                            //                            .filter(score -> score > 0.0)
+                            .filter(score -> score > 0.0)
                             .collect(Collectors.toList());
                     chart.addData(values, "average", "" + i);
-                    chartStat.addStatData(values, "score", "" + i);
+//                    chartStat.addStatData(values, "score", "" + i);
                 });
         chart.createLineChart("Evolutionary Computation",
                 "Generation", "Score",
                 1600, 630, true);
         chart.showChartWindow();
 
-        chartStat.createStatLineChart("Evolutionary Computation",
-                "Generation", "Score",
-                1600, 630, true);
-        chartStat.showChartWindow();
+//        chartStat.createStatLineChart("Evolutionary Computation",
+//                "Generation", "Score",
+//                1600, 630, true);
+//        chartStat.showChartWindow();
     }
 
-    @Override
-    public void render() {
+    public void renderScatterPlot() {
 
         ScatterPlot_AWT plot = new ScatterPlot_AWT("Composer " + this.getId());
         List<SimpleEntry<Integer, Double>> popScores = IntStream.range(0, this.getGenCount())
                 .mapToObj(i
                         -> this.getArchive().get(i).stream()
-                        .filter(this.getAim()::isCompleted)
-                        .filter(c -> this.getMinScore(c) > 0.0)
-                        //.peek(c -> this.scanQualifiedComposition(c, i))
                         .mapToDouble(this::getMinScore)
+                        .filter(score -> score > 0.0)
                         .mapToObj(s -> new SimpleEntry<>(i, s)))
                 .flatMap(s -> s)
                 .collect(Collectors.toList());
