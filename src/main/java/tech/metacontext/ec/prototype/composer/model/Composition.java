@@ -21,7 +21,6 @@ import tech.metacontext.ec.prototype.abs.*;
 import tech.metacontext.ec.prototype.composer.*;
 import tech.metacontext.ec.prototype.composer.factory.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -52,16 +51,6 @@ public class Composition extends Individual<CompositionEval> {
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
-    //for debugging
-    private List<String> debug;
-
-    public void addDebugMsg(String msg) {
-        debug.add(msg);
-    }
-
-    public List<String> getDebug() {
-        return debug;
-    }
 
     /**
      * Constructor with id specified.
@@ -90,7 +79,6 @@ public class Composition extends Individual<CompositionEval> {
     public void setup(String composer_id, Collection<? extends Style> styles) {
 
         this._logger = Logger.getLogger(composer_id);
-        _logger.setFilter((r) -> false);
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
         this.setEval(new CompositionEval(styles));
@@ -110,7 +98,7 @@ public class Composition extends Individual<CompositionEval> {
     }
 
     public static void main(String[] args) throws Exception {
-        Main main = new Main(100, 1, 1500, Settings.TEST);
+        Main main = new Main(100, 1, 1500, LogState.TEST);
         Composer composer = main.getComposer();
         Composition p0, p1;
         do {
@@ -239,10 +227,12 @@ public class Composition extends Individual<CompositionEval> {
         return this.getConnectors().size() + 1;
     }
 
-    public Path persistent() {
+    public Path persist() {
 
-        Path destination = new File("src/main/resources/composition", this.getId() + ".txt").toPath();
-        try (BufferedWriter out = Files.newBufferedWriter(
+        var destination = new File("src/main/resources/composition",
+                this._logger.getName() + "_" + this.getId_prefix() + ".txt")
+                .toPath();
+        try (var out = Files.newBufferedWriter(
                 destination, StandardCharsets.UTF_8)) {
             out.write(this.toString());
             out.flush();
@@ -298,10 +288,12 @@ public class Composition extends Individual<CompositionEval> {
     @Override
     public String toString() {
         String result
-                = String.format("%s(size = %d, Composer = [%s])\n",
-                        super.toString(), this.getSize(), _logger.getName())
-                + String.format("%s\n", Composer.simpleScoreOutput(this))
-                + String.format("Seed: %s\n", this.getSeed())
+                = String.format("%s(size = %d, Composer = [%s])\n"
+                        + "%s\n"
+                        + "Seed: %s\n",
+                        super.toString(), this.getSize(), _logger.getName(),
+                        Composer.simpleScoreOutput(this),
+                        this.getSeed())
                 + this.getConnectors().stream()
                         .peek(c -> {
                             if (Objects.isNull(c.getPrevious())) {
@@ -336,5 +328,18 @@ public class Composition extends Individual<CompositionEval> {
 
     public List<SketchNode> getRendered() {
         return this.rendered;
+    }
+
+    /*
+     * For debugging.
+     */
+    private List<String> debug;
+
+    public void addDebugMsg(String msg) {
+        debug.add(msg);
+    }
+
+    public List<String> getDebug() {
+        return debug;
     }
 }

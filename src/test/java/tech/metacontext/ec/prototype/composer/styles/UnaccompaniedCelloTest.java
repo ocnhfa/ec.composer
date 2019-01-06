@@ -15,9 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 
 /**
@@ -29,7 +29,7 @@ public class UnaccompaniedCelloTest {
     static UnaccompaniedCello instance;
     static TestCenter tc;
 
-    @BeforeClass
+    @BeforeAll
     public static void prepare() {
         tc = TestCenter.getInstance();
         instance = new UnaccompaniedCello();

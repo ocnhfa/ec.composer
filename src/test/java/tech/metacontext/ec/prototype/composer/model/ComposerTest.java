@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
@@ -42,7 +42,7 @@ public class ComposerTest {
 
     static TestCenter tc;
 
-    @BeforeClass
+    @BeforeAll
     public static void prepare() {
         tc = TestCenter.getInstance();
         assertEquals(tc.PRESET_POPULATION_SIZE, tc.getComposer().getSize());
@@ -148,7 +148,7 @@ public class ComposerTest {
      * Test of evolve method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testEvolve() {
         System.out.println("evolve");
         Composer instance = null;
@@ -161,7 +161,7 @@ public class ComposerTest {
      * Test of render method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testRender() {
         System.out.println("render");
         Composer instance = null;
@@ -174,7 +174,7 @@ public class ComposerTest {
      * Test of addStyle method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testAddStyle() {
         System.out.println("addStyle");
         Style style = null;
@@ -188,7 +188,7 @@ public class ComposerTest {
      * Test of getStyles method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetStyles() {
         System.out.println("getStyles");
         Composer instance = null;
@@ -203,7 +203,7 @@ public class ComposerTest {
      * Test of setStyles method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testSetStyles() {
         System.out.println("setStyles");
         List<Style> styles = null;
@@ -217,7 +217,7 @@ public class ComposerTest {
      * Test of getAim method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetAim() {
         System.out.println("getAim");
         Composer instance = null;
@@ -232,7 +232,7 @@ public class ComposerTest {
      * Test of setAim method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testSetAim() {
         System.out.println("setAim");
         ComposerAim aim = null;
@@ -246,7 +246,7 @@ public class ComposerTest {
      * Test of getConservetory method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetConservetory() {
         System.out.println("getConservetory");
         Composer instance = null;
@@ -261,7 +261,7 @@ public class ComposerTest {
      * Test of getAimSize method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetSize() {
         System.out.println("getSize");
         Composer instance = null;
@@ -276,7 +276,7 @@ public class ComposerTest {
      * Test of setSize method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testSetSize() {
         System.out.println("setSize");
         int size = 0;
@@ -290,7 +290,7 @@ public class ComposerTest {
      * Test of mutate method, of class Composer.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testMutate() {
         System.out.println("mutate");
         Composition origin = null;

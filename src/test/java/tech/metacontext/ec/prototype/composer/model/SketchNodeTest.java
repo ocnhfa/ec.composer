@@ -19,13 +19,10 @@ import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.FileHandler;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 
@@ -40,22 +37,6 @@ public class SketchNodeTest {
     public SketchNodeTest() throws IOException {
 
         sketchNodeFactory = SketchNodeFactory.getInstance();
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test
@@ -76,7 +57,7 @@ public class SketchNodeTest {
      * Test of getMat method, of class SketchNode.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetMat() {
         System.out.println("getMat");
         MaterialType type = null;
@@ -92,7 +73,7 @@ public class SketchNodeTest {
      * Test of getMats method, of class SketchNode.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetMats() {
         System.out.println("getMats");
         SketchNode instance = new SketchNode();
@@ -107,7 +88,7 @@ public class SketchNodeTest {
      * Test of setMats method, of class SketchNode.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testSetMats() {
         System.out.println("setMats");
         Map<MaterialType, MusicMaterial> mats = null;
@@ -121,7 +102,7 @@ public class SketchNodeTest {
      * Test of toString method, of class SketchNode.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testToString() {
         System.out.println("toString");
         SketchNode instance = new SketchNode();

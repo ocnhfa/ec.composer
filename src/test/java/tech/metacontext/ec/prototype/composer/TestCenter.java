@@ -18,6 +18,7 @@ package tech.metacontext.ec.prototype.composer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tech.metacontext.ec.prototype.composer.model.Composer;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *
@@ -25,7 +26,7 @@ import tech.metacontext.ec.prototype.composer.model.Composer;
  */
 public class TestCenter {
 
-    public static final int PRESET_POPULATION_SIZE = 200;
+    public static final int PRESET_POPULATION_SIZE = 100;
     public static final int GOAL_CONSERVATORY_SIZE = 2;
     public static final int GOAL_GENERATION = 0;
     private static TestCenter instance;
@@ -43,7 +44,7 @@ public class TestCenter {
             composer = new Main(PRESET_POPULATION_SIZE,
                     GOAL_CONSERVATORY_SIZE,
                     GOAL_GENERATION,
-                    Settings.TEST).getComposer();
+                    LogState.TEST).getComposer();
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }

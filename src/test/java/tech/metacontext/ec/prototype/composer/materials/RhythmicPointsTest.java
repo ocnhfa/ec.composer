@@ -16,9 +16,9 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.stream.Stream;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
@@ -59,42 +59,42 @@ public class RhythmicPointsTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testReset() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGenerate() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testRandom() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testToString() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGetMin() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testSetMin() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGetMax() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testSetMax() {
     }
 

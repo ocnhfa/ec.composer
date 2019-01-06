@@ -19,10 +19,10 @@ import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
 import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
@@ -37,7 +37,7 @@ public class CompositionTest {
     static CompositionFactory compositionFactory;
     static TestCenter tc;
 
-    @BeforeClass
+    @BeforeAll
     public static void prepare() {
         tc = TestCenter.getInstance();
         compositionFactory = CompositionFactory.getInstance(tc.getComposer().getId());
@@ -83,7 +83,7 @@ public class CompositionTest {
      * Test of addConnect method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testAddConnect() {
         System.out.println("addConnect");
         Connector connector = null;
@@ -97,7 +97,7 @@ public class CompositionTest {
      * Test of toString method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testToString() {
         System.out.println("toString");
         Composition instance = null;
@@ -112,7 +112,7 @@ public class CompositionTest {
      * Test of getConnectors method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetConnectors() {
         System.out.println("getConnectors");
         Composition instance = null;
@@ -127,7 +127,7 @@ public class CompositionTest {
      * Test of addConnector method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testAddConnector() {
         System.out.println("addConnector");
         Connector connector = null;
@@ -141,7 +141,7 @@ public class CompositionTest {
      * Test of getSize method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetSize() {
         System.out.println("getSize");
         Composition instance = null;
@@ -156,7 +156,7 @@ public class CompositionTest {
      * Test of getSeed method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testGetSeed() {
         System.out.println("getSeed");
         Composition instance = null;
@@ -171,7 +171,7 @@ public class CompositionTest {
      * Test of setSeed method, of class Composition.
      */
     @Test
-    @Ignore
+    @Disabled
     public void testSetSeed() {
         System.out.println("setSeed");
         SketchNode seed = null;

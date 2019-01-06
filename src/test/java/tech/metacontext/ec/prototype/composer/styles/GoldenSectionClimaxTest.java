@@ -15,9 +15,9 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
 import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 
@@ -30,7 +30,7 @@ public class GoldenSectionClimaxTest {
     static GoldenSectionClimax instance;
     static TestCenter tc;
 
-    @BeforeClass
+    @BeforeAll
     public static void prepare() {
         instance = new GoldenSectionClimax(UnaccompaniedCello.getRange());
         tc = TestCenter.getInstance();
@@ -57,7 +57,7 @@ public class GoldenSectionClimaxTest {
                 this.getClass().getSimpleName() + "::testRateComposition"))
                 .map(instance::rateComposition)
                 .map(score -> score >= Settings.SCORE_CONSERVE_IF_COMPLETED)
-                .forEach(Assert::assertTrue);
+                .forEach(Assertions::assertTrue);
     }
 
 }

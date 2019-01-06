@@ -17,8 +17,8 @@ package tech.metacontext.ec.prototype.composer.connectors;
 
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
 import java.io.IOException;
-import org.junit.Test;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
@@ -63,47 +63,47 @@ public class ConnectorTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testAddTransformType() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testToString() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGetPrevious() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testSetPrevious() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGetNext() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testSetNext() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGetStyleChecker() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testSetStyleChecker() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testGetTransformTypes() {
     }
 

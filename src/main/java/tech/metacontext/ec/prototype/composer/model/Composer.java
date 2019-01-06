@@ -54,7 +54,7 @@ public class Composer extends Population<Composition> {
 
     public static void main(String[] args) throws Exception {
 
-        Main main = new Main(50, 2, 0, TEST);
+        Main main = new Main(50, 2, 0, LogState.TEST);
         main.getComposer().render(RENDERTYPE_COMBINEDCHART);
         main.getComposer().render(RENDERTYPE_SCATTERPLOT);
         main.getComposer().render(RENDERTYPE_AVERAGELINECHART);
@@ -90,12 +90,11 @@ public class Composer extends Population<Composition> {
      * @param styles
      * @throws java.lang.Exception
      */
-    public Composer(int size, ComposerAim aim, int logState, Style... styles)
+    public Composer(int size, ComposerAim aim, LogState logState, Style... styles)
             throws Exception {
 
         _logger = Logger.getLogger(getId());
         setFileHandler(logState, _logger);
-        _logger.setFilter((r) -> false);
 
         _logger.log(Level.INFO,
                 "Initilizing Composer [{0}]", this.getId());
@@ -542,7 +541,7 @@ public class Composer extends Population<Composition> {
     public void persistAll() {
 
         this.getConservetory().keySet().stream()
-                .forEach(Composition::persistent);
+                .forEach(Composition::persist);
     }
 
     public void addStyle(Style style) {

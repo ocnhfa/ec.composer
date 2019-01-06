@@ -20,6 +20,7 @@ import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.composer.model.Composer;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
@@ -46,22 +47,24 @@ public class Main {
         int POP_SIZE = 100;
         int SELECTED_SIZE = 10;
         int GENERATION = 300;
-        Main main = new Main(POP_SIZE, SELECTED_SIZE, GENERATION, Settings.DEFAULT);
+
+        Main main = new Main(
+                POP_SIZE,
+                SELECTED_SIZE,
+                GENERATION,
+                LogState.DISABLED);
 
 //        main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
         main.composer.render(Composer.RENDERTYPE_COMBINEDCHART);
         System.out.println(header("Persisting Conservatory"));
         main.composer.persistAll();
 
-//        LineChart_AWT chart = new LineChart_AWT("Composer " + main.composer.getId());
         var chart = new LineChart_AWT("Composer " + main.composer.getId());
-
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
         ToDoubleFunction<SketchNode> mapper = node
                 -> gsc.climaxIndex(node);
         ToDoubleBiFunction<Composition, Integer> mapper2 = (c, i)
                 -> gsc.getStandard(c, i);
-
         var max = main.composer.getConservetory().keySet().stream()
                 .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
                 .peek(gsc::updateClimaxIndexes)
@@ -71,7 +74,13 @@ public class Main {
                                 chart.addData(mapper.applyAsDouble(c.getRendered().get(i)), c.getId_prefix(), "" + i);
                             });
                 })
-                .max((o1, o2) -> Double.compare(main.composer.getMinScore(o1), main.composer.getMinScore(o2)))
+                .max((o1, o2) -> {
+                    gsc.updateClimaxIndexes(o1);
+                    double o1Peak = gsc.getPeak();
+                    gsc.updateClimaxIndexes(o2);
+                    double o2Peak = gsc.getPeak();
+                    return Double.compare(o1Peak, o2Peak);
+                })
                 .get();
         IntStream.range(0, max.getSize())
                 .forEach(i -> {
@@ -94,7 +103,7 @@ public class Main {
     public Main(int popSize,
             int goalSize,
             int generation,
-            int logState) throws Exception {
+            LogState logState) throws Exception {
 
         this.composer = new Composer(popSize, ComposerAim.Phrase,
                 logState,

@@ -17,9 +17,9 @@ package tech.metacontext.ec.prototype.composer.factory;
 
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import java.util.Objects;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 
 /**
@@ -31,7 +31,7 @@ public class CompositionFactoryTest {
     static CompositionFactory instance;
     static TestCenter tc;
 
-    @BeforeClass
+    @BeforeAll
     public static void prepare() {
         tc = TestCenter.getInstance();
         instance = CompositionFactory.getInstance(tc.getComposer().getId());

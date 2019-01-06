@@ -85,21 +85,32 @@ public class Settings {
 
     public static String logfile_test = "log/test/";
 
-    public static int DEFAULT = 0, TEST = 1;
+    public static enum LogState {
+        DEFAULT, TEST, DISABLED
+    }
 
-    public static void setFileHandler(int STATE, Logger logger)
+    public static void setFileHandler(LogState STATE, Logger logger)
             throws Exception {
 
         logger.log(Level.INFO,
                 "Setting FileHandler, STATE = {0}", STATE);
-
-        FileHandler fh = new FileHandler(
-                ((STATE == TEST) ? logfile_test : logfile)
-                + getTimeBasedFilename() + ".log",
-                true);
+        logger.setUseParentHandlers(false);
+        FileHandler fh;
+        switch (STATE) {
+            case DISABLED:
+                logger.setUseParentHandlers(false);
+                return;
+            case TEST:
+                fh = new FileHandler(logfile_test
+                        + getTimeBasedFilename() + ".log", true);
+                break;
+            case DEFAULT:
+            default:
+                fh = new FileHandler(logfile
+                        + getTimeBasedFilename() + ".log", true);
+        }
         fh.setEncoding("UTF-8");
         fh.setFormatter(new SimpleFormatter());
-        logger.setUseParentHandlers(false);
         logger.addHandler(fh);
     }
 }

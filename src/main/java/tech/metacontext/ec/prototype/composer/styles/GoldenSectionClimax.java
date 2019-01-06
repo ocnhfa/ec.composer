@@ -25,6 +25,7 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *
@@ -35,7 +36,7 @@ public class GoldenSectionClimax extends Style {
     public static void main(String[] args) throws Exception {
 
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
-        var composer = new Composer(10, ComposerAim.Phrase, 2, new UnaccompaniedCello(), gsc);
+        var composer = new Composer(10, ComposerAim.Phrase, LogState.TEST, new UnaccompaniedCello(), gsc);
         do {
             composer.compose().evolve();
         } while (composer.getPopulation().stream().anyMatch(c -> !composer.getAim().isCompleted(c)));
@@ -51,8 +52,10 @@ public class GoldenSectionClimax extends Style {
     public static final double RATIO = 1.6180339887498948482;
 
     public final SciRange lowest, highest;
-    List<Double> climaxIndexes, standards;
-    double peak, base;
+    private List<Double> climaxIndexes;
+    private List<Double> standards;
+    private double peak;
+    private double base;
 
     public GoldenSectionClimax(Collection<SciRange> ranges) {
 
@@ -146,6 +149,33 @@ public class GoldenSectionClimax extends Style {
             index.add(mti);
         });
         return index.doubleValue() / node.getMats().size();
+    }
+
+    /*
+     * Default setters and getters.
+     */
+    public List<Double> getClimaxIndexes() {
+        return climaxIndexes;
+    }
+
+    public void setClimaxIndexes(List<Double> climaxIndexes) {
+        this.climaxIndexes = climaxIndexes;
+    }
+
+    public List<Double> getStandards() {
+        return standards;
+    }
+
+    public void setStandards(List<Double> standards) {
+        this.standards = standards;
+    }
+
+    public double getPeak() {
+        return peak;
+    }
+
+    public void setPeak(double peak) {
+        this.peak = peak;
     }
 
 }
