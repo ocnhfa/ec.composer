@@ -48,7 +48,7 @@ public class Main {
         int GENERATION = 300;
         Main main = new Main(POP_SIZE, SELECTED_SIZE, GENERATION, Settings.DEFAULT);
 
-        main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
+//        main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
         main.composer.render(Composer.RENDERTYPE_COMBINEDCHART);
         System.out.println(header("Persisting Conservatory"));
         main.composer.persistAll();
@@ -56,21 +56,26 @@ public class Main {
 //        LineChart_AWT chart = new LineChart_AWT("Composer " + main.composer.getId());
         var chart = new LineChart_AWT("Composer " + main.composer.getId());
 
-        GoldenSectionClimax gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
+        var gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
         ToDoubleFunction<SketchNode> mapper = node
                 -> gsc.climaxIndex(node);
         ToDoubleBiFunction<Composition, Integer> mapper2 = (c, i)
                 -> gsc.getStandard(c, i);
 
-        main.composer.getConservetory().keySet().stream()
+        var max = main.composer.getConservetory().keySet().stream()
                 .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
                 .peek(gsc::updateClimaxIndexes)
-                .forEach(c -> {
+                .peek(c -> {
                     IntStream.range(0, c.getSize())
                             .forEach(i -> {
                                 chart.addData(mapper.applyAsDouble(c.getRendered().get(i)), c.getId_prefix(), "" + i);
-                                chart.addData(mapper2.applyAsDouble(c, i), "standard", "" + i);
                             });
+                })
+                .max((o1, o2) -> Double.compare(main.composer.getMinScore(o1), main.composer.getMinScore(o2)))
+                .get();
+        IntStream.range(0, max.getSize())
+                .forEach(i -> {
+                    chart.addData(mapper2.applyAsDouble(max, i), "standard", "" + i);
                 });
         chart.createLineChart("SketchNode Rating Chart",
                 "Generation", "Score", 560, 367, true);

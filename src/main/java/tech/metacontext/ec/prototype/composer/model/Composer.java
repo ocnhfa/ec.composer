@@ -22,6 +22,7 @@ import tech.metacontext.ec.prototype.composer.operations.MutationType;
 import tech.metacontext.ec.prototype.composer.styles.*;
 import tech.metacontext.ec.prototype.composer.factory.*;
 import tech.metacontext.ec.prototype.render.*;
+import tech.metacontext.ec.prototype.composer.Main;
 import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
 import java.util.AbstractMap.SimpleEntry;
@@ -39,15 +40,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.awt.Color;
-import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.util.Map.Entry;
 import java.util.function.Function;
-import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.ScatterRenderer;
-import tech.metacontext.ec.prototype.composer.Main;
 
 /**
  *
@@ -57,8 +54,10 @@ public class Composer extends Population<Composition> {
 
     public static void main(String[] args) throws Exception {
 
-        Main main = new Main(50, 1, 0, TEST);
+        Main main = new Main(50, 2, 0, TEST);
         main.getComposer().render(RENDERTYPE_COMBINEDCHART);
+        main.getComposer().render(RENDERTYPE_SCATTERPLOT);
+        main.getComposer().render(RENDERTYPE_AVERAGELINECHART);
     }
 
     private static Logger _logger;
@@ -96,7 +95,7 @@ public class Composer extends Population<Composition> {
 
         _logger = Logger.getLogger(getId());
         setFileHandler(logState, _logger);
-//        _logger.setFilter((r) -> false);
+        _logger.setFilter((r) -> false);
 
         _logger.log(Level.INFO,
                 "Initilizing Composer [{0}]", this.getId());
@@ -142,8 +141,8 @@ public class Composer extends Population<Composition> {
                 new Object[]{
                     this.getArchive().get(this.getGenCount()).size(),
                     this.getGenCount()});
-        this.genCountIncrement();
-        long num_elongated = this.getPopulation().stream()
+
+        var num_elongated = this.getPopulation().stream()
                 .parallel()
                 .filter(this::toBeElongated)
                 .peek(c -> _logger.log(Level.INFO, "Composition {0} been elongated.", c.getId_prefix()))
@@ -186,19 +185,19 @@ public class Composer extends Population<Composition> {
 
         _logger.log(Level.INFO,
                 "Evolving from {0} parents.", this.getPopulationSize());
-        List<Composition> children
-                = Stream.generate(this::getChild)
-                        .parallel()
-                        .filter(c -> !this.conserve(c))
-                        .limit(size)
-                        .sequential()
-                        .collect(Collectors.toList());
+        var children = Stream.generate(this::getChild)
+                .parallel()
+                .filter(c -> !this.conserve(c))
+                .limit(size)
+                .sequential()
+                .collect(Collectors.toList());
         _logger.log(Level.INFO,
                 "Evloving finished, gen = {0}, size = {1}, {2}",
                 new Object[]{this.getGenCount(),
                     children.size(),
                     getSummary(children)});
         this.setPopulation(children);
+        this.genCountIncrement();
     }
 
     public static String getSummary(List<Composition> list) {
@@ -213,8 +212,6 @@ public class Composer extends Population<Composition> {
     /**
      * Get child via mutation or crossover.
      *
-     * @param p0 if not completed, mutate; if completed there's a chance to
-     * crossover.
      * @return the child produced.
      */
     public Composition getChild() {
@@ -224,10 +221,10 @@ public class Composer extends Population<Composition> {
             2.若completed則仍有一定機率走mutate -> children
             3.若則選出另一條p1 completed(不能是自己), crossover -> children
          */
-        Composition p0 = select(SELECT_FROM_ALL, SELECTION_THRESHOLD);
+        var p0 = select(SELECT_FROM_ALL, SELECTION_THRESHOLD);
         if (this.getAim().isCompleted(p0)
                 && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED) {
-            Composition p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
+            var p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
             if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
             }
@@ -237,12 +234,12 @@ public class Composer extends Population<Composition> {
 
     public Composition mutate(Composition origin) {
 
-        Composition mutant = compositionFactory.forMutation(origin);
+        var mutant = compositionFactory.forMutation(origin);
         _logger.log(Level.INFO,
                 "Composition {0} being duplicated to {1} for mutation.",
                 new Object[]{origin.getId_prefix(), mutant.getId_prefix()});
         int selected = new Random().nextInt(mutant.getSize() - 1);
-        MutationType type = MutationType.getRandom();
+        var type = MutationType.getRandom();
         switch (type) {
             case Alteration:
                 mutant.getConnectors().set(selected,
@@ -277,7 +274,7 @@ public class Composer extends Population<Composition> {
     public Composition crossover(Composition p0, Composition p1) {
 
         int index = 1;
-        Composition child = compositionFactory.forCrossover(
+        var child = compositionFactory.forCrossover(
                 p0.getConnectors().get(0),
                 this.styles);
         _logger.log(Level.INFO,
@@ -285,7 +282,7 @@ public class Composer extends Population<Composition> {
                 new Object[]{p0.getId_prefix(), child.getId_prefix()});
         String crossover_state = "X";
         do {
-            Composition activated = new Random().nextBoolean()
+            var activated = new Random().nextBoolean()
                     ? ((p0.getSize() - 1 > index) ? p0 : p1)
                     : ((p1.getSize() - 1 > index) ? p1 : p0);
             child.addConnector(connectorfactory
@@ -305,7 +302,7 @@ public class Composer extends Population<Composition> {
     @Override
     public Composition select(Predicate<Composition> criteria, double threshold) {
 
-        List<Composition> subset = this.getPopulation().stream()
+        var subset = this.getPopulation().stream()
                 .filter(criteria)
                 .peek(Composition::updateEval)
                 .sorted((c1, c2) -> (int) (this.getMinScore(c2) - this.getMinScore(c1)))
@@ -315,7 +312,7 @@ public class Composer extends Population<Composition> {
         }
         int thresholdIndex = (int) ((subset.size() - 1) * threshold);
         double std = this.getMinScore(subset.get(thresholdIndex));
-        List<Composition> selectedSubset = subset.stream()
+        var selectedSubset = subset.stream()
                 .filter(c -> this.getMinScore(c) >= std)
                 .collect(Collectors.toList());
 //        if (selectedSubset.size() < subset.size() && subset.size() < this.getSize()) {
@@ -414,9 +411,8 @@ public class Composer extends Population<Composition> {
 
     public void renderCombinedChart() {
 
-        CombinedChart_AWT chart = new CombinedChart_AWT("Composer " + this.getId());
-        Map<Integer, Double> avgs;
-        avgs = IntStream.range(0, this.getGenCount())
+        var chart = new CombinedChart_AWT("Composer " + this.getId());
+        var avgs = IntStream.range(0, this.getGenCount())
                 .boxed()
                 .collect(Collectors.toMap(
                         Function.identity(),
@@ -425,36 +421,36 @@ public class Composer extends Population<Composition> {
                                 /*...*/.filter(score -> score > 0.0)
                                 /*...*/.average().orElse(0.0)));
 
-        Map<Integer, List<Double>> xys, xyc;
-        xys = IntStream.range(0, this.getGenCount())
-                .boxed()
-                .collect(Collectors.toMap(
-                        Function.identity(),
-                        i -> this.getArchive().get(i).stream()
-                                /*...*/.map(this::getMinScore)
-                                /*...*/.filter(score -> score > 0.0)
-                                /*...*/.collect(Collectors.toList())));
-
-        xyc = this.getConservetory().entrySet().stream()
-                .collect(Collectors.groupingBy(Entry::getValue,
-                        Collectors.mapping(e -> this.getMinScore(e.getKey()),
-                                Collectors.toList())));
-
+        var xys = new HashMap<Integer, List<Double>>();
+        var xyc = new HashMap<Integer, List<Double>>();
+        IntStream.range(0, this.getGenCount())
+                .forEach(i -> {
+                    xys.put(i, this.getArchive().get(i).stream()
+                            .map(this::getMinScore)
+                            .filter(score -> score > 0.0)
+                            .collect(Collectors.toList()));
+                    xyc.put(i, this.getConservetory().entrySet().stream()
+                            .filter(e -> e.getValue() == i)
+                            .map(e -> e.getKey())
+                            .map(this::getMinScore)
+                            .collect(Collectors.toList()));
+                });
         double dotSize = 3.0;
         double delta = dotSize / 2.0;
-        Shape shape = new Ellipse2D.Double(-delta, -delta, dotSize, dotSize);
+        var shape = new Ellipse2D.Double(-delta, -delta, dotSize, dotSize);
+
         var scatterRenderer0 = new ScatterRenderer();
         var scatterRenderer1 = new ScatterRenderer();
-        var lineAndShapeRenderer = new LineAndShapeRenderer();
         scatterRenderer0.setSeriesPaint(0, Color.GRAY);
         scatterRenderer0.setSeriesShape(0, shape);
         scatterRenderer1.setSeriesPaint(0, Color.RED);
         scatterRenderer1.setSeriesShape(0, shape);
-        lineAndShapeRenderer.setDefaultShapesVisible(false);
         chart.addRenderer(
                 new String[]{"score", "conservatory"},
                 new CategoryItemRenderer[]{scatterRenderer0, scatterRenderer1},
                 xys, xyc);
+        var lineAndShapeRenderer = new LineAndShapeRenderer();
+        lineAndShapeRenderer.setDefaultShapesVisible(false);
         lineAndShapeRenderer.setSeriesPaint(0, Color.BLUE);
         lineAndShapeRenderer.setSeriesShapesVisible(0, false);
         chart.addRenderer(2, "average", lineAndShapeRenderer, avgs);
@@ -465,8 +461,8 @@ public class Composer extends Population<Composition> {
 
     public void renderAvgLineChart() {
 
-        LineChart_AWT chart = new LineChart_AWT("Composer " + this.getId());
-//        LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
+        var chart = new LineChart_AWT("Composer " + this.getId());
+        LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
 
         IntStream.range(0, this.getGenCount())
                 .forEach(i -> {
@@ -476,28 +472,27 @@ public class Composer extends Population<Composition> {
                             .filter(score -> score > 0.0)
                             .collect(Collectors.toList());
                     chart.addData(values, "average", "" + i);
-//                    chartStat.addStatData(values, "score", "" + i);
+                    chartStat.addStatData(values, "score", "" + i);
                 });
         chart.createLineChart("Evolutionary Computation",
                 "Generation", "Score",
                 1600, 630, true);
         chart.showChartWindow();
 
-//        chartStat.createStatLineChart("Evolutionary Computation",
-//                "Generation", "Score",
-//                1600, 630, true);
-//        chartStat.showChartWindow();
+        chartStat.createStatLineChart("Evolutionary Computation",
+                "Generation", "Score",
+                1600, 630, true);
+        chartStat.showChartWindow();
     }
 
     public void renderScatterPlot() {
 
-        ScatterPlot_AWT plot = new ScatterPlot_AWT("Composer " + this.getId());
-        List<SimpleEntry<Integer, Double>> popScores = IntStream.range(0, this.getGenCount())
+        var plot = new ScatterPlot_AWT("Composer " + this.getId());
+        var popScores = IntStream.range(0, this.getGenCount())
                 .mapToObj(i
                         -> this.getArchive().get(i).stream()
-                        .mapToDouble(this::getMinScore)
-                        .filter(score -> score > 0.0)
-                        .mapToObj(s -> new SimpleEntry<>(i, s)))
+                        .map(this::getMinScore).filter(score -> score > 0.0)
+                        .map(score -> new SimpleEntry<>(i, score)))
                 .flatMap(s -> s)
                 .collect(Collectors.toList());
         plot.addSeries("Population", popScores);

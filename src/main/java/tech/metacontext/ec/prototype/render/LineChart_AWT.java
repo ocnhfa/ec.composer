@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.render;
 
+import java.awt.Color;
 import java.text.NumberFormat;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
@@ -25,10 +26,8 @@ import java.util.stream.Stream;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.StatisticalLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -113,10 +112,15 @@ public class LineChart_AWT extends ApplicationFrame {
         this.pack();
         RefineryUtilities.centerFrameOnScreen(this);
 
-        CategoryPlot plot = chart.getCategoryPlot();
-        CategoryAxis xAxis = plot.getDomainAxis();
-        xAxis.setCategoryLabelPositions(
-                CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 2.0));
+        var plot = chart.getCategoryPlot();
+        var xAxis = plot.getDomainAxis();
+        xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+        int count = plot.getCategories().size();
+        int filter = (int) Math.pow(10, (int) Math.log10(count));
+        IntStream.range(0, count)
+                .filter(i -> i % filter != 0 && i != count - 1)
+                .mapToObj(i -> plot.getCategories().get(i))
+                .forEach(c -> xAxis.setTickLabelPaint((Comparable) c, new Color(0, 0, 0, 0)));
     }
 
     public void createLineChart(String chartTitle, String xLabel, String yLabel,

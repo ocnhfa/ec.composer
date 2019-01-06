@@ -19,6 +19,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +33,6 @@ import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.plot.CombinedDomainCategoryPlot;
-import org.jfree.chart.plot.CombinedRangeCategoryPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
@@ -59,14 +59,11 @@ public class CombinedChart_AWT extends ApplicationFrame {
         IntStream.range(0, 50).forEach(i -> {
             series1A.put(i, new Random().doubles(10, Math.random(), (50.0 + i) / 50 + Math.random())
                     .boxed().collect(Collectors.toList()));
-            System.out.println("###" + i);
-            System.out.println("series1A");
-            System.out.println(series1A.get(i));
             if (i % 2 == 0) {
                 series1B.put(i, new Random().doubles(10, Math.random(), 1.0 + Math.random())
                         .boxed().sorted().collect(Collectors.toList()));
-                System.out.println("series1B");
-                System.out.println(series1B.get(i));
+            } else {
+                series1B.put(i, new ArrayList<>());
             }
             series2.put(i, series1A.get(i).stream()
                     .mapToDouble(s -> s).average().getAsDouble());
@@ -112,7 +109,7 @@ public class CombinedChart_AWT extends ApplicationFrame {
             data[i].entrySet().forEach(e
                     -> dataset.add(e.getValue(), series[i], e.getKey()));
             plot.setDataset(i, dataset);
-            plot.setRenderer(i, renderer[i], true);
+            plot.setRenderer(i, renderer[i]);
         });
     }
 
@@ -122,10 +119,7 @@ public class CombinedChart_AWT extends ApplicationFrame {
 
         var dataset = new DefaultCategoryDataset();
         data.forEach((key, value)
-                -> ((DefaultCategoryDataset) dataset)
-                        .addValue(value,
-                                series,
-                                "" + key));
+                -> dataset.addValue(value, series, key));
         plot.setDataset(index, dataset);
         plot.setRenderer(index, renderer);
     }
@@ -133,7 +127,15 @@ public class CombinedChart_AWT extends ApplicationFrame {
     public void createChart(String chartTitle, String xLabel, String yLabel,
             int x, int y, boolean legend) {
 
-        plot.setDomainAxis(new CategoryAxis(xLabel));
+        var xAxis = new CategoryAxis(xLabel);
+        xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+        int count = plot.getCategories().size();
+        int filter = (int) Math.pow(10, (int) Math.log10(count));
+        IntStream.range(0, count)
+                .filter(i -> i % filter != 0 && i != count - 1)
+                .mapToObj(i -> plot.getCategories().get(i))
+                .forEach(c -> xAxis.setTickLabelPaint((Comparable) c, new Color(0, 0, 0, 0)));
+        plot.setDomainAxis(xAxis);
         plot.setRangeAxis(new NumberAxis(yLabel));
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
         chart = new JFreeChart(plot);
@@ -144,9 +146,6 @@ public class CombinedChart_AWT extends ApplicationFrame {
 
         this.pack();
         RefineryUtilities.centerFrameOnScreen(this);
-        CategoryAxis xAxis = plot.getDomainAxis();
-        Font f = xAxis.getTickLabelFont().deriveFont(0.8f);
-        xAxis.setTickLabelFont(f);
     }
 
     public void addMarker(double position, Color color) {

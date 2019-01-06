@@ -1,0 +1,73 @@
+Composition [c450b5c4-cf77](size = 12, Composer = [0425cdf6-33b9-4ab6-b9f4-1b427a97117b])
+[c450b5c4-cf77] GoldenSectionClimax: 0.934 | UnaccompaniedCello: 1.000
+Seed: SketchNode [fc1f7ff8-0ea1]{
+-   RhythmicPoints (div=3): [7, 7, 4]
+-   Dynamics (div=3): [mf, p, p]
+-   NoteRanges (div=1): [C4]
+-   PitchSets (div=1): [PitchSet[ D_flat, E_flat, G_flat ]]}
+Connector [9da09f5c-2198]{Dynamics=MoveBackward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, PitchSets=Retrograde} 
+ => SketchNode [86922e48-b37c]{
+-   RhythmicPoints (div=3): [0, 2, 2]
+-   Dynamics (div=3): [mp, pp, pp]
+-   NoteRanges (div=1): [C4]
+-   PitchSets (div=1): [PitchSet[ D_flat, E_flat, G_flat ]]}
+Connector [23928c2a-ae72]{Dynamics=Repetition, NoteRanges=MoveForward, RhythmicPoints=Disconnected, PitchSets=Retrograde} 
+ => SketchNode [ac58e2e7-2303]{
+-   RhythmicPoints (div=4): [3, 0, 4, 0]
+-   Dynamics (div=3): [mp, pp, pp]
+-   NoteRanges (div=1): [C5]
+-   PitchSets (div=1): [PitchSet[ D_flat, E_flat, G_flat ]]}
+Connector [4ed0a0ad-cf46]{Dynamics=Repetition, NoteRanges=MoveForward, RhythmicPoints=Disconnected, PitchSets=Retrograde} 
+ => SketchNode [b24072d5-0805]{
+-   RhythmicPoints (div=2): [4, 7]
+-   Dynamics (div=3): [mp, pp, pp]
+-   NoteRanges (div=1): [C6]
+-   PitchSets (div=1): [PitchSet[ D_flat, E_flat, G_flat ]]}
+Connector [c1d4d0a2-ede9]{Dynamics=MoveForward, NoteRanges=Retrograde, RhythmicPoints=MoveForward, PitchSets=MoveForward} 
+ => SketchNode [29ebb5c9-8588]{
+-   RhythmicPoints (div=2): [5, 8]
+-   Dynamics (div=3): [mf, p, p]
+-   NoteRanges (div=1): [C6]
+-   PitchSets (div=1): [PitchSet[ D, E, G ]]}
+Connector [2d190c4c-1fe9]{Dynamics=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, PitchSets=Disconnected} 
+ => SketchNode [471d55df-0337]{
+-   RhythmicPoints (div=1): [5]
+-   Dynamics (div=3): [f, mp, mp]
+-   NoteRanges (div=1): [C6]
+-   PitchSets (div=4): [PitchSet[ F, B_flat, B ], PitchSet[ C, D_flat, A_flat ], PitchSet[ C, F, G ], PitchSet[ G_flat, A_flat, B ]]}
+Connector [b6333c9f-d097]{Dynamics=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, PitchSets=MoveBackward} 
+ => SketchNode [1e326bbe-bd36]{
+-   RhythmicPoints (div=1): [6]
+-   Dynamics (div=3): [ff, mf, mf]
+-   NoteRanges (div=1): [C6]
+-   PitchSets (div=4): [PitchSet[ E, A, B_flat ], PitchSet[ C, G, B ], PitchSet[ E, G_flat, B ], PitchSet[ F, G, B_flat ]]}
+Connector [ff28987a-07c1]{Dynamics=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, PitchSets=Disconnected} 
+ => SketchNode [ab01590f-48b8]{
+-   RhythmicPoints (div=2): [6, 5]
+-   Dynamics (div=3): [fff, f, f]
+-   NoteRanges (div=1): [C6]
+-   PitchSets (div=4): [PitchSet[ D, E_flat, B ], PitchSet[ E, G_flat, B ], PitchSet[ E_flat, G_flat, A ], PitchSet[ E, G, B_flat ]]}
+Connector [860a6317-3264]{Dynamics=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, PitchSets=Disconnected} 
+ => SketchNode [79330e99-574e]{
+-   RhythmicPoints (div=2): [2, 8]
+-   Dynamics (div=3): [ffff, ff, ff]
+-   NoteRanges (div=1): [C6]
+-   PitchSets (div=1): [PitchSet[ D_flat, A, B_flat ]]}
+Connector [140ed74b-add8]{Dynamics=Retrograde, NoteRanges=MoveBackward, RhythmicPoints=MoveBackward, PitchSets=Repetition} 
+ => SketchNode [06d35d93-605e]{
+-   RhythmicPoints (div=2): [1, 7]
+-   Dynamics (div=3): [ff, ff, ffff]
+-   NoteRanges (div=1): [C5]
+-   PitchSets (div=1): [PitchSet[ D_flat, A, B_flat ]]}
+Connector [84f48d95-1797]{Dynamics=Disconnected, NoteRanges=Repetition, RhythmicPoints=MoveBackward, PitchSets=MoveForward} 
+ => SketchNode [0dbfb3f8-10c5]{
+-   RhythmicPoints (div=2): [0, 6]
+-   Dynamics (div=1): [mf]
+-   NoteRanges (div=1): [C5]
+-   PitchSets (div=1): [PitchSet[ D, B_flat, B ]]}
+Connector [1097d526-a2fe]{Dynamics=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, PitchSets=Disconnected} 
+ => SketchNode [4b45ff0a-ff80]{
+-   RhythmicPoints (div=1): [0]
+-   Dynamics (div=1): [f]
+-   NoteRanges (div=1): [C5]
+-   PitchSets (div=2): [PitchSet[ D, E_flat, A ], PitchSet[ E, G_flat, B_flat ]]}

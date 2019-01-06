@@ -1,0 +1,79 @@
+Composition [ebad4b3a-a98b](size = 13, Composer = [f13c94e5-61a5-4b44-8fea-9187c7de2fab])
+[ebad4b3a-a98b] UnaccompaniedCello: 1.000 | GoldenSectionClimax: 0.946
+Seed: SketchNode [525e498a-d776]{
+-   PitchSets (div=1): [PitchSet[ D_flat, D, A_flat ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=1): [0]
+-   Dynamics (div=3): [pp, pp, ff]}
+Connector [16f5cec6-846c]{PitchSets=Retrograde, NoteRanges=Retrograde, RhythmicPoints=MoveBackward, Dynamics=Repetition} 
+ => SketchNode [0e146efd-7410]{
+-   PitchSets (div=1): [PitchSet[ D_flat, D, A_flat ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=1): [0]
+-   Dynamics (div=3): [pp, pp, ff]}
+Connector [80f17829-a1b6]{PitchSets=MoveForward, NoteRanges=Repetition, RhythmicPoints=MoveBackward, Dynamics=MoveForward} 
+ => SketchNode [a165920a-218c]{
+-   PitchSets (div=1): [PitchSet[ D, E_flat, A ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=1): [0]
+-   Dynamics (div=3): [p, p, fff]}
+Connector [f22728f9-ae38]{PitchSets=MoveForward, NoteRanges=Repetition, RhythmicPoints=MoveBackward, Dynamics=MoveForward} 
+ => SketchNode [3085e819-1976]{
+-   PitchSets (div=1): [PitchSet[ E_flat, E, B_flat ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=1): [0]
+-   Dynamics (div=3): [mp, mp, ffff]}
+Connector [f88b0943-1803]{PitchSets=MoveForward, NoteRanges=MoveForward, RhythmicPoints=MoveForward, Dynamics=MoveForward} 
+ => SketchNode [27c439b2-6cc0]{
+-   PitchSets (div=1): [PitchSet[ E, F, B ]]
+-   NoteRanges (div=1): [C3]
+-   RhythmicPoints (div=1): [1]
+-   Dynamics (div=3): [mf, mf, ffff]}
+Connector [d1a54ee4-5ee7]{PitchSets=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, Dynamics=MoveForward} 
+ => SketchNode [86821740-241b]{
+-   PitchSets (div=1): [PitchSet[ C, F, G_flat ]]
+-   NoteRanges (div=1): [C3]
+-   RhythmicPoints (div=1): [0]
+-   Dynamics (div=3): [f, f, ffff]}
+Connector [944115f3-dae4]{PitchSets=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, Dynamics=MoveForward} 
+ => SketchNode [b622c05e-3709]{
+-   PitchSets (div=1): [PitchSet[ D_flat, G_flat, G ]]
+-   NoteRanges (div=1): [C3]
+-   RhythmicPoints (div=3): [8, 0, 3]
+-   Dynamics (div=3): [ff, ff, ffff]}
+Connector [6addced2-8944]{PitchSets=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, Dynamics=MoveForward} 
+ => SketchNode [1ec43906-8a5d]{
+-   PitchSets (div=1): [PitchSet[ D, G, A_flat ]]
+-   NoteRanges (div=1): [C3]
+-   RhythmicPoints (div=3): [8, 2, 6]
+-   Dynamics (div=3): [fff, fff, ffff]}
+Connector [23b38e77-22f9]{PitchSets=MoveBackward, NoteRanges=Retrograde, RhythmicPoints=Retrograde, Dynamics=Disconnected} 
+ => SketchNode [ee53a0bf-c5aa]{
+-   PitchSets (div=1): [PitchSet[ D_flat, G_flat, G ]]
+-   NoteRanges (div=1): [C3]
+-   RhythmicPoints (div=3): [6, 2, 8]
+-   Dynamics (div=3): [pp, ff, ff]}
+Connector [3ed00ee1-7987]{PitchSets=MoveBackward, NoteRanges=MoveBackward, RhythmicPoints=Repetition, Dynamics=Disconnected} 
+ => SketchNode [0d14ee6b-da79]{
+-   PitchSets (div=1): [PitchSet[ C, F, G_flat ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=3): [6, 2, 8]
+-   Dynamics (div=1): [f]}
+Connector [fa9575ca-72e1]{PitchSets=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, Dynamics=MoveForward} 
+ => SketchNode [ff58a842-62c0]{
+-   PitchSets (div=1): [PitchSet[ D_flat, G_flat, G ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=2): [7, 6]
+-   Dynamics (div=1): [ff]}
+Connector [ed43ee7e-63f9]{PitchSets=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, Dynamics=MoveForward} 
+ => SketchNode [6053bf1c-099f]{
+-   PitchSets (div=1): [PitchSet[ D, G, A_flat ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=1): [6]
+-   Dynamics (div=1): [fff]}
+Connector [daaf1aaf-db7b]{PitchSets=MoveForward, NoteRanges=Retrograde, RhythmicPoints=Disconnected, Dynamics=MoveForward} 
+ => SketchNode [e017294c-c832]{
+-   PitchSets (div=1): [PitchSet[ E_flat, A_flat, A ]]
+-   NoteRanges (div=1): [C2]
+-   RhythmicPoints (div=1): [8]
+-   Dynamics (div=1): [ffff]}
