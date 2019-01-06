@@ -21,6 +21,7 @@ import tech.metacontext.ec.prototype.abs.*;
 import tech.metacontext.ec.prototype.composer.*;
 import tech.metacontext.ec.prototype.composer.factory.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -102,8 +103,8 @@ public class Composition extends Individual<CompositionEval> {
         Composer composer = main.getComposer();
         Composition p0, p1;
         do {
-            p0 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
-            p1 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
+            p0 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
+            p1 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
         } while (Objects.equals(p0, p1));
         Composition child, dupe;
         int counter = 0;
@@ -232,7 +233,7 @@ public class Composition extends Individual<CompositionEval> {
         var destination = new File("src/main/resources/composition",
                 this._logger.getName() + "_" + this.getId_prefix() + ".txt")
                 .toPath();
-        try (var out = Files.newBufferedWriter(
+        try ( var out = Files.newBufferedWriter(
                 destination, StandardCharsets.UTF_8)) {
             out.write(this.toString());
             out.flush();

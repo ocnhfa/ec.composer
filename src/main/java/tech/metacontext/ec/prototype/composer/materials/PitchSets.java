@@ -15,16 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.PitchSet;
+import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *
@@ -76,7 +75,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     @Override
     public PitchSets reset() {
 
-        this.setDivision(DEFAULT_DIVISION);
+        this.setDivision(DEFAULT_DIVISION.value.intValue());
         this.factory = new PitchSetFactory();
         return this;
     }
@@ -99,7 +98,9 @@ public class PitchSets extends MusicMaterial<PitchSet> {
     public PitchSets random() {
 
         this.setDivision(new Random().nextInt(
-                DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1) + DEFAULT_MIN_DIVISION);
+                DEFAULT_MAX_DIVISION.value.intValue()
+                - DEFAULT_MIN_DIVISION.value.intValue() + 1)
+                + DEFAULT_MIN_DIVISION.value.intValue());
         return this.generate();
     }
 

@@ -1,4 +1,4 @@
-/*
+/*3
  * Copyright 2018 Jonathan Chang, Chun-yien <ccy@musicapoetica.org>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +45,7 @@ import java.util.function.Function;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.ScatterRenderer;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
@@ -171,7 +172,7 @@ public class Composer extends Population<Composition> {
     private boolean toBeElongated(Composition c) {
 
         if (aim.isCompleted(c) && Math.random()
-                >= Math.pow(CHANCE_ELONGATION_IF_COMPLETED,
+                >= Math.pow(CHANCE_ELONGATION_IF_COMPLETED.value.doubleValue(),
                         c.getSize() - this.getAim().getAimSize() - 1)) {
             return false;
         }
@@ -220,10 +221,10 @@ public class Composer extends Population<Composition> {
             2.若completed則仍有一定機率走mutate -> children
             3.若則選出另一條p1 completed(不能是自己), crossover -> children
          */
-        var p0 = select(SELECT_FROM_ALL, SELECTION_THRESHOLD);
+        var p0 = select(SELECT_FROM_ALL, SELECTION_THRESHOLD.value.doubleValue());
         if (this.getAim().isCompleted(p0)
-                && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED) {
-            var p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
+                && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED.value.doubleValue()) {
+            var p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
             if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
             }
@@ -255,7 +256,7 @@ public class Composer extends Population<Composition> {
                 mutant.getConnectors().remove(selected);
                 break;
         }
-        boolean reseeding = Math.random() < CHANCE_RESEEDING;
+        boolean reseeding = Math.random() < CHANCE_RESEEDING.value.doubleValue();
         if (reseeding) {
             mutant.resetSeed(sketchNodeFactory.newInstance(styleChecker));
         }
@@ -364,7 +365,7 @@ public class Composer extends Population<Composition> {
         }
         c.getRenderedChecked(this.getClass().getSimpleName() + "::conserve");
         c.addDebugMsg("under conservation check.");
-        if (getMinScore(c) < SCORE_CONSERVE_IF_COMPLETED) {
+        if (getMinScore(c) < SCORE_CONSERVE_IF_COMPLETED.value.doubleValue()) {
             c.addDebugMsg("fail conservation check: " + simpleScoreOutput(c));
             return false;
         }
@@ -453,7 +454,7 @@ public class Composer extends Population<Composition> {
         lineAndShapeRenderer.setSeriesPaint(0, Color.BLUE);
         lineAndShapeRenderer.setSeriesShapesVisible(0, false);
         chart.addRenderer(2, "average", lineAndShapeRenderer, avgs);
-        chart.addMarker(SCORE_CONSERVE_IF_COMPLETED, Color.BLACK);
+        chart.addMarker(SCORE_CONSERVE_IF_COMPLETED.value.doubleValue(), Color.BLACK);
         chart.createChart("Evolutionary Computation", "Generation", "Score", 1600, 630, true);
         chart.showChartWindow();
     }
@@ -504,7 +505,7 @@ public class Composer extends Population<Composition> {
                 1600, 630, true);
         plot.setSeriesDot(0, 3.0, Color.GRAY);
         plot.setSeriesDot(1, 3.0, Color.RED);
-        plot.addHorizontalLine(SCORE_CONSERVE_IF_COMPLETED, Color.BLACK);
+        plot.addHorizontalLine(SCORE_CONSERVE_IF_COMPLETED.value.doubleValue(), Color.BLACK);
         plot.showPlotWindow();
     }
 

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
@@ -61,7 +61,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     @Override
     public RhythmicPoints reset() {
 
-        this.setDivision(DEFAULT_DIVISION);
+        this.setDivision(DEFAULT_DIVISION.value.intValue());
         this.minPoints = DEFAULT_MIN_POINTS;
         this.maxPoints = DEFAULT_MAX_POINTS;
         return this;
@@ -82,8 +82,9 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     public RhythmicPoints random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
-                + DEFAULT_MIN_DIVISION);
+                .nextInt(DEFAULT_MAX_DIVISION.value.intValue()
+                        - DEFAULT_MIN_DIVISION.value.intValue() + 1)
+                + DEFAULT_MIN_DIVISION.value.intValue());
         return generate();
     }
 

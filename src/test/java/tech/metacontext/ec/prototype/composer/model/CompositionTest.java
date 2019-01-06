@@ -29,7 +29,7 @@ import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class CompositionTest {
 

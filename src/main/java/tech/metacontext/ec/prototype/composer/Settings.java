@@ -23,59 +23,9 @@ import java.util.logging.SimpleFormatter;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Settings {
-
-    /*
-     * Chance to reset seed when mutation happens.
-     */
-    public static final double CHANCE_RESEEDING = 0.5;
-    /**
-     * Score threshold percentage for selection.
-     */
-    public static final double SELECTION_THRESHOLD = 0.9;
-    /**
-     * Score for a mature composition to reach to be conserved.
-     */
-    public static final double SCORE_CONSERVE_IF_COMPLETED = 0.93;
-    /**
-     * Chance for a mature composition to be elongated.
-     */
-    public static final double CHANCE_ELONGATION_IF_COMPLETED = 0.1;
-    /**
-     * Chance for a mature composition to do crossover than mutation.
-     */
-    public static final double CHANCE_CROSSOVER_IF_COMPLETED = 0.6;
-
-    /**
-     * Chance to produce a Total Connecting State
-     */
-    public static final double CHANCE_TOTAL_CONNECTING_STATE = 0.2;
-    /**
-     * Chance to preserve when producing a Repetition Transform Type
-     */
-    public static final double CHANCE_REPETITION = 0.2;
-    /**
-     * Chance to preserve when producing a MoveForward Transform Type
-     */
-    public static final double CHANCE_MOVEFORWARD = 0.8;
-    /**
-     * Chance to preserve when producing a MoveBackward Transform Type
-     */
-    public static final double CHANCE_MOVEBACKWARD = 0.8;
-    /**
-     * Chance to preserve when producing a Retrograde Transform Type
-     */
-    public static final double CHANCE_RETROGRADE = 0.6;
-    /**
-     * Chance to preserve when producing a Disconnected Transform Type
-     */
-    public static final double CHANCE_DISCONNECTED = 1.0;
-
-    public static final int DEFAULT_DIVISION = 2;
-    public static final int DEFAULT_MIN_DIVISION = 1;
-    public static final int DEFAULT_MAX_DIVISION = 4;
 
     public static String getTimeBasedFilename() {
         return LocalDateTime.now().toString().replace(":", "-").substring(0, 25);

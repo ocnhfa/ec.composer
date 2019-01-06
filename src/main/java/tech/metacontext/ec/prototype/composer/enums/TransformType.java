@@ -16,7 +16,7 @@
 package tech.metacontext.ec.prototype.composer.enums;
 
 import java.util.Random;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
@@ -24,11 +24,11 @@ import static tech.metacontext.ec.prototype.composer.Settings.*;
  */
 public enum TransformType {
 
-    Repetition(CHANCE_REPETITION),
-    MoveForward(CHANCE_MOVEFORWARD),
-    MoveBackward(CHANCE_MOVEBACKWARD),
-    Retrograde(CHANCE_RETROGRADE),
-    Disconnected(CHANCE_DISCONNECTED);
+    Repetition(CHANCE_REPETITION.value.doubleValue()),
+    MoveForward(CHANCE_MOVEFORWARD.value.doubleValue()),
+    MoveBackward(CHANCE_MOVEBACKWARD.value.doubleValue()),
+    Retrograde(CHANCE_RETROGRADE.value.doubleValue()),
+    Disconnected(CHANCE_DISCONNECTED.value.doubleValue());
 
     double weighting;
 

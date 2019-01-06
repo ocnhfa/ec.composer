@@ -15,26 +15,23 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import java.util.Arrays;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
+import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.TestCenter;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
-import tech.metacontext.ec.prototype.composer.styles.Style;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import tech.metacontext.ec.prototype.composer.TestCenter;
-import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class ComposerTest {
 
@@ -58,9 +55,9 @@ public class ComposerTest {
         Composition p1, p2;
         do {
             tc.getComposer().compose().evolve();
-            p1 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
-            p2 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD);
-        } while (tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD) == null
+            p1 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
+            p2 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
+        } while (tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue()) == null
                 || Objects.equals(p1, p2)
                 || p1.getSize() == p2.getSize());
         Composition result = tc.getComposer().crossover(p1, p2);
@@ -90,7 +87,7 @@ public class ComposerTest {
         int state = Composer.SELECT_ONLY_COMPLETED;
         Composition result = Stream.generate(() -> {
             tc.getComposer().compose().evolve();
-            return tc.getComposer().select(state, SELECTION_THRESHOLD);
+            return tc.getComposer().select(state, SELECTION_THRESHOLD.value.doubleValue());
         })
                 .filter(Objects::nonNull)
                 .findFirst()
@@ -134,7 +131,7 @@ public class ComposerTest {
             System.out.println(Composer.simpleScoreOutput(c));
             boolean expResult = tc.getComposer().getStyles().stream()
                     .map(c::getScore)
-                    .allMatch(score -> score > SCORE_CONSERVE_IF_COMPLETED);
+                    .allMatch(score -> score > SCORE_CONSERVE_IF_COMPLETED.value.doubleValue());
             System.out.println(Composer.simpleScoreOutput(c));
             System.out.println("expResult = " + expResult);
             boolean result = tc.getComposer().conserve(c);
@@ -298,6 +295,155 @@ public class ComposerTest {
         Composition expResult = null;
         Composition result = tc.getComposer().mutate(origin);
         assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of main method, of class Composer.
+     */
+    @Test
+    public void testMain() throws Exception {
+        System.out.println("main");
+        String[] args = null;
+        Composer.main(args);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getSummary method, of class Composer.
+     */
+    @Test
+    public void testGetSummary() {
+        System.out.println("getSummary");
+        List<Composition> list = null;
+        String expResult = "";
+        String result = Composer.getSummary(list);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getChild method, of class Composer.
+     */
+    @Test
+    public void testGetChild() {
+        System.out.println("getChild");
+        Composer instance = null;
+        Composition expResult = null;
+        Composition result = instance.getChild();
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of select method, of class Composer.
+     */
+    @Test
+    public void testSelect_Predicate_double() {
+        System.out.println("select");
+        Predicate<Composition> criteria = null;
+        double threshold = 0.0;
+        Composer instance = null;
+        Composition expResult = null;
+        Composition result = instance.select(criteria, threshold);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of select method, of class Composer.
+     */
+    @Test
+    public void testSelect_int_double() {
+        System.out.println("select");
+        int state = 0;
+        double threshold = 0.0;
+        Composer instance = null;
+        Composition expResult = null;
+        Composition result = instance.select(state, threshold);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of renderCombinedChart method, of class Composer.
+     */
+    @Test
+    public void testRenderCombinedChart() {
+        System.out.println("renderCombinedChart");
+        Composer instance = null;
+        instance.renderCombinedChart();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of renderAvgLineChart method, of class Composer.
+     */
+    @Test
+    public void testRenderAvgLineChart() {
+        System.out.println("renderAvgLineChart");
+        Composer instance = null;
+        instance.renderAvgLineChart();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of renderScatterPlot method, of class Composer.
+     */
+    @Test
+    public void testRenderScatterPlot() {
+        System.out.println("renderScatterPlot");
+        Composer instance = null;
+        instance.renderScatterPlot();
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getMinScore method, of class Composer.
+     */
+    @Test
+    public void testGetMinScore() {
+        System.out.println("getMinScore");
+        Composition c = null;
+        Composer instance = null;
+        double expResult = 0.0;
+        double result = instance.getMinScore(c);
+        assertEquals(expResult, result, 0.0);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of simpleScoreOutput method, of class Composer.
+     */
+    @Test
+    public void testSimpleScoreOutput() {
+        System.out.println("simpleScoreOutput");
+        Composition[] list = null;
+        String expResult = "";
+        String result = Composer.simpleScoreOutput(list);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of persistAll method, of class Composer.
+     */
+    @Test
+    public void testPersistAll() {
+        System.out.println("persistAll");
+        Composer instance = null;
+        instance.persistAll();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

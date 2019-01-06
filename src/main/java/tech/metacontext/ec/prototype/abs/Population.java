@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  * @param <E>
  */
 public abstract class Population<E extends Individual> {

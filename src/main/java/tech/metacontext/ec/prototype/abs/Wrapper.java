@@ -17,7 +17,7 @@ package tech.metacontext.ec.prototype.abs;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Wrapper<T> {
 

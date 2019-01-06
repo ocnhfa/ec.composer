@@ -18,12 +18,11 @@ package tech.metacontext.ec.prototype.composer.materials;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *
@@ -56,7 +55,7 @@ public class NoteRanges extends MusicMaterial<SciRange> {
     @Override
     public NoteRanges reset() {
 
-        this.setDivision(DEFAULT_DIVISION);
+        this.setDivision(DEFAULT_DIVISION.value.intValue());
         this.lowestRange = DEFAULT_LOWEST_RANGE;
         this.highestRange = DEFAULT_HIGHEST_RANGE;
         return this;
@@ -80,8 +79,9 @@ public class NoteRanges extends MusicMaterial<SciRange> {
     public NoteRanges random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
-                + DEFAULT_MIN_DIVISION);
+                .nextInt(DEFAULT_MAX_DIVISION.value.intValue()
+                        - DEFAULT_MIN_DIVISION.value.intValue() + 1)
+                + DEFAULT_MIN_DIVISION.value.intValue());
         return generate();
     }
 

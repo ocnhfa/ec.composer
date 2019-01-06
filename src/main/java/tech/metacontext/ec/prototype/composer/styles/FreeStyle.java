@@ -20,7 +20,7 @@ import tech.metacontext.ec.prototype.composer.model.SketchNode;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class FreeStyle extends Style {
 

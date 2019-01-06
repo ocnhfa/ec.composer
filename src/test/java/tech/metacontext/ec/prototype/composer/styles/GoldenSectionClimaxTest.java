@@ -15,10 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
-import tech.metacontext.ec.prototype.composer.Settings;
+import org.junit.jupiter.api.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 
 /**
@@ -56,7 +54,7 @@ public class GoldenSectionClimaxTest {
                 .peek(c -> c.getRenderedChecked(
                 this.getClass().getSimpleName() + "::testRateComposition"))
                 .map(instance::rateComposition)
-                .map(score -> score >= Settings.SCORE_CONSERVE_IF_COMPLETED)
+                .map(score -> score >= SCORE_CONSERVE_IF_COMPLETED.value.doubleValue())
                 .forEach(Assertions::assertTrue);
     }
 

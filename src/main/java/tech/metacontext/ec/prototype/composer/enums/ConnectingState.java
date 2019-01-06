@@ -15,11 +15,11 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
-import static tech.metacontext.ec.prototype.composer.Settings.CHANCE_TOTAL_CONNECTING_STATE;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum ConnectingState {
     Total,
@@ -27,7 +27,8 @@ public enum ConnectingState {
 
     public static ConnectingState getRandom() {
 
-        return Math.random() < CHANCE_TOTAL_CONNECTING_STATE ? ConnectingState.Total : ConnectingState.ByItem;
+        return Math.random() < CHANCE_TOTAL_CONNECTING_STATE.value.doubleValue()
+                ? ConnectingState.Total : ConnectingState.ByItem;
     }
 
 }

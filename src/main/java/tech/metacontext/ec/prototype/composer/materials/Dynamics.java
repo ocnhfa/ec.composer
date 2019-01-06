@@ -18,7 +18,7 @@ package tech.metacontext.ec.prototype.composer.materials;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
 
@@ -53,7 +53,7 @@ public class Dynamics extends MusicMaterial<Intensity> {
     @Override
     public Dynamics reset() {
 
-        this.setDivision(DEFAULT_DIVISION);
+        this.setDivision(DEFAULT_DIVISION.value.intValue());
         this.lowestIntensity = DEFAULT_LOWEST_INTENSITY;
         this.highestIntensity = DEFAULT_HIGHEST_INTENSITY;
         return this;
@@ -75,8 +75,9 @@ public class Dynamics extends MusicMaterial<Intensity> {
     public Dynamics random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION - DEFAULT_MIN_DIVISION + 1)
-                + DEFAULT_MIN_DIVISION);
+                .nextInt(DEFAULT_MAX_DIVISION.value.intValue()
+                        - DEFAULT_MIN_DIVISION.value.intValue() + 1)
+                + DEFAULT_MIN_DIVISION.value.intValue());
         return generate();
     }
 
