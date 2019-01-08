@@ -61,7 +61,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     @Override
     public RhythmicPoints reset() {
 
-        this.setDivision(DEFAULT_DIVISION.value.intValue());
+        this.setDivision(DEFAULT_DIVISION.getInt());
         this.minPoints = DEFAULT_MIN_POINTS;
         this.maxPoints = DEFAULT_MAX_POINTS;
         return this;
@@ -82,9 +82,9 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     public RhythmicPoints random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION.value.intValue()
-                        - DEFAULT_MIN_DIVISION.value.intValue() + 1)
-                + DEFAULT_MIN_DIVISION.value.intValue());
+                .nextInt(DEFAULT_MAX_DIVISION.getInt()
+                        - DEFAULT_MIN_DIVISION.getInt() + 1)
+                + DEFAULT_MIN_DIVISION.getInt());
         return generate();
     }
 

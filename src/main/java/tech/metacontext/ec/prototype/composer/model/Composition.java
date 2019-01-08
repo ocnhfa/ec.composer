@@ -103,8 +103,8 @@ public class Composition extends Individual<CompositionEval> {
         Composer composer = main.getComposer();
         Composition p0, p1;
         do {
-            p0 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
-            p1 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
+            p0 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
+            p1 = composer.select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
         } while (Objects.equals(p0, p1));
         Composition child, dupe;
         int counter = 0;

@@ -55,7 +55,7 @@ public class NoteRanges extends MusicMaterial<SciRange> {
     @Override
     public NoteRanges reset() {
 
-        this.setDivision(DEFAULT_DIVISION.value.intValue());
+        this.setDivision(DEFAULT_DIVISION.getInt());
         this.lowestRange = DEFAULT_LOWEST_RANGE;
         this.highestRange = DEFAULT_HIGHEST_RANGE;
         return this;
@@ -79,9 +79,9 @@ public class NoteRanges extends MusicMaterial<SciRange> {
     public NoteRanges random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION.value.intValue()
-                        - DEFAULT_MIN_DIVISION.value.intValue() + 1)
-                + DEFAULT_MIN_DIVISION.value.intValue());
+                .nextInt(DEFAULT_MAX_DIVISION.getInt()
+                        - DEFAULT_MIN_DIVISION.getInt() + 1)
+                + DEFAULT_MIN_DIVISION.getInt());
         return generate();
     }
 

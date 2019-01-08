@@ -24,11 +24,11 @@ import static tech.metacontext.ec.prototype.composer.Parameters.*;
  */
 public enum TransformType {
 
-    Repetition(CHANCE_REPETITION.value.doubleValue()),
-    MoveForward(CHANCE_MOVEFORWARD.value.doubleValue()),
-    MoveBackward(CHANCE_MOVEBACKWARD.value.doubleValue()),
-    Retrograde(CHANCE_RETROGRADE.value.doubleValue()),
-    Disconnected(CHANCE_DISCONNECTED.value.doubleValue());
+    Repetition(CHANCE_REPETITION.getDouble()),
+    MoveForward(CHANCE_MOVEFORWARD.getDouble()),
+    MoveBackward(CHANCE_MOVEBACKWARD.getDouble()),
+    Retrograde(CHANCE_RETROGRADE.getDouble()),
+    Disconnected(CHANCE_DISCONNECTED.getDouble());
 
     double weighting;
 

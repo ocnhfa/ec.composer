@@ -303,6 +303,7 @@ public class ComposerTest {
      * Test of main method, of class Composer.
      */
     @Test
+    @Disabled
     public void testMain() throws Exception {
         System.out.println("main");
         String[] args = null;
@@ -315,6 +316,7 @@ public class ComposerTest {
      * Test of getSummary method, of class Composer.
      */
     @Test
+    @Disabled
     public void testGetSummary() {
         System.out.println("getSummary");
         List<Composition> list = null;
@@ -329,6 +331,7 @@ public class ComposerTest {
      * Test of getChild method, of class Composer.
      */
     @Test
+    @Disabled
     public void testGetChild() {
         System.out.println("getChild");
         Composer instance = null;
@@ -343,6 +346,7 @@ public class ComposerTest {
      * Test of select method, of class Composer.
      */
     @Test
+    @Disabled
     public void testSelect_Predicate_double() {
         System.out.println("select");
         Predicate<Composition> criteria = null;
@@ -359,6 +363,7 @@ public class ComposerTest {
      * Test of select method, of class Composer.
      */
     @Test
+    @Disabled
     public void testSelect_int_double() {
         System.out.println("select");
         int state = 0;
@@ -375,6 +380,7 @@ public class ComposerTest {
      * Test of renderCombinedChart method, of class Composer.
      */
     @Test
+    @Disabled
     public void testRenderCombinedChart() {
         System.out.println("renderCombinedChart");
         Composer instance = null;
@@ -387,6 +393,7 @@ public class ComposerTest {
      * Test of renderAvgLineChart method, of class Composer.
      */
     @Test
+    @Disabled
     public void testRenderAvgLineChart() {
         System.out.println("renderAvgLineChart");
         Composer instance = null;
@@ -399,6 +406,7 @@ public class ComposerTest {
      * Test of renderScatterPlot method, of class Composer.
      */
     @Test
+    @Disabled
     public void testRenderScatterPlot() {
         System.out.println("renderScatterPlot");
         Composer instance = null;
@@ -411,6 +419,7 @@ public class ComposerTest {
      * Test of getMinScore method, of class Composer.
      */
     @Test
+    @Disabled
     public void testGetMinScore() {
         System.out.println("getMinScore");
         Composition c = null;
@@ -426,6 +435,7 @@ public class ComposerTest {
      * Test of simpleScoreOutput method, of class Composer.
      */
     @Test
+    @Disabled
     public void testSimpleScoreOutput() {
         System.out.println("simpleScoreOutput");
         Composition[] list = null;
@@ -440,6 +450,7 @@ public class ComposerTest {
      * Test of persistAll method, of class Composer.
      */
     @Test
+    @Disabled
     public void testPersistAll() {
         System.out.println("persistAll");
         Composer instance = null;

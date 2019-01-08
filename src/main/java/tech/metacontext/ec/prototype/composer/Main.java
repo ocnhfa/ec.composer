@@ -15,25 +15,21 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.model.*;
+import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.render.LineChart_AWT;
 import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
-import tech.metacontext.ec.prototype.composer.model.Composer;
 import java.util.stream.IntStream;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.model.Composition;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.styles.*;
-import tech.metacontext.ec.prototype.render.LineChart_AWT;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Main {
-
-    private Composer composer;
 
     /**
      * Entry point of main.
@@ -90,6 +86,8 @@ public class Main {
                 "Generation", "Score", 560, 367, true);
         chart.showChartWindow();
     }
+
+    private Composer composer;
 
     /**
      * Main constructor.

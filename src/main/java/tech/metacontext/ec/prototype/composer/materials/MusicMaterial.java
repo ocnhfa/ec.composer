@@ -89,7 +89,7 @@ public abstract class MusicMaterial<E> {
         return this.getMaterials().stream().mapToDouble(mapper)
                 .average().getAsDouble()
                 * this.getDivision()
-                / DEFAULT_MAX_DIVISION.value.doubleValue();
+                / DEFAULT_MAX_DIVISION.getDouble();
     }
 
     abstract public <M extends MusicMaterial> M duplicate();

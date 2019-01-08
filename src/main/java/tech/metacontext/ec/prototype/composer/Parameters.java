@@ -73,4 +73,14 @@ public enum Parameters {
     Parameters(double value) {
         this.value = value;
     }
+
+    public double getDouble() {
+
+        return value.doubleValue();
+    }
+
+    public int getInt() {
+
+        return value.intValue();
+    }
 }
