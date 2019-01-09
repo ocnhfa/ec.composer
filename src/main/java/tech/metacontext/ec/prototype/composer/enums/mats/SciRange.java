@@ -33,4 +33,23 @@ public enum SciRange {
         }
         return 1.0 * (range.ordinal() - lowest.ordinal() + 1) / (highest.ordinal());
     }
+
+    public static SciRange valueOf(int ordinal) {
+        
+        return SciRange.values()[ordinal];
+    }
+
+    public SciRange forward(SciRange highest) {
+
+        return (this.ordinal() >= highest.ordinal())
+                ? highest
+                : SciRange.values()[this.ordinal() + 1];
+    }
+
+    public SciRange backward(SciRange lowest) {
+        
+        return (this.ordinal() <= lowest.ordinal())
+                ? lowest
+                : SciRange.values()[this.ordinal() - 1];
+    }
 }

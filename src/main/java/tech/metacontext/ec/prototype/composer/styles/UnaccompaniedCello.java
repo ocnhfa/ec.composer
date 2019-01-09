@@ -22,6 +22,7 @@ import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRangeSet;
 
 /**
  *
@@ -48,6 +49,7 @@ public class UnaccompaniedCello extends Style {
         return sketchNode.getMat(MaterialType.NoteRanges)
                 .getMaterials()
                 .stream()
+                .flatMap(set -> ((SciRangeSet)set).getSciRange_set().stream())
                 .allMatch(range
                         -> RANGE.containsKey((SciRange) range)
                 /*...*/ && RANGE.get((SciRange) range) > Math.random());

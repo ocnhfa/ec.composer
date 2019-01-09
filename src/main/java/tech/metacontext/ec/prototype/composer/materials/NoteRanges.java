@@ -18,20 +18,20 @@ package tech.metacontext.ec.prototype.composer.materials;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRangeSet;
 
 /**
  *
  * @author Jonathan
  */
-public class NoteRanges extends MusicMaterial<SciRange> {
-
-    public static final SciRange DEFAULT_LOWEST_RANGE = SciRange.C0;
-    public static final SciRange DEFAULT_HIGHEST_RANGE = SciRange.C8;
+public class NoteRanges extends MusicMaterial<SciRangeSet> {
 
     private SciRange lowestRange;
     private SciRange highestRange;
@@ -56,20 +56,19 @@ public class NoteRanges extends MusicMaterial<SciRange> {
     public NoteRanges reset() {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
-        this.lowestRange = DEFAULT_LOWEST_RANGE;
-        this.highestRange = DEFAULT_HIGHEST_RANGE;
+        this.lowestRange = SciRange.valueOf(DEFAULT_LOWEST_RANGE.getInt());
+        this.highestRange = SciRange.valueOf(DEFAULT_HIGHEST_RANGE.getInt());
         return this;
     }
 
     @Override
     public NoteRanges generate() {
 
-        List<SciRange> rangeList = Arrays.asList(SciRange.values());
-        int lowest_value = rangeList.indexOf(this.lowestRange);
-        int highest_value = rangeList.indexOf(this.highestRange);
+        int highest = this.highestRange.ordinal(), lowerest = this.lowestRange.ordinal();
         this.setMaterials(
-                new Random().ints(this.getDivision(), lowest_value, highest_value + 1)
-                        .mapToObj(rangeList::get)
+                new Random().ints(this.getDivision(), lowerest, highest + 1)
+                        .mapToObj(lowerBond -> new SciRangeSet(lowerBond,
+                        new Random().nextInt(highest - lowerBond + 1) + lowerBond))
                         .collect(Collectors.toList())
         );
         return this;
@@ -113,22 +112,15 @@ public class NoteRanges extends MusicMaterial<SciRange> {
 
     private NoteRanges moveForward() {
 
-        IntStream.range(0, this.size())
-                .forEach(i -> {
-                    int o = Math.min(this.getMaterials().get(i).ordinal() + 1,
-                            SciRange.values().length - 1);
-                    this.getMaterials().set(i, SciRange.values()[o]);
-                });
+        this.getMaterials().stream()
+                .forEach(srs -> srs.setSciRange_set(srs.moveForward(this.highestRange)));
         return this;
     }
 
     private NoteRanges moveBackward() {
 
-        IntStream.range(0, this.size())
-                .forEach(i -> {
-                    int o = Math.max(this.getMaterials().get(i).ordinal() - 1, 0);
-                    this.getMaterials().set(i, SciRange.values()[o]);
-                });
+        this.getMaterials().stream()
+                .forEach(srs -> srs.setSciRange_set(srs.moveBackward(this.lowestRange)));
         return this;
     }
 

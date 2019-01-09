@@ -15,11 +15,36 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
+import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
+
 /**
  *
  * @author Jonathan Chang
  */
 public enum Parameters {
+    /*
+     * MusicMaterial parameters
+     */
+    DEFAULT_DIVISION(4),
+    DEFAULT_MIN_DIVISION(1),
+    DEFAULT_MAX_DIVISION(4),
+    /*
+     * Default parameters for RhythmicPoints.
+     */
+    DEFAULT_MIN_RHYTHMIC_POINTS(0),
+    DEFAULT_MAX_RHYTHMIC_POINTS(16),
+    /*
+     * Default parameters for RhythmicPoint.
+     */
+    DEFAULT_LOWEST_INTENSITY(Intensity.pp.ordinal()),
+    DEFAULT_HIGHEST_INTENSITY(Intensity.ff.ordinal()),
+    /*
+     * Default parameters for NoteRanges.
+     */
+    DEFAULT_LOWEST_RANGE(SciRange.C0.ordinal()),
+    DEFAULT_HIGHEST_RANGE(SciRange.C8.ordinal()),
+    
     /**
      * Chance to reset seed when mutation happens.
      */
@@ -63,10 +88,7 @@ public enum Parameters {
     /**
      * Chance to preserve when producing a Disconnected Transform Type
      */
-    CHANCE_DISCONNECTED(1.0),
-    DEFAULT_DIVISION(4),
-    DEFAULT_MIN_DIVISION(1),
-    DEFAULT_MAX_DIVISION(4);
+    CHANCE_DISCONNECTED(1.0);
 
     public final Number value;
 

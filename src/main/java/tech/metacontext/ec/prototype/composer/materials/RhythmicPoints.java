@@ -28,9 +28,6 @@ import static tech.metacontext.ec.prototype.composer.Parameters.*;
  */
 public class RhythmicPoints extends MusicMaterial<Integer> {
 
-    public static final int DEFAULT_MIN_POINTS = 0;
-    public static final int DEFAULT_MAX_POINTS = 8;
-
     private int minPoints, maxPoints;
 
     public static void main(String[] args) {
@@ -62,8 +59,8 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     public RhythmicPoints reset() {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
-        this.minPoints = DEFAULT_MIN_POINTS;
-        this.maxPoints = DEFAULT_MAX_POINTS;
+        this.minPoints = DEFAULT_MIN_RHYTHMIC_POINTS.getInt();
+        this.maxPoints = DEFAULT_MAX_RHYTHMIC_POINTS.getInt();
         return this;
     }
 
