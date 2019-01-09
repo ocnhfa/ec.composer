@@ -15,14 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
+import tech.metacontext.ec.prototype.abs.Factory;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.abs.Factory;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
@@ -61,6 +62,16 @@ public class SketchNodeFactory implements Factory<SketchNode> {
                         Entry::getKey,
                         e -> e.getValue().duplicate())));
         return node;
+    }
+
+    public SketchNode newRandomInstance() {
+
+        SketchNode newInstance = new SketchNode();
+        newInstance.setMats(Stream.of(MaterialType.values())
+                .collect(Collectors.toMap(
+                        t -> t,
+                        t -> t.getInstance().random())));
+        return newInstance;
     }
 
     public SketchNode newInstance() {

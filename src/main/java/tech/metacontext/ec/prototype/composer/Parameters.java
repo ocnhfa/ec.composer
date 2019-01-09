@@ -64,7 +64,7 @@ public enum Parameters {
      * Chance to preserve when producing a Disconnected Transform Type
      */
     CHANCE_DISCONNECTED(1.0),
-    DEFAULT_DIVISION(2),
+    DEFAULT_DIVISION(4),
     DEFAULT_MIN_DIVISION(1),
     DEFAULT_MAX_DIVISION(4);
 

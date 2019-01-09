@@ -48,7 +48,7 @@ public abstract class MusicMaterial<E> {
      */
     public MusicMaterial() {
 
-        this.reset().random();
+        this.reset().generate();
     }
 
     /**

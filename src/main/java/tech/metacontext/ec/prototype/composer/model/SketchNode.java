@@ -66,7 +66,6 @@ public class SketchNode extends Individual {
     }
 
     public void setMats(Map<MaterialType, ? extends MusicMaterial> mats) {
-
         this.musicMats = mats;
     }
 

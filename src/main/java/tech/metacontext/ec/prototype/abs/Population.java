@@ -101,6 +101,11 @@ public abstract class Population<E extends Individual> {
         return id.toString();
     }
 
+    public String getId_prefix() {
+
+        return "[" + this.getId().substring(0, 13) + "]";
+    }
+
     /*
      * Default setters and getters.
      */
