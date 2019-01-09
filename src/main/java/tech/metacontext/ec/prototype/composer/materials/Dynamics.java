@@ -28,9 +28,6 @@ import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
  */
 public class Dynamics extends MusicMaterial<Intensity> {
 
-    public static final Intensity DEFAULT_LOWEST_INTENSITY = Intensity.pp;
-    public static final Intensity DEFAULT_HIGHEST_INTENSITY = Intensity.ff;
-
     Intensity lowestIntensity;
     Intensity highestIntensity;
 
@@ -54,8 +51,10 @@ public class Dynamics extends MusicMaterial<Intensity> {
     public Dynamics reset() {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
-        this.lowestIntensity = DEFAULT_LOWEST_INTENSITY;
-        this.highestIntensity = DEFAULT_HIGHEST_INTENSITY;
+        this.lowestIntensity = Intensity.valueOf(
+                DEFAULT_LOWEST_INTENSITY.getInt());
+        this.highestIntensity = Intensity.valueOf(
+                DEFAULT_HIGHEST_INTENSITY.getInt());
         return this;
     }
 

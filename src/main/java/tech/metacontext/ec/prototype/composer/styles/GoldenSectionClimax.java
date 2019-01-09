@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.DEFAULT_MAX_RHYTHMIC_POINTS;
 
 /**
  *
@@ -134,14 +135,13 @@ public class GoldenSectionClimax extends Style {
                     mti = ((Dynamics) mm).getAvgIntensityIndex(Intensity::getIntensityIndex);
                     break;
                 case NoteRanges:
-                    mti = ((NoteRanges) mm).getAvgIntensityIndex(mat -> SciRange.getIntensityIndex(mat, lowest, highest));
+                    mti = ((NoteRanges) mm).getAvgIntensityIndex(mat -> SciRangeSet.getIntensityIndex(mat, lowest, highest));
                     break;
                 case PitchSets:
                     mti = ((PitchSets) mm).getAvgIntensityIndex(PitchSet::getIntensityIndex);
                     break;
                 case RhythmicPoints:
-                    mti = ((RhythmicPoints) mm).getAvgIntensityIndex(
-                            mat -> 1.0 * mat / RhythmicPoints.DEFAULT_MAX_POINTS);
+                    mti = ((RhythmicPoints) mm).getAvgIntensityIndex(mat -> 1.0 * mat / DEFAULT_MAX_RHYTHMIC_POINTS.getInt());
                     break;
                 default:
             }

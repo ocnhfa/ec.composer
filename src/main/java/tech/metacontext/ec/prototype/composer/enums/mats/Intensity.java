@@ -27,4 +27,9 @@ public enum Intensity {
 
         return 1.0 * intensity.ordinal() / (values().length - 1);
     }
+    
+    public static Intensity valueOf(int ordinal) {
+        
+        return Intensity.values()[ordinal];
+    }
 }
