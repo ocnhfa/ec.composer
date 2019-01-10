@@ -48,7 +48,8 @@ public class Main {
                 POP_SIZE,
                 SELECTED_SIZE,
                 GENERATION,
-                LogState.DISABLED);
+                LogState.DEFAULT);
+//                LogState.DISABLED);
 
 //        main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
         main.composer.render(Composer.RENDERTYPE_COMBINEDCHART);

@@ -15,23 +15,18 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
-import java.util.Arrays;
-import java.util.List;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.mats.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
-import tech.metacontext.ec.prototype.composer.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
-import tech.metacontext.ec.prototype.composer.enums.mats.SciRangeSet;
 
 /**
  *
  * @author Jonathan
  */
-public class NoteRanges extends MusicMaterial<SciRangeSet> {
+public class NoteRanges extends MusicMaterial<NoteRangeSet> {
 
     private SciRange lowestRange;
     private SciRange highestRange;
@@ -67,7 +62,7 @@ public class NoteRanges extends MusicMaterial<SciRangeSet> {
         int highest = this.highestRange.ordinal(), lowerest = this.lowestRange.ordinal();
         this.setMaterials(
                 new Random().ints(this.getDivision(), lowerest, highest + 1)
-                        .mapToObj(lowerBond -> new SciRangeSet(lowerBond,
+                        .mapToObj(lowerBond -> new NoteRangeSet(lowerBond,
                         new Random().nextInt(highest - lowerBond + 1) + lowerBond))
                         .collect(Collectors.toList())
         );

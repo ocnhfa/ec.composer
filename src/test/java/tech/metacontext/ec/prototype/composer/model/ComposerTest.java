@@ -42,7 +42,15 @@ public class ComposerTest {
     @BeforeAll
     public static void prepare() {
         tc = TestCenter.getInstance();
-        assertEquals(tc.PRESET_POPULATION_SIZE, tc.getComposer().getSize());
+    }
+
+    /**
+     * Test of getAimSize method, of class Composer.
+     */
+    @Test
+    public void testGetSize() {
+        System.out.println("getSize");
+        assertEquals(TestCenter.PRESET_POPULATION_SIZE, tc.getComposer().getSize());
         assertEquals(tc.getComposer().getSize(), tc.getComposer().getPopulationSize());
     }
 
@@ -249,21 +257,6 @@ public class ComposerTest {
         Composer instance = null;
         List<Composition> expResult = null;
         Map<Composition, Integer> result = tc.getComposer().getConservetory();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getAimSize method, of class Composer.
-     */
-    @Test
-    @Disabled
-    public void testGetSize() {
-        System.out.println("getSize");
-        Composer instance = null;
-        int expResult = 0;
-        int result = tc.getComposer().getSize();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -16,11 +16,10 @@
 package tech.metacontext.ec.prototype.composer.factory;
 
 import tech.metacontext.ec.prototype.composer.model.Composition;
-import java.util.Objects;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
 import tech.metacontext.ec.prototype.composer.TestCenter;
+import java.util.Objects;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -33,6 +32,7 @@ public class CompositionFactoryTest {
 
     @BeforeAll
     public static void prepare() {
+        
         tc = TestCenter.getInstance();
         instance = CompositionFactory.getInstance(tc.getComposer().getId());
     }

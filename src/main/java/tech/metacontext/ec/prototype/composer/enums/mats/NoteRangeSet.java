@@ -16,41 +16,47 @@
 package tech.metacontext.ec.prototype.composer.enums.mats;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class SciRangeSet {
+public class NoteRangeSet {
 
-    private List<SciRange> range_set;
+    public static void main(String[] args) {
 
-    public SciRangeSet() {
+        var nrs = new NoteRangeSet(5, 8);
+        System.out.println(nrs);
 
-        this.range_set = new ArrayList<>();
+        System.out.println(getBase(SciRange.C8.ordinal() - SciRange.C5.ordinal()));
+        new Random().ints(5, 8)
+                .limit(10)
+                .mapToObj(low -> new NoteRangeSet(low, new Random().nextInt(8 - low + 1) + low))
+                .peek(System.out::print)
+                .peek(set -> set.setSciRange_set(set.moveBackward(SciRange.C0)))
+                .peek(System.out::print)
+                .map(rs -> NoteRangeSet.getIntensityIndex(rs, SciRange.C5, SciRange.C8))
+                .forEach(System.out::println);
+
     }
+    private List<SciRange> range_set = new ArrayList<>();
 
-    public SciRangeSet(List<SciRange> ranges) {
+    public NoteRangeSet(List<SciRange> ranges) {
 
-        this();
         this.range_set.addAll(ranges);
     }
 
-    public SciRangeSet(SciRangeSet origin) {
+    public NoteRangeSet(NoteRangeSet origin) {
 
         this(origin.getSciRange_set());
     }
 
-    public SciRangeSet(int lowerbond, int upperbond) {
+    public NoteRangeSet(int lowerbond, int upperbond) {
 
-        this();
         IntStream.rangeClosed(lowerbond, upperbond)
                 .mapToObj(ordinal -> SciRange.values()[ordinal])
                 .forEach(this.range_set::add);
@@ -58,7 +64,8 @@ public class SciRangeSet {
 
     @Override
     public String toString() {
-        return String.format("SciRangeSet[ %s ]",
+
+        return String.format("NoteRangeSet[ %s ]",
                 this.range_set.stream()
                         .sorted()
                         .map(Object::toString)
@@ -79,7 +86,7 @@ public class SciRangeSet {
                 .collect(Collectors.toList());
     }
 
-    public static double getIntensityIndex(SciRangeSet rangeSet,
+    public static double getIntensityIndex(NoteRangeSet rangeSet,
             SciRange lowest, SciRange highest) {
 
         return IntStream.rangeClosed(lowest.ordinal(), highest.ordinal())
@@ -87,20 +94,6 @@ public class SciRangeSet {
                 .mapToDouble(i -> Math.pow(2, i - lowest.ordinal()))
                 //                .peek(System.out::println)
                 .sum() / getBase(highest.ordinal() - lowest.ordinal());
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println(getBase(SciRange.C8.ordinal() - SciRange.C5.ordinal()));
-        new Random().ints(5, 8)
-                .limit(100)
-                .mapToObj(low -> new SciRangeSet(low, new Random().nextInt(8 - low + 1) + low))
-                .peek(System.out::print)
-                .map(rs -> SciRangeSet.getIntensityIndex(rs, SciRange.C5, SciRange.C8))
-                .forEach(System.out::println);
-//        for (int i = 0; i < 9; i++) {
-//            System.out.println(getBase(i));;
-//        }
     }
 
     public static int getBase(int coverage) {

@@ -32,6 +32,11 @@ public class TestCenter {
     private static TestCenter instance;
     private static Composer composer;
 
+    public static void main(String[] args) {
+        
+        var tc = TestCenter.getInstance();
+    }
+
     public static synchronized TestCenter getInstance() {
         if (instance == null) {
             instance = new TestCenter();
