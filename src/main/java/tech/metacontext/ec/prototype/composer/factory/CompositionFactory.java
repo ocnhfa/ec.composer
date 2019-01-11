@@ -22,10 +22,15 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import tech.metacontext.ec.prototype.abs.Factory;
+import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
+import tech.metacontext.ec.prototype.composer.model.Connector;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.composer.model.Composer;
+import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
@@ -37,6 +42,23 @@ public class CompositionFactory implements Factory<Composition> {
     private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
     private static final Map<String, CompositionFactory> instances = new HashMap<>();
     private final String composer_id;
+
+    public static void main(String[] args) throws Exception {
+
+        var composer = new Composer(50, ComposerAim.Phrase, Settings.LogState.DISABLED,
+                new UnaccompaniedCello(),
+                new GoldenSectionClimax(UnaccompaniedCello.getRange()));
+        var instance = CompositionFactory.getInstance(composer.getId());
+        var composition = instance.newInstance(
+                composer.styleChecker,
+                composer.getStyles());
+        do {
+            composition.elongation(composer.styleChecker);
+        } while (!composer.getAim().isCompleted(composition));
+        composition.getRenderedChecked(null);
+        System.out.println(composer.getAim().isCompleted(composition));
+        System.out.println(composition);
+    }
 
     private CompositionFactory(String composer_id) {
 

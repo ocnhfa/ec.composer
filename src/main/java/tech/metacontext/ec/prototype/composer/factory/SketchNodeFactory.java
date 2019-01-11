@@ -23,13 +23,19 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class SketchNodeFactory implements Factory<SketchNode> {
+
+    public static void main(String[] args) {
+        var instance = SketchNodeFactory.getInstance();
+        System.out.println(instance.newInstance(
+                new UnaccompaniedCello()::qualifySketchNode));
+    }
 
     private static SketchNodeFactory instance;
 
@@ -78,16 +84,21 @@ public class SketchNodeFactory implements Factory<SketchNode> {
 
         SketchNode newInstance = new SketchNode();
         newInstance.setMats(Stream.of(MaterialType.values())
-                .collect(Collectors.toMap(t -> t, MaterialType::getInstance)));
+                .collect(Collectors.toMap(t -> t,
+                        t -> t.getInstance())));
         return newInstance;
     }
 
     public SketchNode newInstance(Predicate<SketchNode> styleChecker) {
 
-        return Stream.generate(this::newInstance)
+        return Stream.generate(SketchNode::new)
+                .peek(node -> node.setMats(
+                Stream.of(MaterialType.values())
+                        .collect(Collectors.toMap(t -> t,
+                                t -> t.getInstance())))
+                )
                 .filter(styleChecker)
-                .findFirst()
-                .get();
+                .findFirst().get();
     }
 
 }

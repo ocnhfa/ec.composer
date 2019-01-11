@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.composer.connectors;
+package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.composer.factory.ConnectorFactory;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import static tech.metacontext.ec.prototype.composer.enums.MaterialType.*;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
@@ -42,20 +42,20 @@ public class ConnectorTest {
     @Test
     public void testTransform() {
         Connector instance = connectorFactory.newConnector(FreeStyle::checker);
-        instance.addTransformType(MaterialType.Dynamics, TransformType.MoveForward);
-        instance.addTransformType(MaterialType.NoteRanges, TransformType.MoveForward);
-        instance.addTransformType(MaterialType.PitchSets, TransformType.MoveForward);
-        instance.addTransformType(MaterialType.RhythmicPoints, TransformType.MoveForward);
+        instance.addTransformType(DYNAMICS, TransformType.MoveForward);
+        instance.addTransformType(NOTE_RANGES, TransformType.MoveForward);
+        instance.addTransformType(PITCH_SETS, TransformType.MoveForward);
+        instance.addTransformType(RHYTHMIC_POINTS, TransformType.MoveForward);
         instance.setPrevious(sketchNodeFactory.newInstance());
         System.out.println(instance.getPrevious());
         instance.transform();
         System.out.println(instance.getNext());
         System.out.println("----------------------------------------------");
         Connector instance2 = connectorFactory.newConnector(FreeStyle::checker);
-        instance2.addTransformType(MaterialType.Dynamics, TransformType.MoveBackward);
-        instance2.addTransformType(MaterialType.NoteRanges, TransformType.MoveBackward);
-        instance2.addTransformType(MaterialType.PitchSets, TransformType.MoveBackward);
-        instance2.addTransformType(MaterialType.RhythmicPoints, TransformType.MoveBackward);
+        instance2.addTransformType(DYNAMICS, TransformType.MoveBackward);
+        instance2.addTransformType(NOTE_RANGES, TransformType.MoveBackward);
+        instance2.addTransformType(PITCH_SETS, TransformType.MoveBackward);
+        instance2.addTransformType(RHYTHMIC_POINTS, TransformType.MoveBackward);
         instance2.setPrevious(sketchNodeFactory.newInstance());
         System.out.println(instance2.getPrevious());
         instance2.transform();

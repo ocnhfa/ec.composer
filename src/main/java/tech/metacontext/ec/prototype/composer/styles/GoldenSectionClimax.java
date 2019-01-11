@@ -52,15 +52,15 @@ public class GoldenSectionClimax extends Style {
 
     public static final double RATIO = 1.6180339887498948482;
 
-    public final SciRange lowest, highest;
+    public final NoteRange lowest, highest;
     private List<Double> climaxIndexes;
     private List<Double> standards;
     private double peak;
     private double base;
 
-    public GoldenSectionClimax(Collection<SciRange> ranges) {
+    public GoldenSectionClimax(Collection<NoteRange> ranges) {
 
-        TreeSet<SciRange> sortedRanges = new TreeSet<>(ranges);
+        TreeSet<NoteRange> sortedRanges = new TreeSet<>(ranges);
         this.lowest = sortedRanges.first();
         this.highest = sortedRanges.last();
     }
@@ -128,19 +128,19 @@ public class GoldenSectionClimax extends Style {
     public double climaxIndex(SketchNode node) {
 
         DoubleAdder index = new DoubleAdder();
-        node.getMats().forEach((MaterialType mt, MusicMaterial mm) -> {
+        node.getMats().forEach((mt, mm) -> {
             double mti = 0.0;
             switch (mt) {
-                case Dynamics:
+                case DYNAMICS:
                     mti = ((Dynamics) mm).getAvgIntensityIndex(Intensity::getIntensityIndex);
                     break;
-                case NoteRanges:
+                case NOTE_RANGES:
                     mti = ((NoteRanges) mm).getAvgIntensityIndex(mat -> NoteRangeSet.getIntensityIndex(mat, lowest, highest));
                     break;
-                case PitchSets:
+                case PITCH_SETS:
                     mti = ((PitchSets) mm).getAvgIntensityIndex(PitchSet::getIntensityIndex);
                     break;
-                case RhythmicPoints:
+                case RHYTHMIC_POINTS:
                     mti = ((RhythmicPoints) mm).getAvgIntensityIndex(mat -> 1.0 * mat / DEFAULT_MAX_RHYTHMIC_POINTS.getInt());
                     break;
                 default:

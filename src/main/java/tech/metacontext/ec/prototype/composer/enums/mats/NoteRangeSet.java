@@ -32,65 +32,65 @@ public class NoteRangeSet {
         var nrs = new NoteRangeSet(5, 8);
         System.out.println(nrs);
 
-        System.out.println(getBase(SciRange.C8.ordinal() - SciRange.C5.ordinal()));
+        System.out.println(getBase(NoteRange.C8.ordinal() - NoteRange.C5.ordinal()));
         new Random().ints(5, 8)
                 .limit(10)
                 .mapToObj(low -> new NoteRangeSet(low, new Random().nextInt(8 - low + 1) + low))
                 .peek(System.out::print)
-                .peek(set -> set.setSciRange_set(set.moveBackward(SciRange.C0)))
+                .peek(set -> set.setNoteRange_set(set.moveBackward(NoteRange.C0)))
                 .peek(System.out::print)
-                .map(rs -> NoteRangeSet.getIntensityIndex(rs, SciRange.C5, SciRange.C8))
+                .map(rs -> NoteRangeSet.getIntensityIndex(rs, NoteRange.C5, NoteRange.C8))
                 .forEach(System.out::println);
 
     }
-    private List<SciRange> range_set = new ArrayList<>();
+    private List<NoteRange> noteRange_set = new ArrayList<>();
 
-    public NoteRangeSet(List<SciRange> ranges) {
+    public NoteRangeSet(List<NoteRange> ranges) {
 
-        this.range_set.addAll(ranges);
+        this.noteRange_set.addAll(ranges);
     }
 
     public NoteRangeSet(NoteRangeSet origin) {
 
-        this(origin.getSciRange_set());
+        this(origin.getNoteRange_set());
     }
 
     public NoteRangeSet(int lowerbond, int upperbond) {
 
         IntStream.rangeClosed(lowerbond, upperbond)
-                .mapToObj(ordinal -> SciRange.values()[ordinal])
-                .forEach(this.range_set::add);
+                .mapToObj(ordinal -> NoteRange.values()[ordinal])
+                .forEach(this.noteRange_set::add);
     }
 
     @Override
     public String toString() {
 
         return String.format("NoteRangeSet[ %s ]",
-                this.range_set.stream()
+                this.noteRange_set.stream()
                         .sorted()
                         .map(Object::toString)
                         .collect(Collectors.joining(", ")));
     }
 
-    public List<SciRange> moveForward(SciRange highest) {
+    public List<NoteRange> moveForward(NoteRange highest) {
 
-        return this.getSciRange_set().stream()
+        return this.getNoteRange_set().stream()
                 .map(r -> r.forward(highest))
                 .collect(Collectors.toList());
     }
 
-    public List<SciRange> moveBackward(SciRange lowest) {
+    public List<NoteRange> moveBackward(NoteRange lowest) {
 
-        return this.getSciRange_set().stream()
+        return this.getNoteRange_set().stream()
                 .map(r -> r.backward(lowest))
                 .collect(Collectors.toList());
     }
 
     public static double getIntensityIndex(NoteRangeSet rangeSet,
-            SciRange lowest, SciRange highest) {
+            NoteRange lowest, NoteRange highest) {
 
         return IntStream.rangeClosed(lowest.ordinal(), highest.ordinal())
-                .filter(i -> rangeSet.getSciRange_set().contains(SciRange.valueOf(i)))
+                .filter(i -> rangeSet.getNoteRange_set().contains(NoteRange.valueOf(i)))
                 .mapToDouble(i -> Math.pow(2, i - lowest.ordinal()))
                 //                .peek(System.out::println)
                 .sum() / getBase(highest.ordinal() - lowest.ordinal());
@@ -103,20 +103,21 @@ public class NoteRangeSet {
                 .sum();
     }
 
+    public int getSize() {
+        return this.noteRange_set.size();
+    }
+
     /*
      * Default setters and getters.
      */
-    public int getSize() {
-        return this.range_set.size();
+    public List<NoteRange> getNoteRange_set() {
+        
+        return noteRange_set;
     }
 
-    public List<SciRange> getSciRange_set() {
-        return range_set;
-    }
+    public void setNoteRange_set(List<NoteRange> range_set) {
 
-    public void setSciRange_set(List<SciRange> range_set) {
-
-        this.range_set = range_set;
+        this.noteRange_set = range_set;
     }
 
 }

@@ -18,13 +18,13 @@ package tech.metacontext.ec.prototype.composer.model;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.FileHandler;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Disabled;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import static tech.metacontext.ec.prototype.composer.enums.MaterialType.*;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+
 
 /**
  *
@@ -44,13 +44,13 @@ public class SketchNodeTest {
         SketchNode node1 = sketchNodeFactory.newInstance(),
                 node2 = node1,
                 node3 = sketchNodeFactory.forArchiving(node1);
-        node1.getMat(MaterialType.PitchSets).random();
+        node1.getMat(PITCH_SETS).random();
         assertEquals(node1, node2);
         assertEquals(node1, node3);
-        assertEquals(node1.getMat(MaterialType.PitchSets),
-                node2.getMat(MaterialType.PitchSets));
-        assertNotEquals(node1.getMat(MaterialType.PitchSets),
-                node3.getMat(MaterialType.PitchSets));
+        assertEquals(node1.getMat(PITCH_SETS),
+                node2.getMat(PITCH_SETS));
+        assertNotEquals(node1.getMat(PITCH_SETS),
+                node3.getMat(PITCH_SETS));
     }
 
     /**

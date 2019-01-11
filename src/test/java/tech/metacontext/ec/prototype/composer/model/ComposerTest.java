@@ -16,7 +16,7 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.composer.enums.*;
-import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
+import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
@@ -107,7 +107,7 @@ public class ComposerTest {
     public void testStyleChecker() {
         System.out.println("styleChecker");
         SketchNode node = sketchNodeFactory.newInstance(tc.getComposer().styleChecker);
-        node.getMat(MaterialType.NoteRanges).setMaterials(List.of(SciRange.C0));
+        node.getMat(MaterialType.NOTE_RANGES).setMaterials(List.of(NoteRange.C0));
         assertFalse(Stream.generate(() -> tc.getComposer().styleChecker)
                 .limit(100)
                 .allMatch(b -> b.test(node)));

@@ -28,8 +28,8 @@ import java.util.stream.IntStream;
  */
 public class NoteRanges extends MusicMaterial<NoteRangeSet> {
 
-    private SciRange lowestRange;
-    private SciRange highestRange;
+    private NoteRange lowestRange;
+    private NoteRange highestRange;
 
     public NoteRanges() {
     }
@@ -51,8 +51,8 @@ public class NoteRanges extends MusicMaterial<NoteRangeSet> {
     public NoteRanges reset() {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
-        this.lowestRange = SciRange.valueOf(DEFAULT_LOWEST_RANGE.getInt());
-        this.highestRange = SciRange.valueOf(DEFAULT_HIGHEST_RANGE.getInt());
+        this.lowestRange = NoteRange.valueOf(DEFAULT_LOWEST_RANGE.getInt());
+        this.highestRange = NoteRange.valueOf(DEFAULT_HIGHEST_RANGE.getInt());
         return this;
     }
 
@@ -108,14 +108,14 @@ public class NoteRanges extends MusicMaterial<NoteRangeSet> {
     private NoteRanges moveForward() {
 
         this.getMaterials().stream()
-                .forEach(srs -> srs.setSciRange_set(srs.moveForward(this.highestRange)));
+                .forEach(srs -> srs.setNoteRange_set(srs.moveForward(this.highestRange)));
         return this;
     }
 
     private NoteRanges moveBackward() {
 
         this.getMaterials().stream()
-                .forEach(srs -> srs.setSciRange_set(srs.moveBackward(this.lowestRange)));
+                .forEach(srs -> srs.setNoteRange_set(srs.moveBackward(this.lowestRange)));
         return this;
     }
 
@@ -132,19 +132,19 @@ public class NoteRanges extends MusicMaterial<NoteRangeSet> {
     /*
      * Default setters and getters.
      */
-    public SciRange getLowest() {
+    public NoteRange getLowest() {
         return lowestRange;
     }
 
-    public void setLowest(SciRange lowest) {
+    public void setLowest(NoteRange lowest) {
         this.lowestRange = lowest;
     }
 
-    public SciRange getHighest() {
+    public NoteRange getHighest() {
         return highestRange;
     }
 
-    public void setHighest(SciRange highest) {
+    public void setHighest(NoteRange highest) {
         this.highestRange = highest;
     }
 

@@ -21,9 +21,11 @@ import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
 
 /**
  *

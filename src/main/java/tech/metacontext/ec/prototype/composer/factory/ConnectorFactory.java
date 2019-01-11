@@ -16,13 +16,12 @@
 package tech.metacontext.ec.prototype.composer.factory;
 
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
+import tech.metacontext.ec.prototype.composer.model.Connector;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
-import tech.metacontext.ec.prototype.composer.enums.ConnectingState;
 
 /**
  *

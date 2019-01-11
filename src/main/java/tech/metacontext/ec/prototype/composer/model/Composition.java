@@ -15,7 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import tech.metacontext.ec.prototype.abs.*;
 import tech.metacontext.ec.prototype.composer.*;

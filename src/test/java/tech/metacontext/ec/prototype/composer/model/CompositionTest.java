@@ -16,7 +16,6 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
-import tech.metacontext.ec.prototype.composer.connectors.Connector;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.Test;

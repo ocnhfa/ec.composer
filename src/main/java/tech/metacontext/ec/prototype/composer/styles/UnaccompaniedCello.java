@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
+import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.NoteRangeSet;
+import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
 
 /**
  *
@@ -33,42 +33,44 @@ public class UnaccompaniedCello extends Style {
     /**
      * 音域
      */
-    public static final Map<SciRange, Double> RANGE = new HashMap<>();
+    public static final Map<NoteRange, Double> RANGE = new HashMap<>();
 
     static {
-        RANGE.put(SciRange.C2, 1.0);
-        RANGE.put(SciRange.C3, 1.0);
-        RANGE.put(SciRange.C4, 1.0);
-        RANGE.put(SciRange.C5, 0.5);
-        RANGE.put(SciRange.C6, 0.25);
+        RANGE.put(NoteRange.C2, 1.0);
+        RANGE.put(NoteRange.C3, 1.0);
+        RANGE.put(NoteRange.C4, 1.0);
+        RANGE.put(NoteRange.C5, 0.5);
+        RANGE.put(NoteRange.C6, 0.25);
     }
 
     @Override
     public boolean qualifySketchNode(SketchNode sketchNode) {
 
-        return sketchNode.getMat(MaterialType.NoteRanges)
+        return ((NoteRanges) sketchNode.getMat(MaterialType.NOTE_RANGES))
                 .getMaterials()
                 .stream()
-                .flatMap(set -> ((NoteRangeSet)set).getSciRange_set().stream())
-                .allMatch(range
-                        -> RANGE.containsKey((SciRange) range)
-                /*...*/ && RANGE.get((SciRange) range) > Math.random());
+                .flatMap(set -> set.getNoteRange_set().stream())
+                .filter(RANGE::containsKey)
+                .map(RANGE::get)
+                .allMatch(chance -> chance > Math.random());
     }
 
     @Override
     public double rateComposition(Composition composition) {
 
-        if (!composition.getRenderedChecked(this.getClass().getSimpleName() + "::rateComposition")
+        if (composition.getRenderedChecked(this.getClass().getSimpleName() + "::rateComposition")
                 .stream()
-                .flatMap(node -> node.getMat(MaterialType.NoteRanges)
-                .getMaterials().stream())
-                .allMatch(getRange()::contains)) {
-            return 0.0;
+                .map(node -> ((NoteRanges) node.getMat(MaterialType.NOTE_RANGES)))
+                .map(mm -> mm.getMaterials())
+                .flatMap(lnrs -> lnrs.stream())
+                .flatMap(nrs -> nrs.getNoteRange_set().stream())
+                .allMatch(RANGE::containsKey)) {
+            return 1.0;
         }
-        return 1.0;
+        return 0.0;
     }
 
-    public static Collection<SciRange> getRange() {
+    public static Collection<NoteRange> getRange() {
 
         return RANGE.keySet();
     }

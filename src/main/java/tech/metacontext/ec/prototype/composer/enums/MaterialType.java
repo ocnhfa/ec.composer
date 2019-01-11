@@ -24,10 +24,10 @@ import tech.metacontext.ec.prototype.composer.materials.*;
  */
 public enum MaterialType {
 
-    PitchSets(PitchSets.class),
-    RhythmicPoints(RhythmicPoints.class),
-    NoteRanges(NoteRanges.class),
-    Dynamics(Dynamics.class);
+    DYNAMICS(Dynamics.class),
+    PITCH_SETS(PitchSets.class),
+    RHYTHMIC_POINTS(RhythmicPoints.class),
+    NOTE_RANGES(NoteRanges.class);
 
     Class<? extends MusicMaterial> clazz;
 
@@ -38,10 +38,12 @@ public enum MaterialType {
     public MusicMaterial getInstance() {
 
         try {
-            return this.clazz.getDeclaredConstructor().newInstance();
+            return this.clazz.getDeclaredConstructor()
+                    .newInstance();
         } catch (Exception ex) {
             System.out.println(this);
             throw new InstantiationFailedException(ex.getMessage());
         }
     }
+
 }

@@ -16,7 +16,7 @@
 package tech.metacontext.ec.prototype.composer;
 
 import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
-import tech.metacontext.ec.prototype.composer.enums.mats.SciRange;
+import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 
 /**
  *
@@ -42,8 +42,8 @@ public enum Parameters {
     /*
      * Default parameters for NoteRanges.
      */
-    DEFAULT_LOWEST_RANGE(SciRange.C0.ordinal()),
-    DEFAULT_HIGHEST_RANGE(SciRange.C8.ordinal()),
+    DEFAULT_LOWEST_RANGE(NoteRange.C0.ordinal()),
+    DEFAULT_HIGHEST_RANGE(NoteRange.C8.ordinal()),
     
     /**
      * Chance to reset seed when mutation happens.

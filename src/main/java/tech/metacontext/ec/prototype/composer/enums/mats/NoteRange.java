@@ -19,11 +19,11 @@ package tech.metacontext.ec.prototype.composer.enums.mats;
  *
  * @author Jonathan
  */
-public enum SciRange {
+public enum NoteRange {
 
     C0, C1, C2, C3, C4, C5, C6, C7, C8;
 
-    public static double getIntensityIndex(SciRange range, SciRange lowest, SciRange highest) {
+    public static double getIntensityIndex(NoteRange range, NoteRange lowest, NoteRange highest) {
 
         if (range.ordinal() < lowest.ordinal()) {
             return 0.0;
@@ -34,22 +34,22 @@ public enum SciRange {
         return 1.0 * (range.ordinal() - lowest.ordinal() + 1) / (highest.ordinal());
     }
 
-    public static SciRange valueOf(int ordinal) {
+    public static NoteRange valueOf(int ordinal) {
         
-        return SciRange.values()[ordinal];
+        return NoteRange.values()[ordinal];
     }
 
-    public SciRange forward(SciRange highest) {
+    public NoteRange forward(NoteRange highest) {
 
         return (this.ordinal() >= highest.ordinal())
                 ? highest
-                : SciRange.values()[this.ordinal() + 1];
+                : NoteRange.values()[this.ordinal() + 1];
     }
 
-    public SciRange backward(SciRange lowest) {
+    public NoteRange backward(NoteRange lowest) {
         
         return (this.ordinal() <= lowest.ordinal())
                 ? lowest
-                : SciRange.values()[this.ordinal() - 1];
+                : NoteRange.values()[this.ordinal() - 1];
     }
 }

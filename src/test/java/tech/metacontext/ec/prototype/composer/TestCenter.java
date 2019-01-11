@@ -26,15 +26,16 @@ import static tech.metacontext.ec.prototype.composer.Settings.*;
  */
 public class TestCenter {
 
-    public static final int PRESET_POPULATION_SIZE = 100;
-    public static final int GOAL_CONSERVATORY_SIZE = 2;
-    public static final int GOAL_GENERATION = 0;
+    public static final int PRESET_POPULATION_SIZE = 20;
+    public static final int GOAL_CONSERVATORY_SIZE = 0;
+    public static final int GOAL_GENERATION = 100;
     private static TestCenter instance;
     private static Composer composer;
 
     public static void main(String[] args) {
-        
+
         var tc = TestCenter.getInstance();
+        tc.getComposer().renderCombinedChart();
     }
 
     public static synchronized TestCenter getInstance() {
@@ -53,8 +54,8 @@ public class TestCenter {
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }
-        composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
-        composer.render(Composer.RENDERTYPE_SCATTERPLOT);
+//        composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
+//        composer.render(Composer.RENDERTYPE_SCATTERPLOT);
     }
 
     public Composer getComposer() {

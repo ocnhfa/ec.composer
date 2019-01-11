@@ -28,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CompositionFactoryTest {
 
     static CompositionFactory instance;
-    static TestCenter tc;
+    static TestCenter tc = TestCenter.getInstance();
 
     @BeforeAll
     public static void prepare() {
-        
-        tc = TestCenter.getInstance();
+
+//        tc = TestCenter.getInstance();
         instance = CompositionFactory.getInstance(tc.getComposer().getId());
     }
 
