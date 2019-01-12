@@ -159,12 +159,17 @@ public class PitchSets extends MusicMaterial<List<Pitch>> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    this.getMaterials().set(i, 
+                    this.getMaterials().set(i,
                             this.getMaterials().get(i).stream()
                                     .map(Pitch::backward)
                                     .collect(Collectors.toList()));
                 });
         return this;
+    }
+
+    public static double getIntensityIndex(List<Pitch> ps) {
+
+        return 1.0 * ps.size() / PitchSets.DEFAULT_MAX_PITCH_NUMBER;
     }
 
     @Override

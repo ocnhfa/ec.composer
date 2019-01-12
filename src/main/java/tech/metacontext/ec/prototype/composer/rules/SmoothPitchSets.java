@@ -50,10 +50,8 @@ public class SmoothPitchSets implements Rule {
                             .forEach(i -> {
                                 int p1ci = Math.max(p1.size() - 1 - i, 0),
                                         p2ci = Math.min(p2.size() - 1, i);
-                                boolean p1c = p1.getMaterials().get(p1ci)
-                                        .getPitch_set().contains(p),
-                                        p2c = p2.getMaterials().get(p2ci)
-                                                .getPitch_set().contains(p);
+                                boolean p1c = p1.getMaterials().get(p1ci).contains(p),
+                                        p2c = p2.getMaterials().get(p2ci).contains(p);
                                 if (p1c || p2c) {
                                     base.getAndAdd(max - i);
 //                                    System.out.print("base + " + (max - i));
