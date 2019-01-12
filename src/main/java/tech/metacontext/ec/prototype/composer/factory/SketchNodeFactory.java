@@ -15,13 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import java.util.HashMap;
 import tech.metacontext.ec.prototype.abs.Factory;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -39,13 +36,13 @@ public class SketchNodeFactory implements Factory<SketchNode> {
     public static void main(String[] args) {
 
         var instance = SketchNodeFactory.getInstance();
-        Map<MaterialType, Consumer<? extends MusicMaterial>> inits = new HashMap<>();
-        inits.put(MaterialType.DYNAMICS, (Dynamics mm) -> {
+        System.out.println(instance.newInstance((MusicMaterial mm) -> {
             mm.setDivision(4);
-            mm.setLowestIntensity(Intensity.ppp);
-            mm.setHighestIntensity(Intensity.fff);
-        });
-        System.out.println(instance.newInstance(inits));
+            if (mm instanceof Dynamics) {
+                ((Dynamics) mm).setLowestIntensity(Intensity.ppp);
+                ((Dynamics) mm).setHighestIntensity(Intensity.fff);
+            }
+        }));
     }
 
     private static SketchNodeFactory instance;
@@ -101,12 +98,12 @@ public class SketchNodeFactory implements Factory<SketchNode> {
         return newInstance;
     }
 
-    public SketchNode newInstance(Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
+    public SketchNode newInstance(Consumer<MusicMaterial> init) {
 
         SketchNode newInstance = new SketchNode();
-        newInstance.setMats(inits.entrySet().stream()
-                .collect(Collectors.toMap(e -> e.getKey(),
-                        e -> e.getKey().getInstance(e.getValue()))));
+        newInstance.setMats(Stream.of(MaterialType.values())
+                .collect(Collectors.toMap(mt -> mt,
+                        mt -> mt.getInstance(init))));
         return newInstance;
     }
 

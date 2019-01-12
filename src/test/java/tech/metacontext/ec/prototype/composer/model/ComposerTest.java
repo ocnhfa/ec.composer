@@ -107,9 +107,8 @@ public class ComposerTest {
     public void testStyleChecker() {
 
         System.out.println("styleChecker");
-        Stream.generate(sketchNodeFactory::newInstance)
+        Stream.generate(() -> sketchNodeFactory.newInstance(tc.getComposer().getInit()))
                 .limit(100)
-                .filter(tc.getComposer().styleChecker)
                 .peek(n -> System.out.println(n.getMat(MaterialType.NOTE_RANGES)))
                 .map(tc.getComposer().styleChecker::test)
                 .forEach(Assertions::assertTrue);

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -62,6 +63,12 @@ public class PitchSets extends MusicMaterial<List<Pitch>> {
 
         super(origin.getDivision(), origin.getMaterials());
         this.commonTone = origin.commonTone;
+    }
+
+    public PitchSets(Consumer<PitchSets> init) {
+
+        super();
+        init.accept(this);
     }
 
     @Override

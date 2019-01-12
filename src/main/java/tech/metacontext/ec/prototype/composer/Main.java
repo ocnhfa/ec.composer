@@ -91,6 +91,26 @@ public class Main {
     private Composer composer;
 
     /**
+     * Main constructor.
+     *
+     * @param popSize
+     * @param goalSize
+     * @param generation
+     * @param logState
+     * @throws Exception
+     */
+    public Main(int popSize,
+            int goalSize,
+            int generation,
+            LogState logState) throws Exception {
+
+        this(popSize, goalSize, generation,
+                SELECTION_THRESHOLD.getDouble(),
+                SCORE_CONSERVE_IF_COMPLETED.getDouble(),
+                logState);
+    }
+
+    /**
      *
      * @param popSize
      * @param goalSize
@@ -151,26 +171,6 @@ public class Main {
                         .map(new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())::climaxIndex)
                         .map(s -> String.format("%.2f", s))
                         .collect(Collectors.joining(" "))));
-    }
-
-    /**
-     * Main constructor.
-     *
-     * @param popSize
-     * @param goalSize
-     * @param generation
-     * @param logState
-     * @throws Exception
-     */
-    public Main(int popSize,
-            int goalSize,
-            int generation,
-            LogState logState) throws Exception {
-
-        this(popSize, goalSize, generation,
-                SELECTION_THRESHOLD.getDouble(),
-                SCORE_CONSERVE_IF_COMPLETED.getDouble(),
-                logState);
     }
 
     static String header(String text) {

@@ -47,11 +47,13 @@ public enum MaterialType {
         }
     }
 
-    public MusicMaterial getInstance(Consumer<? extends MusicMaterial> init) {
+    public <M extends MusicMaterial> M getInstance(Consumer<M> init) {
 
         try {
-            return this.clazz.getDeclaredConstructor(init.getClass())
-                    .newInstance(init);
+            M instance = (M) this.clazz.getDeclaredConstructor()
+                    .newInstance();
+            init.accept(instance);
+            return (M) instance.generate();
         } catch (Exception ex) {
             System.out.println(this);
             throw new InstantiationFailedException(ex.getMessage());

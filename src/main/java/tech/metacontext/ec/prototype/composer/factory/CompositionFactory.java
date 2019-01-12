@@ -76,15 +76,15 @@ public class CompositionFactory implements Factory<Composition> {
 
         return this.newInstance(composer.styleChecker,
                 composer.getStyles(),
-                composer.getInits());
+                composer.getInit());
     }
 
     public Composition newInstance(Predicate<SketchNode> styleChecker,
             Collection<? extends Style> styles,
-            Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
+            Consumer<MusicMaterial> init) {
 
         Composition newInstance = new Composition(this.composer_id, styles);
-        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker, inits);
+        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker, init);
         newInstance.addConnector(conn);
         newInstance.setSeed(conn.getPrevious());
         return newInstance;

@@ -74,7 +74,7 @@ public class Composer extends Population<Composition> {
     private int size;
     private double threshold;
     private double conserve_score;
-    private Map<MaterialType, Consumer<? extends MusicMaterial>> inits;
+    private Consumer<MusicMaterial> init;
 
     private final Map<Composition, Integer> conservetory;
 
@@ -131,15 +131,11 @@ public class Composer extends Population<Composition> {
         this.aim = aim;
         this.styles = new ArrayList<>(Arrays.asList(styles));
         this.conservetory = new HashMap<>();
-        this.inits = Stream.of(MaterialType.values())
-                .collect(Collectors.toMap(mt -> mt, mt -> new Consumer<MusicMaterial>() {
-            @Override
-            public void accept(MusicMaterial mm) {
-                for (Style style : styles) {
-                    style.matInitializer(mm);
-                }
+        this.init = mm -> {
+            for (Style style : styles) {
+                style.matInitializer(mm);
             }
-        }));
+        };
 
         _logger.log(Level.INFO,
                 "Initializing Composition Population...");
@@ -283,7 +279,7 @@ public class Composer extends Population<Composition> {
         }
         boolean reseeding = Math.random() < CHANCE_RESEEDING.getDouble();
         if (reseeding) {
-            mutant.resetSeed(sketchNodeFactory.newInstance(inits));
+            mutant.resetSeed(sketchNodeFactory.newInstance(init));
         }
         _logger.log(Level.INFO,
                 "Mutation, mutant: {0}, type: {1}, loci: {2}, reseed = {3}, length: {4} -> {5}",
@@ -622,11 +618,11 @@ public class Composer extends Population<Composition> {
         this.conserve_score = conserve_score;
     }
 
-    public Map<MaterialType, Consumer<? extends MusicMaterial>> getInits() {
-        return inits;
+    public Consumer<MusicMaterial> getInit() {
+        return init;
     }
 
-    public void setInits(Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
-        this.inits = inits;
+    public void setInit(Consumer<MusicMaterial> init) {
+        this.init = init;
     }
 }

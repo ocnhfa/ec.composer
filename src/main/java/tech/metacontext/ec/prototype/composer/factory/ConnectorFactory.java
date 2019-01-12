@@ -68,10 +68,10 @@ public class ConnectorFactory {
     }
 
     public Connector newConnectorWithSeed(Predicate<SketchNode> styleChecker,
-            Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
+            Consumer<MusicMaterial> init) {
 
         Connector conn = newConnector(styleChecker);
-        conn.setPrevious(sketchNodeFactory.newInstance(inits));
+        conn.setPrevious(sketchNodeFactory.newInstance(init));
         return conn;
     }
 

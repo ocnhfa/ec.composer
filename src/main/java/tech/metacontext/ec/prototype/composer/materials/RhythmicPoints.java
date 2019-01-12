@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -40,6 +41,11 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     }
 
     public RhythmicPoints() {
+    }
+
+    public RhythmicPoints(Consumer<RhythmicPoints> init) {
+        super();
+        init.accept(this);
     }
 
     public RhythmicPoints(RhythmicPoints origin) {
