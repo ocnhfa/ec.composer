@@ -42,7 +42,7 @@ public class Main {
         // 決定作品數量及演進世代
         int POP_SIZE = 100;
         int SELECTED_SIZE = 10;
-        int GENERATION = 300;
+        int GENERATION = 0;
 
         Main main = new Main(
                 POP_SIZE,

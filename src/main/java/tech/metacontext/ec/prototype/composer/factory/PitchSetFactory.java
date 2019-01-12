@@ -16,7 +16,9 @@
 package tech.metacontext.ec.prototype.composer.factory;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,9 +73,9 @@ public class PitchSetFactory {
         this.presetPitches.clear();
     }
 
-    public PitchSet generate() {
+    public List<Pitch> generate() {
 
-        PitchSet ps = new PitchSet();
+        List<Pitch> ps = new ArrayList<>();
         //若不允許升記號則將preset中的升記號以降記號取代
         if (!this.sharpAllowed && !presetPitches.isEmpty()) {
             this.setPresetPitches(
@@ -81,7 +83,7 @@ public class PitchSetFactory {
                             .map(pitch -> Pitch.values()[pitch.ordinalEnharmonic()])
                             .collect(Collectors.toSet()));
         }
-        ps.getPitch_set().addAll(Stream.of(Pitch.values())
+        ps.addAll(Stream.of(Pitch.values())
                 .limit(this.sharpAllowed ? 17 : 12)
                 .map(p -> new AbstractMap.SimpleEntry<>(this.presetPitches.contains(p) ? 0.0 : Math.random(), p))
                 .sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey()))

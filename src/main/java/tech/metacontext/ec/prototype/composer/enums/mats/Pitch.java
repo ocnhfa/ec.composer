@@ -15,8 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.enums.mats;
 
-import java.util.Arrays;
-
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>

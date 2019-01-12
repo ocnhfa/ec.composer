@@ -15,23 +15,26 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.PitchSet;
 import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
+import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class PitchSets extends MusicMaterial<PitchSet> {
+public class PitchSets extends MusicMaterial<List<Pitch>> {
 
     public static final int DEFAULT_MIN_PITCH_NUMBER = 1;
     public static final int DEFAULT_MAX_PITCH_NUMBER = 5;
@@ -69,7 +72,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
         dupe.setDivision(this.getDivision());
         dupe.setCommonTone(this.getCommonTone());
         dupe.setMaterials(this.getMaterials().stream()
-                .map(PitchSet::new)
+                .map(ArrayList::new)
                 .collect(Collectors.toList()));
         return dupe;
     }
@@ -89,7 +92,7 @@ public class PitchSets extends MusicMaterial<PitchSet> {
             factory.setMinPitchNumber(this.commonTone);
         }
         this.setMaterials(Stream.generate(factory::generate)
-                .peek(ps -> factory.setPresetPitches(ps.selectPitch(this.commonTone)))
+                .peek(ps -> factory.setPresetPitches(selectPitch(ps, this.commonTone)))
                 .limit(this.getDivision())
                 .collect(Collectors.toList())
         );
@@ -124,6 +127,14 @@ public class PitchSets extends MusicMaterial<PitchSet> {
         return null;
     }
 
+    private Set<Pitch> selectPitch(List<Pitch> ps, int commonTone) {
+        Set<Pitch> selected = new HashSet<>();
+        while (selected.size() < commonTone) {
+            selected.add(ps.get(new Random().nextInt(ps.size())));
+        }
+        return selected;
+    }
+
     private PitchSets retrograde() {
 
         this.setMaterials(IntStream.range(0, this.size())
@@ -136,7 +147,10 @@ public class PitchSets extends MusicMaterial<PitchSet> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    this.getMaterials().set(i, this.getMaterials().get(i).moveForward());
+                    this.getMaterials().set(i,
+                            this.getMaterials().get(i).stream()
+                                    .map(Pitch::forward)
+                                    .collect(Collectors.toList()));
                 });
         return this;
     }
@@ -145,7 +159,10 @@ public class PitchSets extends MusicMaterial<PitchSet> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    this.getMaterials().set(i, this.getMaterials().get(i).moveBackward());
+                    this.getMaterials().set(i, 
+                            this.getMaterials().get(i).stream()
+                                    .map(Pitch::backward)
+                                    .collect(Collectors.toList()));
                 });
         return this;
     }
