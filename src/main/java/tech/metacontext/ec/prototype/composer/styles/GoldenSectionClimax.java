@@ -37,11 +37,24 @@ public class GoldenSectionClimax extends Style {
     public static void main(String[] args) throws Exception {
 
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
-        var composer = new Composer(10, ComposerAim.Phrase, LogState.TEST, new UnaccompaniedCello(), gsc);
+        var composer = new Composer(100, ComposerAim.Phrase, LogState.TEST,
+                0.9, 0.9,
+                new UnaccompaniedCello(),
+                gsc);
         do {
             composer.compose().evolve();
-        } while (composer.getPopulation().stream().anyMatch(c -> !composer.getAim().isCompleted(c)));
-        composer.getPopulation().stream().map(gsc::rateComposition).forEach(System.out::println);
+            System.out.print(".");
+        } while (composer.getConservetory().isEmpty());
+        System.out.println("");
+        composer.getConservetory().keySet().stream()
+                .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
+                .forEach(c -> {
+                    var list = c.getRendered();
+                    IntStream.range(0, list.size())
+                            .peek(i -> System.out.printf("%.2f -> ", gsc.getStandard(c, i)))
+                            .mapToObj(gsc.getClimaxIndexes()::get)
+                            .forEach(System.out::println);
+                });
 
 //        Stream.generate(() -> SketchNodeFactory.getInstance().newInstance(composer.styleChecker))
 //                .limit(50)
@@ -87,10 +100,12 @@ public class GoldenSectionClimax extends Style {
 //            scores.add(score);
 //            base += standard * peak;
 //        }
+//        System.out.println("rateComposition");
         this.updateClimaxIndexes(composition);
         double sum = IntStream.range(0, composition.getSize())
                 .mapToDouble(i
                         -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
+                //                .peek(System.out::println)
                 .sum();
         return (base - sum) / base;
     }

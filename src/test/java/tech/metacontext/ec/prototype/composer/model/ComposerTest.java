@@ -24,10 +24,13 @@ import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
 
 /**
  *
@@ -106,17 +109,22 @@ public class ComposerTest {
     @Test
     public void testStyleChecker() {
 
+        Consumer<MusicMaterial> init = mm -> {
+            if (mm instanceof NoteRanges) {
+                ((NoteRanges) mm).setHighest(NoteRange.C4);
+                ((NoteRanges) mm).setLowest(NoteRange.C2);
+            }
+        };
         System.out.println("styleChecker");
-        Stream.generate(() -> sketchNodeFactory.newInstance(tc.getComposer().getInit()))
+        Stream.generate(() -> sketchNodeFactory.newInstance(init))
                 .limit(100)
-                .peek(n -> System.out.println(n.getMat(MaterialType.NOTE_RANGES)))
                 .map(tc.getComposer().styleChecker::test)
                 .forEach(Assertions::assertTrue);
-        Stream.generate(sketchNodeFactory::newRandomInstance)
+        assertFalse(Stream.generate(sketchNodeFactory::newRandomInstance)
                 .limit(100)
-                .peek(n -> n.getMat(MaterialType.NOTE_RANGES).setMaterials(List.of(NoteRange.C0)))
-                .map(tc.getComposer().styleChecker::test)
-                .forEach(Assertions::assertFalse);
+                .peek(System.out::println)
+                //                .peek(n -> n.getMat(MaterialType.NOTE_RANGES).getMaterials().set(0, List.of(NoteRange.C0)))
+                .allMatch(tc.getComposer().styleChecker::test));
     }
 
     /**

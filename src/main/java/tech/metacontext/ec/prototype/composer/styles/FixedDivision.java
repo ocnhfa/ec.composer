@@ -15,7 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;

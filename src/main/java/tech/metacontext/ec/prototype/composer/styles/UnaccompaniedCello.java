@@ -47,10 +47,11 @@ public class UnaccompaniedCello extends Style {
     }
 
     public static void main(String[] args) {
-        var factory = SketchNodeFactory.getInstance();
+        var sketchnode_factory = SketchNodeFactory.getInstance();
         var instance = new UnaccompaniedCello();
-        Stream.generate(factory::newRandomInstance)
+        Stream.generate(() -> sketchnode_factory.newInstance(instance::matInitializer))
                 .limit(50)
+                .peek(node -> System.out.print(node.getMat(MaterialType.NOTE_RANGES)))
                 .map(instance::qualifySketchNode)
                 .forEach(System.out::println);
     }
@@ -58,13 +59,18 @@ public class UnaccompaniedCello extends Style {
     @Override
     public boolean qualifySketchNode(SketchNode sketchNode) {
 
-        return ((NoteRanges) sketchNode.getMat(MaterialType.NOTE_RANGES))
+        boolean inrange = ((NoteRanges) sketchNode.getMat(MaterialType.NOTE_RANGES))
                 .getMaterials()
                 .stream()
-                .flatMap(set -> set.stream())
-                .filter(RANGE::containsKey)
-                .map(RANGE::get)
-                .allMatch(chance -> chance > Math.random());
+                .allMatch(list -> list.stream().allMatch(RANGE::containsKey));
+        boolean chance = inrange
+                ? ((NoteRanges) sketchNode.getMat(MaterialType.NOTE_RANGES))
+                        .getMaterials()
+                        .stream()
+                        .mapToDouble(list -> list.stream().mapToDouble(RANGE::get).average().getAsDouble())
+                        .average().getAsDouble() > Math.random()
+                : false;
+        return inrange && chance;
     }
 
     @Override
