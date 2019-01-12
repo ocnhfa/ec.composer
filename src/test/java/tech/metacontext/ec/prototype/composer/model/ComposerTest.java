@@ -119,7 +119,7 @@ public class ComposerTest {
     @Test
     public void testConserve() {
         System.out.println("conserve");
-        while (tc.getComposer().getConservetory().size() < 3) {
+        while (tc.getComposer().getConservetory().size() < 1) {
             tc.getComposer().compose().evolve();
         }
         System.out.println(Composer.simpleScoreOutput(tc.getComposer().getConservetory()

@@ -65,12 +65,11 @@ public class Main {
         var max = main.composer.getConservetory().keySet().stream()
                 .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
                 .peek(gsc::updateClimaxIndexes)
-                .peek(c -> {
-                    IntStream.range(0, c.getSize())
-                            .forEach(i -> {
-                                chart.addData(mapper.applyAsDouble(c.getRendered().get(i)), c.getId_prefix(), "" + i);
-                            });
-                })
+                .peek(c
+                        -> IntStream.range(0, c.getSize())
+                        .forEach(i
+                                -> chart.addData(mapper.applyAsDouble(c.getRendered().get(i)), c.getId_prefix(), "" + i)
+                        ))
                 .max((o1, o2) -> {
                     gsc.updateClimaxIndexes(o1);
                     double o1Peak = gsc.getPeak();

@@ -69,7 +69,7 @@ public class CompositionTest {
                 tc.getComposer().getStyles()),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
-        c1.elongation(FreeStyle::checker);
+        c1.elongate(FreeStyle::checker);
         assertEquals(
                 c1.getConnectors().size(),
                 c2.getConnectors().size());

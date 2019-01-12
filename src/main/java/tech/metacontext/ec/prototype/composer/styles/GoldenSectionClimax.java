@@ -135,13 +135,15 @@ public class GoldenSectionClimax extends Style {
                     mti = ((Dynamics) mm).getAvgIntensityIndex(Intensity::getIntensityIndex);
                     break;
                 case NOTE_RANGES:
-                    mti = ((NoteRanges) mm).getAvgIntensityIndex(mat -> NoteRangeSet.getIntensityIndex(mat, lowest, highest));
+                    mti = ((NoteRanges) mm).getAvgIntensityIndex(mat
+                            -> NoteRanges.getIntensityIndex(mat, lowest, highest));
                     break;
                 case PITCH_SETS:
                     mti = ((PitchSets) mm).getAvgIntensityIndex(PitchSets::getIntensityIndex);
                     break;
                 case RHYTHMIC_POINTS:
-                    mti = ((RhythmicPoints) mm).getAvgIntensityIndex(mat -> 1.0 * mat / DEFAULT_MAX_RHYTHMIC_POINTS.getInt());
+                    mti = ((RhythmicPoints) mm).getAvgIntensityIndex(mat
+                            -> 1.0 * mat / DEFAULT_MAX_RHYTHMIC_POINTS.getInt());
                     break;
                 default:
             }

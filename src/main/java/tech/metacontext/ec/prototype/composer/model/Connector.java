@@ -16,7 +16,6 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.*;
@@ -25,12 +24,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Connector extends Individual {
+
+    public static void main(String[] args) {
+        var conn = new Connector();
+        Stream.of(MaterialType.values()).forEach(mt
+                -> conn.addTransformType(mt, TransformType.getRandom()));
+        System.out.println(conn);
+    }
 
     private static SketchNodeFactory sketchNodeFactory;
 
@@ -78,9 +85,7 @@ public class Connector extends Individual {
     @Override
     public String toString() {
 
-        return super.toString() + getTransformTypes() + " "
-                + ((previous == null) ? "N/A" : "\nfrom: " + previous)
-                + ((next == null) ? "" : "\n => " + next);
+        return super.toString() + getTransformTypes();
     }
 
     public String toStringNext() {

@@ -176,7 +176,7 @@ public class Composer extends Population<Composition> {
                         c.getSize() - this.getAim().getAimSize() - 1)) {
             return false;
         }
-        c.elongation(this.styleChecker);
+        c.elongate(this.styleChecker);
         return true;
     }
 

@@ -53,11 +53,14 @@ public class CompositionFactory implements Factory<Composition> {
                 composer.styleChecker,
                 composer.getStyles());
         do {
-            composition.elongation(composer.styleChecker);
+            composer.compose().evolve();
+            composition.elongate(composer.styleChecker);
         } while (!composer.getAim().isCompleted(composition));
         composition.getRenderedChecked(null);
         System.out.println(composer.getAim().isCompleted(composition));
         System.out.println(composition);
+        System.out.println("-".repeat(100));
+        System.out.println(instance.forArchiving(composition));
     }
 
     private CompositionFactory(String composer_id) {

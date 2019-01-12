@@ -20,13 +20,22 @@ import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class SketchNode extends Individual {
+
+    public static void main(String[] args) {
+
+        Stream.generate(SketchNodeFactory.getInstance()::newRandomInstance)
+                .limit(50)
+                .forEach(System.out::println);
+    }
 
     private Map<MaterialType, ? extends MusicMaterial> musicMats;
 
@@ -48,13 +57,13 @@ public class SketchNode extends Individual {
 
     @Override
     public String toString() {
-        return super.toString() + "{\n"
+        return super.toString() + "{"
                 + this.getMats().entrySet().stream()
-                        .map(e -> String.format("-   %s (div=%d): %s",
+                        .map(e -> String.format("%s(%d):%s",
                         /*..........*/ e.getKey(),
                         /*..........*/ e.getValue().getDivision(),
                         /*..........*/ e.getValue().getMaterials()))
-                        .collect(Collectors.joining("\n"))
+                        .collect(Collectors.joining(", "))
                 + "}";
     }
 

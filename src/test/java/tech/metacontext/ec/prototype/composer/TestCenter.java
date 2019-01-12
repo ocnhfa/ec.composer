@@ -28,7 +28,7 @@ public class TestCenter {
 
     public static final int PRESET_POPULATION_SIZE = 20;
     public static final int GOAL_CONSERVATORY_SIZE = 0;
-    public static final int GOAL_GENERATION = 100;
+    public static final int GOAL_GENERATION = 50;
     private static TestCenter instance;
     private static Composer composer;
 
@@ -47,10 +47,9 @@ public class TestCenter {
 
     private TestCenter() {
         try {
-            composer = new Main(PRESET_POPULATION_SIZE,
-                    GOAL_CONSERVATORY_SIZE,
-                    GOAL_GENERATION,
-                    LogState.TEST).getComposer();
+            composer = new Main(PRESET_POPULATION_SIZE, GOAL_CONSERVATORY_SIZE,
+                    GOAL_GENERATION, LogState.TEST)
+                    .getComposer();
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }

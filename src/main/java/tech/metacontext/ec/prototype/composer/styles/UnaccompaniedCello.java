@@ -49,7 +49,7 @@ public class UnaccompaniedCello extends Style {
         return ((NoteRanges) sketchNode.getMat(MaterialType.NOTE_RANGES))
                 .getMaterials()
                 .stream()
-                .flatMap(set -> set.getNoteRange_set().stream())
+                .flatMap(set -> set.stream())
                 .filter(RANGE::containsKey)
                 .map(RANGE::get)
                 .allMatch(chance -> chance > Math.random());
@@ -63,7 +63,7 @@ public class UnaccompaniedCello extends Style {
                 .map(node -> ((NoteRanges) node.getMat(MaterialType.NOTE_RANGES)))
                 .map(mm -> mm.getMaterials())
                 .flatMap(lnrs -> lnrs.stream())
-                .flatMap(nrs -> nrs.getNoteRange_set().stream())
+                .flatMap(nrs -> nrs.stream())
                 .allMatch(RANGE::containsKey)) {
             return 1.0;
         }

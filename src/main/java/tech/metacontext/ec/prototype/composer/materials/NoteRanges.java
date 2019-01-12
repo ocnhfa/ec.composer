@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.util.ArrayList;
+import java.util.List;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.*;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
@@ -26,7 +28,7 @@ import java.util.stream.IntStream;
  *
  * @author Jonathan
  */
-public class NoteRanges extends MusicMaterial<NoteRangeSet> {
+public class NoteRanges extends MusicMaterial<List<NoteRange>> {
 
     private NoteRange lowestRange;
     private NoteRange highestRange;
@@ -62,8 +64,10 @@ public class NoteRanges extends MusicMaterial<NoteRangeSet> {
         int highest = this.highestRange.ordinal(), lowerest = this.lowestRange.ordinal();
         this.setMaterials(
                 new Random().ints(this.getDivision(), lowerest, highest + 1)
-                        .mapToObj(lowerBond -> new NoteRangeSet(lowerBond,
-                        new Random().nextInt(highest - lowerBond + 1) + lowerBond))
+                        .mapToObj(lowerBond
+                                -> IntStream.rangeClosed(lowerBond, new Random().nextInt(highest - lowerBond + 1) + lowerBond)
+                                .mapToObj(NoteRange::valueOf)
+                                .collect(Collectors.toList()))
                         .collect(Collectors.toList())
         );
         return this;
@@ -107,16 +111,37 @@ public class NoteRanges extends MusicMaterial<NoteRangeSet> {
 
     private NoteRanges moveForward() {
 
-        this.getMaterials().stream()
-                .forEach(srs -> srs.setNoteRange_set(srs.moveForward(this.highestRange)));
+        this.setMaterials(this.getMaterials().stream()
+                .map(rlist -> rlist.stream().map(r -> r.forward(this.highestRange)).collect(Collectors.toList()))
+                .collect(Collectors.toList()));
         return this;
     }
 
     private NoteRanges moveBackward() {
 
-        this.getMaterials().stream()
-                .forEach(srs -> srs.setNoteRange_set(srs.moveBackward(this.lowestRange)));
+        this.setMaterials(this.getMaterials().stream()
+                .map(rlist -> rlist.stream().map(r -> r.backward(this.lowestRange)).collect(Collectors.toList()))
+                .collect(Collectors.toList()));
         return this;
+    }
+
+    public static double getIntensityIndex(List<NoteRange> rangeSet,
+            NoteRange lowest, NoteRange highest) {
+
+        int low = lowest.ordinal(),
+                hi = highest.ordinal();
+        return IntStream.rangeClosed(low, hi)
+                .filter(i -> rangeSet.contains(NoteRange.valueOf(i)))
+                .mapToDouble(i -> Math.pow(2, i - low))
+                //                .peek(System.out::println)
+                .sum() / getBase(hi - low);
+    }
+
+    public static int getBase(int coverage) {
+
+        return IntStream.rangeClosed(0, coverage)
+                .map(p -> (int) Math.pow(2, p))
+                .sum();
     }
 
     @Override

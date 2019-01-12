@@ -15,6 +15,10 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.time.LocalDateTime;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -45,20 +49,24 @@ public class Settings {
         logger.log(Level.INFO,
                 "Setting FileHandler, STATE = {0}", STATE);
         logger.setUseParentHandlers(false);
-        FileHandler fh;
+
+        File file_path;
         switch (STATE) {
             case DISABLED:
                 logger.setUseParentHandlers(false);
                 return;
             case TEST:
-                fh = new FileHandler(logfile_test
-                        + getTimeBasedFilename() + ".log", true);
+                file_path = new File(logfile_test);
                 break;
             case DEFAULT:
             default:
-                fh = new FileHandler(logfile
-                        + getTimeBasedFilename() + ".log", true);
+                file_path = new File(logfile);
         }
+        if (!file_path.exists() || !file_path.isDirectory()) {
+            file_path.mkdirs();
+        }
+        FileHandler fh = new FileHandler(Path.of(file_path.getPath(),
+                getTimeBasedFilename() + ".log").toString(), true);
         fh.setEncoding("UTF-8");
         fh.setFormatter(new SimpleFormatter());
         logger.addHandler(fh);

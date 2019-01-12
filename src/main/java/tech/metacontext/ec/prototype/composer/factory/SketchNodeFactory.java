@@ -84,7 +84,8 @@ public class SketchNodeFactory implements Factory<SketchNode> {
 
         SketchNode newInstance = new SketchNode();
         newInstance.setMats(Stream.of(MaterialType.values())
-                .collect(Collectors.toMap(t -> t,
+                .collect(Collectors.toMap(
+                        t -> t,
                         t -> t.getInstance())));
         return newInstance;
     }
@@ -94,7 +95,8 @@ public class SketchNodeFactory implements Factory<SketchNode> {
         return Stream.generate(SketchNode::new)
                 .peek(node -> node.setMats(
                 Stream.of(MaterialType.values())
-                        .collect(Collectors.toMap(t -> t,
+                        .collect(Collectors.toMap(
+                                t -> t,
                                 t -> t.getInstance())))
                 )
                 .filter(styleChecker)
