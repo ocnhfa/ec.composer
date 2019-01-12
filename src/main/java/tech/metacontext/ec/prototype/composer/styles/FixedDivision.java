@@ -30,7 +30,7 @@ import tech.metacontext.ec.prototype.composer.model.SketchNode;
 public class FixedDivision extends Style {
 
     public static void main(String[] args) {
-        var instance = new FixedDivision();
+        var instance = new FixedDivision(4);
         Stream.generate(SketchNodeFactory.getInstance()::newRandomInstance)
                 .peek(node
                         -> System.out.println(node.getMats().values().stream()
@@ -40,20 +40,30 @@ public class FixedDivision extends Style {
                 .limit(1)
                 .forEach(node -> System.out.println(instance.qualifySketchNode(node)));
     }
+    private final int div;
+
+    public FixedDivision(int div) {
+        this.div = div;
+    }
 
     @Override
     public boolean qualifySketchNode(SketchNode sketchNode) {
 
-        AtomicInteger c = new AtomicInteger();
         return sketchNode.getMats().values().stream()
                 .mapToInt(MusicMaterial::getDivision)
-                .peek(div -> c.compareAndExchange(0, div))
-                .allMatch(div -> c.compareAndSet(div, div));
+                .allMatch(d -> d == this.div);
     }
 
     @Override
     public double rateComposition(Composition composition) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        return 1.0;
+    }
+
+    @Override
+    public <M extends MusicMaterial> void matInitializer(M m) {
+
+        m.setDivision(div);
     }
 
 }

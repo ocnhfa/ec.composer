@@ -24,6 +24,7 @@ import java.util.function.ToDoubleBiFunction;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
@@ -90,21 +91,24 @@ public class Main {
     private Composer composer;
 
     /**
-     * Main constructor.
      *
      * @param popSize
      * @param goalSize
      * @param generation
+     * @param threshold
+     * @param conserve_score
      * @param logState
      * @throws Exception
      */
     public Main(int popSize,
             int goalSize,
             int generation,
+            double threshold,
+            double conserve_score,
             LogState logState) throws Exception {
 
         this.composer = new Composer(popSize, ComposerAim.Phrase,
-                logState,
+                logState, threshold, conserve_score,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
@@ -147,14 +151,35 @@ public class Main {
                         .map(new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())::climaxIndex)
                         .map(s -> String.format("%.2f", s))
                         .collect(Collectors.joining(" "))));
+    }
 
+    /**
+     * Main constructor.
+     *
+     * @param popSize
+     * @param goalSize
+     * @param generation
+     * @param logState
+     * @throws Exception
+     */
+    public Main(int popSize,
+            int goalSize,
+            int generation,
+            LogState logState) throws Exception {
+
+        this(popSize, goalSize, generation,
+                SELECTION_THRESHOLD.getDouble(),
+                SCORE_CONSERVE_IF_COMPLETED.getDouble(),
+                logState);
     }
 
     static String header(String text) {
+
         return "\n---------- " + text + " ----------";
     }
 
     public Composer getComposer() {
+
         return composer;
     }
 

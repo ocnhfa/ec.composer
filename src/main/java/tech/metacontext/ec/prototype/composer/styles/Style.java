@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 
@@ -46,6 +47,13 @@ public abstract class Style {
      * @return double value score ranging from 0.0 to 1.0.
      */
     public abstract double rateComposition(Composition composition);
+
+    /**
+     *
+     * @param <M>
+     * @param m
+     */
+    abstract public <M extends MusicMaterial> void matInitializer(M m);
 
     @Override
     public String toString() {

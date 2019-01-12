@@ -18,10 +18,13 @@ package tech.metacontext.ec.prototype.composer.styles;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
 
 /**
@@ -41,6 +44,15 @@ public class UnaccompaniedCello extends Style {
         RANGE.put(NoteRange.C4, 1.0);
         RANGE.put(NoteRange.C5, 0.5);
         RANGE.put(NoteRange.C6, 0.25);
+    }
+
+    public static void main(String[] args) {
+        var factory = SketchNodeFactory.getInstance();
+        var instance = new UnaccompaniedCello();
+        Stream.generate(factory::newRandomInstance)
+                .limit(50)
+                .map(instance::qualifySketchNode)
+                .forEach(System.out::println);
     }
 
     @Override
@@ -73,5 +85,14 @@ public class UnaccompaniedCello extends Style {
     public static Collection<NoteRange> getRange() {
 
         return RANGE.keySet();
+    }
+
+    @Override
+    public <M extends MusicMaterial> void matInitializer(M m) {
+
+        if (m instanceof NoteRanges) {
+            ((NoteRanges) m).setHighest(RANGE.keySet().stream().max(NoteRange::compareTo).get());
+            ((NoteRanges) m).setLowest(RANGE.keySet().stream().min(NoteRange::compareTo).get());
+        }
     }
 }

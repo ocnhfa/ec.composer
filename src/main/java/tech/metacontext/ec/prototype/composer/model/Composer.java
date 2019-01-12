@@ -16,12 +16,13 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.render.*;
 import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.operations.MutationType;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.styles.*;
 import tech.metacontext.ec.prototype.composer.factory.*;
-import tech.metacontext.ec.prototype.render.*;
+import tech.metacontext.ec.prototype.composer.enums.*;
 import tech.metacontext.ec.prototype.composer.Main;
 import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
@@ -42,6 +43,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
@@ -70,6 +72,9 @@ public class Composer extends Population<Composition> {
     private ComposerAim aim;
     private List<Style> styles;
     private int size;
+    private double threshold;
+    private double conserve_score;
+    private Map<MaterialType, Consumer<? extends MusicMaterial>> inits;
 
     private final Map<Composition, Integer> conservetory;
 
@@ -94,6 +99,16 @@ public class Composer extends Population<Composition> {
     public Composer(int size, ComposerAim aim, LogState logState, Style... styles)
             throws Exception {
 
+        this(size, aim, logState,
+                SELECTION_THRESHOLD.getDouble(),
+                SCORE_CONSERVE_IF_COMPLETED.getDouble(),
+                styles);
+    }
+
+    public Composer(int size, ComposerAim aim, LogState logState,
+            double threshold, double conserve_score, Style... styles)
+            throws Exception {
+
         _logger = Logger.getLogger(getId());
         setFileHandler(logState, _logger);
 
@@ -116,12 +131,20 @@ public class Composer extends Population<Composition> {
         this.aim = aim;
         this.styles = new ArrayList<>(Arrays.asList(styles));
         this.conservetory = new HashMap<>();
+        this.inits = Stream.of(MaterialType.values())
+                .collect(Collectors.toMap(mt -> mt, mt -> new Consumer<MusicMaterial>() {
+            @Override
+            public void accept(MusicMaterial mm) {
+                for (Style style : styles) {
+                    style.matInitializer(mm);
+                }
+            }
+        }));
 
         _logger.log(Level.INFO,
                 "Initializing Composition Population...");
         this.setPopulation(Stream.generate(()
-                -> compositionFactory.newInstance(
-                        styleChecker, this.styles))
+                -> compositionFactory.newInstance(this))
                 .limit(size)
                 .peek(c -> c.addDebugMsg("Initialization..."))
                 .collect(Collectors.toList()));
@@ -131,6 +154,8 @@ public class Composer extends Population<Composition> {
                 new Object[]{size, aim, this.styles.stream()
                             .map(style -> style.getClass().getSimpleName())
                             .collect(Collectors.joining(", "))});
+        this.threshold = threshold;
+        this.conserve_score = conserve_score;
     }
 
     public Composer compose() {
@@ -221,10 +246,10 @@ public class Composer extends Population<Composition> {
             2.若completed則仍有一定機率走mutate -> children
             3.若則選出另一條p1 completed(不能是自己), crossover -> children
          */
-        var p0 = select(SELECT_FROM_ALL, SELECTION_THRESHOLD.getDouble());
+        var p0 = select(SELECT_FROM_ALL, this.threshold);
         if (this.getAim().isCompleted(p0)
                 && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED.getDouble()) {
-            var p1 = this.select(SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
+            var p1 = this.select(SELECT_ONLY_COMPLETED, this.threshold);
             if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
             }
@@ -258,7 +283,7 @@ public class Composer extends Population<Composition> {
         }
         boolean reseeding = Math.random() < CHANCE_RESEEDING.getDouble();
         if (reseeding) {
-            mutant.resetSeed(sketchNodeFactory.newInstance(styleChecker));
+            mutant.resetSeed(sketchNodeFactory.newInstance(inits));
         }
         _logger.log(Level.INFO,
                 "Mutation, mutant: {0}, type: {1}, loci: {2}, reseed = {3}, length: {4} -> {5}",
@@ -365,7 +390,7 @@ public class Composer extends Population<Composition> {
         }
         c.getRenderedChecked(this.getClass().getSimpleName() + "::conserve");
         c.addDebugMsg("under conservation check.");
-        if (getMinScore(c) < SCORE_CONSERVE_IF_COMPLETED.getDouble()) {
+        if (getMinScore(c) < conserve_score) {
             c.addDebugMsg("fail conservation check: " + simpleScoreOutput(c));
             return false;
         }
@@ -454,7 +479,7 @@ public class Composer extends Population<Composition> {
         lineAndShapeRenderer.setSeriesPaint(0, Color.BLUE);
         lineAndShapeRenderer.setSeriesShapesVisible(0, false);
         chart.addRenderer(2, "average", lineAndShapeRenderer, avgs);
-        chart.addMarker(SCORE_CONSERVE_IF_COMPLETED.getDouble(), Color.BLACK);
+        chart.addMarker(this.conserve_score, Color.BLACK);
         chart.createChart("Evolutionary Computation", "Generation", "Score", 1600, 630, true);
         chart.showChartWindow();
     }
@@ -505,7 +530,7 @@ public class Composer extends Population<Composition> {
                 1600, 630, true);
         plot.setSeriesDot(0, 3.0, Color.GRAY);
         plot.setSeriesDot(1, 3.0, Color.RED);
-        plot.addHorizontalLine(SCORE_CONSERVE_IF_COMPLETED.getDouble(), Color.BLACK);
+        plot.addHorizontalLine(this.conserve_score, Color.BLACK);
         plot.showPlotWindow();
     }
 
@@ -581,4 +606,27 @@ public class Composer extends Population<Composition> {
         this.size = size;
     }
 
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public double getConserve_score() {
+        return conserve_score;
+    }
+
+    public void setConserve_score(double conserve_score) {
+        this.conserve_score = conserve_score;
+    }
+
+    public Map<MaterialType, Consumer<? extends MusicMaterial>> getInits() {
+        return inits;
+    }
+
+    public void setInits(Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
+        this.inits = inits;
+    }
 }

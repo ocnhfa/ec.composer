@@ -105,12 +105,19 @@ public class ComposerTest {
 
     @Test
     public void testStyleChecker() {
+
         System.out.println("styleChecker");
-        SketchNode node = sketchNodeFactory.newInstance(tc.getComposer().styleChecker);
-        node.getMat(MaterialType.NOTE_RANGES).setMaterials(List.of(NoteRange.C0));
-        assertFalse(Stream.generate(() -> tc.getComposer().styleChecker)
+        Stream.generate(sketchNodeFactory::newInstance)
                 .limit(100)
-                .allMatch(b -> b.test(node)));
+                .filter(tc.getComposer().styleChecker)
+                .peek(n -> System.out.println(n.getMat(MaterialType.NOTE_RANGES)))
+                .map(tc.getComposer().styleChecker::test)
+                .forEach(Assertions::assertTrue);
+        Stream.generate(sketchNodeFactory::newRandomInstance)
+                .limit(100)
+                .peek(n -> n.getMat(MaterialType.NOTE_RANGES).setMaterials(List.of(NoteRange.C0)))
+                .map(tc.getComposer().styleChecker::test)
+                .forEach(Assertions::assertFalse);
     }
 
     /**
@@ -139,7 +146,7 @@ public class ComposerTest {
             System.out.println(Composer.simpleScoreOutput(c));
             boolean expResult = tc.getComposer().getStyles().stream()
                     .map(c::getScore)
-                    .allMatch(score -> score > SCORE_CONSERVE_IF_COMPLETED.value.doubleValue());
+                    .allMatch(score -> score > tc.getComposer().getConserve_score());
             System.out.println(Composer.simpleScoreOutput(c));
             System.out.println("expResult = " + expResult);
             boolean result = tc.getComposer().conserve(c);

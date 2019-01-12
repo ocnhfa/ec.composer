@@ -29,8 +29,10 @@ public class TestCenter {
     public static final int PRESET_POPULATION_SIZE = 20;
     public static final int GOAL_CONSERVATORY_SIZE = 0;
     public static final int GOAL_GENERATION = 50;
+    public static final double THRESHOLD = 0.5;
+    public static final double CONSERVE_SCORE = 0.5;
     private static TestCenter instance;
-    private static Composer composer;
+    private static Main main;
 
     public static void main(String[] args) {
 
@@ -39,6 +41,7 @@ public class TestCenter {
     }
 
     public static synchronized TestCenter getInstance() {
+        
         if (instance == null) {
             instance = new TestCenter();
         }
@@ -46,10 +49,10 @@ public class TestCenter {
     }
 
     private TestCenter() {
+        
         try {
-            composer = new Main(PRESET_POPULATION_SIZE, GOAL_CONSERVATORY_SIZE,
-                    GOAL_GENERATION, LogState.TEST)
-                    .getComposer();
+            this.main = new Main(PRESET_POPULATION_SIZE, GOAL_CONSERVATORY_SIZE,
+                    GOAL_GENERATION, THRESHOLD, CONSERVE_SCORE, LogState.TEST);
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }
@@ -58,6 +61,7 @@ public class TestCenter {
     }
 
     public Composer getComposer() {
-        return composer;
+        
+        return main.getComposer();
     }
 }

@@ -19,14 +19,14 @@ import tech.metacontext.ec.prototype.composer.model.*;
 import tech.metacontext.ec.prototype.composer.enums.mats.*;
 import tech.metacontext.ec.prototype.composer.enums.*;
 import tech.metacontext.ec.prototype.composer.materials.*;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.DEFAULT_MAX_RHYTHMIC_POINTS;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import static tech.metacontext.ec.prototype.composer.Parameters.DEFAULT_MAX_RHYTHMIC_POINTS;
 
 /**
  *
@@ -178,6 +178,10 @@ public class GoldenSectionClimax extends Style {
 
     public void setPeak(double peak) {
         this.peak = peak;
+    }
+
+    @Override
+    public <M extends MusicMaterial> void matInitializer(M m) {
     }
 
 }

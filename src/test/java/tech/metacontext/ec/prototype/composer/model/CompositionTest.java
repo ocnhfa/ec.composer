@@ -64,9 +64,7 @@ public class CompositionTest {
     public void ObjectCopy() {
 
         System.out.println("ObjectCopy");
-        Composition c1 = compositionFactory.newInstance(
-                tc.getComposer().styleChecker,
-                tc.getComposer().getStyles()),
+        Composition c1 = compositionFactory.newInstance(tc.getComposer()),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
         c1.elongate(FreeStyle::checker);

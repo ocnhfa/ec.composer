@@ -16,6 +16,8 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
@@ -28,10 +30,16 @@ import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
  */
 public class Dynamics extends MusicMaterial<Intensity> {
 
-    Intensity lowestIntensity;
-    Intensity highestIntensity;
+    private Intensity lowestIntensity;
+    private Intensity highestIntensity;
 
     public Dynamics() {
+    }
+
+    public Dynamics(Consumer<Dynamics> init) {
+
+        super();
+        init.accept(this);
     }
 
     public Dynamics(Dynamics origin) {
@@ -125,6 +133,25 @@ public class Dynamics extends MusicMaterial<Intensity> {
                     this.getMaterials().set(i, Intensity.values()[o]);
                 });
         return this;
+    }
+
+    /*
+     * Default setters and getters.
+     */
+    public Intensity getLowestIntensity() {
+        return lowestIntensity;
+    }
+
+    public void setLowestIntensity(Intensity lowestIntensity) {
+        this.lowestIntensity = lowestIntensity;
+    }
+
+    public Intensity getHighestIntensity() {
+        return highestIntensity;
+    }
+
+    public void setHighestIntensity(Intensity highestIntensity) {
+        this.highestIntensity = highestIntensity;
     }
 
 }

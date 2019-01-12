@@ -15,13 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
+import java.util.Map;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.enums.*;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.model.Connector;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
@@ -64,10 +67,11 @@ public class ConnectorFactory {
         return conn;
     }
 
-    public Connector newConnectorWithSeed(Predicate<SketchNode> styleChecker) {
+    public Connector newConnectorWithSeed(Predicate<SketchNode> styleChecker,
+            Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
 
         Connector conn = newConnector(styleChecker);
-        conn.setPrevious(sketchNodeFactory.newInstance(styleChecker));
+        conn.setPrevious(sketchNodeFactory.newInstance(inits));
         return conn;
     }
 

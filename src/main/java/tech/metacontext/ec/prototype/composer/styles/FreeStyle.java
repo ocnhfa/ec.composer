@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 
@@ -39,5 +40,9 @@ public class FreeStyle extends Style {
     public static boolean checker(SketchNode whatever) {
 
         return true;
+    }
+
+    @Override
+    public <M extends MusicMaterial> void matInitializer(M m) {
     }
 }

@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
+import java.util.function.Consumer;
 import tech.metacontext.ec.prototype.composer.ex.InstantiationFailedException;
 import tech.metacontext.ec.prototype.composer.materials.*;
 
@@ -46,4 +47,14 @@ public enum MaterialType {
         }
     }
 
+    public MusicMaterial getInstance(Consumer<? extends MusicMaterial> init) {
+
+        try {
+            return this.clazz.getDeclaredConstructor(init.getClass())
+                    .newInstance(init);
+        } catch (Exception ex) {
+            System.out.println(this);
+            throw new InstantiationFailedException(ex.getMessage());
+        }
+    }
 }

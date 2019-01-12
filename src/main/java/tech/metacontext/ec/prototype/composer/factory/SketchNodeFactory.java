@@ -15,15 +15,20 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
+import java.util.HashMap;
 import tech.metacontext.ec.prototype.abs.Factory;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
+import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
+import tech.metacontext.ec.prototype.composer.materials.Dynamics;
 
 /**
  *
@@ -32,9 +37,15 @@ import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
 public class SketchNodeFactory implements Factory<SketchNode> {
 
     public static void main(String[] args) {
+
         var instance = SketchNodeFactory.getInstance();
-        System.out.println(instance.newInstance(
-                new UnaccompaniedCello()::qualifySketchNode));
+        Map<MaterialType, Consumer<? extends MusicMaterial>> inits = new HashMap<>();
+        inits.put(MaterialType.DYNAMICS, (Dynamics mm) -> {
+            mm.setDivision(4);
+            mm.setLowestIntensity(Intensity.ppp);
+            mm.setHighestIntensity(Intensity.fff);
+        });
+        System.out.println(instance.newInstance(inits));
     }
 
     private static SketchNodeFactory instance;
@@ -90,17 +101,13 @@ public class SketchNodeFactory implements Factory<SketchNode> {
         return newInstance;
     }
 
-    public SketchNode newInstance(Predicate<SketchNode> styleChecker) {
+    public SketchNode newInstance(Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
 
-        return Stream.generate(SketchNode::new)
-                .peek(node -> node.setMats(
-                Stream.of(MaterialType.values())
-                        .collect(Collectors.toMap(
-                                t -> t,
-                                t -> t.getInstance())))
-                )
-                .filter(styleChecker)
-                .findFirst().get();
+        SketchNode newInstance = new SketchNode();
+        newInstance.setMats(inits.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey(),
+                        e -> e.getKey().getInstance(e.getValue()))));
+        return newInstance;
     }
 
 }

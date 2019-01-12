@@ -15,22 +15,20 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
+import tech.metacontext.ec.prototype.abs.Factory;
+import tech.metacontext.ec.prototype.composer.Settings;
+import tech.metacontext.ec.prototype.composer.model.*;
+import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import tech.metacontext.ec.prototype.abs.Factory;
-import tech.metacontext.ec.prototype.composer.Settings;
-import tech.metacontext.ec.prototype.composer.model.Composition;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.model.Connector;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.model.Composer;
-import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
-import tech.metacontext.ec.prototype.composer.styles.Style;
-import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
@@ -49,9 +47,7 @@ public class CompositionFactory implements Factory<Composition> {
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.getRange()));
         var instance = CompositionFactory.getInstance(composer.getId());
-        var composition = instance.newInstance(
-                composer.styleChecker,
-                composer.getStyles());
+        var composition = instance.newInstance(composer);
         do {
             composer.compose().evolve();
             composition.elongate(composer.styleChecker);
@@ -76,11 +72,19 @@ public class CompositionFactory implements Factory<Composition> {
         return instances.get(composer_id);
     }
 
+    public Composition newInstance(Composer composer) {
+
+        return this.newInstance(composer.styleChecker,
+                composer.getStyles(),
+                composer.getInits());
+    }
+
     public Composition newInstance(Predicate<SketchNode> styleChecker,
-            Collection<? extends Style> styles) {
+            Collection<? extends Style> styles,
+            Map<MaterialType, Consumer<? extends MusicMaterial>> inits) {
 
         Composition newInstance = new Composition(this.composer_id, styles);
-        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker);
+        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker, inits);
         newInstance.addConnector(conn);
         newInstance.setSeed(conn.getPrevious());
         return newInstance;
