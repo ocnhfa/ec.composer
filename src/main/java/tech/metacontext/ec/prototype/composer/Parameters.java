@@ -23,6 +23,17 @@ import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
  * @author Jonathan Chang
  */
 public enum Parameters {
+
+    /**
+     * Score threshold percentage for selection.
+     */
+    SELECTION_THRESHOLD(0.8),
+//    SELECTION_THRESHOLD(0.9),
+    /**
+     * Score for a mature composition to reach to be conserved.
+     */
+    SCORE_CONSERVE_IF_COMPLETED(0.8),
+    //    SCORE_CONSERVE_IF_COMPLETED(0.93),
     /*
      * MusicMaterial parameters
      */
@@ -44,21 +55,10 @@ public enum Parameters {
      */
     DEFAULT_LOWEST_RANGE(NoteRange.C0.ordinal()),
     DEFAULT_HIGHEST_RANGE(NoteRange.C8.ordinal()),
-    
     /**
      * Chance to reset seed when mutation happens.
      */
     CHANCE_RESEEDING(0.5),
-    /**
-     * Score threshold percentage for selection.
-     */
-//    SELECTION_THRESHOLD(0.8),
-    SELECTION_THRESHOLD(0.9),
-    /**
-     * Score for a mature composition to reach to be conserved.
-     */
-//    SCORE_CONSERVE_IF_COMPLETED(0.9),
-    SCORE_CONSERVE_IF_COMPLETED(0.93),
     /**
      * Chance for a mature composition to be elongated.
      */

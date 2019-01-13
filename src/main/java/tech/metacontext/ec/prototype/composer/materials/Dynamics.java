@@ -134,6 +134,12 @@ public class Dynamics extends MusicMaterial<Intensity> {
         return this;
     }
 
+    @Override
+    public String toString() {
+        
+        return this.getMaterials().toString();
+    }
+
     /*
      * Default setters and getters.
      */

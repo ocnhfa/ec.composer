@@ -139,11 +139,8 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
     @Override
     public String toString() {
-        return "RhythmicPoints{"
-                + "div=" + this.getDivision()
-                + ", min=" + minPoints
-                + ", max=" + maxPoints + '}'
-                + this.getMaterials();
+        
+        return this.getMaterials().toString();
     }
 
     /*

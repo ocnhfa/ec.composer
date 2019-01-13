@@ -173,20 +173,26 @@ public class PitchSets extends MusicMaterial<List<Pitch>> {
         return this;
     }
 
-    public static double getIntensityIndex(List<Pitch> ps) {
+    public double getIntensityIndex() {
 
-        return 1.0 * ps.size() / PitchSets.DEFAULT_MAX_PITCH_NUMBER;
+        var counting = this.getMaterials().stream()
+                .flatMap(List::stream)
+                .map(Pitch::ordinalEnharmonic)
+                .distinct()
+                .collect(Collectors.counting());
+        return 1.0 * counting / 12;
     }
 
     @Override
     public String toString() {
 
-        AtomicInteger i = new AtomicInteger(0);
-        return String.format("PitchSets[ Division=%2d ]\n%s",
-                this.getDivision(),
-                this.getMaterials().stream()
-                        .map(p -> "  " + i.incrementAndGet() + ". " + p.toString())
-                        .collect(Collectors.joining("\n")));
+//        AtomicInteger i = new AtomicInteger(0);
+//        return String.format("PitchSets[ Division=%2d ]\n%s",
+//                this.getDivision(),
+//                this.getMaterials().stream()
+//                        .map(p -> "  " + i.incrementAndGet() + ". " + p.toString())
+//                        .collect(Collectors.joining("\n")));
+        return this.getMaterials().toString();
     }
 
     /*

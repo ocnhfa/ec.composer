@@ -27,9 +27,22 @@ public enum Intensity {
 
         return 1.0 * intensity.ordinal() / (values().length - 1);
     }
-    
+
+    public static double getIntensityIndex(Intensity intensity,
+            Intensity lowest, Intensity highest) {
+
+        if (intensity.ordinal() > highest.ordinal()) {
+            return 1.0;
+        }
+        if (intensity.ordinal() < lowest.ordinal()) {
+            return 0.0;
+        }
+        return 1.0 * (intensity.ordinal() - lowest.ordinal()) / (highest.ordinal() - lowest.ordinal());
+    }
+
     public static Intensity valueOf(int ordinal) {
-        
+
         return Intensity.values()[ordinal];
     }
+
 }

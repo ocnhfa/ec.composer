@@ -1,0 +1,23 @@
+Composition [85de7223-1c07](size = 11, Composer = [66e0cb18-d261-4451-b83c-59ad1e205738])
+[85de7223-1c07] UnaccompaniedCello: 1.000 | GoldenSectionClimax: 0.934
+Seed: SketchNode [756ff85c-b1f3]{RHYTHMIC_POINTS(4):[0, 5, 1, 1], NOTE_RANGES(4):[[C4, C5], [C4], [C4, C5], [C2, C3, C4]], PITCH_SETS(4):[[D, C, G_flat], [A_flat, E, G], [G, A_flat, G_flat], [G_flat, E, G]], DYNAMICS(4):[mf, f, ff, p]}
+Connector [5919d029-5895]{RHYTHMIC_POINTS=MoveBackward, NOTE_RANGES=MoveBackward, PITCH_SETS=MoveBackward, DYNAMICS=MoveBackward} 
+ => SketchNode [ad42c756-5298]{RHYTHMIC_POINTS(4):[0, 4, 0, 0], NOTE_RANGES(4):[[C3, C4], [C3], [C3, C4], [C2, C2, C3]], PITCH_SETS(4):[[D_flat, B, F], [G, E_flat, G_flat], [G_flat, G, F], [F, E_flat, G_flat]], DYNAMICS(4):[mp, mf, f, pp]}
+Connector [3c6b56e7-f25a]{RHYTHMIC_POINTS=Disconnected, NOTE_RANGES=MoveBackward, PITCH_SETS=MoveForward, DYNAMICS=Disconnected} 
+ => SketchNode [37e796ed-8d79]{RHYTHMIC_POINTS(4):[1, 6, 13, 2], NOTE_RANGES(4):[[C2, C3], [C2], [C2, C3], [C2, C2, C2]], PITCH_SETS(4):[[D, C, G_flat], [A_flat, E, G], [G, A_flat, G_flat], [G_flat, E, G]], DYNAMICS(4):[pp, pp, ff, pp]}
+Connector [66115a04-77a6]{RHYTHMIC_POINTS=Disconnected, NOTE_RANGES=Retrograde, PITCH_SETS=MoveForward, DYNAMICS=MoveBackward} 
+ => SketchNode [c45073b5-5343]{RHYTHMIC_POINTS(4):[13, 4, 7, 13], NOTE_RANGES(4):[[C2, C2, C2], [C2, C3], [C2], [C2, C3]], PITCH_SETS(4):[[E_flat, D_flat, G], [A, F, A_flat], [A_flat, A, G], [G, F, A_flat]], DYNAMICS(4):[ppp, ppp, f, ppp]}
+Connector [9ae3873e-e3e9]{RHYTHMIC_POINTS=MoveForward, NOTE_RANGES=MoveForward, PITCH_SETS=Disconnected, DYNAMICS=Disconnected} 
+ => SketchNode [d6c3bfc9-0dad]{RHYTHMIC_POINTS(4):[14, 5, 8, 14], NOTE_RANGES(4):[[C3, C3, C3], [C3, C4], [C3], [C3, C4]], PITCH_SETS(4):[[E_flat, B, B_flat], [B_flat, A_flat, D], [D, G_flat, A_flat], [B, E, G_flat]], DYNAMICS(4):[mp, ff, pp, ff]}
+Connector [bdb49104-e8b6]{RHYTHMIC_POINTS=MoveForward, NOTE_RANGES=MoveForward, PITCH_SETS=MoveForward, DYNAMICS=MoveForward} 
+ => SketchNode [104393f4-f27c]{RHYTHMIC_POINTS(4):[15, 6, 9, 15], NOTE_RANGES(4):[[C4, C4, C4], [C4, C5], [C4], [C4, C5]], PITCH_SETS(4):[[E, C, B], [B, A, E_flat], [E_flat, G, A], [C, F, G]], DYNAMICS(4):[mf, fff, p, fff]}
+Connector [281f5dc7-77c5]{RHYTHMIC_POINTS=MoveForward, NOTE_RANGES=MoveForward, PITCH_SETS=MoveForward, DYNAMICS=MoveForward} 
+ => SketchNode [87de47b5-110d]{RHYTHMIC_POINTS(4):[16, 7, 10, 16], NOTE_RANGES(4):[[C5, C5, C5], [C5, C6], [C5], [C5, C6]], PITCH_SETS(4):[[F, D_flat, C], [C, B_flat, E], [E, A_flat, B_flat], [D_flat, G_flat, A_flat]], DYNAMICS(4):[f, ffff, mp, ffff]}
+Connector [764854a4-4e86]{RHYTHMIC_POINTS=Disconnected, NOTE_RANGES=MoveBackward, PITCH_SETS=MoveForward, DYNAMICS=MoveBackward} 
+ => SketchNode [51118d22-b719]{RHYTHMIC_POINTS(4):[15, 8, 5, 2], NOTE_RANGES(4):[[C4, C4, C4], [C4, C5], [C4], [C4, C5]], PITCH_SETS(4):[[G_flat, D, D_flat], [D_flat, B, F], [F, A, B], [D, G, A]], DYNAMICS(4):[mf, fff, p, fff]}
+Connector [2b69f03d-74b3]{RHYTHMIC_POINTS=Retrograde, NOTE_RANGES=MoveBackward, PITCH_SETS=MoveBackward, DYNAMICS=MoveBackward} 
+ => SketchNode [0ab9555f-79c5]{RHYTHMIC_POINTS(4):[2, 5, 8, 15], NOTE_RANGES(4):[[C3, C3, C3], [C3, C4], [C3], [C3, C4]], PITCH_SETS(4):[[F, D_flat, C], [C, B_flat, E], [E, A_flat, B_flat], [D_flat, G_flat, A_flat]], DYNAMICS(4):[mp, ff, pp, ff]}
+Connector [02e40c78-9f9f]{RHYTHMIC_POINTS=MoveBackward, NOTE_RANGES=MoveBackward, PITCH_SETS=MoveBackward, DYNAMICS=MoveBackward} 
+ => SketchNode [1bae1a54-5e04]{RHYTHMIC_POINTS(4):[1, 4, 7, 14], NOTE_RANGES(4):[[C2, C2, C2], [C2, C3], [C2], [C2, C3]], PITCH_SETS(4):[[E, C, B], [B, A, E_flat], [E_flat, G, A], [C, F, G]], DYNAMICS(4):[p, f, ppp, f]}
+Connector [9dd521bf-bfa8]{RHYTHMIC_POINTS=Disconnected, NOTE_RANGES=MoveBackward, PITCH_SETS=MoveBackward, DYNAMICS=Retrograde} 
+ => SketchNode [b9c28ad8-07ab]{RHYTHMIC_POINTS(4):[3, 5, 7, 7], NOTE_RANGES(4):[[C2, C2, C2], [C2, C2], [C2], [C2, C2]], PITCH_SETS(4):[[E_flat, B, B_flat], [B_flat, A_flat, D], [D, G_flat, A_flat], [B, E, G_flat]], DYNAMICS(4):[f, ppp, f, p]}

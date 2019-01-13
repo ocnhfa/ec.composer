@@ -20,11 +20,12 @@ import tech.metacontext.ec.prototype.composer.enums.mats.*;
 import tech.metacontext.ec.prototype.composer.enums.*;
 import tech.metacontext.ec.prototype.composer.materials.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
-import static tech.metacontext.ec.prototype.composer.Parameters.DEFAULT_MAX_RHYTHMIC_POINTS;
 import java.util.Collection;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.DoubleAdder;
+import static java.util.function.Predicate.not;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -41,12 +42,21 @@ public class GoldenSectionClimax extends Style {
                 0.9, 0.9,
                 new UnaccompaniedCello(),
                 gsc);
+        DoubleSummaryStatistics summary;
         do {
             composer.compose().evolve();
-            System.out.print(".");
-        } while (composer.getConservetory().isEmpty());
-        System.out.println("");
-        composer.getConservetory().keySet().stream()
+            summary = composer.getPopulation().stream()
+                    .peek(c -> c.getRenderedChecked(null))
+                    .mapToDouble(c -> c.getScore(gsc))
+                    .summaryStatistics();
+            System.out.printf("%.5f ~ %.5f\n", summary.getMin(), summary.getMax());
+//        } while (composer.getConservetory().isEmpty());
+        } while (composer.getPopulation().stream().anyMatch(not(composer.getAim()::isCompleted))
+                || summary.getMax() < 0.8 && composer.getConservetory().isEmpty());
+        (composer.getConservetory().isEmpty()
+                ? composer.getPopulation()
+                : composer.getConservetory().keySet())
+                .stream()
                 .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
                 .peek(gsc::updateClimaxIndexes)
                 .forEach(c -> {
@@ -101,18 +111,12 @@ public class GoldenSectionClimax extends Style {
     @Override
     public double rateComposition(Composition composition) {
 
-//        for (int i = 0; i < composition.getSize(); i++) {
-//            double standard = getStandard(composition, i);
-//            double score = standard
-//                    * Math.abs(climaxIndexes.get(i) - standard);
-//            scores.add(score);
-//            base += standard * peak;
-//        }
 //        System.out.println("rateComposition");
         this.updateClimaxIndexes(composition);
         double sum = IntStream.range(0, composition.getSize())
                 .mapToDouble(i
-                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
+                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
+                //-> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
                 //                .peek(System.out::println)
                 .sum();
         return (base - sum) / base;
@@ -128,12 +132,12 @@ public class GoldenSectionClimax extends Style {
         this.peak = climaxIndexes.stream()
                 .mapToDouble(s -> s)
                 .max().orElse(0.0);
-        this.base = 0.0;
         this.standards = IntStream.range(0, composition.getSize())
                 .mapToDouble(i -> this.getStandard(composition, i))
-                .peek(s -> this.base += s * peak)
+//                .peek(s -> this.base += s) //.peek(s -> this.base += s * peak)
                 .boxed()
                 .collect(Collectors.toList());
+        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d));
     }
 
     public double getStandard(Composition composition, int i) {
@@ -143,9 +147,9 @@ public class GoldenSectionClimax extends Style {
         }
         long peakNodeIndex = Math.round((composition.getSize() - 1) / RATIO);
         return (i < peakNodeIndex)
-                ? i * peak / peakNodeIndex
-                : (composition.getSize() - i - 1) * peak
-                / (composition.getSize() - peakNodeIndex - 1);
+                ? (i + 1) * peak / (peakNodeIndex + 1)
+                : (composition.getSize() - i) * peak
+                / (composition.getSize() - peakNodeIndex);
     }
 
     public double climaxIndex(SketchNode node) {
@@ -155,24 +159,29 @@ public class GoldenSectionClimax extends Style {
             double mti = 0.0;
             switch (mt) {
                 case DYNAMICS:
-                    mti = ((Dynamics) mm).getAvgIntensityIndex(Intensity::getIntensityIndex);
+                    mti = ((Dynamics) mm).getAvgIntensityIndex(mat
+                            -> Intensity.getIntensityIndex(mat, ((Dynamics) mm).getLowestIntensity(),
+                                    ((Dynamics) mm).getHighestIntensity()));
                     break;
                 case NOTE_RANGES:
                     mti = ((NoteRanges) mm).getAvgIntensityIndex(mat
                             -> NoteRanges.getIntensityIndex(mat, lowest, highest));
                     break;
                 case PITCH_SETS:
-                    mti = ((PitchSets) mm).getAvgIntensityIndex(PitchSets::getIntensityIndex);
+                    mti = ((PitchSets) mm).getIntensityIndex();
                     break;
                 case RHYTHMIC_POINTS:
                     mti = ((RhythmicPoints) mm).getAvgIntensityIndex(mat
-                            -> 1.0 * mat / DEFAULT_MAX_RHYTHMIC_POINTS.getInt());
+                            -> 1.0 * (mat - ((RhythmicPoints) mm).getMin())
+                            / ((RhythmicPoints) mm).getMax() - ((RhythmicPoints) mm).getMin());
                     break;
                 default:
             }
-//            System.out.println(mt + ":" + mti);
+            assert (mti >= 0.0 && mti <= 1.0);
+//            System.out.printf("%s:%.5f ", mm, mti);
             index.add(mti);
         });
+//        System.out.printf("=>%.5f\n", index.doubleValue() / node.getMats().size());
         return index.doubleValue() / node.getMats().size();
     }
 

@@ -136,6 +136,8 @@ public class Main {
         System.out.printf("Composer = [%s]\n", composer.getId());
         System.out.println("Population size = " + popSize);
         System.out.println("Expected conservatory size = " + goalSize);
+        System.out.println("Threshold = " + threshold);
+        System.out.println("Conserve Score = " + conserve_score);
         System.out.println("Generation = " + generation);
         System.out.println(header("Evolution"));
         int conserved = 0;
