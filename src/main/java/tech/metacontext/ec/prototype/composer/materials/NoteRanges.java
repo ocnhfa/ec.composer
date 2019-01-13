@@ -146,12 +146,8 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> {
 
     @Override
     public String toString() {
-        return "{"
-                + "div=" + this.getDivision()
-                + ", lowest=" + lowestRange
-                + ", highest=" + highestRange
-                + '}'
-                + this.getMaterials();
+        
+        return this.getMaterials().toString();
     }
 
     /*
