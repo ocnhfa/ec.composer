@@ -39,7 +39,7 @@ public class GoldenSectionClimax extends Style {
 
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
         var composer = new Composer(100, ComposerAim.Phrase, LogState.TEST,
-                0.9, 0.9,
+                0.9, 0.95,
                 new UnaccompaniedCello(),
                 gsc);
         DoubleSummaryStatistics summary;
@@ -52,7 +52,7 @@ public class GoldenSectionClimax extends Style {
             System.out.printf("%.5f ~ %.5f\n", summary.getMin(), summary.getMax());
 //        } while (composer.getConservetory().isEmpty());
         } while (composer.getPopulation().stream().anyMatch(not(composer.getAim()::isCompleted))
-                || summary.getMax() < 0.8 && composer.getConservetory().isEmpty());
+                || summary.getMax() < 0.95 && composer.getConservetory().isEmpty());
         (composer.getConservetory().isEmpty()
                 ? composer.getPopulation()
                 : composer.getConservetory().keySet())
@@ -115,8 +115,8 @@ public class GoldenSectionClimax extends Style {
         this.updateClimaxIndexes(composition);
         double sum = IntStream.range(0, composition.getSize())
                 .mapToDouble(i
-                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
-                //-> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
+                        //                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
+                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
                 //                .peek(System.out::println)
                 .sum();
         return (base - sum) / base;
@@ -134,10 +134,10 @@ public class GoldenSectionClimax extends Style {
                 .max().orElse(0.0);
         this.standards = IntStream.range(0, composition.getSize())
                 .mapToDouble(i -> this.getStandard(composition, i))
-//                .peek(s -> this.base += s) //.peek(s -> this.base += s * peak)
+                //                .peek(s -> this.base += s) //.peek(s -> this.base += s * peak)
                 .boxed()
                 .collect(Collectors.toList());
-        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d));
+        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * peak));
     }
 
     public double getStandard(Composition composition, int i) {
