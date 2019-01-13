@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import tech.metacontext.ec.prototype.composer.model.Composition;
+import tech.metacontext.ec.prototype.composer.model.*;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import java.util.Objects;
 import org.junit.jupiter.api.*;
@@ -48,12 +48,12 @@ public class CompositionFactoryTest {
         tc.getComposer().getPopulation().stream().forEach(c -> {
             c.ifReRenderRequired();
             System.out.printf("Composition %s from population.\n", c.getId_prefix());
-            c.getEval().getScores().entrySet()
-                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            c.updateEval();
+            System.out.println(Composer.simpleScoreOutput(c));
             Composition result = instance.forArchiving(c);
             System.out.printf("Composition %s for Archiving.\n", result.getId_prefix());
-            result.getEval().getScores().entrySet()
-                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            result.updateEval();
+            System.out.println(Composer.simpleScoreOutput(result));
             tc.getComposer().getStyles().stream().forEach(s -> {
                 assertEquals(c.getScore(s), result.getScore(s));
             });
@@ -67,12 +67,12 @@ public class CompositionFactoryTest {
         tc.getComposer().getPopulation().stream().forEach(c -> {
             c.ifReRenderRequired();
             System.out.printf("Composition %s from population.\n", c.getId_prefix());
-            c.getEval().getScores().entrySet()
-                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            c.updateEval();
+            System.out.println(Composer.simpleScoreOutput(c));
             Composition result = instance.forMutation(c);
             System.out.printf("Composition %s for Mutation.\n", result.getId_prefix());
-            result.getEval().getScores().entrySet()
-                    .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+            result.updateEval();
+            System.out.println(Composer.simpleScoreOutput(result));
             assertFalse(tc.getComposer().getStyles().stream()
                     .allMatch(s -> Objects.equals(c.getScore(s), result.getScore(s))));
         });

@@ -48,9 +48,17 @@ public class GoldenSectionClimax extends Style {
         System.out.println("");
         composer.getConservetory().keySet().stream()
                 .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
+                .peek(gsc::updateClimaxIndexes)
                 .forEach(c -> {
-                    var list = c.getRendered();
-                    IntStream.range(0, list.size())
+                    System.out.println("base = " + gsc.base);
+                    var note_list = c.getRendered();
+                    var sum = IntStream.range(0, c.getSize())
+                            .mapToDouble(i
+                                    -> Math.abs(gsc.climaxIndexes.get(i) - gsc.standards.get(i)) * gsc.standards.get(i))
+                            .sum();
+                    System.out.println("sum = " + sum);
+                    System.out.println("rate = " + ((gsc.base - sum) / gsc.base));
+                    IntStream.range(0, note_list.size())
                             .peek(i -> System.out.printf("%.2f -> ", gsc.getStandard(c, i)))
                             .mapToObj(gsc.getClimaxIndexes()::get)
                             .forEach(System.out::println);
