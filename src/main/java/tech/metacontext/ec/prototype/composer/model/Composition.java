@@ -54,7 +54,7 @@ public class Composition extends Individual<CompositionEval> {
         } while (Objects.equals(p0, p1));
         Composition child, dupe;
         int counter = 0;
-        CompositionFactory cf = CompositionFactory.getInstance(composer.getId());
+        CompositionFactory cf = CompositionFactory.getInstance(composer);
         do {
             System.out.print(".");
             child = composer.crossover(p0, p1);
@@ -65,52 +65,52 @@ public class Composition extends Individual<CompositionEval> {
             }
         } while (!dupe.ifReRenderRequired());
     }
-    
-    private static ConnectorFactory connectorFactory
-            = ConnectorFactory.getInstance();
+
+    private static ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
+    private static SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
-    private String composer_id;
+    private Composer composer;
 
     /**
      * Constructor with id specified.
      *
-     * @param composer_id
+     * @param composer
      * @param id
      * @param styles
      */
-    public Composition(String composer_id, String id, Collection<? extends Style> styles) {
+    public Composition(Composer composer, String id) {
 
         super(id);
-        setup(composer_id, styles);
+        setup(composer);
     }
 
     /**
      * Constructor without id specified.
      *
-     * @param composer_id
+     * @param composer
      * @param styles
      */
-    public Composition(String composer_id, Collection<? extends Style> styles) {
+    public Composition(Composer composer) {
 
-        setup(composer_id, styles);
+        setup(composer);
     }
 
-    public void setup(String composer_id, Collection<? extends Style> styles) {
+    public void setup(Composer composer) {
 
-        this.composer_id = composer_id;
+        this.composer = composer;
         this.rendered = new LinkedList<>();
         this.connectors = new LinkedList<>();
-        this.setEval(new CompositionEval(styles));
+        this.setEval(new CompositionEval(composer.getStyles()));
         //for debugging
         this.debug = new ArrayList<>();
         this.addDebugMsg("Initilization completed.");
     }
 
-    public void elongate(Predicate<SketchNode> styleChecker) {
+    public void elongate() {
 
-        this.addConnector(connectorFactory.newConnector(styleChecker));
+        this.addConnector(connectorFactory.newConnector(composer.styleChecker));
     }
 
     public void addConnector(Connector connector) {
@@ -121,6 +121,7 @@ public class Composition extends Individual<CompositionEval> {
     public List<SketchNode> render() {
 
         rendered.clear();
+        resetSeed(sketchNodeFactory.newInstance(this.composer.getInit()));
         Wrapper<SketchNode> previous = new Wrapper<>(seed);
         rendered.add(seed);
         /*
@@ -140,7 +141,7 @@ public class Composition extends Individual<CompositionEval> {
 
     public List<SketchNode> getRenderedChecked(String request) {
 
-        Logger.getLogger(composer_id).log(Level.INFO,
+        Logger.getLogger(composer.getId()).log(Level.INFO,
                 "{0}: getRenderedChecked, request from {1}",
                 new Object[]{this.getId_prefix(), request});
         if (this.ifReRenderRequired()) {
@@ -153,19 +154,19 @@ public class Composition extends Individual<CompositionEval> {
     public boolean ifReRenderRequired() {
 
         if (this.rendered.isEmpty()) {
-            Logger.getLogger(composer_id).log(Level.INFO,
+            Logger.getLogger(composer.getId()).log(Level.INFO,
                     "Not rendered yet, rendering required for Composition {0}.",
                     this.getId_prefix());
             return true;
         }
         if (!Objects.equals(this.connectors.getFirst().getPrevious(), this.seed)) {
-            Logger.getLogger(composer_id).log(Level.INFO,
+            Logger.getLogger(composer.getId()).log(Level.INFO,
                     "Seed mismatched, rerendering required for Composition {0}.",
                     this.getId_prefix());
             return true;
         }
         if (this.rendered.size() != this.getSize()) {
-            Logger.getLogger(composer_id).log(Level.INFO,
+            Logger.getLogger(composer.getId()).log(Level.INFO,
                     "Size mismatched: {0} to {1}, rerendering required for Composition {2}.", new Object[]{
                         this.rendered.size(),
                         this.getSize(),
@@ -174,7 +175,7 @@ public class Composition extends Individual<CompositionEval> {
         }
         if (this.connectors.stream().anyMatch(conn
                 -> Objects.isNull(conn.getPrevious()) || Objects.isNull(conn.getNext()))) {
-            Logger.getLogger(composer_id).log(Level.INFO,
+            Logger.getLogger(composer.getId()).log(Level.INFO,
                     "Connector without connected SketchNode found, rerendering required for Composition {0}.",
                     this.getId_prefix());
             return true;
@@ -186,14 +187,14 @@ public class Composition extends Individual<CompositionEval> {
                         this.rendered.get(i)))
                 .findFirst();
         if (mismatchIndex.isPresent()) {
-            Logger.getLogger(composer_id).log(Level.INFO,
+            Logger.getLogger(composer.getId()).log(Level.INFO,
                     "Mismatched SketchNodes at {0}, rerendering required for Composition {1}.",
                     new Object[]{
                         mismatchIndex.getAsInt(),
                         this.getId_prefix()});
             return true;
         }
-        Logger.getLogger(composer_id).log(Level.FINE,
+        Logger.getLogger(composer.getId()).log(Level.FINE,
                 "Rendered list remained consistant, no rerendering required for {0}.",
                 this.getId_prefix());
         return false;
@@ -229,17 +230,17 @@ public class Composition extends Individual<CompositionEval> {
     public Path persist() {
 
         var destination = new File("src/main/resources/composition",
-                composer_id + "_" + this.getId_prefix() + ".txt")
+                composer.getId() + "_" + this.getId_prefix() + ".txt")
                 .toPath();
         try (var out = Files.newBufferedWriter(
                 destination, StandardCharsets.UTF_8)) {
             out.write(this.toString());
             out.flush();
         } catch (IOException ex) {
-            Logger.getLogger(composer_id).log(Level.SEVERE, "Failed to persist {0}. {1}", new Object[]{
+            Logger.getLogger(composer.getId()).log(Level.SEVERE, "Failed to persist {0}. {1}", new Object[]{
                 this.getId_prefix(), ex.getMessage()});
         }
-        Logger.getLogger(composer_id).log(Level.INFO, "{0} has been persisted to {1}", new Object[]{
+        Logger.getLogger(composer.getId()).log(Level.INFO, "{0} has been persisted to {1}", new Object[]{
             this.getId_prefix(),
             destination.getFileName()});
         return destination;
@@ -290,17 +291,17 @@ public class Composition extends Individual<CompositionEval> {
                 = String.format("%s(size = %d, Composer = [%s])\n"
                         + "%s\n"
                         + "Seed: %s\n",
-                        super.toString(), this.getSize(), composer_id,
+                        super.toString(), this.getSize(), composer.getId(),
                         Composer.simpleScoreOutput(this),
                         this.getSeed())
                 + this.getConnectors().stream()
                         .peek(c -> {
                             if (Objects.isNull(c.getPrevious())) {
-                                Logger.getLogger(composer_id).log(Level.WARNING,
+                                Logger.getLogger(composer.getId()).log(Level.WARNING,
                                         "Null SketchNode found in {0}.getPrevious().", c.getId_prefix());
                             }
                             if (Objects.isNull(c.getNext())) {
-                                Logger.getLogger(composer_id).log(Level.WARNING,
+                                Logger.getLogger(composer.getId()).log(Level.WARNING,
                                         "Null SketchNode found in {0}.getNext().", c.getId_prefix());
                             }
                         })

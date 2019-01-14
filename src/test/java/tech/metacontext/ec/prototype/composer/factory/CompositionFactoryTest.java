@@ -34,7 +34,7 @@ public class CompositionFactoryTest {
     public static void prepare() {
 
 //        tc = TestCenter.getInstance();
-        instance = CompositionFactory.getInstance(tc.getComposer().getId());
+        instance = CompositionFactory.getInstance(tc.getComposer());
     }
 
     @Test

@@ -119,7 +119,7 @@ public class Composer extends Population<Composition> {
 
         _logger.log(Level.INFO,
                 "Initializing CompositionFactory...");
-        Composer.compositionFactory = CompositionFactory.getInstance(this.getId());
+        Composer.compositionFactory = CompositionFactory.getInstance(this);
 
         _logger.log(Level.INFO,
                 "Initializing SketchNodeFactory...");
@@ -140,7 +140,7 @@ public class Composer extends Population<Composition> {
         _logger.log(Level.INFO,
                 "Initializing Composition Population...");
         this.setPopulation(Stream.generate(()
-                -> compositionFactory.newInstance(this))
+                -> compositionFactory.newInstance())
                 .limit(size)
                 .peek(c -> c.addDebugMsg("Initialization..."))
                 .collect(Collectors.toList()));
@@ -197,7 +197,7 @@ public class Composer extends Population<Composition> {
                         c.getSize() - this.getAim().getAimSize() - 1)) {
             return false;
         }
-        c.elongate(this.styleChecker);
+        c.elongate();
         return true;
     }
 

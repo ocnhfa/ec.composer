@@ -39,18 +39,18 @@ public class CompositionFactory implements Factory<Composition> {
     private static final ConnectorFactory connectorFactory = ConnectorFactory.getInstance();
     private static final SketchNodeFactory sketchNodeFactory = SketchNodeFactory.getInstance();
     private static final Map<String, CompositionFactory> instances = new HashMap<>();
-    private final String composer_id;
+    private final Composer composer;
 
     public static void main(String[] args) throws Exception {
 
         var composer = new Composer(50, ComposerAim.Phrase, Settings.LogState.DISABLED,
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.getRange()));
-        var instance = CompositionFactory.getInstance(composer.getId());
-        var composition = instance.newInstance(composer);
+        var instance = CompositionFactory.getInstance(composer);
+        var composition = instance.newInstance();
         do {
             composer.compose().evolve();
-            composition.elongate(composer.styleChecker);
+            composition.elongate();
         } while (!composer.getAim().isCompleted(composition));
         composition.getRenderedChecked(null);
         System.out.println(composer.getAim().isCompleted(composition));
@@ -59,32 +59,24 @@ public class CompositionFactory implements Factory<Composition> {
         System.out.println(instance.forArchiving(composition));
     }
 
-    private CompositionFactory(String composer_id) {
+    private CompositionFactory(Composer composer) {
 
-        this.composer_id = composer_id;
+        this.composer = composer;
     }
 
-    public static CompositionFactory getInstance(String composer_id) {
+    public static CompositionFactory getInstance(Composer composer) {
 
-        if (Objects.isNull(instances.get(composer_id))) {
-            instances.put(composer_id, new CompositionFactory(composer_id));
+        if (Objects.isNull(instances.get(composer.getId()))) {
+            instances.put(composer.getId(), new CompositionFactory(composer));
         }
-        return instances.get(composer_id);
+        return instances.get(composer.getId());
     }
 
-    public Composition newInstance(Composer composer) {
+    public Composition newInstance() {
 
-        return this.newInstance(composer.styleChecker,
-                composer.getStyles(),
-                composer.getInit());
-    }
-
-    public Composition newInstance(Predicate<SketchNode> styleChecker,
-            Collection<? extends Style> styles,
-            Consumer<MusicMaterial> init) {
-
-        Composition newInstance = new Composition(this.composer_id, styles);
-        Connector conn = connectorFactory.newConnectorWithSeed(styleChecker, init);
+        Composition newInstance = new Composition(composer);
+        Connector conn = connectorFactory.newConnectorWithSeed(
+                composer.styleChecker, composer.getInit());
         newInstance.addConnector(conn);
         newInstance.setSeed(conn.getPrevious());
         return newInstance;
@@ -102,8 +94,7 @@ public class CompositionFactory implements Factory<Composition> {
         origin.addDebugMsg("forArchiving: "
                 + origin.getId_prefix() + " been checked/rendered.");
         origin.getRenderedChecked(this.getClass().getSimpleName() + "::forArchiving");
-        Composition dupe = new Composition(this.composer_id, origin.getId(),
-                origin.getEval().getStyles());
+        Composition dupe = new Composition(this.composer, origin.getId());
         dupe.getRendered().addAll(origin.getRendered());
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forArchiving)
@@ -126,8 +117,7 @@ public class CompositionFactory implements Factory<Composition> {
 
         origin.addDebugMsg("forMutation: "
                 + origin.getId_prefix() + "been checked/rendered.");
-        Composition dupe = new Composition(this.composer_id,
-                origin.getEval().getStyles());
+        Composition dupe = new Composition(this.composer);
         dupe.getConnectors().addAll(origin.getConnectors().stream()
                 .map(connectorFactory::forMutation)
                 .collect(Collectors.toList()));
@@ -146,7 +136,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition forCrossover(Connector conn,
             Collection<? extends Style> styles) {
 
-        Composition newInstance = new Composition(this.composer_id, styles);
+        Composition newInstance = new Composition(this.composer);
         Connector dupe = connectorFactory.forMutation(conn);
         newInstance.addConnector(dupe);
         newInstance.resetSeed(dupe.getPrevious());

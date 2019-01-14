@@ -39,7 +39,7 @@ public class CompositionTest {
     @BeforeAll
     public static void prepare() {
         tc = TestCenter.getInstance();
-        compositionFactory = CompositionFactory.getInstance(tc.getComposer().getId());
+        compositionFactory = CompositionFactory.getInstance(tc.getComposer());
         sketchNodeFactory = SketchNodeFactory.getInstance();
     }
 
@@ -64,10 +64,10 @@ public class CompositionTest {
     public void ObjectCopy() {
 
         System.out.println("ObjectCopy");
-        Composition c1 = compositionFactory.newInstance(tc.getComposer()),
+        Composition c1 = compositionFactory.newInstance(),
                 c2 = c1,
                 c3 = compositionFactory.forArchiving(c1);
-        c1.elongate(FreeStyle::checker);
+        c1.elongate();
         assertEquals(
                 c1.getConnectors().size(),
                 c2.getConnectors().size());
