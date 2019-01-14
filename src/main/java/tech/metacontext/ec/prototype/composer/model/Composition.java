@@ -121,9 +121,11 @@ public class Composition extends Individual<CompositionEval> {
     public List<SketchNode> render() {
 
         rendered.clear();
-        resetSeed(sketchNodeFactory.newInstance(this.composer.getInit()));
-        Wrapper<SketchNode> previous = new Wrapper<>(seed);
+        if (Objects.isNull(seed) || Math.random() < CHANCE_RESEEDING.getDouble()) {
+            resetSeed(sketchNodeFactory.newInstance(this.composer.getInit()));
+        }
         rendered.add(seed);
+        var previous = new Wrapper<>(seed);
         /*
         1. conn.setPrevious(previous.get())
         2. previous.set(conn.transform())

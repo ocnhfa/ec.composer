@@ -64,7 +64,7 @@ public enum Parameters {
     /**
      * Chance to reset seed when mutation happens.
      */
-    CHANCE_RESEEDING(1.0),
+    CHANCE_RESEEDING(0.8),
     /**
      * Chance for a mature composition to be elongated.
      */
