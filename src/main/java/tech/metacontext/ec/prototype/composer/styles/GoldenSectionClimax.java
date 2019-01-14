@@ -137,7 +137,7 @@ public class GoldenSectionClimax extends Style {
                 //                .peek(s -> this.base += s) //.peek(s -> this.base += s * peak)
                 .boxed()
                 .collect(Collectors.toList());
-        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * peak));
+        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * d));
     }
 
     public double getStandard(Composition composition, int i) {

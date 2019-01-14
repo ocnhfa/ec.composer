@@ -298,6 +298,7 @@ public class Composer extends Population<Composition> {
         var child = compositionFactory.forCrossover(
                 p0.getConnectors().get(0),
                 this.styles);
+
         _logger.log(Level.INFO,
                 "Composition {0} being transformed to {1} for crossover.",
                 new Object[]{p0.getId_prefix(), child.getId_prefix()});
@@ -317,6 +318,10 @@ public class Composer extends Population<Composition> {
                     child.getId_prefix(),
                     crossover_state});
 //        child.getRenderedChecked(this.getClass().getSimpleName() + "::crossover");
+        boolean reseeding = Math.random() < CHANCE_RESEEDING.getDouble();
+        if (reseeding) {
+            child.resetSeed(sketchNodeFactory.newInstance(init));
+        }
         return child;
     }
 
