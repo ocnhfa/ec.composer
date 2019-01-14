@@ -21,6 +21,7 @@ import tech.metacontext.ec.prototype.composer.enums.*;
 import tech.metacontext.ec.prototype.composer.materials.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.TreeSet;
@@ -111,7 +112,6 @@ public class GoldenSectionClimax extends Style {
     @Override
     public double rateComposition(Composition composition) {
 
-//        System.out.println("rateComposition");
         this.updateClimaxIndexes(composition);
         double sum = IntStream.range(0, composition.getSize())
                 .mapToDouble(i
@@ -130,8 +130,8 @@ public class GoldenSectionClimax extends Style {
                 .map(this::climaxIndex)
                 .collect(Collectors.toList());
         this.peak = climaxIndexes.stream()
-                .mapToDouble(s -> s)
-                .max().orElse(0.0);
+                .max(Comparator.naturalOrder())
+                .orElse(0.0);
         this.standards = IntStream.range(0, composition.getSize())
                 .mapToDouble(i -> this.getStandard(composition, i))
                 //                .peek(s -> this.base += s) //.peek(s -> this.base += s * peak)
@@ -185,6 +185,19 @@ public class GoldenSectionClimax extends Style {
         return index.doubleValue() / node.getMats().size();
     }
 
+    public int compareToPeak(Composition o1, Composition o2) {
+
+        this.updateClimaxIndexes(o1);
+        double o1Peak = this.getPeak();
+        this.updateClimaxIndexes(o2);
+        double o2Peak = this.getPeak();
+        return Double.compare(o1Peak, o2Peak);
+    }
+
+    @Override
+    public <M extends MusicMaterial> void matInitializer(M m) {
+    }
+
     /*
      * Default setters and getters.
      */
@@ -210,10 +223,6 @@ public class GoldenSectionClimax extends Style {
 
     public void setPeak(double peak) {
         this.peak = peak;
-    }
-
-    @Override
-    public <M extends MusicMaterial> void matInitializer(M m) {
     }
 
 }

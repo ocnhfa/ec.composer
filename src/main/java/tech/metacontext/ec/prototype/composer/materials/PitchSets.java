@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,9 +35,6 @@ import java.util.stream.Stream;
  */
 public class PitchSets extends MusicMaterial<List<Pitch>> {
 
-    public static final int DEFAULT_MIN_PITCH_NUMBER = 1;
-    public static final int DEFAULT_MAX_PITCH_NUMBER = 5;
-    public static final int DEFAULT_PITCH_NUMBER = 3;
     public static final int SHARP_ALLOWED = 1, SHARP_NOT_ALLOWED = 0;
     public static final int DEFAULT_ENHARMONIC_ALLOWED = SHARP_NOT_ALLOWED;
     public static final int DEFAULT_SHARP_ALLOWED = SHARP_ALLOWED;

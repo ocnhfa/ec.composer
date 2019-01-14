@@ -59,32 +59,24 @@ public class Main {
 
         var chart = new LineChart_AWT("Composer " + main.composer.getId());
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
-        ToDoubleFunction<SketchNode> mapper = node
-                -> gsc.climaxIndex(node);
-        ToDoubleBiFunction<Composition, Integer> mapper2 = (c, i)
-                -> gsc.getStandard(c, i);
-        var max = main.composer.getConservetory().keySet().stream()
+        main.composer.getConservetory().keySet().stream()
                 .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
                 .peek(gsc::updateClimaxIndexes)
-                .peek(c
+                .forEach(c
                         -> IntStream.range(0, c.getSize())
                         .forEach(i
-                                -> chart.addData(mapper.applyAsDouble(c.getRendered().get(i)), c.getId_prefix(), "" + i)
-                        ))
-                .max((o1, o2) -> {
-                    gsc.updateClimaxIndexes(o1);
-                    double o1Peak = gsc.getPeak();
-                    gsc.updateClimaxIndexes(o2);
-                    double o2Peak = gsc.getPeak();
-                    return Double.compare(o1Peak, o2Peak);
-                })
+                                //                                -> chart.addData(gsc.climaxIndex(c.getRendered().get(i)), c.getId_prefix(), "" + i)
+                                -> chart.addData(gsc.getClimaxIndexes().get(i), c.getId_prefix(), "" + i)
+                        ));
+        var max = main.composer.getConservetory().keySet().stream()
+                .max(gsc::compareToPeak)
                 .get();
         IntStream.range(0, max.getSize())
                 .forEach(i -> {
-                    chart.addData(mapper2.applyAsDouble(max, i), "standard", "" + i);
+                    chart.addData(gsc.getStandard(max, i), "standard", "" + i);
                 });
         chart.createLineChart("SketchNode Rating Chart",
-                "Generation", "Score", 560, 367, true);
+                "SketchNode", "Intensity Index", 560, 367, true);
         chart.showChartWindow();
     }
 
@@ -167,12 +159,14 @@ public class Main {
                 .forEach(System.out::println);
 
         composer.getConservetory().keySet().stream()
-                .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
-                .forEach(c
-                        -> System.out.println("GSC: " + c.getRendered().stream()
-                        .map(new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())::climaxIndex)
-                        .map(s -> String.format("%.2f", s))
-                        .collect(Collectors.joining(" "))));
+                .peek(c -> System.out.print(Composer.simpleScoreOutput(c) + "\n GSC: "))
+                .map(c -> {
+                    var gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
+                    gsc.updateClimaxIndexes(c);
+                    return gsc.getClimaxIndexes().stream().map(i -> String.format("%.2f", i))
+                            .collect(Collectors.joining(" "));
+                })
+                .forEach(System.out::println);
     }
 
     static String header(String text) {

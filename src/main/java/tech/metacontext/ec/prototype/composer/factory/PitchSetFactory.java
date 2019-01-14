@@ -23,8 +23,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
-import tech.metacontext.ec.prototype.composer.enums.mats.PitchSet;
 
 /**
  *
@@ -32,9 +32,6 @@ import tech.metacontext.ec.prototype.composer.enums.mats.PitchSet;
  */
 public class PitchSetFactory {
 
-    public static final int DEFAULT_MIN_PITCH_NUMBER = 1;
-    public static final int DEFAULT_MAX_PITCH_NUMBER = 5;
-    public static final int DEFAULT_PITCH_NUMBER = 3;
     public static final int ALLOWED = 1, NOT_ALLOWED = 0;
     public static final int DEFAULT_ENHARMONIC_ALLOWED = NOT_ALLOWED;
     public static final int DEFAULT_SHARP_ALLOWED = ALLOWED;
@@ -56,9 +53,9 @@ public class PitchSetFactory {
 
     public PitchSetFactory() {
 
-        this.minPitchNumber = DEFAULT_MIN_PITCH_NUMBER;
-        this.maxPitchNumber = DEFAULT_MAX_PITCH_NUMBER;
-        this.pitchNumber = DEFAULT_PITCH_NUMBER;
+        this.minPitchNumber = DEFAULT_MIN_PITCH_NUMBER.getInt();
+        this.maxPitchNumber = DEFAULT_MAX_PITCH_NUMBER.getInt();
+        this.pitchNumber = DEFAULT_PITCH_NUMBER.getInt();
         this.sharpAllowed = (DEFAULT_SHARP_ALLOWED == ALLOWED);
         this.enharmonicAllowed = (DEFAULT_ENHARMONIC_ALLOWED == ALLOWED);
         this.presetPitches.clear();
@@ -90,7 +87,8 @@ public class PitchSetFactory {
                 .map(e -> (this.enharmonicAllowed) ? e.getValue().ordinal() : e.getValue().ordinalEnharmonic())
                 .distinct()
                 .map(i -> Pitch.values()[i])
-                .limit(this.pitchNumber)
+                //                .limit(this.pitchNumber)
+                .limit(new Random().nextInt(this.maxPitchNumber - this.minPitchNumber + 1) + this.minPitchNumber)
                 .collect(Collectors.toList())
         );
         return ps;

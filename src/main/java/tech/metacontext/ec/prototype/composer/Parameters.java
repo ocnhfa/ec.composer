@@ -33,7 +33,7 @@ public enum Parameters {
      * Score for a mature composition to reach to be conserved.
      */
     //    SCORE_CONSERVE_IF_COMPLETED(0.8),
-    SCORE_CONSERVE_IF_COMPLETED(0.93),
+    SCORE_CONSERVE_IF_COMPLETED(0.94),
     /*
      * MusicMaterial parameters
      */
@@ -41,10 +41,16 @@ public enum Parameters {
     DEFAULT_MIN_DIVISION(1),
     DEFAULT_MAX_DIVISION(4),
     /*
+     * Default parameters for PitchSets.
+     */
+    DEFAULT_MIN_PITCH_NUMBER(1),
+    DEFAULT_MAX_PITCH_NUMBER(7),
+    DEFAULT_PITCH_NUMBER(3),
+    /*
      * Default parameters for RhythmicPoints.
      */
     DEFAULT_MIN_RHYTHMIC_POINTS(0),
-    DEFAULT_MAX_RHYTHMIC_POINTS(16),
+    DEFAULT_MAX_RHYTHMIC_POINTS(6),
     /*
      * Default parameters for RhythmicPoint.
      */
@@ -58,7 +64,7 @@ public enum Parameters {
     /**
      * Chance to reset seed when mutation happens.
      */
-    CHANCE_RESEEDING(0.5),
+    CHANCE_RESEEDING(1.0),
     /**
      * Chance for a mature composition to be elongated.
      */
