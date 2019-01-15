@@ -15,11 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import tech.metacontext.ec.prototype.composer.enums.*;
-import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 import tech.metacontext.ec.prototype.composer.TestCenter;
+import tech.metacontext.ec.prototype.composer.styles.Style;
+import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.composer.materials.*;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
 
 /**
  *
@@ -66,9 +65,9 @@ public class ComposerTest {
         Composition p1, p2;
         do {
             tc.getComposer().compose().evolve();
-            p1 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
-            p2 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue());
-        } while (tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.value.doubleValue()) == null
+            p1 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
+            p2 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
+        } while (tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble()) == null
                 || Objects.equals(p1, p2)
                 || p1.getSize() == p2.getSize());
         Composition result = tc.getComposer().crossover(p1, p2);
@@ -106,26 +105,26 @@ public class ComposerTest {
         assertTrue(tc.getComposer().getAim().isCompleted(result));
     }
 
-    @Test
-    public void testStyleChecker() {
-
-        Consumer<MusicMaterial> init = mm -> {
-            if (mm instanceof NoteRanges) {
-                ((NoteRanges) mm).setHighest(NoteRange.C4);
-                ((NoteRanges) mm).setLowest(NoteRange.C2);
-            }
-        };
-        System.out.println("styleChecker");
-        Stream.generate(() -> sketchNodeFactory.newInstance(init))
-                .limit(100)
-                .map(tc.getComposer().styleChecker::test)
-                .forEach(Assertions::assertTrue);
-        assertFalse(Stream.generate(sketchNodeFactory::newRandomInstance)
-                .limit(100)
-                .peek(System.out::println)
-                //                .peek(n -> n.getMat(MaterialType.NOTE_RANGES).getMaterials().set(0, List.of(NoteRange.C0)))
-                .allMatch(tc.getComposer().styleChecker::test));
-    }
+//    @Test
+//    public void testStyleChecker() {
+//
+//        Consumer<MusicMaterial> init = mm -> {
+//            if (mm instanceof NoteRanges) {
+//                ((NoteRanges) mm).setHighest(NoteRange.C4);
+//                ((NoteRanges) mm).setLowest(NoteRange.C2);
+//            }
+//        };
+//        System.out.println("styleChecker");
+//        Stream.generate(() -> sketchNodeFactory.newInstance(init))
+//                .limit(100)
+//                .map(tc.getComposer().styleChecker::test)
+//                .forEach(Assertions::assertTrue);
+//        assertFalse(Stream.generate(sketchNodeFactory::newRandomInstance)
+//                .limit(100)
+//                .peek(System.out::println)
+//                //                .peek(n -> n.getMat(MaterialType.NOTE_RANGES).getMaterials().set(0, List.of(NoteRange.C0)))
+//                .allMatch(tc.getComposer().styleChecker::test));
+//    }
 
     /**
      * Test of conserve method, of class Composer.

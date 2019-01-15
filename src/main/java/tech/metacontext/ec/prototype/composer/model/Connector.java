@@ -42,7 +42,6 @@ public class Connector extends Individual {
     private static SketchNodeFactory sketchNodeFactory;
 
     private final Map<MaterialType, TransformType> transformTypes;
-    private Predicate<SketchNode> styleChecker;
     private SketchNode previous;
     private SketchNode next;
 
@@ -111,14 +110,6 @@ public class Connector extends Individual {
 
     public void setNext(SketchNode next) {
         this.next = next;
-    }
-
-    public Predicate<SketchNode> getStyleChecker() {
-        return styleChecker;
-    }
-
-    public void setStyleChecker(Predicate<SketchNode> styleChecker) {
-        this.styleChecker = styleChecker;
     }
 
     public Map<MaterialType, TransformType> getTransformTypes() {

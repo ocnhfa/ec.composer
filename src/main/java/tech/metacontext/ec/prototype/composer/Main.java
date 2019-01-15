@@ -139,7 +139,9 @@ public class Main {
                     System.out.print("|");
                 }
             }
+            //
             composer.compose().evolve();
+            //
             if (composer.getConservetory().size() > conserved) {
                 System.out.print(composer.getConservetory().size() - conserved);
                 conserved = composer.getConservetory().size();

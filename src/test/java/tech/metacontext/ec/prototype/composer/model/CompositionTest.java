@@ -24,7 +24,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**
  *

@@ -41,7 +41,7 @@ public class ConnectorTest {
 
     @Test
     public void testTransform() {
-        Connector instance = connectorFactory.newConnector(FreeStyle::checker);
+        Connector instance = connectorFactory.newConnector();
         instance.addTransformType(DYNAMICS, TransformType.MoveForward);
         instance.addTransformType(NOTE_RANGES, TransformType.MoveForward);
         instance.addTransformType(PITCH_SETS, TransformType.MoveForward);
@@ -51,7 +51,7 @@ public class ConnectorTest {
         instance.transform();
         System.out.println(instance.getNext());
         System.out.println("----------------------------------------------");
-        Connector instance2 = connectorFactory.newConnector(FreeStyle::checker);
+        Connector instance2 = connectorFactory.newConnector();
         instance2.addTransformType(DYNAMICS, TransformType.MoveBackward);
         instance2.addTransformType(NOTE_RANGES, TransformType.MoveBackward);
         instance2.addTransformType(PITCH_SETS, TransformType.MoveBackward);

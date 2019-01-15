@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,8 +25,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
-import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 
 /**
  *

@@ -78,8 +78,6 @@ public class Composer extends Population<Composition> {
 
     private final Map<Composition, Integer> conservetory;
 
-    public Predicate<SketchNode> styleChecker;
-
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
     public static final int RENDERTYPE_SCATTERPLOT = 0,
             RENDERTYPE_AVERAGELINECHART = 1,
@@ -128,8 +126,6 @@ public class Composer extends Population<Composition> {
         this.size = size;
         this.aim = aim;
         this.styles = new ArrayList<>(Arrays.asList(styles));
-        this.styleChecker = (node) -> this.styles.stream()
-                .allMatch(s -> s.qualifySketchNode(node));
         this.conservetory = new HashMap<>();
         this.init = mm -> {
             for (Style style : styles) {
@@ -264,12 +260,12 @@ public class Composer extends Population<Composition> {
         switch (type) {
             case Alteration:
                 mutant.getConnectors().set(selected,
-                        connectorfactory.newConnector(this.styleChecker));
+                        connectorfactory.newConnector());
                 break;
             case Insertion:
                 if (!this.getAim().isCompleted(origin)) {
                     mutant.getConnectors().add(selected,
-                            connectorfactory.newConnector(this.styleChecker));
+                            connectorfactory.newConnector());
                     break;
                 }
                 type = Deletion;

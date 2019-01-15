@@ -54,7 +54,9 @@ public class UnaccompaniedCello extends Style {
         var instance = new UnaccompaniedCello();
         Stream.generate(() -> sketchnode_factory.newInstance(instance::matInitializer))
                 .limit(50)
-                .peek(node -> System.out.print(node.getMat(MaterialType.NOTE_RANGES)))
+                .peek(node -> System.out.println(//node.getMat(MaterialType.NOTE_RANGES) + "\n" + 
+                node.getMat(MaterialType.PITCH_SETS)
+                + "\n" + node.getMat(MaterialType.RHYTHMIC_POINTS)))
                 .map(instance::qualifySketchNode)
                 .forEach(System.out::println);
     }
@@ -81,6 +83,7 @@ public class UnaccompaniedCello extends Style {
                 if (ps.getMaterials().get(i).size() > rp.getMaterials().get(i) * 2) {
                     return false;
                 }
+                System.out.println("ps.getMaterials().get(i).size() > rp.getMaterials().get(i) * 2 == false");
             }
         }
         return inrange && chance;

@@ -18,14 +18,13 @@ package tech.metacontext.ec.prototype.composer.factory;
 import tech.metacontext.ec.prototype.abs.Factory;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
+import tech.metacontext.ec.prototype.composer.materials.*;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
-import tech.metacontext.ec.prototype.composer.materials.Dynamics;
 
 /**
  *
@@ -37,7 +36,7 @@ public class SketchNodeFactory implements Factory<SketchNode> {
 
         var instance = SketchNodeFactory.getInstance();
         System.out.println(instance.newInstance((MusicMaterial mm) -> {
-            mm.setDivision(4);
+            mm.setDivision(2);
             if (mm instanceof Dynamics) {
                 ((Dynamics) mm).setLowestIntensity(Intensity.ppp);
                 ((Dynamics) mm).setHighestIntensity(Intensity.fff);

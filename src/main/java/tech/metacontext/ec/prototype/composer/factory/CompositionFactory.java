@@ -24,11 +24,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
@@ -75,8 +71,7 @@ public class CompositionFactory implements Factory<Composition> {
     public Composition newInstance() {
 
         Composition newInstance = new Composition(composer);
-        Connector conn = connectorFactory.newConnectorWithSeed(
-                composer.styleChecker, composer.getInit());
+        Connector conn = connectorFactory.newConnectorWithSeed(composer.getInit());
         newInstance.addConnector(conn);
         newInstance.setSeed(conn.getPrevious());
         return newInstance;
@@ -102,7 +97,8 @@ public class CompositionFactory implements Factory<Composition> {
         dupe.resetSeed(dupe.getConnectors().get(0).getPrevious());
         dupe.getRenderedChecked("Composition::resetSeed");
         dupe.updateEval();
-        assert (origin.getEval().equals(dupe.getEval()));
+        assert origin.getEval().equals(dupe.getEval()) :
+                "unequal: " + origin.getEval() + " vs. " + dupe.getEval();
         return dupe;
     }
 

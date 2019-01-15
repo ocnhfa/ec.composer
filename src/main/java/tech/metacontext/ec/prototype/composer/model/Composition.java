@@ -27,12 +27,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -110,7 +108,7 @@ public class Composition extends Individual<CompositionEval> {
 
     public void elongate() {
 
-        this.addConnector(connectorFactory.newConnector(composer.styleChecker));
+        this.addConnector(connectorFactory.newConnector());
     }
 
     public void addConnector(Connector connector) {

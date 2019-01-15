@@ -74,7 +74,8 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
     public RhythmicPoints generate() {
 
         this.setMaterials(
-                Stream.generate(() -> new Random().nextInt(this.maxPoints - this.minPoints + 1) + this.minPoints)
+                Stream.generate(()
+                        -> new Random().nextInt(this.maxPoints - this.minPoints + 1) + this.minPoints)
                         .limit(this.getDivision())
                         .collect(Collectors.toList())
         );
@@ -131,7 +132,8 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    int o = Math.max(this.getMaterials().get(i) - 1, 0);
+                    int o = Math.max(this.getMaterials().get(i) - 1,
+                            this.minPoints);
                     this.getMaterials().set(i, o);
                 });
         return this;
@@ -139,7 +141,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> {
 
     @Override
     public String toString() {
-        
+
         return this.getMaterials().toString();
     }
 

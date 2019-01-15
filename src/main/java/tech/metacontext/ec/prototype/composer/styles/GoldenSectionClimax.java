@@ -74,12 +74,6 @@ public class GoldenSectionClimax extends Style {
                             .mapToObj(gsc.getClimaxIndexes()::get)
                             .forEach(System.out::println);
                 });
-
-//        Stream.generate(() -> SketchNodeFactory.getInstance().newInstance(composer.styleChecker))
-//                .limit(50)
-//                .peek(System.out::println)
-//                .map(gsc::climaxIndex)
-//                .forEach(System.out::println);
     }
 
     public static final double RATIO = 1.6180339887498948482;
@@ -171,13 +165,14 @@ public class GoldenSectionClimax extends Style {
                     mti = ((PitchSets) mm).getIntensityIndex();
                     break;
                 case RHYTHMIC_POINTS:
-                    mti = ((RhythmicPoints) mm).getAvgIntensityIndex(mat
-                            -> 1.0 * (mat - ((RhythmicPoints) mm).getMin())
-                            / ((RhythmicPoints) mm).getMax() - ((RhythmicPoints) mm).getMin());
+                    var rp = (RhythmicPoints) mm;
+                    mti = rp.getAvgIntensityIndex(mat
+                            -> 1.0 * (mat - rp.getMin()) / (rp.getMax() - rp.getMin()));
                     break;
                 default:
             }
-            assert (mti >= 0.0 && mti <= 1.0);
+            assert (mti >= 0.0 && mti <= 1.0) :
+                    "mti not in range: " + mt + " = " + mti + "\n" + node;
 //            System.out.printf("%s:%.5f ", mm, mti);
             index.add(mti);
         });

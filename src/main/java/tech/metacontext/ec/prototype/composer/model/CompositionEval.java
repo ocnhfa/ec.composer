@@ -15,14 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *
@@ -86,6 +84,12 @@ public class CompositionEval {
         }
         return this.scores.entrySet().stream()
                 .allMatch(e -> other.scores.get(e.getKey()).equals(e.getValue()));
+    }
+
+    @Override
+    public String toString() {
+
+        return "CompositionEval{" + "scores=" + scores + '}';
     }
 
     /*
