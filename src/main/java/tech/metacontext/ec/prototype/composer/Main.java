@@ -20,8 +20,6 @@ import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.model.*;
 import tech.metacontext.ec.prototype.composer.styles.*;
 import tech.metacontext.ec.prototype.render.LineChart_AWT;
-import java.util.function.ToDoubleBiFunction;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
@@ -42,7 +40,7 @@ public class Main {
 
         // 決定作品數量及演進世代
         int POP_SIZE = 100;
-        int SELECTED_SIZE = 0;
+        int SELECTED_SIZE = 5;
         int GENERATION = 300;
 
         Main main = new Main(

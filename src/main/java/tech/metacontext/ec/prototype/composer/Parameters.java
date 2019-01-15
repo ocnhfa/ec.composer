@@ -43,9 +43,9 @@ public enum Parameters {
     /*
      * Default parameters for PitchSets.
      */
-    DEFAULT_MIN_PITCH_NUMBER(1),
-    DEFAULT_MAX_PITCH_NUMBER(7),
     DEFAULT_PITCH_NUMBER(3),
+    DEFAULT_MIN_PITCH_NUMBER(0),
+    DEFAULT_MAX_PITCH_NUMBER(7),
     /*
      * Default parameters for RhythmicPoints.
      */

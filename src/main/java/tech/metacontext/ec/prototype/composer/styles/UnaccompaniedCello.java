@@ -23,9 +23,12 @@ import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.NoteRanges;
+import tech.metacontext.ec.prototype.composer.materials.PitchSets;
+import tech.metacontext.ec.prototype.composer.materials.RhythmicPoints;
 
 /**
  *
@@ -70,6 +73,16 @@ public class UnaccompaniedCello extends Style {
                         .mapToDouble(list -> list.stream().mapToDouble(RANGE::get).average().getAsDouble())
                         .average().getAsDouble() > Math.random()
                 : false;
+        PitchSets ps = (PitchSets) sketchNode.getMat(MaterialType.PITCH_SETS);
+        RhythmicPoints rp = (RhythmicPoints) sketchNode.getMat(MaterialType.RHYTHMIC_POINTS);
+
+        if (ps.getDivision() == rp.getDivision()) {
+            for (var i = 0; i < ps.getDivision(); i++) {
+                if (ps.getMaterials().get(i).size() > rp.getMaterials().get(i) * 2) {
+                    return false;
+                }
+            }
+        }
         return inrange && chance;
     }
 
@@ -94,11 +107,11 @@ public class UnaccompaniedCello extends Style {
     }
 
     @Override
-    public <M extends MusicMaterial> void matInitializer(M m) {
+    public <M extends MusicMaterial> void matInitializer(M mat) {
 
-        if (m instanceof NoteRanges) {
-            ((NoteRanges) m).setHighest(RANGE.keySet().stream().max(NoteRange::compareTo).get());
-            ((NoteRanges) m).setLowest(RANGE.keySet().stream().min(NoteRange::compareTo).get());
+        if (mat instanceof NoteRanges) {
+            ((NoteRanges) mat).setHighest(RANGE.keySet().stream().max(NoteRange::compareTo).get());
+            ((NoteRanges) mat).setLowest(RANGE.keySet().stream().min(NoteRange::compareTo).get());
         }
     }
 }
