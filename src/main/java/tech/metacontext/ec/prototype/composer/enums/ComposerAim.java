@@ -15,13 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
+import java.io.Serializable;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 
 /**
  *
  * @author Jonathan
  */
-public enum ComposerAim {
+public enum ComposerAim implements Serializable {
     Phrase(8),
     Section(16),
     Movement(32),

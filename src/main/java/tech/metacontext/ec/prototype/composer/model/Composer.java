@@ -43,6 +43,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -54,7 +55,7 @@ import org.jfree.chart.renderer.category.ScatterRenderer;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Composer extends Population<Composition> {
+public class Composer extends Population<Composition> implements Serializable {
 
     public static void main(String[] args) throws Exception {
 
@@ -64,7 +65,7 @@ public class Composer extends Population<Composition> {
 //        main.getComposer().draw(DRAWTYPE_AVERAGELINECHART);
         var archive = new ArrayList<List<Composition>>();
         Path folder = Path.of(SER_PATH, "90bc28ac-2056-4911-a32e-b5ce41e8497b");
-        
+
     }
 
     private static CompositionFactory compositionFactory;
@@ -155,12 +156,16 @@ public class Composer extends Population<Composition> {
     public void readArchive() {
 
         this.readArchive(Path.of(SER_PATH, this.getId()));
+        this.getArchive().stream()
+                .forEach(list
+                        -> list.stream()
+                        .forEach(Composition::updateEval));
     }
 
     public Composer sketch() {
 
 //        this.archive(compositionFactory);
-        this.archive(Path.of(SER_PATH, this.getId(), "gen_" + this.getGenCount()));
+        archive(Path.of(SER_PATH, this.getId(), "" + this.getGenCount()), this.getPopulation());
 
         var num_elongated = this.getPopulation().stream()
                 .parallel()
@@ -437,11 +442,20 @@ public class Composer extends Population<Composition> {
     public void drawCombinedChart() {
 
         var chart = new CombinedChart_AWT("Composer " + this.getId());
+        var list = new ArrayList<Composition>();
         var avgs = IntStream.range(0, this.getGenCount())
                 .boxed()
+                .peek(i -> {
+                    list.clear();
+                    list.addAll(this.getArchive().get(i));
+                    list.addAll(this.conservetory.entrySet().stream()
+                            .filter(e -> e.getValue().equals(i))
+                            .map(e -> e.getKey())
+                            .collect(Collectors.toList()));
+                })
                 .collect(Collectors.toMap(
                         Function.identity(),
-                        i -> this.getArchive().get(i).stream()
+                        i -> list.stream()
                                 /*...*/.mapToDouble(this::getMinScore)
                                 /*...*/.filter(score -> score > 0.0)
                                 /*...*/.average().orElse(0.0)));

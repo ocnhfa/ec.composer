@@ -15,6 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
 import tech.metacontext.ec.prototype.composer.factory.CompositionFactory;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.composer.Settings;
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 
@@ -40,6 +44,15 @@ public class CompositionTest {
         tc = TestCenter.getInstance();
         compositionFactory = CompositionFactory.getInstance(tc.getComposer());
         sketchNodeFactory = SketchNodeFactory.getInstance();
+    }
+
+    @Test
+    public void serialization() {
+
+        tc.getComposer().readArchive();
+        System.out.println("archive size = " + tc.getComposer().getArchive().size());
+        System.out.println(tc.getComposer().getArchive()
+                .get(tc.getComposer().getArchive().size() - 1));
     }
 
     /**

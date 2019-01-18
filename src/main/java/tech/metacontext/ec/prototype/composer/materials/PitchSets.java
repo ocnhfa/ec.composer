@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.io.Serializable;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
@@ -33,14 +34,14 @@ import java.util.stream.Stream;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class PitchSets extends MusicMaterial<List<Pitch>> {
+public class PitchSets extends MusicMaterial<List<Pitch>> implements Serializable {
 
     public static final int SHARP_ALLOWED = 1, SHARP_NOT_ALLOWED = 0;
     public static final int DEFAULT_ENHARMONIC_ALLOWED = SHARP_NOT_ALLOWED;
     public static final int DEFAULT_SHARP_ALLOWED = SHARP_ALLOWED;
 
     private int commonTone = 0;
-    public PitchSetFactory factory;
+    public transient PitchSetFactory factory;
 
     public static void main(String[] args) {
 

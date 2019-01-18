@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
@@ -28,7 +29,7 @@ import java.util.stream.IntStream;
  *
  * @author Jonathan
  */
-public class NoteRanges extends MusicMaterial<List<NoteRange>> {
+public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serializable {
 
     private NoteRange lowestRange;
     private NoteRange highestRange;

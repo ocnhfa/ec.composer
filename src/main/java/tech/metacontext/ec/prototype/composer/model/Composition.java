@@ -70,7 +70,7 @@ public class Composition extends Individual<CompositionEval> implements Serializ
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
-    private Composer composer;
+    private static Composer composer;
 
     /**
      * Constructor with id specified.

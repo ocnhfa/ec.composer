@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ import static tech.metacontext.ec.prototype.composer.Parameters.*;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class RhythmicPoints extends MusicMaterial<Integer> {
+public class RhythmicPoints extends MusicMaterial<Integer> implements Serializable {
 
     private int minPoints, maxPoints;
 

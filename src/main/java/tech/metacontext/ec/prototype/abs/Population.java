@@ -100,8 +100,9 @@ public abstract class Population<E extends Individual> {
                     this.getGenCount()});
     }
 
-    public void archive(Path folder) {
+    public static void archive(Path folder, List<? extends Individual> population) {
 
+        _logger.log(Level.INFO, "Archiving, folder = {0}", folder.toString());
         if (!Files.exists(folder) || !Files.isDirectory(folder)) {
             try {
                 Files.createDirectories(folder);
@@ -109,12 +110,12 @@ public abstract class Population<E extends Individual> {
                 _logger.log(Level.SEVERE, "Error when creating folder {0}", folder.toString());
             }
         }
-        this.getPopulation().stream()
-                .forEach(i -> {
-                    var f = folder.resolve(i.getId() + ".ser");
+        population.stream()
+                .forEach(idv -> {
+                    var f = folder.resolve(idv.getId() + ".ser");
                     try (var fileOut = new FileOutputStream(f.toFile());
                             var out = new ObjectOutputStream(fileOut);) {
-                        out.writeObject(i);
+                        out.writeObject(idv);
                         _logger.log(Level.INFO, "Serialized data is saved in {0}", f.toString());
                     } catch (Exception e) {
                         _logger.log(Level.SEVERE, "Error when serializing {0}", f.toString());
@@ -124,14 +125,16 @@ public abstract class Population<E extends Individual> {
 
     public void readArchive(Path folder) {
 
+//        _logger.log(Level.INFO, "Reading archive, folder = {0}", folder.toString());
+        System.out.println("Reading archive, folder = " + folder.toString());
         if (Files.exists(folder) && Files.isDirectory(folder)) {
             this.archive.clear();
             try {
                 Files.walk(folder, 1)
-                        .filter(f -> f.startsWith("gen_"))
+                        .skip(1)
                         .sorted((f1, f2)
-                                -> Integer.valueOf(f1.toString().split("gen_")[1])
-                                .compareTo(Integer.valueOf(f2.toString().split("gen_")[1])))
+                                -> Integer.valueOf(f1.toFile().getName())
+                                .compareTo(Integer.valueOf(f2.toFile().getName())))
                         .forEach(this::readIndividual);
             } catch (IOException ex) {
                 _logger.log(Level.SEVERE, "Error when reading Archive.");
@@ -141,14 +144,16 @@ public abstract class Population<E extends Individual> {
 
     public void readIndividual(Path location) {
 
-        List generation = new ArrayList<>();
+        _logger.log(Level.INFO, "Reading Individual. location = {0}", location.toString());
+        List<E> generation = new ArrayList<>();
         try {
-            Files.walk(location)
-                    .filter(l -> l.endsWith(".ser"))
+            Files.walk(location, 1)
+                    .filter(l -> l.toString().endsWith(".ser"))
+                    .peek(path -> _logger.log(Level.INFO, "Reading object: {0}", path))
                     .forEach(path -> {
-                        try (var fileInputStream = new FileInputStream(path.toFile());
-                                var objectInputStream = new ObjectInputStream(fileInputStream);) {
-                            E i = (E) objectInputStream.readObject();
+                        try (var fis = new FileInputStream(path.toFile());
+                                var ois = new ObjectInputStream(fis);) {
+                            E i = (E) ois.readObject();
                             generation.add(i);
                         } catch (Exception ex) {
                             Logger.getLogger(Population.class.getName()).log(Level.SEVERE, null, ex);

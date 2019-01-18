@@ -55,6 +55,7 @@ public class TestCenter {
         try {
             this.m = new Main(PRESET_POPULATION_SIZE, GOAL_CONSERVATORY_SIZE,
                     GOAL_GENERATION, THRESHOLD, CONSERVE_SCORE, LogState.DISABLED);
+            this.m.getComposer().readArchive();
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }

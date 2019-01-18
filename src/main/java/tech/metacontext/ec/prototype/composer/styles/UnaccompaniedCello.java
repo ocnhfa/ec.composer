@@ -23,7 +23,6 @@ import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
 import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.materials.NoteRanges;

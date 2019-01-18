@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
  *
  * @author Jonathan
  */
-public class Dynamics extends MusicMaterial<Intensity> {
+public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
 
     private Intensity lowestIntensity;
     private Intensity highestIntensity;
