@@ -23,6 +23,7 @@ import static tech.metacontext.ec.prototype.composer.Settings.*;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +41,7 @@ import java.util.stream.IntStream;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class Composition extends Individual<CompositionEval> {
+public class Composition extends Individual<CompositionEval> implements Serializable {
 
     public static void main(String[] args) throws Exception {
         Main main = new Main(100, 1, 100, LogState.TEST);
@@ -76,7 +77,6 @@ public class Composition extends Individual<CompositionEval> {
      *
      * @param composer
      * @param id
-     * @param styles
      */
     public Composition(Composer composer, String id) {
 
@@ -260,7 +260,7 @@ public class Composition extends Individual<CompositionEval> {
 //                this.rendered.set(0, seed);
 //            } else {
 //                 Logger.getLogger(composer_id).warning("Rendered size mismatch of missing seed, rerendering.");
-//                this.render();
+//                this.draw();
 //            }
 //        }
     }

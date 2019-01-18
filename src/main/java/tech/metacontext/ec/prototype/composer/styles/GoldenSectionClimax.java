@@ -45,7 +45,7 @@ public class GoldenSectionClimax extends Style {
                 gsc);
         DoubleSummaryStatistics summary;
         do {
-            composer.compose().evolve();
+            composer.sketch().evolve();
             summary = composer.getPopulation().stream()
                     .peek(c -> c.getRenderedChecked(null))
                     .mapToDouble(c -> c.getScore(gsc))

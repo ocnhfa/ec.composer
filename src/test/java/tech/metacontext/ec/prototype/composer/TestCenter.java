@@ -39,7 +39,7 @@ public class TestCenter {
     public static void main(String[] args) {
 
         var tc = TestCenter.getInstance();
-        tc.getComposer().renderCombinedChart();
+        tc.getComposer().drawCombinedChart();
     }
 
     public static synchronized TestCenter getInstance() {
@@ -58,8 +58,8 @@ public class TestCenter {
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         }
-//        composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
-//        composer.render(Composer.RENDERTYPE_SCATTERPLOT);
+//        composer.draw(Composer.RENDERTYPE_AVERAGELINECHART);
+//        composer.draw(Composer.RENDERTYPE_SCATTERPLOT);
     }
 
     public Composer getComposer() {

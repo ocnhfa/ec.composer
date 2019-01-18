@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.enums.MaterialType;
@@ -28,7 +29,7 @@ import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class SketchNode extends Individual {
+public class SketchNode extends Individual implements Serializable {
 
     public static void main(String[] args) {
 

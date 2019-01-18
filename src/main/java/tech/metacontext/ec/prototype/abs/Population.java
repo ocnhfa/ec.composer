@@ -15,6 +15,13 @@
  */
 package tech.metacontext.ec.prototype.abs;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +36,8 @@ import java.util.stream.Collectors;
  * @param <E>
  */
 public abstract class Population<E extends Individual> {
+
+    protected static Logger _logger;
 
     private final UUID id;
     private List<E> population;
@@ -49,7 +58,7 @@ public abstract class Population<E extends Individual> {
      */
     abstract public void evolve();
 
-    abstract public void render(int type);
+    abstract public void draw(int type);
 
     /**
      * Randomly select an Individual from subset selected with a criteria and a
@@ -84,6 +93,71 @@ public abstract class Population<E extends Individual> {
         this.archive.add(this.population.stream()
                 .map(factory::forArchiving)
                 .collect(Collectors.toList()));
+        _logger.log(Level.INFO,
+                "{0} Individuals archived as Generation {1}.",
+                new Object[]{
+                    this.getArchive().get(this.getGenCount()).size(),
+                    this.getGenCount()});
+    }
+
+    public void archive(Path folder) {
+
+        if (!Files.exists(folder) || !Files.isDirectory(folder)) {
+            try {
+                Files.createDirectories(folder);
+            } catch (IOException e) {
+                _logger.log(Level.SEVERE, "Error when creating folder {0}", folder.toString());
+            }
+        }
+        this.getPopulation().stream()
+                .forEach(i -> {
+                    var f = folder.resolve(i.getId() + ".ser");
+                    try (var fileOut = new FileOutputStream(f.toFile());
+                            var out = new ObjectOutputStream(fileOut);) {
+                        out.writeObject(i);
+                        _logger.log(Level.INFO, "Serialized data is saved in {0}", f.toString());
+                    } catch (Exception e) {
+                        _logger.log(Level.SEVERE, "Error when serializing {0}", f.toString());
+                    }
+                });
+    }
+
+    public void readArchive(Path folder) {
+
+        if (Files.exists(folder) && Files.isDirectory(folder)) {
+            this.archive.clear();
+            try {
+                Files.walk(folder, 1)
+                        .filter(f -> f.startsWith("gen_"))
+                        .sorted((f1, f2)
+                                -> Integer.valueOf(f1.toString().split("gen_")[1])
+                                .compareTo(Integer.valueOf(f2.toString().split("gen_")[1])))
+                        .forEach(this::readIndividual);
+            } catch (IOException ex) {
+                _logger.log(Level.SEVERE, "Error when reading Archive.");
+            }
+        }
+    }
+
+    public void readIndividual(Path location) {
+
+        List generation = new ArrayList<>();
+        try {
+            Files.walk(location)
+                    .filter(l -> l.endsWith(".ser"))
+                    .forEach(path -> {
+                        try (var fileInputStream = new FileInputStream(path.toFile());
+                                var objectInputStream = new ObjectInputStream(fileInputStream);) {
+                            E i = (E) objectInputStream.readObject();
+                            generation.add(i);
+                        } catch (Exception ex) {
+                            Logger.getLogger(Population.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+        } catch (IOException ex) {
+            Logger.getLogger(Population.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.archive.add(generation);
     }
 
     public E copyInstance(E e) {
@@ -91,7 +165,8 @@ public abstract class Population<E extends Individual> {
         try {
             return (E) e.getClass().getDeclaredConstructor(e.getClass()).newInstance(e);
         } catch (Exception ex) {
-            Logger.getLogger(Population.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Population.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

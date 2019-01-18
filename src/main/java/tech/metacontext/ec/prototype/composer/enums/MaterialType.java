@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 import tech.metacontext.ec.prototype.composer.ex.InstantiationFailedException;
 import tech.metacontext.ec.prototype.composer.materials.*;
@@ -23,7 +24,7 @@ import tech.metacontext.ec.prototype.composer.materials.*;
  *
  * @author Jonathan
  */
-public enum MaterialType {
+public enum MaterialType implements Serializable{
 
     DYNAMICS(Dynamics.class),
     PITCH_SETS(PitchSets.class),

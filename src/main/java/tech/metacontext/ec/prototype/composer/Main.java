@@ -40,8 +40,8 @@ public class Main {
 
         // 決定作品數量及演進世代
         int POP_SIZE = 100;
-        int SELECTED_SIZE = 5;
-        int GENERATION = 300;
+        int SELECTED_SIZE = 1;
+        int GENERATION = 0;
 
         Main main = new Main(
                 POP_SIZE,
@@ -50,8 +50,8 @@ public class Main {
                 LogState.DEFAULT);
 //                LogState.DISABLED);
 
-//        main.composer.render(Composer.RENDERTYPE_AVERAGELINECHART);
-        main.composer.render(Composer.RENDERTYPE_COMBINEDCHART);
+//        main.composer.draw(Composer.DRAWTYPE_AVERAGELINECHART);
+        main.composer.draw(Composer.DRAWTYPE_COMBINEDCHART);
         System.out.println(header("Persisting Conservatory"));
         main.composer.persistAll();
 
@@ -140,7 +140,7 @@ public class Main {
                 }
             }
             //
-            composer.compose().evolve();
+            composer.sketch().evolve();
             //
             if (composer.getConservetory().size() > conserved) {
                 System.out.print(composer.getConservetory().size() - conserved);
@@ -153,6 +153,10 @@ public class Main {
         System.out.println(" (" + composer.getGenCount() + ")");
 
         System.out.println(header("Dumping Archive"));
+
+        if (composer.getArchive().isEmpty()) {
+            composer.readArchive();
+        }
         IntStream.range(0, composer.getGenCount())
                 .mapToObj(i -> String.format("%3d >> ", i)
                 + Composer.getSummary(composer.getArchive().get(i)))

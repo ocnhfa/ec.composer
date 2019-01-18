@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
+import java.io.Serializable;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
@@ -23,7 +24,7 @@ import tech.metacontext.ec.prototype.composer.model.SketchNode;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public abstract class Style {
+public abstract class Style implements Serializable {
 
     /**
      * Qualify a newly produced SketchNode. This function should only be called

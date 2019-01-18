@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
@@ -26,7 +27,7 @@ import tech.metacontext.ec.prototype.composer.enums.TransformType;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  * @param <E>
  */
-public abstract class MusicMaterial<E> {
+public abstract class MusicMaterial<E> implements Serializable {
 
     private int division;
     private List<E> materials;

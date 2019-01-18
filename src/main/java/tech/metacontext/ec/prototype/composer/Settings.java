@@ -35,10 +35,12 @@ public class Settings {
         return LocalDateTime.now().toString().replace(":", "-").substring(0, 25);
     }
 
-    public static String logfile = "log/";
+    public static String LOG_PATH = "log/";
 
-    public static String logfile_test = "log/test/";
+    public static String LOG_PATH_TEST = "log/test/";
 
+    public static String SER_PATH = "ser/";
+    
     public static enum LogState {
         DEFAULT, TEST, DISABLED
     }
@@ -56,11 +58,11 @@ public class Settings {
                 logger.setUseParentHandlers(false);
                 return;
             case TEST:
-                file_path = new File(logfile_test);
+                file_path = new File(LOG_PATH_TEST);
                 break;
             case DEFAULT:
             default:
-                file_path = new File(logfile);
+                file_path = new File(LOG_PATH);
         }
         if (!file_path.exists() || !file_path.isDirectory()) {
             file_path.mkdirs();

@@ -64,7 +64,7 @@ public class ComposerTest {
         System.out.println("crossover");
         Composition p1, p2;
         do {
-            tc.getComposer().compose().evolve();
+            tc.getComposer().sketch().evolve();
             p1 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
             p2 = tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble());
         } while (tc.getComposer().select(Composer.SELECT_ONLY_COMPLETED, SELECTION_THRESHOLD.getDouble()) == null
@@ -81,11 +81,11 @@ public class ComposerTest {
     public void testCompose() {
         System.out.println("compose");
         while (tc.getComposer().getConservetory().size() < 2) {
-            tc.getComposer().compose().evolve();
+            tc.getComposer().sketch().evolve();
         }
         System.out.println("--conservatory--");
         System.out.println(tc.getComposer().getConservetory());
-        tc.getComposer().renderScatterPlot();
+        tc.getComposer().drawScatterPlot();
     }
 
     /**
@@ -96,7 +96,7 @@ public class ComposerTest {
         System.out.println("randomSelect");
         int state = Composer.SELECT_ONLY_COMPLETED;
         Composition result = Stream.generate(() -> {
-            tc.getComposer().compose().evolve();
+            tc.getComposer().sketch().evolve();
             return tc.getComposer().select(state, SELECTION_THRESHOLD.value.doubleValue());
         })
                 .filter(Objects::nonNull)
@@ -133,7 +133,7 @@ public class ComposerTest {
     public void testConserve() {
         System.out.println("conserve");
         while (tc.getComposer().getConservetory().size() < 1) {
-            tc.getComposer().compose().evolve();
+            tc.getComposer().sketch().evolve();
         }
         System.out.println(Composer.simpleScoreOutput(tc.getComposer().getConservetory()
                 .keySet().toArray(Composition[]::new)));
@@ -176,14 +176,14 @@ public class ComposerTest {
     }
 
     /**
-     * Test of render method, of class Composer.
+     * Test of draw method, of class Composer.
      */
     @Test
     @Disabled
     public void testRender() {
         System.out.println("render");
         Composer instance = null;
-        tc.getComposer().renderScatterPlot();
+        tc.getComposer().drawScatterPlot();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -383,40 +383,40 @@ public class ComposerTest {
     }
 
     /**
-     * Test of renderCombinedChart method, of class Composer.
+     * Test of drawCombinedChart method, of class Composer.
      */
     @Test
     @Disabled
     public void testRenderCombinedChart() {
         System.out.println("renderCombinedChart");
         Composer instance = null;
-        instance.renderCombinedChart();
+        instance.drawCombinedChart();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of renderAvgLineChart method, of class Composer.
+     * Test of drawAvgLineChart method, of class Composer.
      */
     @Test
     @Disabled
     public void testRenderAvgLineChart() {
         System.out.println("renderAvgLineChart");
         Composer instance = null;
-        instance.renderAvgLineChart();
+        instance.drawAvgLineChart();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of renderScatterPlot method, of class Composer.
+     * Test of drawScatterPlot method, of class Composer.
      */
     @Test
     @Disabled
     public void testRenderScatterPlot() {
         System.out.println("renderScatterPlot");
         Composer instance = null;
-        instance.renderScatterPlot();
+        instance.drawScatterPlot();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

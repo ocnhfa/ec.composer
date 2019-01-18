@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import java.io.Serializable;
 import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public class CompositionEval {
+public class CompositionEval implements Serializable {
 
     private final Map<Style, Double> scores;
 //    private List<Rule> rules;

@@ -43,14 +43,14 @@ public class CompositionTest {
     }
 
     /**
-     * Test of render method, of class Composition.
+     * Test of draw method, of class Composition.
      */
     @Test
     public void testRender() {
 
         System.out.println("render");
         for (int i = 0; i < 1; i++) {
-            tc.getComposer().compose().evolve();
+            tc.getComposer().sketch().evolve();
         }
         Composition instance = tc.getComposer().getPopulation().get(0);
         System.out.println(instance);

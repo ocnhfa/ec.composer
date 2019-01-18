@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.abs;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,7 +23,7 @@ import java.util.UUID;
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
-public abstract class Individual<E> {
+public abstract class Individual<E> implements Serializable {
 
     private final String id;
     private E eval;

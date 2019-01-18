@@ -45,7 +45,7 @@ public class CompositionFactory implements Factory<Composition> {
         var instance = CompositionFactory.getInstance(composer);
         var composition = instance.newInstance();
         do {
-            composer.compose().evolve();
+            composer.sketch().evolve();
             composition.elongate();
         } while (!composer.getAim().isCompleted(composition));
         composition.getRenderedChecked(null);

@@ -43,6 +43,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
@@ -57,13 +58,14 @@ public class Composer extends Population<Composition> {
 
     public static void main(String[] args) throws Exception {
 
-        Main main = new Main(50, 2, 0, LogState.TEST);
-        main.getComposer().render(RENDERTYPE_COMBINEDCHART);
-        main.getComposer().render(RENDERTYPE_SCATTERPLOT);
-        main.getComposer().render(RENDERTYPE_AVERAGELINECHART);
+//        Main main = new Main(50, 2, 0, LogState.TEST);
+//        main.getComposer().draw(DRAWTYPE_COMBINEDCHART);
+//        main.getComposer().draw(DRAWTYPE_SCATTERPLOT);
+//        main.getComposer().draw(DRAWTYPE_AVERAGELINECHART);
+        var archive = new ArrayList<List<Composition>>();
+        Path folder = Path.of(SER_PATH, "90bc28ac-2056-4911-a32e-b5ce41e8497b");
+        
     }
-
-    private static Logger _logger;
 
     private static CompositionFactory compositionFactory;
     private static ConnectorFactory connectorfactory;
@@ -79,9 +81,9 @@ public class Composer extends Population<Composition> {
     private final Map<Composition, Integer> conservetory;
 
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
-    public static final int RENDERTYPE_SCATTERPLOT = 0,
-            RENDERTYPE_AVERAGELINECHART = 1,
-            RENDERTYPE_COMBINEDCHART = 2;
+    public static final int DRAWTYPE_SCATTERPLOT = 0,
+            DRAWTYPE_AVERAGELINECHART = 1,
+            DRAWTYPE_COMBINEDCHART = 2;
 
     /**
      * Constructor.
@@ -150,14 +152,15 @@ public class Composer extends Population<Composition> {
         this.conserve_score = conserve_score;
     }
 
-    public Composer compose() {
+    public void readArchive() {
 
-        this.archive(compositionFactory);
-        _logger.log(Level.INFO,
-                "Compose... {0} Compositions archived as Generation {1}.",
-                new Object[]{
-                    this.getArchive().get(this.getGenCount()).size(),
-                    this.getGenCount()});
+        this.readArchive(Path.of(SER_PATH, this.getId()));
+    }
+
+    public Composer sketch() {
+
+//        this.archive(compositionFactory);
+        this.archive(Path.of(SER_PATH, this.getId(), "gen_" + this.getGenCount()));
 
         var num_elongated = this.getPopulation().stream()
                 .parallel()
@@ -415,23 +418,23 @@ public class Composer extends Population<Composition> {
     }
 
     @Override
-    public void render(int type) {
+    public void draw(int type) {
 
-        _logger.log(Level.INFO, "Rendering Composer {0}", this.getId());
+        _logger.log(Level.INFO, "Drawing Composer {0}", this.getId());
         switch (type) {
             case 0:
-                renderScatterPlot();
+                drawScatterPlot();
                 break;
             case 1:
-                renderAvgLineChart();
+                drawAvgLineChart();
                 break;
             case 2:
-                renderCombinedChart();
+                drawCombinedChart();
                 break;
         }
     }
 
-    public void renderCombinedChart() {
+    public void drawCombinedChart() {
 
         var chart = new CombinedChart_AWT("Composer " + this.getId());
         var avgs = IntStream.range(0, this.getGenCount())
@@ -481,7 +484,7 @@ public class Composer extends Population<Composition> {
         chart.showChartWindow();
     }
 
-    public void renderAvgLineChart() {
+    public void drawAvgLineChart() {
 
         var chart = new LineChart_AWT("Composer " + this.getId());
         LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
@@ -507,7 +510,7 @@ public class Composer extends Population<Composition> {
         chartStat.showChartWindow();
     }
 
-    public void renderScatterPlot() {
+    public void drawScatterPlot() {
 
         var plot = new ScatterPlot_AWT("Composer " + this.getId());
         var popScores = IntStream.range(0, this.getGenCount())
