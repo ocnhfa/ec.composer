@@ -125,20 +125,32 @@ public abstract class Population<E extends Individual> {
 
     public void readArchive(Path folder) {
 
-//        _logger.log(Level.INFO, "Reading archive, folder = {0}", folder.toString());
+        _logger.log(Level.INFO, "Reading archive, folder = {0}", folder.toString());
         System.out.println("Reading archive, folder = " + folder.toString());
         if (Files.exists(folder) && Files.isDirectory(folder)) {
             this.archive.clear();
             try {
                 Files.walk(folder, 1)
-                        .skip(1)
+                        .filter(Population::isInteger)
                         .sorted((f1, f2)
                                 -> Integer.valueOf(f1.toFile().getName())
                                 .compareTo(Integer.valueOf(f2.toFile().getName())))
+                        .peek(f -> System.out.println("Reading generation " + f.getFileName()))
                         .forEach(this::readIndividual);
             } catch (IOException ex) {
-                _logger.log(Level.SEVERE, "Error when reading Archive.");
+                _logger.log(Level.SEVERE, 
+                        "Error when reading Archive, folder = {0}", folder);
             }
+        }
+    }
+
+    public static boolean isInteger(Path path) {
+
+        try {
+            Integer.parseInt(path.toFile().getName());
+            return true;
+        } catch (Exception ex) {
+            return false;
         }
     }
 
@@ -156,7 +168,8 @@ public abstract class Population<E extends Individual> {
                             E i = (E) ois.readObject();
                             generation.add(i);
                         } catch (Exception ex) {
-                            Logger.getLogger(Population.class.getName()).log(Level.SEVERE, null, ex);
+                            _logger.log(Level.SEVERE,
+                                    "Error when reading Individual at {0}", location);
                         }
                     });
         } catch (IOException ex) {

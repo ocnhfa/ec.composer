@@ -39,7 +39,7 @@ public class GoldenSectionClimax extends Style {
     public static void main(String[] args) throws Exception {
 
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
-        var composer = new Composer(100, ComposerAim.Phrase, LogState.TEST,
+        var composer = new Composer(100, ComposerAim.Phrase, LogState.DISABLED,
                 0.9, 0.95,
                 new UnaccompaniedCello(),
                 gsc);
@@ -109,9 +109,8 @@ public class GoldenSectionClimax extends Style {
         this.updateClimaxIndexes(composition);
         double sum = IntStream.range(0, composition.getSize())
                 .mapToDouble(i
-                        //                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
-                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
-                //                .peek(System.out::println)
+//                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
+                -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
                 .sum();
         return (base - sum) / base;
     }
@@ -132,6 +131,7 @@ public class GoldenSectionClimax extends Style {
                 .boxed()
                 .collect(Collectors.toList());
         this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * d));
+//        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d));
     }
 
     public double getStandard(Composition composition, int i) {

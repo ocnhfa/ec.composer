@@ -443,7 +443,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
         var chart = new CombinedChart_AWT("Composer " + this.getId());
         var list = new ArrayList<Composition>();
-        var avgs = IntStream.range(0, this.getGenCount())
+        var avgs = IntStream.range(0, this.getArchive().size())
                 .boxed()
                 .peek(i -> {
                     list.clear();
@@ -462,7 +462,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
         var xys = new HashMap<Integer, List<Double>>();
         var xyc = new HashMap<Integer, List<Double>>();
-        IntStream.range(0, this.getGenCount())
+        IntStream.range(0, this.getArchive().size())
                 .forEach(i -> {
                     xys.put(i, this.getArchive().get(i).stream()
                             .map(this::getMinScore)
@@ -502,8 +502,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
         var chart = new LineChart_AWT("Composer " + this.getId());
         LineChart_AWT chartStat = new LineChart_AWT("Composer " + this.getId());
-
-        IntStream.range(0, this.getGenCount())
+        IntStream.range(0, this.getArchive().size())
                 .forEach(i -> {
                     List<Composition> list = this.getArchive().get(i);
                     List<Double> values = list.stream()
@@ -527,7 +526,7 @@ public class Composer extends Population<Composition> implements Serializable {
     public void drawScatterPlot() {
 
         var plot = new ScatterPlot_AWT("Composer " + this.getId());
-        var popScores = IntStream.range(0, this.getGenCount())
+        var popScores = IntStream.range(0, this.getArchive().size())
                 .mapToObj(i
                         -> this.getArchive().get(i).stream()
                         .map(this::getMinScore).filter(score -> score > 0.0)

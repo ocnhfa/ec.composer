@@ -17,15 +17,12 @@ package tech.metacontext.ec.prototype.composer.model;
 
 import tech.metacontext.ec.prototype.composer.TestCenter;
 import tech.metacontext.ec.prototype.composer.styles.Style;
-import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 import tech.metacontext.ec.prototype.composer.enums.*;
-import tech.metacontext.ec.prototype.composer.materials.*;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.*;
@@ -78,8 +75,8 @@ public class ComposerTest {
      * Test of compose method, of class Composer.
      */
     @Test
-    public void testCompose() {
-        System.out.println("compose");
+    public void testSketch() {
+        System.out.println("sketch");
         while (tc.getComposer().getConservetory().size() < 2) {
             tc.getComposer().sketch().evolve();
         }
@@ -104,27 +101,6 @@ public class ComposerTest {
                 .get();
         assertTrue(tc.getComposer().getAim().isCompleted(result));
     }
-
-//    @Test
-//    public void testStyleChecker() {
-//
-//        Consumer<MusicMaterial> init = mm -> {
-//            if (mm instanceof NoteRanges) {
-//                ((NoteRanges) mm).setHighest(NoteRange.C4);
-//                ((NoteRanges) mm).setLowest(NoteRange.C2);
-//            }
-//        };
-//        System.out.println("styleChecker");
-//        Stream.generate(() -> sketchNodeFactory.newInstance(init))
-//                .limit(100)
-//                .map(tc.getComposer().styleChecker::test)
-//                .forEach(Assertions::assertTrue);
-//        assertFalse(Stream.generate(sketchNodeFactory::newRandomInstance)
-//                .limit(100)
-//                .peek(System.out::println)
-//                //                .peek(n -> n.getMat(MaterialType.NOTE_RANGES).getMaterials().set(0, List.of(NoteRange.C0)))
-//                .allMatch(tc.getComposer().styleChecker::test));
-//    }
 
     /**
      * Test of conserve method, of class Composer.
@@ -171,19 +147,6 @@ public class ComposerTest {
         System.out.println("evolve");
         Composer instance = null;
         tc.getComposer().evolve();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of draw method, of class Composer.
-     */
-    @Test
-    @Disabled
-    public void testRender() {
-        System.out.println("render");
-        Composer instance = null;
-        tc.getComposer().drawScatterPlot();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
