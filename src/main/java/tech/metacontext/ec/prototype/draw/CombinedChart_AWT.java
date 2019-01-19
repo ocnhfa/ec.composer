@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.render;
+package tech.metacontext.ec.prototype.draw;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,13 +67,13 @@ public class CombinedChart_AWT extends ApplicationFrame {
             series2.put(i, series1A.get(i).stream()
                     .mapToDouble(s -> s).average().getAsDouble());
         });
-        double size = 3.0;
+        double size = 4.0;
         double delta = size / 2.0;
         Shape shape = new Ellipse2D.Double(-delta, -delta, size, size);
         var sr1 = new ScatterRenderer();
         var sr2 = new ScatterRenderer();
 
-        sr1.setSeriesPaint(0, Color.GRAY);
+        sr1.setSeriesPaint(0, Color.LIGHT_GRAY);
         sr1.setSeriesShape(0, shape);
         sr2.setSeriesPaint(0, Color.RED);
         sr2.setSeriesShape(0, shape);
@@ -101,7 +100,7 @@ public class CombinedChart_AWT extends ApplicationFrame {
     }
 
     public void addRenderer(String[] series,
-            CategoryItemRenderer[] renderer,
+            CategoryItemRenderer[] renderers,
             Map<Integer, List<Double>>... data) {
 
         IntStream.range(0, data.length).forEach(i -> {
@@ -109,7 +108,7 @@ public class CombinedChart_AWT extends ApplicationFrame {
             data[i].entrySet().forEach(e
                     -> dataset.add(e.getValue(), series[i], e.getKey()));
             plot.setDataset(i, dataset);
-            plot.setRenderer(i, renderer[i]);
+            plot.setRenderer(i, renderers[i]);
         });
     }
 
@@ -127,7 +126,11 @@ public class CombinedChart_AWT extends ApplicationFrame {
     public void createChart(String chartTitle, String xLabel, String yLabel,
             int x, int y, boolean legend) {
 
+        Font largefont = new Font("Dialog", Font.PLAIN, 25);
+        Font smallfont = new Font("Dialog", Font.PLAIN, 20);
         var xAxis = new CategoryAxis(xLabel);
+        xAxis.setLabelFont(largefont);
+        xAxis.setTickLabelFont(smallfont);
         xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
         int count = plot.getCategories().size();
         int filter = (int) Math.pow(10, (int) Math.log10(count));
@@ -136,7 +139,10 @@ public class CombinedChart_AWT extends ApplicationFrame {
                 .mapToObj(i -> plot.getCategories().get(i))
                 .forEach(c -> xAxis.setTickLabelPaint((Comparable) c, new Color(0, 0, 0, 0)));
         plot.setDomainAxis(xAxis);
-        plot.setRangeAxis(new NumberAxis(yLabel));
+        var yAxis = new NumberAxis(yLabel);
+        yAxis.setLabelFont(largefont);
+        yAxis.setTickLabelFont(smallfont);
+        plot.setRangeAxis(yAxis);
         plot.setDatasetRenderingOrder(DatasetRenderingOrder.FORWARD);
         chart = new JFreeChart(plot);
         chart.setTitle(chartTitle);

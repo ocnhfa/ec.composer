@@ -77,11 +77,11 @@ public class ComposerTest {
     @Test
     public void testSketch() {
         System.out.println("sketch");
-        while (tc.getComposer().getConservetory().size() < 2) {
+        while (tc.getComposer().getConservatory().size() < 2) {
             tc.getComposer().sketch().evolve();
         }
         System.out.println("--conservatory--");
-        System.out.println(tc.getComposer().getConservetory());
+        System.out.println(tc.getComposer().getConservatory());
         tc.getComposer().drawScatterPlot();
     }
 
@@ -108,23 +108,23 @@ public class ComposerTest {
     @Test
     public void testConserve() {
         System.out.println("conserve");
-        while (tc.getComposer().getConservetory().size() < 1) {
+        while (tc.getComposer().getConservatory().size() < 1) {
             tc.getComposer().sketch().evolve();
         }
-        System.out.println(Composer.simpleScoreOutput(tc.getComposer().getConservetory()
+        System.out.println(Composer.simpleScoreOutput(tc.getComposer().getConservatory()
                 .keySet().toArray(Composition[]::new)));
-        tc.getComposer().getConservetory().keySet().forEach(c -> {
+        tc.getComposer().getConservatory().keySet().forEach(c -> {
             System.out.println(c.getId_prefix());
             System.out.println(c.getConnectors().size());
             System.out.println(c.getRendered().size());
         });
-//        System.out.println( tc.getComposer().getConservetory().get(0));
-        while (tc.getComposer().getConservetory().size() > 0) {
-            Composition c = tc.getComposer().getConservetory().entrySet().stream()
+//        System.out.println( tc.getComposer().getConservatory().get(0));
+        while (tc.getComposer().getConservatory().size() > 0) {
+            Composition c = tc.getComposer().getConservatory().entrySet().stream()
                     .findFirst()
                     .get()
                     .getKey();
-            tc.getComposer().getConservetory().remove(c);
+            tc.getComposer().getConservatory().remove(c);
             System.out.println(Composer.simpleScoreOutput(c));
             boolean expResult = tc.getComposer().getStyles().stream()
                     .map(c::getScore)
@@ -134,7 +134,7 @@ public class ComposerTest {
             boolean result = tc.getComposer().conserve(c);
             System.out.println("Result = " + result);
             assertEquals(expResult, result);
-            tc.getComposer().getConservetory().remove(c);
+            tc.getComposer().getConservatory().remove(c);
         }
     }
 
@@ -224,15 +224,15 @@ public class ComposerTest {
     }
 
     /**
-     * Test of getConservetory method, of class Composer.
+     * Test of getConservatory method, of class Composer.
      */
     @Test
     @Disabled
-    public void testGetConservetory() {
-        System.out.println("getConservetory");
+    public void testGetConservatory() {
+        System.out.println("getConservatory");
         Composer instance = null;
         List<Composition> expResult = null;
-        Map<Composition, Integer> result = tc.getComposer().getConservetory();
+        Map<Composition, Integer> result = tc.getComposer().getConservatory();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

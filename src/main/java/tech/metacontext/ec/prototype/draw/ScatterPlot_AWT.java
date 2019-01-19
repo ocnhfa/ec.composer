@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.metacontext.ec.prototype.render;
+package tech.metacontext.ec.prototype.draw;
 
 import java.awt.Color;
 import java.awt.Shape;

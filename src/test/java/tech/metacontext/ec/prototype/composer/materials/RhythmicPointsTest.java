@@ -41,7 +41,7 @@ public class RhythmicPointsTest {
                 rp3 = new RhythmicPoints(rp1);
         rp1.setMaterials(rp1.transform(TransformType.Retrograde).getMaterials());
         assertEquals(rp1.toString(), rp2.toString());
-        assertNotEquals(rp1.toString(), rp3.toString());
+        assertEquals(rp1.getMaterials().get(0), rp3.getMaterials().get(rp3.size() - 1));
     }
 
     @Test

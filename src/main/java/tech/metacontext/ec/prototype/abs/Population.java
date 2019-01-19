@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -35,18 +36,31 @@ import java.util.stream.Collectors;
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  * @param <E>
  */
-public abstract class Population<E extends Individual> {
+public abstract class Population<E extends Individual> implements Serializable {
 
-    protected static Logger _logger;
+    private static final long serialVersionUID = 0L;
 
+    private final transient Logger _logger;
     private final UUID id;
     private List<E> population;
-    private final List<List<E>> archive;
+    private final transient List<List<E>> archive;
     private int genCount;
 
     public Population() {
 
-        this.id = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Population(String id) {
+
+        this(UUID.fromString(id));
+
+    }
+
+    public Population(UUID id) {
+
+        this.id = id;
+        _logger = Logger.getLogger(getId());
         this.population = new ArrayList<>();
         this.archive = new ArrayList<>();
         this.genCount = 0;
@@ -100,7 +114,7 @@ public abstract class Population<E extends Individual> {
                     this.getGenCount()});
     }
 
-    public static void archive(Path folder, List<? extends Individual> population) {
+    public void archive(Path folder, List<? extends Individual> population) {
 
         _logger.log(Level.INFO, "Archiving, folder = {0}", folder.toString());
         if (!Files.exists(folder) || !Files.isDirectory(folder)) {
@@ -138,7 +152,7 @@ public abstract class Population<E extends Individual> {
                         .peek(f -> System.out.println("Reading generation " + f.getFileName()))
                         .forEach(this::readIndividual);
             } catch (IOException ex) {
-                _logger.log(Level.SEVERE, 
+                _logger.log(Level.SEVERE,
                         "Error when reading Archive, folder = {0}", folder);
             }
         }
@@ -222,4 +236,7 @@ public abstract class Population<E extends Individual> {
         return this.archive;
     }
 
+    public Logger getLogger() {
+        return this._logger;
+    }
 }

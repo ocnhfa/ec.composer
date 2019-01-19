@@ -15,14 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import static tech.metacontext.ec.prototype.composer.Settings.*;
 import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import tech.metacontext.ec.prototype.composer.model.*;
 import tech.metacontext.ec.prototype.composer.styles.*;
-import tech.metacontext.ec.prototype.render.LineChart_AWT;
+import tech.metacontext.ec.prototype.draw.LineChart_AWT;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
@@ -47,8 +47,8 @@ public class Main {
                 POP_SIZE,
                 SELECTED_SIZE,
                 GENERATION,
-                LogState.DEFAULT);
-//                LogState.DISABLED);
+                LogState.DISABLED);
+                //                LogState.DEFAULT);
 
 //        main.composer.draw(Composer.DRAWTYPE_AVERAGELINECHART);
         main.composer.draw(Composer.DRAWTYPE_COMBINEDCHART);
@@ -57,7 +57,7 @@ public class Main {
 
         var chart = new LineChart_AWT("Composer " + main.composer.getId());
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());
-        main.composer.getConservetory().keySet().stream()
+        main.composer.getConservatory().keySet().stream()
                 .sorted((o1, o2) -> o1.getId().compareTo(o2.getId()))
                 .peek(gsc::updateClimaxIndexes)
                 .forEach(c
@@ -66,7 +66,7 @@ public class Main {
                                 //                                -> chart.addData(gsc.climaxIndex(c.getRendered().get(i)), c.getId_prefix(), "" + i)
                                 -> chart.addData(gsc.getClimaxIndexes().get(i), c.getId_prefix(), "" + i)
                         ));
-        var max = main.composer.getConservetory().keySet().stream()
+        var max = main.composer.getConservatory().keySet().stream()
                 .max(gsc::compareToPeak)
                 .get();
         IntStream.range(0, max.getSize())
@@ -142,15 +142,17 @@ public class Main {
             //
             composer.sketch().evolve();
             //
-            if (composer.getConservetory().size() > conserved) {
-                System.out.print(composer.getConservetory().size() - conserved);
-                conserved = composer.getConservetory().size();
+            if (composer.getConservatory().size() > conserved) {
+                System.out.print(composer.getConservatory().size() - conserved);
+                conserved = composer.getConservatory().size();
             } else {
                 System.out.print(".");
             }
-        } while (composer.getConservetory().size() < goalSize
+        } while (composer.getConservatory().size() < goalSize
                 || composer.getGenCount() < generation);
         System.out.println(" (" + composer.getGenCount() + ")");
+
+        composer.save();
 
         System.out.println(header("Dumping Archive"));
 
@@ -162,7 +164,7 @@ public class Main {
                 + Composer.getSummary(composer.getArchive().get(i)))
                 .forEach(System.out::println);
 
-        composer.getConservetory().keySet().stream()
+        composer.getConservatory().keySet().stream()
                 .peek(c -> System.out.print(Composer.simpleScoreOutput(c) + "\n GSC: "))
                 .map(c -> {
                     var gsc = new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet());

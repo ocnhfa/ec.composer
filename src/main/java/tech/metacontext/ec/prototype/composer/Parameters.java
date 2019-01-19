@@ -32,10 +32,10 @@ public enum Parameters {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-    //    SCORE_CONSERVE_IF_COMPLETED(0.8),
-    SCORE_CONSERVE_IF_COMPLETED(0.94),
+        SCORE_CONSERVE_IF_COMPLETED(0.85),
+//    SCORE_CONSERVE_IF_COMPLETED(0.942),
     /*
-     * MusicMaterial parameters
+     * MusicMaterial parameters.
      */
     DEFAULT_DIVISION(4),
     DEFAULT_MIN_DIVISION(1),
@@ -56,7 +56,7 @@ public enum Parameters {
      */
     DEFAULT_LOWEST_INTENSITY(Intensity.pp.ordinal()),
     DEFAULT_HIGHEST_INTENSITY(Intensity.ff.ordinal()),
-    /*
+    /**
      * Default parameters for NoteRanges.
      */
     DEFAULT_LOWEST_RANGE(NoteRange.C0.ordinal()),
@@ -64,7 +64,7 @@ public enum Parameters {
     /**
      * Chance to reset seed when mutation happens.
      */
-    CHANCE_RESEEDING(0.8),
+    CHANCE_RESEEDING(0.5),
     /**
      * Chance for a mature composition to be elongated.
      */
@@ -74,27 +74,27 @@ public enum Parameters {
      */
     CHANCE_CROSSOVER_IF_COMPLETED(0.6),
     /**
-     * Chance to produce a Total Connecting State
+     * Chance to produce a Total Connecting State.
      */
     CHANCE_TOTAL_CONNECTING_STATE(0.2),
     /**
-     * Chance to preserve when producing a Repetition Transform Type
+     * Chance to preserve when producing a Repetition Transform Type.
      */
     CHANCE_REPETITION(0.2),
     /**
-     * Chance to preserve when producing a MoveForward Transform Type
+     * Chance to preserve when producing a MoveForward Transform Type.
      */
     CHANCE_MOVEFORWARD(0.8),
     /**
-     * Chance to preserve when producing a MoveBackward Transform Type
+     * Chance to preserve when producing a MoveBackward Transform Type.
      */
     CHANCE_MOVEBACKWARD(0.8),
     /**
-     * Chance to preserve when producing a Retrograde Transform Type
+     * Chance to preserve when producing a Retrograde Transform Type.
      */
     CHANCE_RETROGRADE(0.6),
     /**
-     * Chance to preserve when producing a Disconnected Transform Type
+     * Chance to preserve when producing a Disconnected Transform Type.
      */
     CHANCE_DISCONNECTED(1.0);
 

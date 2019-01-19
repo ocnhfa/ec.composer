@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -70,7 +69,7 @@ public class Composition extends Individual<CompositionEval> implements Serializ
     private LinkedList<Connector> connectors;
     private LinkedList<SketchNode> rendered;
     private SketchNode seed;
-    private static Composer composer;
+    private transient Composer composer;
 
     /**
      * Constructor with id specified.
@@ -141,7 +140,7 @@ public class Composition extends Individual<CompositionEval> implements Serializ
 
     public List<SketchNode> getRenderedChecked(String request) {
 
-        Logger.getLogger(composer.getId()).log(Level.INFO,
+        composer.getLogger().log(Level.INFO,
                 "{0}: getRenderedChecked, request from {1}",
                 new Object[]{this.getId_prefix(), request});
         if (this.ifReRenderRequired()) {
@@ -154,19 +153,19 @@ public class Composition extends Individual<CompositionEval> implements Serializ
     public boolean ifReRenderRequired() {
 
         if (this.rendered.isEmpty()) {
-            Logger.getLogger(composer.getId()).log(Level.INFO,
+            composer.getLogger().log(Level.INFO,
                     "Not rendered yet, rendering required for Composition {0}.",
                     this.getId_prefix());
             return true;
         }
         if (!Objects.equals(this.connectors.getFirst().getPrevious(), this.seed)) {
-            Logger.getLogger(composer.getId()).log(Level.INFO,
+            composer.getLogger().log(Level.INFO,
                     "Seed mismatched, rerendering required for Composition {0}.",
                     this.getId_prefix());
             return true;
         }
         if (this.rendered.size() != this.getSize()) {
-            Logger.getLogger(composer.getId()).log(Level.INFO,
+            composer.getLogger().log(Level.INFO,
                     "Size mismatched: {0} to {1}, rerendering required for Composition {2}.", new Object[]{
                         this.rendered.size(),
                         this.getSize(),
@@ -175,7 +174,7 @@ public class Composition extends Individual<CompositionEval> implements Serializ
         }
         if (this.connectors.stream().anyMatch(conn
                 -> Objects.isNull(conn.getPrevious()) || Objects.isNull(conn.getNext()))) {
-            Logger.getLogger(composer.getId()).log(Level.INFO,
+            composer.getLogger().log(Level.INFO,
                     "Connector without connected SketchNode found, rerendering required for Composition {0}.",
                     this.getId_prefix());
             return true;
@@ -187,14 +186,14 @@ public class Composition extends Individual<CompositionEval> implements Serializ
                         this.rendered.get(i)))
                 .findFirst();
         if (mismatchIndex.isPresent()) {
-            Logger.getLogger(composer.getId()).log(Level.INFO,
+            composer.getLogger().log(Level.INFO,
                     "Mismatched SketchNodes at {0}, rerendering required for Composition {1}.",
                     new Object[]{
                         mismatchIndex.getAsInt(),
                         this.getId_prefix()});
             return true;
         }
-        Logger.getLogger(composer.getId()).log(Level.FINE,
+        composer.getLogger().log(Level.FINE,
                 "Rendered list remained consistant, no rerendering required for {0}.",
                 this.getId_prefix());
         return false;
@@ -237,10 +236,10 @@ public class Composition extends Individual<CompositionEval> implements Serializ
             out.write(this.toString());
             out.flush();
         } catch (IOException ex) {
-            Logger.getLogger(composer.getId()).log(Level.SEVERE, "Failed to persist {0}. {1}", new Object[]{
+            composer.getLogger().log(Level.SEVERE, "Failed to persist {0}. {1}", new Object[]{
                 this.getId_prefix(), ex.getMessage()});
         }
-        Logger.getLogger(composer.getId()).log(Level.INFO, "{0} has been persisted to {1}", new Object[]{
+        composer.getLogger().log(Level.INFO, "{0} has been persisted to {1}", new Object[]{
             this.getId_prefix(),
             destination.getFileName()});
         return destination;
@@ -297,11 +296,11 @@ public class Composition extends Individual<CompositionEval> implements Serializ
                 + this.getConnectors().stream()
                         .peek(c -> {
                             if (Objects.isNull(c.getPrevious())) {
-                                Logger.getLogger(composer.getId()).log(Level.WARNING,
+                                composer.getLogger().log(Level.WARNING,
                                         "Null SketchNode found in {0}.getPrevious().", c.getId_prefix());
                             }
                             if (Objects.isNull(c.getNext())) {
-                                Logger.getLogger(composer.getId()).log(Level.WARNING,
+                                composer.getLogger().log(Level.WARNING,
                                         "Null SketchNode found in {0}.getNext().", c.getId_prefix());
                             }
                         })
@@ -341,5 +340,13 @@ public class Composition extends Individual<CompositionEval> implements Serializ
 
     public List<String> getDebug() {
         return debug;
+    }
+
+    public Composer getComposer() {
+        return composer;
+    }
+
+    public void setComposer(Composer composer) {
+        this.composer = composer;
     }
 }

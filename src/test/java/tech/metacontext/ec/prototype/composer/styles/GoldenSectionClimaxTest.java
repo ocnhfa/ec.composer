@@ -38,7 +38,7 @@ public class GoldenSectionClimaxTest {
     public void testClimaxIndex() {
 
         System.out.println("climaxIndex");
-        tc.getComposer().getConservetory().keySet().stream()
+        tc.getComposer().getConservatory().keySet().stream()
                 .flatMap(c -> c.getRendered().stream())
                 .map(instance::climaxIndex)
                 .forEach(System.out::println);
@@ -50,7 +50,7 @@ public class GoldenSectionClimaxTest {
     public void testRateComposition() {
 
         System.out.println("rateComposition");
-        tc.getComposer().getConservetory().keySet().stream()
+        tc.getComposer().getConservatory().keySet().stream()
                 .peek(c -> c.getRenderedChecked(
                 this.getClass().getSimpleName() + "::testRateComposition"))
                 .map(instance::rateComposition)

@@ -51,12 +51,12 @@ public class GoldenSectionClimax extends Style {
                     .mapToDouble(c -> c.getScore(gsc))
                     .summaryStatistics();
             System.out.printf("%.5f ~ %.5f\n", summary.getMin(), summary.getMax());
-//        } while (composer.getConservetory().isEmpty());
+//        } while (composer.getConservatory().isEmpty());
         } while (composer.getPopulation().stream().anyMatch(not(composer.getAim()::isCompleted))
-                || summary.getMax() < 0.95 && composer.getConservetory().isEmpty());
-        (composer.getConservetory().isEmpty()
+                || summary.getMax() < 0.95 && composer.getConservatory().isEmpty());
+        (composer.getConservatory().isEmpty()
                 ? composer.getPopulation()
-                : composer.getConservetory().keySet())
+                : composer.getConservatory().keySet())
                 .stream()
                 .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
                 .peek(gsc::updateClimaxIndexes)
@@ -109,8 +109,8 @@ public class GoldenSectionClimax extends Style {
         this.updateClimaxIndexes(composition);
         double sum = IntStream.range(0, composition.getSize())
                 .mapToDouble(i
-//                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
-                -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
+                        -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)))
+                //                -> Math.abs(climaxIndexes.get(i) - this.standards.get(i)) * this.standards.get(i))
                 .sum();
         return (base - sum) / base;
     }
@@ -130,8 +130,8 @@ public class GoldenSectionClimax extends Style {
                 //                .peek(s -> this.base += s) //.peek(s -> this.base += s * peak)
                 .boxed()
                 .collect(Collectors.toList());
-        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * d));
-//        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d));
+//        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * d));
+        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d));
     }
 
     public double getStandard(Composition composition, int i) {

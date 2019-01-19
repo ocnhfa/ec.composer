@@ -22,6 +22,7 @@ import java.util.UUID;
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
+ * @param <E>
  */
 public abstract class Individual<E> implements Serializable {
 

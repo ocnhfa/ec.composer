@@ -15,15 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import tech.metacontext.ec.prototype.draw.LineChart_AWT;
+import tech.metacontext.ec.prototype.draw.ScatterPlot_AWT;
+import tech.metacontext.ec.prototype.draw.CombinedChart_AWT;
 import tech.metacontext.ec.prototype.abs.Population;
-import tech.metacontext.ec.prototype.render.*;
 import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
 import tech.metacontext.ec.prototype.composer.operations.MutationType;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.styles.*;
 import tech.metacontext.ec.prototype.composer.factory.*;
 import tech.metacontext.ec.prototype.composer.enums.*;
-import tech.metacontext.ec.prototype.composer.Main;
 import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
@@ -37,13 +38,15 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -59,13 +62,15 @@ public class Composer extends Population<Composition> implements Serializable {
 
     public static void main(String[] args) throws Exception {
 
-//        Main main = new Main(50, 2, 0, LogState.TEST);
-//        main.getComposer().draw(DRAWTYPE_COMBINEDCHART);
-//        main.getComposer().draw(DRAWTYPE_SCATTERPLOT);
-//        main.getComposer().draw(DRAWTYPE_AVERAGELINECHART);
-        var archive = new ArrayList<List<Composition>>();
-        Path folder = Path.of(SER_PATH, "90bc28ac-2056-4911-a32e-b5ce41e8497b");
-
+        var id = "82339a62-b72b-4ab3-8fad-797abd0217a4";
+        var path = Path.of(SER_PATH, id, "Composer.ser");
+        Composer composer;
+        try (var fis = Files.newInputStream(path);
+                var ois = new ObjectInputStream(fis)) {
+            composer = (Composer) ois.readObject();
+        }
+        composer.readArchive();
+        composer.draw(DRAWTYPE_COMBINEDCHART);
     }
 
     private static CompositionFactory compositionFactory;
@@ -79,12 +84,32 @@ public class Composer extends Population<Composition> implements Serializable {
     private double conserve_score;
     private Consumer<MusicMaterial> init;
 
-    private final Map<Composition, Integer> conservetory;
+    private final Map<Composition, Integer> conservatory = new HashMap<>();
 
+    public boolean ARCHIVE_TO_DISK = true;
     public static final int SELECT_FROM_ALL = 0, SELECT_ONLY_COMPLETED = 1;
     public static final int DRAWTYPE_SCATTERPLOT = 0,
             DRAWTYPE_AVERAGELINECHART = 1,
             DRAWTYPE_COMBINEDCHART = 2;
+
+    /**
+     * Constructor for loading data from serialized objects.
+     *
+     * @param id
+     * @param size
+     * @param aim
+     * @param logState
+     * @param styles
+     * @throws java.lang.Exception
+     */
+    public Composer(String id, int size, ComposerAim aim, LogState logState,
+            Style... styles) throws Exception {
+
+        super(id);
+        setup(size, aim, logState, styles);
+        this.readArchive();
+        this.setGenCount(this.getArchive().size());
+    }
 
     /**
      * Constructor.
@@ -108,43 +133,14 @@ public class Composer extends Population<Composition> implements Serializable {
             double threshold, double conserve_score, Style... styles)
             throws Exception {
 
-        _logger = Logger.getLogger(getId());
-        setFileHandler(logState, _logger);
-
-        _logger.log(Level.INFO,
-                "Initilizing Composer [{0}]", this.getId());
-
-        _logger.log(Level.INFO,
-                "Initializing ConnectorFactory...");
-        Composer.connectorfactory = ConnectorFactory.getInstance();
-
-        _logger.log(Level.INFO,
-                "Initializing CompositionFactory...");
-        Composer.compositionFactory = CompositionFactory.getInstance(this);
-
-        _logger.log(Level.INFO,
-                "Initializing SketchNodeFactory...");
-        Composer.sketchNodeFactory = SketchNodeFactory.getInstance();
-
-        this.size = size;
-        this.aim = aim;
-        this.styles = new ArrayList<>(Arrays.asList(styles));
-        this.conservetory = new HashMap<>();
-        this.init = mm -> {
-            for (Style style : styles) {
-                style.matInitializer(mm);
-            }
-        };
-
-        _logger.log(Level.INFO,
+        setup(size, aim, logState, styles);
+        getLogger().log(Level.INFO,
                 "Initializing Composition Population...");
-        this.setPopulation(Stream.generate(()
-                -> compositionFactory.newInstance())
+        this.setPopulation(Stream.generate(() -> compositionFactory.newInstance())
                 .limit(size)
                 .peek(c -> c.addDebugMsg("Initialization..."))
                 .collect(Collectors.toList()));
-
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Composer created: size = {0}, aim = {1}, styles = {2}",
                 new Object[]{size, aim, this.styles.stream()
                             .map(style -> style.getClass().getSimpleName())
@@ -153,33 +149,74 @@ public class Composer extends Population<Composition> implements Serializable {
         this.conserve_score = conserve_score;
     }
 
+    private void setup(int size, ComposerAim aim, LogState logState, Style... styles)
+            throws Exception {
+
+        this.size = size;
+        this.aim = aim;
+
+        setFileHandler(logState, getLogger());
+        getLogger().log(Level.INFO,
+                "Initilizing Composer [{0}]", this.getId());
+        this.styles = new ArrayList<>(Arrays.asList(styles));
+        this.init = mm -> {
+            for (Style style : styles) {
+                style.matInitializer(mm);
+            }
+        };
+        getLogger().log(Level.INFO,
+                "Initializing ConnectorFactory...");
+        Composer.connectorfactory = ConnectorFactory.getInstance();
+        getLogger().log(Level.INFO,
+                "Initializing CompositionFactory...");
+        Composer.compositionFactory = CompositionFactory.getInstance(this);
+        getLogger().log(Level.INFO,
+                "Initializing SketchNodeFactory...");
+        Composer.sketchNodeFactory = SketchNodeFactory.getInstance();
+    }
+
     public void readArchive() {
 
         this.readArchive(Path.of(SER_PATH, this.getId()));
         this.getArchive().stream()
                 .forEach(list
                         -> list.stream()
+                        .peek(c -> c.setComposer(this))
                         .forEach(Composition::updateEval));
+    }
+
+    public void save() {
+
+        var path = Path.of(SER_PATH, this.getId(), "Composer.ser");
+        try (var os = Files.newOutputStream(path);
+                var ois = new ObjectOutputStream(os)) {
+            ois.writeObject(this);
+        } catch (Exception ex) {
+            this.getLogger().log(Level.SEVERE, "Error when saving Composer to {0}", path);
+        }
     }
 
     public Composer sketch() {
 
-//        this.archive(compositionFactory);
-        archive(Path.of(SER_PATH, this.getId(), "" + this.getGenCount()), this.getPopulation());
+        if (ARCHIVE_TO_DISK) {
+            archive(Path.of(SER_PATH, this.getId(), "" + this.getGenCount()), this.getPopulation());
+        } else {
+            this.archive(compositionFactory);
+        }
 
         var num_elongated = this.getPopulation().stream()
                 .parallel()
                 .filter(this::toBeElongated)
-                .peek(c -> _logger.log(Level.INFO, "Composition {0} been elongated.", c.getId_prefix()))
+                .peek(c -> getLogger().log(Level.INFO, "Composition {0} been elongated.", c.getId_prefix()))
                 .sequential()
                 .collect(Collectors.counting());
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Composing, totally {0} Compositions been elongated.", num_elongated);
 
         int original = this.getSize();
         this.getPopulation().removeIf(this::conserve);
         if (original - this.getSize() > 0) {
-            _logger.log(Level.INFO,
+            getLogger().log(Level.INFO,
                     "Composing, {0} Composition(s) conserved.",
                     original - this.getSize());
         }
@@ -208,7 +245,7 @@ public class Composer extends Population<Composition> implements Serializable {
     @Override
     public void evolve() {
 
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Evolving from {0} parents.", this.getPopulationSize());
         var children = Stream.generate(this::getChild)
                 .parallel()
@@ -216,7 +253,7 @@ public class Composer extends Population<Composition> implements Serializable {
                 .limit(size)
                 .sequential()
                 .collect(Collectors.toList());
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Evloving finished, gen = {0}, size = {1}, {2}",
                 new Object[]{this.getGenCount(),
                     children.size(),
@@ -260,7 +297,7 @@ public class Composer extends Population<Composition> implements Serializable {
     public Composition mutate(Composition origin) {
 
         var mutant = compositionFactory.forMutation(origin);
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Composition {0} being duplicated to {1} for mutation.",
                 new Object[]{origin.getId_prefix(), mutant.getId_prefix()});
         int selected = new Random().nextInt(mutant.getSize() - 1);
@@ -285,7 +322,7 @@ public class Composer extends Population<Composition> implements Serializable {
         if (reseeding) {
             mutant.resetSeed(sketchNodeFactory.newInstance(init));
         }
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Mutation, mutant: {0}, type: {1}, loci: {2}, reseed = {3}, length: {4} -> {5}",
                 new Object[]{
                     mutant.getId_prefix(),
@@ -303,7 +340,7 @@ public class Composer extends Population<Composition> implements Serializable {
                 p0.getConnectors().get(0),
                 this.styles);
 
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Composition {0} being transformed to {1} for crossover.",
                 new Object[]{p0.getId_prefix(), child.getId_prefix()});
         String crossover_state = "X";
@@ -315,7 +352,7 @@ public class Composer extends Population<Composition> implements Serializable {
                     .forMutation(activated.getConnectors().get(index)));
             crossover_state += (Objects.equals(activated, p0)) ? "X" : "Y";
         } while (++index < Math.max(p0.getSize() - 1, p1.getSize() - 1));
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Crossover, [{0}, {1}] -> {2} = {3}", new Object[]{
                     p0.getId_prefix(),
                     p1.getId_prefix(),
@@ -400,19 +437,19 @@ public class Composer extends Population<Composition> implements Serializable {
             return false;
         }
         c.addDebugMsg("pass conservation check: " + simpleScoreOutput(c));
-        _logger.log(Level.INFO, "Qualified Composition been located: {0}",
+        getLogger().log(Level.INFO, "Qualified Composition been located: {0}",
                 simpleScoreOutput(c));
-        _logger.log(Level.INFO,
+        getLogger().log(Level.INFO,
                 "Composition {0} being duplicated for conservation.",
                 c.getId_prefix());
         Composition dupe = compositionFactory.forArchiving(c);
-        if (Objects.nonNull(this.conservetory.put(dupe, this.getGenCount()))) {
-            _logger.log(Level.WARNING,
+        if (Objects.nonNull(this.conservatory.put(dupe, this.getGenCount()))) {
+            getLogger().log(Level.WARNING,
                     "Conserving with an Id already existing in conservatory: {0}",
                     c.getId_prefix());
         }
-        if (this.conservetory.containsKey(dupe)) {
-            _logger.log(Level.INFO,
+        if (this.conservatory.containsKey(dupe)) {
+            getLogger().log(Level.INFO,
                     "Composition {0} been conserved.",
                     c.getId_prefix());
         } else {
@@ -425,7 +462,7 @@ public class Composer extends Population<Composition> implements Serializable {
     @Override
     public void draw(int type) {
 
-        _logger.log(Level.INFO, "Drawing Composer {0}", this.getId());
+        getLogger().log(Level.INFO, "Drawing Composer {0}", this.getId());
         switch (type) {
             case 0:
                 drawScatterPlot();
@@ -448,7 +485,7 @@ public class Composer extends Population<Composition> implements Serializable {
                 .peek(i -> {
                     list.clear();
                     list.addAll(this.getArchive().get(i));
-                    list.addAll(this.conservetory.entrySet().stream()
+                    list.addAll(this.conservatory.entrySet().stream()
                             .filter(e -> e.getValue().equals(i))
                             .map(e -> e.getKey())
                             .collect(Collectors.toList()));
@@ -468,22 +505,24 @@ public class Composer extends Population<Composition> implements Serializable {
                             .map(this::getMinScore)
                             .filter(score -> score > 0.0)
                             .collect(Collectors.toList()));
-                    xyc.put(i, this.getConservetory().entrySet().stream()
+                    xyc.put(i, this.getConservatory().entrySet().stream()
                             .filter(e -> e.getValue() == i)
                             .map(e -> e.getKey())
                             .map(this::getMinScore)
                             .collect(Collectors.toList()));
                 });
-        double dotSize = 3.0;
-        double delta = dotSize / 2.0;
-        var shape = new Ellipse2D.Double(-delta, -delta, dotSize, dotSize);
-
+        double dotSize0 = 3.0;
+        double dotSize1 = 4.0;
+        double delta0 = dotSize0 / 2.0;
+        double delta1 = dotSize1 / 2.0;
+        var shape0 = new Ellipse2D.Double(-delta0, -delta0, dotSize0, dotSize0);
+        var shape1 = new Ellipse2D.Double(-delta1, -delta1, dotSize1, dotSize1);
         var scatterRenderer0 = new ScatterRenderer();
         var scatterRenderer1 = new ScatterRenderer();
-        scatterRenderer0.setSeriesPaint(0, Color.GRAY);
-        scatterRenderer0.setSeriesShape(0, shape);
+        scatterRenderer0.setSeriesPaint(0, Color.LIGHT_GRAY);
+        scatterRenderer0.setSeriesShape(0, shape0);
         scatterRenderer1.setSeriesPaint(0, Color.RED);
-        scatterRenderer1.setSeriesShape(0, shape);
+        scatterRenderer1.setSeriesShape(0, shape1);
         chart.addRenderer(
                 new String[]{"score", "conservatory"},
                 new CategoryItemRenderer[]{scatterRenderer0, scatterRenderer1},
@@ -534,7 +573,7 @@ public class Composer extends Population<Composition> implements Serializable {
                 .flatMap(s -> s)
                 .collect(Collectors.toList());
         plot.addSeries("Population", popScores);
-        List<SimpleEntry<Integer, Double>> conserveScores = this.getConservetory().entrySet().stream()
+        List<SimpleEntry<Integer, Double>> conserveScores = this.getConservatory().entrySet().stream()
                 .map(e -> new SimpleEntry<>(e.getValue(), this.getMinScore(e.getKey())))
                 .collect(Collectors.toList());
         plot.addSeries("Conservatory", conserveScores);
@@ -579,7 +618,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
     public void persistAll() {
 
-        this.getConservetory().keySet().stream()
+        this.getConservatory().keySet().stream()
                 .forEach(Composition::persist);
     }
 
@@ -607,8 +646,8 @@ public class Composer extends Population<Composition> implements Serializable {
         this.aim = aim;
     }
 
-    public Map<Composition, Integer> getConservetory() {
-        return conservetory;
+    public Map<Composition, Integer> getConservatory() {
+        return conservatory;
     }
 
     public int getSize() {

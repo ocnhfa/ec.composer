@@ -45,7 +45,7 @@ public class UnaccompaniedCello extends Style {
         RANGE.put(NoteRange.C3, 1.0);
         RANGE.put(NoteRange.C4, 1.0);
         RANGE.put(NoteRange.C5, 0.5);
-        RANGE.put(NoteRange.C6, 0.25);
+//        RANGE.put(NoteRange.C6, 0.25);
     }
 
     public static void main(String[] args) {

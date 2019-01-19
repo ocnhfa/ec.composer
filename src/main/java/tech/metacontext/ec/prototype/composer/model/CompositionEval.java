@@ -49,15 +49,15 @@ public class CompositionEval implements Serializable {
         eval.getScores().forEach(scores::put);
     }
 
-//    public void addRule(Rule rule) {
-//
-//        this.rules.add(rule);
-//    }
     public Set<? extends Style> getStyles() {
 
         return this.getScores().keySet();
     }
 
+//    public void addRule(Rule rule) {
+//
+//        this.rules.add(rule);
+//    }
     @Override
     public int hashCode() {
         int hash = 7;

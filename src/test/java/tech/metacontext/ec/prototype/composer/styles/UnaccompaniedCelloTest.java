@@ -39,7 +39,7 @@ public class UnaccompaniedCelloTest {
     public void testRateComposition() {
 
         System.out.println("rateComposition");
-        tc.getComposer().getConservetory().keySet().stream()
+        tc.getComposer().getConservatory().keySet().stream()
                 .map(instance::rateComposition)
                 .forEach(score -> assertTrue(score > 0.0));
     }
