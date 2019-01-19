@@ -173,10 +173,11 @@ public class GoldenSectionClimax extends Style {
             }
             assert (mti >= 0.0 && mti <= 1.0) :
                     "mti not in range: " + mt + " = " + mti + "\n" + node;
-//            System.out.printf("%s:%.5f ", mm, mti);
+//            System.out.printf("%s:%.2f ", mt, mti);
             index.add(mti);
         });
 //        System.out.printf("=>%.5f\n", index.doubleValue() / node.getMats().size());
+//        System.out.println("");
         return index.doubleValue() / node.getMats().size();
     }
 

@@ -32,7 +32,7 @@ public enum Parameters {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-        SCORE_CONSERVE_IF_COMPLETED(0.85),
+        SCORE_CONSERVE_IF_COMPLETED(0.855),
 //    SCORE_CONSERVE_IF_COMPLETED(0.942),
     /*
      * MusicMaterial parameters.
@@ -49,8 +49,8 @@ public enum Parameters {
     /*
      * Default parameters for RhythmicPoints.
      */
-    DEFAULT_MIN_RHYTHMIC_POINTS(1),
-    DEFAULT_MAX_RHYTHMIC_POINTS(6),
+    DEFAULT_MIN_RHYTHMIC_POINTS(0),
+    DEFAULT_MAX_RHYTHMIC_POINTS(12),
     /*
      * Default parameters for RhythmicPoint.
      */
