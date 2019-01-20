@@ -32,8 +32,8 @@ public enum Parameters {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-        SCORE_CONSERVE_IF_COMPLETED(0.855),
-//    SCORE_CONSERVE_IF_COMPLETED(0.942),
+    SCORE_CONSERVE_IF_COMPLETED(0.8),
+    //    SCORE_CONSERVE_IF_COMPLETED(0.942),
     /*
      * MusicMaterial parameters.
      */

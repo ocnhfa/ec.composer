@@ -40,15 +40,15 @@ public class Main {
 
         // 決定作品數量及演進世代
         int POP_SIZE = 100;
-        int SELECTED_SIZE = 5;
-        int GENERATION = 0;
+        int SELECTED_SIZE = 0;
+        int GENERATION = 300;
 
         Main main = new Main(
                 POP_SIZE,
                 SELECTED_SIZE,
                 GENERATION,
                 LogState.DISABLED);
-                //                LogState.DEFAULT);
+        //                LogState.DEFAULT);
 
 //        main.composer.draw(Composer.DRAWTYPE_AVERAGELINECHART);
         main.composer.draw(Composer.DRAWTYPE_COMBINEDCHART);
@@ -122,6 +122,9 @@ public class Main {
                 new UnaccompaniedCello(),
                 new GoldenSectionClimax(UnaccompaniedCello.RANGE.keySet())
         );
+        if (generation <= 300) {
+            this.composer.ARCHIVE_TO_DISK = false;
+        }
         System.out.println(header("Evolutionary Computation"));
         System.out.printf("Composer = [%s]\n", composer.getId());
         System.out.println("Population size = " + popSize);

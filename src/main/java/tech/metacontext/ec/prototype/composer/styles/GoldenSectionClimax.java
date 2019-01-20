@@ -40,7 +40,7 @@ public class GoldenSectionClimax extends Style {
 
         var gsc = new GoldenSectionClimax(UnaccompaniedCello.getRange());
         var composer = new Composer(100, ComposerAim.Phrase, LogState.DISABLED,
-                0.9, 0.95,
+                0.95, 0.85,
                 new UnaccompaniedCello(),
                 gsc);
         DoubleSummaryStatistics summary;
