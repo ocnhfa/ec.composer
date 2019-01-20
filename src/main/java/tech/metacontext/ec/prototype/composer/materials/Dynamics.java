@@ -60,9 +60,9 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
         this.lowestIntensity = Intensity.valueOf(
-                DEFAULT_LOWEST_INTENSITY.getInt());
+                LOWEST_INTENSITY.getInt());
         this.highestIntensity = Intensity.valueOf(
-                DEFAULT_HIGHEST_INTENSITY.getInt());
+                HIGHEST_INTENSITY.getInt());
         return this;
     }
 
@@ -82,9 +82,9 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
     public Dynamics random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION.getInt()
-                        - DEFAULT_MIN_DIVISION.getInt() + 1)
-                + DEFAULT_MIN_DIVISION.getInt());
+                .nextInt(MAX_DIVISION.getInt()
+                        - MIN_DIVISION.getInt() + 1)
+                + MIN_DIVISION.getInt());
         return generate();
     }
 
@@ -119,7 +119,7 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
         IntStream.range(0, this.size())
                 .forEach(i -> {
                     int o = Math.min(this.getMaterials().get(i).ordinal() + 1,
-                            Intensity.values().length - 1);
+                            this.highestIntensity.ordinal());
                     this.getMaterials().set(i, Intensity.values()[o]);
                 });
         return this;
@@ -129,7 +129,8 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
 
         IntStream.range(0, this.size())
                 .forEach(i -> {
-                    int o = Math.max(this.getMaterials().get(i).ordinal() - 1, 0);
+                    int o = Math.max(this.getMaterials().get(i).ordinal() - 1,
+                            this.lowestIntensity.ordinal());
                     this.getMaterials().set(i, Intensity.values()[o]);
                 });
         return this;

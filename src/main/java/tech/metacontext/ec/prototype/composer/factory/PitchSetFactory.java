@@ -53,8 +53,8 @@ public class PitchSetFactory {
 
     public PitchSetFactory() {
 
-        this.minPitchNumber = DEFAULT_MIN_PITCH_NUMBER.getInt();
-        this.maxPitchNumber = DEFAULT_MAX_PITCH_NUMBER.getInt();
+        this.minPitchNumber = MIN_PITCHSET_NUMBER.getInt();
+        this.maxPitchNumber = MAX_PITCHSET_NUMBER.getInt();
         this.pitchNumber = DEFAULT_PITCH_NUMBER.getInt();
         this.sharpAllowed = (DEFAULT_SHARP_ALLOWED == ALLOWED);
         this.enharmonicAllowed = (DEFAULT_ENHARMONIC_ALLOWED == ALLOWED);

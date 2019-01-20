@@ -32,35 +32,35 @@ public enum Parameters {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-    SCORE_CONSERVE_IF_COMPLETED(0.8),
-    //    SCORE_CONSERVE_IF_COMPLETED(0.942),
+    MIN_CONSERVE_SCORE(0.8),
+    //    MIN_CONSERVE_SCORE(0.942),
     /*
      * MusicMaterial parameters.
      */
-    DEFAULT_DIVISION(4),
-    DEFAULT_MIN_DIVISION(1),
-    DEFAULT_MAX_DIVISION(4),
+    DEFAULT_DIVISION(3),
+    MIN_DIVISION(1),
+    MAX_DIVISION(4),
     /*
      * Default parameters for PitchSets.
      */
     DEFAULT_PITCH_NUMBER(3),
-    DEFAULT_MIN_PITCH_NUMBER(1),
-    DEFAULT_MAX_PITCH_NUMBER(7),
+    MIN_PITCHSET_NUMBER(1),
+    MAX_PITCHSET_NUMBER(7),
     /*
      * Default parameters for RhythmicPoints.
      */
-    DEFAULT_MIN_RHYTHMIC_POINTS(0),
-    DEFAULT_MAX_RHYTHMIC_POINTS(12),
+    MIN_RHYTHMIC_POINTS(0),
+    MAX_RHYTHMIC_POINTS(12),
     /*
      * Default parameters for RhythmicPoint.
      */
-    DEFAULT_LOWEST_INTENSITY(Intensity.pp.ordinal()),
-    DEFAULT_HIGHEST_INTENSITY(Intensity.ff.ordinal()),
+    LOWEST_INTENSITY(Intensity.pp.ordinal()),
+    HIGHEST_INTENSITY(Intensity.ff.ordinal()),
     /**
      * Default parameters for NoteRanges.
      */
-    DEFAULT_LOWEST_RANGE(NoteRange.C0.ordinal()),
-    DEFAULT_HIGHEST_RANGE(NoteRange.C8.ordinal()),
+    LOWEST_RANGE(NoteRange.C0.ordinal()),
+    HIGHEST_RANGE(NoteRange.C8.ordinal()),
     /**
      * Chance to reset seed when mutation happens.
      */

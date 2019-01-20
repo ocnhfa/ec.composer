@@ -125,7 +125,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
         this(size, aim, logState,
                 SELECTION_THRESHOLD.getDouble(),
-                SCORE_CONSERVE_IF_COMPLETED.getDouble(),
+                MIN_CONSERVE_SCORE.getDouble(),
                 styles);
     }
 
@@ -588,7 +588,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
     /*
     public void scanQualifiedComposition(Composition c, int i) {
-        if (getMinScore(c) < Settings.SCORE_CONSERVE_IF_COMPLETED) {
+        if (getMinScore(c) < Settings.MIN_CONSERVE_SCORE) {
             return;
         }
         System.out.println("Qualified composition left in population at gen#" + i);

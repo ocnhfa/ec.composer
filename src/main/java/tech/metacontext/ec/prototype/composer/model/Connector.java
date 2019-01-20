@@ -22,7 +22,6 @@ import tech.metacontext.ec.prototype.composer.enums.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

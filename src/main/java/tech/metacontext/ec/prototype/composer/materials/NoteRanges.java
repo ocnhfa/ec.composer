@@ -54,8 +54,8 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serial
     public NoteRanges reset() {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
-        this.lowestRange = NoteRange.valueOf(DEFAULT_LOWEST_RANGE.getInt());
-        this.highestRange = NoteRange.valueOf(DEFAULT_HIGHEST_RANGE.getInt());
+        this.lowestRange = NoteRange.valueOf(LOWEST_RANGE.getInt());
+        this.highestRange = NoteRange.valueOf(HIGHEST_RANGE.getInt());
         return this;
     }
 
@@ -78,9 +78,9 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serial
     public NoteRanges random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION.getInt()
-                        - DEFAULT_MIN_DIVISION.getInt() + 1)
-                + DEFAULT_MIN_DIVISION.getInt());
+                .nextInt(MAX_DIVISION.getInt()
+                        - MIN_DIVISION.getInt() + 1)
+                + MIN_DIVISION.getInt());
         return generate();
     }
 

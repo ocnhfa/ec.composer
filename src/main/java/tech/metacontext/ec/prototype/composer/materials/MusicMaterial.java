@@ -90,7 +90,7 @@ public abstract class MusicMaterial<E> implements Serializable {
         return this.getMaterials().stream().mapToDouble(mapper)
                 .average().getAsDouble()
                 * this.getDivision()
-                / DEFAULT_MAX_DIVISION.getDouble();
+                / MAX_DIVISION.getDouble();
     }
 
     abstract public <M extends MusicMaterial> M duplicate();

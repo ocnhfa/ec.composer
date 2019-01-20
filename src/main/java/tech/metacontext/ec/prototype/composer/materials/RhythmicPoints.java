@@ -66,8 +66,8 @@ public class RhythmicPoints extends MusicMaterial<Integer> implements Serializab
     public RhythmicPoints reset() {
 
         this.setDivision(DEFAULT_DIVISION.getInt());
-        this.minPoints = DEFAULT_MIN_RHYTHMIC_POINTS.getInt();
-        this.maxPoints = DEFAULT_MAX_RHYTHMIC_POINTS.getInt();
+        this.minPoints = MIN_RHYTHMIC_POINTS.getInt();
+        this.maxPoints = MAX_RHYTHMIC_POINTS.getInt();
         return this;
     }
 
@@ -87,9 +87,9 @@ public class RhythmicPoints extends MusicMaterial<Integer> implements Serializab
     public RhythmicPoints random() {
 
         this.setDivision(new Random()
-                .nextInt(DEFAULT_MAX_DIVISION.getInt()
-                        - DEFAULT_MIN_DIVISION.getInt() + 1)
-                + DEFAULT_MIN_DIVISION.getInt());
+                .nextInt(MAX_DIVISION.getInt()
+                        - MIN_DIVISION.getInt() + 1)
+                + MIN_DIVISION.getInt());
         return generate();
     }
 

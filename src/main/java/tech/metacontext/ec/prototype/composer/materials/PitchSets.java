@@ -106,9 +106,9 @@ public class PitchSets extends MusicMaterial<List<Pitch>> implements Serializabl
     public PitchSets random() {
 
         this.setDivision(new Random().nextInt(
-                DEFAULT_MAX_DIVISION.getInt()
-                - DEFAULT_MIN_DIVISION.getInt() + 1)
-                + DEFAULT_MIN_DIVISION.getInt());
+                MAX_DIVISION.getInt()
+                - MIN_DIVISION.getInt() + 1)
+                + MIN_DIVISION.getInt());
         return this.generate();
     }
 

@@ -96,7 +96,7 @@ public class Main {
 
         this(popSize, goalSize, generation,
                 SELECTION_THRESHOLD.getDouble(),
-                SCORE_CONSERVE_IF_COMPLETED.getDouble(),
+                MIN_CONSERVE_SCORE.getDouble(),
                 logState);
     }
 
