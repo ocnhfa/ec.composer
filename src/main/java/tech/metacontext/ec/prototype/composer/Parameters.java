@@ -32,7 +32,7 @@ public enum Parameters {
     /**
      * Score for a mature composition to reach to be conserved.
      */
-    MIN_CONSERVE_SCORE(0.8),
+    MIN_CONSERVE_SCORE(0.825),
     //    MIN_CONSERVE_SCORE(0.942),
     /*
      * MusicMaterial parameters.

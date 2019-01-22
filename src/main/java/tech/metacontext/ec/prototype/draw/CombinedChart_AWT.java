@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.draw;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Shape;
@@ -84,6 +85,7 @@ public class CombinedChart_AWT extends ApplicationFrame {
         var lasr = new LineAndShapeRenderer();
         lasr.setSeriesPaint(0, Color.BLUE);
         lasr.setSeriesShape(0, shape);
+        lasr.setSeriesStroke(0, new BasicStroke(2.0f));
         chart.addRenderer(2, "Series2", lasr, series2);
 
         chart.createChart("HelloWorld", "Generation", "Score", 560, 367, true);

@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
+import java.awt.BasicStroke;
 import tech.metacontext.ec.prototype.draw.LineChart_AWT;
 import tech.metacontext.ec.prototype.draw.ScatterPlot_AWT;
 import tech.metacontext.ec.prototype.draw.CombinedChart_AWT;
@@ -62,7 +63,7 @@ public class Composer extends Population<Composition> implements Serializable {
 
     public static void main(String[] args) throws Exception {
 
-        var id = "82339a62-b72b-4ab3-8fad-797abd0217a4";
+        var id = "2c585484-92a5-4974-9cf3-3e9254114713";
         var path = Path.of(SER_PATH, id, "Composer.ser");
         Composer composer;
         try (var fis = Files.newInputStream(path);
@@ -531,6 +532,7 @@ public class Composer extends Population<Composition> implements Serializable {
         lineAndShapeRenderer.setDefaultShapesVisible(false);
         lineAndShapeRenderer.setSeriesPaint(0, Color.BLUE);
         lineAndShapeRenderer.setSeriesShapesVisible(0, false);
+        lineAndShapeRenderer.setSeriesStroke(0, new BasicStroke(2.0f));
         chart.addRenderer(2, "average", lineAndShapeRenderer, avgs);
         chart.addMarker(this.conserve_score, Color.BLACK);
         chart.createChart("Evolutionary Computation", "Generation", "Score", 1600, 630, true);
