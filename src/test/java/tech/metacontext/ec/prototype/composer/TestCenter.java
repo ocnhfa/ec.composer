@@ -22,7 +22,7 @@ import static tech.metacontext.ec.prototype.composer.Settings.*;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class TestCenter {
 

@@ -22,7 +22,7 @@ import tech.metacontext.ec.prototype.composer.materials.*;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum MaterialType implements Serializable{
 

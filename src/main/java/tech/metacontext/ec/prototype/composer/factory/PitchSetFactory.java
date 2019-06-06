@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class PitchSetFactory {
 

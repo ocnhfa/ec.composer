@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class CompositionFactory implements Factory<Composition> {
 

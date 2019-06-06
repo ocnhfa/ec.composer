@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import static java.util.function.Predicate.not;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +24,7 @@ import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class RhythmicPointsTest {
 
@@ -34,7 +35,7 @@ public class RhythmicPointsTest {
     public void copyObject() {
 
         RhythmicPoints rp1 = Stream.generate(RhythmicPoints::new)
-                .filter(rp -> rp.size() == 4)
+                .filter(not(rp -> rp.getMaterials().get(0).equals(rp.getMaterials().get(rp.size() - 1))))
                 .findFirst()
                 .get(),
                 rp2 = rp1,
@@ -47,7 +48,7 @@ public class RhythmicPointsTest {
     @Test
     public void testTransform() {
         RhythmicPoints rp1 = Stream.generate(RhythmicPoints::new)
-                .filter(rp -> rp.size() == 4)
+                .filter(not(rp -> rp.getMaterials().get(0).equals(rp.getMaterials().get(rp.size() - 1))))
                 .findFirst()
                 .get();
         System.out.printf("Original    : %s\n", rp1);

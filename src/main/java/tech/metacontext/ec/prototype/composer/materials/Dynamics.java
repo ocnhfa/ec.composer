@@ -26,7 +26,7 @@ import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
 

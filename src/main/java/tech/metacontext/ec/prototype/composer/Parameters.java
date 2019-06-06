@@ -20,7 +20,7 @@ import tech.metacontext.ec.prototype.composer.enums.mats.NoteRange;
 
 /**
  *
- * @author Jonathan Chang
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum Parameters {
 

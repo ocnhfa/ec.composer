@@ -37,7 +37,7 @@ import org.jfree.ui.RefineryUtilities;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class ScatterPlot_AWT extends ApplicationFrame {
 

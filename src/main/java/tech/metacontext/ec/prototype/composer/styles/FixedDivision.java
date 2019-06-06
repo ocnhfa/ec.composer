@@ -24,7 +24,7 @@ import tech.metacontext.ec.prototype.composer.model.SketchNode;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class FixedDivision extends Style {
 

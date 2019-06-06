@@ -20,7 +20,7 @@ import static tech.metacontext.ec.prototype.composer.Parameters.*;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum TransformType {
 

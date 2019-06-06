@@ -17,7 +17,7 @@ package tech.metacontext.ec.prototype.composer.ex;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class InstantiationFailedException extends RuntimeException {
 

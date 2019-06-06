@@ -26,7 +26,7 @@ import tech.metacontext.ec.prototype.composer.styles.FreeStyle;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class ConnectorTest {
 

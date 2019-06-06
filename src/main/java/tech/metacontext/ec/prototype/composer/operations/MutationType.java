@@ -19,7 +19,7 @@ import java.util.Random;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum MutationType {
 

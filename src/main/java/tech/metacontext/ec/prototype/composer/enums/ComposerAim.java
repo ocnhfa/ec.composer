@@ -20,7 +20,7 @@ import tech.metacontext.ec.prototype.composer.model.Composition;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum ComposerAim implements Serializable {
     Phrase(8),

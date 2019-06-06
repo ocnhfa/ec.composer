@@ -15,6 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
+import static java.util.function.Predicate.not;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +24,7 @@ import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
  *
- * @author Jonathan
+ * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class NoteRangesTest {
 
@@ -34,7 +35,8 @@ public class NoteRangesTest {
     public void copyObject() {
 
         NoteRanges nr1 = Stream.generate(NoteRanges::new)
-                .filter(rp -> rp.size() == 4)
+                //                .peek(System.out::println)
+                .filter(not(nr -> nr.getMaterials().get(0).equals(nr.getMaterials().get(nr.size() - 1))))
                 .findFirst()
                 .get(),
                 nr2 = nr1,
@@ -49,10 +51,10 @@ public class NoteRangesTest {
 
     @Test
     public void testTransform() {
-        
+
         System.out.println("testTransform");
         NoteRanges nr1 = Stream.generate(NoteRanges::new)
-                .filter(nr -> nr.size() == 4)
+                .filter(not(nr -> nr.getMaterials().get(0).equals(nr.getMaterials().get(nr.size() - 1))))
                 .findFirst()
                 .get();
         System.out.printf("Original    : %s\n", nr1);
