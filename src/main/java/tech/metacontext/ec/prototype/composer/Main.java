@@ -15,14 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
-import tech.metacontext.ec.prototype.composer.model.*;
-import tech.metacontext.ec.prototype.composer.styles.*;
-import tech.metacontext.ec.prototype.draw.LineChart_AWT;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.composer.model.*;
+import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
+import tech.metacontext.ec.prototype.draw.LineChart_AWT;
 
 /**
  *

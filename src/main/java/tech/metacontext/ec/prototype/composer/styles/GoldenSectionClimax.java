@@ -15,20 +15,20 @@
  */
 package tech.metacontext.ec.prototype.composer.styles;
 
-import tech.metacontext.ec.prototype.composer.model.*;
-import tech.metacontext.ec.prototype.composer.enums.mats.*;
-import tech.metacontext.ec.prototype.composer.enums.*;
-import tech.metacontext.ec.prototype.composer.materials.*;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static java.util.function.Predicate.not;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.DoubleAdder;
-import static java.util.function.Predicate.not;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import tech.metacontext.ec.prototype.composer.model.*;
+import tech.metacontext.ec.prototype.composer.enums.mats.*;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.composer.materials.*;
 
 /**
  *
@@ -152,24 +152,20 @@ public class GoldenSectionClimax extends Style {
         node.getMats().forEach((mt, mm) -> {
             double mti = 0.0;
             switch (mt) {
-                case DYNAMICS:
+                case DYNAMICS->
                     mti = ((Dynamics) mm).getAvgIntensityIndex(mat
                             -> Intensity.getIntensityIndex(mat, ((Dynamics) mm).getLowestIntensity(),
                                     ((Dynamics) mm).getHighestIntensity()));
-                    break;
-                case NOTE_RANGES:
+                case NOTE_RANGES->
                     mti = ((NoteRanges) mm).getAvgIntensityIndex(mat
                             -> NoteRanges.getIntensityIndex(mat, lowest, highest));
-                    break;
-                case PITCH_SETS:
+                case PITCH_SETS->
                     mti = ((PitchSets) mm).getIntensityIndex();
-                    break;
-                case RHYTHMIC_POINTS:
+                case RHYTHMIC_POINTS-> {
                     var rp = (RhythmicPoints) mm;
                     mti = rp.getAvgIntensityIndex(mat
                             -> 1.0 * (mat - rp.getMin()) / (rp.getMax() - rp.getMin()));
-                    break;
-                default:
+                }
             }
             assert (mti >= 0.0 && mti <= 1.0) :
                     "mti not in range: " + mt + " = " + mti + "\n" + node;

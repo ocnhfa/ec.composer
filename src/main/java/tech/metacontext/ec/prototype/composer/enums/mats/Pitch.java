@@ -39,20 +39,20 @@ public enum Pitch {
 
     public int ordinalEnharmonic() {
 
-        switch (this.ordinal()) {
-            case 12:
-                return 1;
-            case 13:
-                return 3;
-            case 14:
-                return 6;
-            case 15:
-                return 8;
-            case 16:
-                return 10;
-            default:
-                return this.ordinal();
-        }
+        return switch (this.ordinal()) {
+            case 12->
+                1;
+            case 13->
+                3;
+            case 14->
+                6;
+            case 15->
+                8;
+            case 16->
+                10;
+            default->
+                this.ordinal();
+        };
     }
 
     public int compareToPitch(Pitch o) {

@@ -15,11 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
-import java.io.Serializable;
-import tech.metacontext.ec.prototype.composer.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
-import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +24,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.io.Serializable;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
+import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
+import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
 
 /**
  *
@@ -115,19 +115,18 @@ public class PitchSets extends MusicMaterial<List<Pitch>> implements Serializabl
     @Override
     public PitchSets transform(TransformType type) {
 
-        switch (type) {
-            case Repetition:
-                return new PitchSets(this);
-            case Retrograde:
-                return new PitchSets(this).retrograde();
-            case MoveForward:
-                return new PitchSets(this).moveForward();
-            case MoveBackward:
-                return new PitchSets(this).moveBackward();
-            case Disconnected:
-                return new PitchSets();
-        }
-        return null;
+        return switch (type) {
+            case Repetition->
+                new PitchSets(this);
+            case Retrograde->
+                new PitchSets(this).retrograde();
+            case MoveForward->
+                new PitchSets(this).moveForward();
+            case MoveBackward->
+                new PitchSets(this).moveBackward();
+            case Disconnected->
+                new PitchSets();
+        };
     }
 
     private Set<Pitch> selectPitch(List<Pitch> ps, int commonTone) {

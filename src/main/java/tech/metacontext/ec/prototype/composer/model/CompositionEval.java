@@ -16,12 +16,12 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import java.io.Serializable;
-import tech.metacontext.ec.prototype.composer.styles.Style;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 
 /**
  *

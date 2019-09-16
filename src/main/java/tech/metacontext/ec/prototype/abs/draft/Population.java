@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 import tech.metacontext.ec.prototype.abs.Evaluation;
 import tech.metacontext.ec.prototype.abs.GeneticOperator;
 import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.abs.Selector;
 
 /**
  *

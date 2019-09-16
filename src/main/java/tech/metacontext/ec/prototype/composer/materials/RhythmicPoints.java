@@ -21,8 +21,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
  *
@@ -95,19 +95,18 @@ public class RhythmicPoints extends MusicMaterial<Integer> implements Serializab
 
     @Override
     public RhythmicPoints transform(TransformType type) {
-        switch (type) {
-            case Repetition:
-                return new RhythmicPoints(this);
-            case Retrograde:
-                return new RhythmicPoints(this).retrograde();
-            case MoveForward:
-                return new RhythmicPoints(this).moveForward();
-            case MoveBackward:
-                return new RhythmicPoints(this).moveBackward();
-            case Disconnected:
-                return new RhythmicPoints();
-        }
-        return null;
+        return switch (type) {
+            case Repetition->
+                new RhythmicPoints(this);
+            case Retrograde->
+                new RhythmicPoints(this).retrograde();
+            case MoveForward->
+                new RhythmicPoints(this).moveForward();
+            case MoveBackward->
+                new RhythmicPoints(this).moveBackward();
+            case Disconnected->
+                new RhythmicPoints();
+        };
     }
 
     private RhythmicPoints retrograde() {

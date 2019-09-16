@@ -15,15 +15,15 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import tech.metacontext.ec.prototype.abs.Individual;
-import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.enums.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *

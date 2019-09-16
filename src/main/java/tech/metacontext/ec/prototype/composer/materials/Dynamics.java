@@ -91,19 +91,18 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
     @Override
     public Dynamics transform(TransformType type) {
 
-        switch (type) {
-            case Repetition:
-                return new Dynamics(this);
-            case Retrograde:
-                return new Dynamics(this).retrograde();
-            case MoveForward:
-                return new Dynamics(this).moveForward();
-            case MoveBackward:
-                return new Dynamics(this).moveBackward();
-            case Disconnected:
-                return new Dynamics();
-        }
-        return null;
+        return switch (type) {
+            case Repetition->
+                new Dynamics(this);
+            case Retrograde->
+                new Dynamics(this).retrograde();
+            case MoveForward->
+                new Dynamics(this).moveForward();
+            case MoveBackward->
+                new Dynamics(this).moveBackward();
+            case Disconnected->
+                new Dynamics();
+        };
     }
 
     private Dynamics retrograde() {
@@ -138,7 +137,7 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
 
     @Override
     public String toString() {
-        
+
         return this.getMaterials().toString();
     }
 

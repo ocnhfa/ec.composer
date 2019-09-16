@@ -17,12 +17,12 @@ package tech.metacontext.ec.prototype.composer.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import tech.metacontext.ec.prototype.abs.Individual;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
 import tech.metacontext.ec.prototype.composer.factory.SketchNodeFactory;
 
 /**

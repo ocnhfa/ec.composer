@@ -15,16 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import tech.metacontext.ec.prototype.abs.Factory;
-import tech.metacontext.ec.prototype.composer.Settings;
-import tech.metacontext.ec.prototype.composer.model.*;
-import tech.metacontext.ec.prototype.composer.styles.*;
-import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import tech.metacontext.ec.prototype.composer.model.*;
+import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.abs.Factory;
+import tech.metacontext.ec.prototype.composer.Settings;
+import tech.metacontext.ec.prototype.composer.enums.ComposerAim;
 
 /**
  *

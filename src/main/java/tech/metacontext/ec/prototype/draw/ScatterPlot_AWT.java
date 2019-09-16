@@ -18,7 +18,6 @@ package tech.metacontext.ec.prototype.draw;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Random;

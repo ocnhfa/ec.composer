@@ -15,16 +15,16 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import tech.metacontext.ec.prototype.abs.Factory;
-import tech.metacontext.ec.prototype.composer.model.SketchNode;
-import tech.metacontext.ec.prototype.composer.enums.MaterialType;
-import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
-import tech.metacontext.ec.prototype.composer.materials.*;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.materials.*;
+import tech.metacontext.ec.prototype.abs.Factory;
+import tech.metacontext.ec.prototype.composer.model.SketchNode;
+import tech.metacontext.ec.prototype.composer.enums.MaterialType;
+import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
 
 /**
  *

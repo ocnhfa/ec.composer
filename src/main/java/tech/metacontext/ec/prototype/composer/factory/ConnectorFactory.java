@@ -15,12 +15,12 @@
  */
 package tech.metacontext.ec.prototype.composer.factory;
 
-import tech.metacontext.ec.prototype.composer.model.Connector;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.enums.*;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.composer.model.Connector;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *

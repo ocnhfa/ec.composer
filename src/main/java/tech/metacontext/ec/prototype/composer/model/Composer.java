@@ -16,19 +16,6 @@
 package tech.metacontext.ec.prototype.composer.model;
 
 import java.awt.BasicStroke;
-import tech.metacontext.ec.prototype.draw.LineChart_AWT;
-import tech.metacontext.ec.prototype.draw.ScatterPlot_AWT;
-import tech.metacontext.ec.prototype.draw.CombinedChart_AWT;
-import tech.metacontext.ec.prototype.abs.Population;
-import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
-import tech.metacontext.ec.prototype.composer.operations.MutationType;
-import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
-import tech.metacontext.ec.prototype.composer.styles.*;
-import tech.metacontext.ec.prototype.composer.factory.*;
-import tech.metacontext.ec.prototype.composer.enums.*;
-import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,6 +41,17 @@ import java.util.function.Function;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.renderer.category.ScatterRenderer;
+import static tech.metacontext.ec.prototype.composer.operations.MutationType.*;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.draw.*;
+import tech.metacontext.ec.prototype.composer.styles.*;
+import tech.metacontext.ec.prototype.composer.factory.*;
+import tech.metacontext.ec.prototype.composer.enums.*;
+import tech.metacontext.ec.prototype.abs.Population;
+import tech.metacontext.ec.prototype.composer.ex.ConservationFailedException;
+import tech.metacontext.ec.prototype.composer.operations.MutationType;
+import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 
 /**
  *
@@ -304,20 +302,19 @@ public class Composer extends Population<Composition> implements Serializable {
         int selected = new Random().nextInt(mutant.getSize() - 1);
         var type = MutationType.getRandom();
         switch (type) {
-            case Alteration:
+            case Alteration->
                 mutant.getConnectors().set(selected,
                         connectorfactory.newConnector());
-                break;
-            case Insertion:
-                if (!this.getAim().isCompleted(origin)) {
+            case Insertion-> {
+                if (this.getAim().isCompleted(origin)) {
+                    type = Deletion;
+                } else {
                     mutant.getConnectors().add(selected,
                             connectorfactory.newConnector());
-                    break;
                 }
-                type = Deletion;
-            case Deletion:
+            }
+            case Deletion->
                 mutant.getConnectors().remove(selected);
-                break;
         }
         boolean reseeding = Math.random() < CHANCE_RESEEDING.getDouble();
         if (reseeding) {
@@ -465,15 +462,12 @@ public class Composer extends Population<Composition> implements Serializable {
 
         getLogger().log(Level.INFO, "Drawing Composer {0}", this.getId());
         switch (type) {
-            case 0:
+            case 0->
                 drawScatterPlot();
-                break;
-            case 1:
+            case 1->
                 drawAvgLineChart();
-                break;
-            case 2:
+            case 2->
                 drawCombinedChart();
-                break;
         }
     }
 

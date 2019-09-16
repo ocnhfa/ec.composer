@@ -15,14 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer.materials;
 
-import java.io.Serializable;
-import java.util.List;
-import tech.metacontext.ec.prototype.composer.enums.TransformType;
-import tech.metacontext.ec.prototype.composer.enums.mats.*;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.List;
+import java.io.Serializable;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.composer.enums.mats.*;
+import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
  *
@@ -86,19 +86,18 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serial
     @Override
     public NoteRanges transform(TransformType type) {
 
-        switch (type) {
-            case Repetition:
-                return new NoteRanges(this);
-            case Retrograde:
-                return new NoteRanges(this).retrograde();
-            case MoveForward:
-                return new NoteRanges(this).moveForward();
-            case MoveBackward:
-                return new NoteRanges(this).moveBackward();
-            case Disconnected:
-                return new NoteRanges();
-        }
-        return null;
+        return switch (type) {
+            case Repetition->
+                new NoteRanges(this);
+            case Retrograde->
+                new NoteRanges(this).retrograde();
+            case MoveForward->
+                new NoteRanges(this).moveForward();
+            case MoveBackward->
+                new NoteRanges(this).moveBackward();
+            case Disconnected->
+                new NoteRanges();
+        };
     }
 
     private NoteRanges retrograde() {
@@ -146,7 +145,7 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serial
 
     @Override
     public String toString() {
-        
+
         return this.getMaterials().toString();
     }
 

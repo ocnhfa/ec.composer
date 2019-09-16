@@ -15,15 +15,14 @@
  */
 package tech.metacontext.ec.prototype.composer;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
-import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.io.File;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -40,7 +39,7 @@ public class Settings {
     public static String LOG_PATH_TEST = "log/test/";
 
     public static String SER_PATH = "ser/";
-    
+
     public static enum LogState {
         DEFAULT, TEST, DISABLED
     }
@@ -52,25 +51,25 @@ public class Settings {
                 "Setting FileHandler, STATE = {0}", STATE);
         logger.setUseParentHandlers(false);
 
-        File file_path;
-        switch (STATE) {
+        File file_path = switch (STATE) {
             case DISABLED:
-                logger.setUseParentHandlers(false);
-                return;
+                break null;
             case TEST:
-                file_path = new File(LOG_PATH_TEST);
-                break;
+                break new File(LOG_PATH_TEST);
             case DEFAULT:
-            default:
-                file_path = new File(LOG_PATH);
-        }
-        if (!file_path.exists() || !file_path.isDirectory()) {
-            file_path.mkdirs();
-        }
-        FileHandler fh = new FileHandler(Path.of(file_path.getPath(),
-                getTimeBasedFilename() + ".log").toString(), true);
-        fh.setEncoding("UTF-8");
-        fh.setFormatter(new SimpleFormatter());
-        logger.addHandler(fh);
+                break new File(LOG_PATH);
+        };
+            if (Objects.isNull(file_path)) {
+                logger.setUseParentHandlers(false);
+            } else {
+                if (!file_path.exists() || !file_path.isDirectory()) {
+                    file_path.mkdirs();
+                }
+                FileHandler fh = new FileHandler(Path.of(file_path.getPath(),
+                        getTimeBasedFilename() + ".log").toString(), true);
+                fh.setEncoding("UTF-8");
+                fh.setFormatter(new SimpleFormatter());
+                logger.addHandler(fh);
+            }
     }
 }

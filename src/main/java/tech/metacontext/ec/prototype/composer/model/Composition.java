@@ -15,12 +15,6 @@
  */
 package tech.metacontext.ec.prototype.composer.model;
 
-import tech.metacontext.ec.prototype.composer.styles.Style;
-import tech.metacontext.ec.prototype.abs.*;
-import tech.metacontext.ec.prototype.composer.*;
-import tech.metacontext.ec.prototype.composer.factory.*;
-import static tech.metacontext.ec.prototype.composer.Settings.*;
-import static tech.metacontext.ec.prototype.composer.Parameters.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -35,7 +29,12 @@ import java.util.OptionalInt;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
+import static tech.metacontext.ec.prototype.composer.Settings.*;
+import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.abs.*;
+import tech.metacontext.ec.prototype.composer.*;
+import tech.metacontext.ec.prototype.composer.factory.*;
+import tech.metacontext.ec.prototype.composer.styles.Style;
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
