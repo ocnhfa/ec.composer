@@ -20,7 +20,6 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.jfree.chart.ChartFactory;
@@ -33,6 +32,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 
 /**
  *
@@ -54,7 +54,7 @@ public class ScatterPlot_AWT extends ApplicationFrame {
     }
 
     private static List<SimpleEntry<Integer, Double>> generate() {
-        return Stream.generate(() -> new SimpleEntry<>(new Random().nextInt(50), Math.random()))
+        return Stream.generate(() -> new SimpleEntry<>(getRandom().nextInt(50), getRandom().nextDouble()))
                 .limit(50)
                 .collect(Collectors.toList());
     }

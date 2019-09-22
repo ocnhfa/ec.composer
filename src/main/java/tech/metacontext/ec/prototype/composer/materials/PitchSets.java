@@ -26,6 +26,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.io.Serializable;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 import tech.metacontext.ec.prototype.composer.factory.PitchSetFactory;
@@ -105,7 +106,7 @@ public class PitchSets extends MusicMaterial<List<Pitch>> implements Serializabl
     @Override
     public PitchSets random() {
 
-        this.setDivision(new Random().nextInt(
+        this.setDivision(getRandom().nextInt(
                 MAX_DIVISION.getInt()
                 - MIN_DIVISION.getInt() + 1)
                 + MIN_DIVISION.getInt());
@@ -132,7 +133,7 @@ public class PitchSets extends MusicMaterial<List<Pitch>> implements Serializabl
     private Set<Pitch> selectPitch(List<Pitch> ps, int commonTone) {
         Set<Pitch> selected = new HashSet<>();
         while (selected.size() < commonTone) {
-            selected.add(ps.get(new Random().nextInt(ps.size())));
+            selected.add(ps.get(getRandom().nextInt(ps.size())));
         }
         return selected;
     }

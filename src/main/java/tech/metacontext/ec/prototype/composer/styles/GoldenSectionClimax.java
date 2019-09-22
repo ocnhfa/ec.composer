@@ -54,9 +54,9 @@ public class GoldenSectionClimax extends Style {
 //        } while (composer.getConservatory().isEmpty());
         } while (composer.getPopulation().stream().anyMatch(not(composer.getAim()::isCompleted))
                 || summary.getMax() < 0.95 && composer.getConservatory().isEmpty());
-        (composer.getConservatory().isEmpty()
-                ? composer.getPopulation()
-                : composer.getConservatory().keySet())
+        (composer.getConservatory().isEmpty() ?
+                composer.getPopulation() :
+                composer.getConservatory().keySet())
                 .stream()
                 .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
                 .peek(gsc::updateClimaxIndexes)
@@ -115,7 +115,7 @@ public class GoldenSectionClimax extends Style {
         return (base - sum) / base;
     }
 
-    public void updateClimaxIndexes(Composition composition) {
+    public List<Double> updateClimaxIndexes(Composition composition) {
 
         this.climaxIndexes = composition
                 .getRenderedChecked("GoldenSectionClimax::rateComposition")
@@ -132,6 +132,7 @@ public class GoldenSectionClimax extends Style {
                 .collect(Collectors.toList());
 //        this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d * d));
         this.base = this.standards.stream().collect(Collectors.summingDouble(d -> d));
+        return this.climaxIndexes;
     }
 
     public double getStandard(Composition composition, int i) {
@@ -140,9 +141,9 @@ public class GoldenSectionClimax extends Style {
             return 0.0;
         }
         long peakNodeIndex = Math.round((composition.getSize() - 1) / RATIO);
-        return (i < peakNodeIndex)
-                ? (i + 1) * peak / (peakNodeIndex + 1)
-                : (composition.getSize() - i) * peak
+        return (i < peakNodeIndex) ?
+                (i + 1) * peak / (peakNodeIndex + 1) :
+                (composition.getSize() - i) * peak
                 / (composition.getSize() - peakNodeIndex);
     }
 
@@ -153,21 +154,21 @@ public class GoldenSectionClimax extends Style {
             double mti = 0.0;
             switch (mt) {
                 case DYNAMICS->
-                    mti = ((Dynamics) mm).getAvgIntensityIndex(mat
-                            -> Intensity.getIntensityIndex(mat, ((Dynamics) mm).getLowestIntensity(),
-                                    ((Dynamics) mm).getHighestIntensity()));
+                    mti = ((Dynamics)mm).getAvgIntensityIndex(mat
+                            -> Intensity.getIntensityIndex(mat, ((Dynamics)mm).getLowestIntensity(),
+                                    ((Dynamics)mm).getHighestIntensity()));
                 case NOTE_RANGES->
-                    mti = ((NoteRanges) mm).getAvgIntensityIndex(mat
+                    mti = ((NoteRanges)mm).getAvgIntensityIndex(mat
                             -> NoteRanges.getIntensityIndex(mat, lowest, highest));
                 case PITCH_SETS->
-                    mti = ((PitchSets) mm).getIntensityIndex();
+                    mti = ((PitchSets)mm).getIntensityIndex();
                 case RHYTHMIC_POINTS-> {
-                    var rp = (RhythmicPoints) mm;
+                    var rp = (RhythmicPoints)mm;
                     mti = rp.getAvgIntensityIndex(mat
                             -> 1.0 * (mat - rp.getMin()) / (rp.getMax() - rp.getMin()));
                 }
             }
-            assert (mti >= 0.0 && mti <= 1.0) :
+            assert (mti >= 0.0 && mti <= 1.0):
                     "mti not in range: " + mt + " = " + mti + "\n" + node;
 //            System.out.printf("%s:%.2f ", mt, mti);
             index.add(mti);

@@ -15,8 +15,8 @@
  */
 package tech.metacontext.ec.prototype.composer.enums;
 
-import java.util.Random;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 
 /**
  *
@@ -37,11 +37,11 @@ public enum TransformType {
         this.weighting = weighting;
     }
 
-    public static TransformType getRandom() {
+    public static TransformType getRandomType() {
 
-        return new Random().ints(0, values().length)
+        return getRandom().ints(0, values().length)
                 .mapToObj(i -> values()[i])
-                .filter(tt -> Math.random() < tt.weighting)
+                .filter(tt -> getRandom().nextDouble() < tt.weighting)
                 .findFirst().get();
     }
 

@@ -23,6 +23,6 @@ public enum CrossoverType {
 
 //    public static CrossoverType getRandom() {
 //
-//        return Math.random() < TOTAL_RATIO ? State.Total : State.ByItem;
+//        return getRandom().nextDouble() < TOTAL_RATIO ? State.Total : State.ByItem;
 //    }
 }

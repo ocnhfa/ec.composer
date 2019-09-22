@@ -15,7 +15,7 @@
  */
 package tech.metacontext.ec.prototype.composer.operations;
 
-import java.util.Random;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 
 /**
  *
@@ -27,8 +27,8 @@ public enum MutationType {
     Deletion(),
     Alteration();
 
-    public static MutationType getRandom() {
+    public static MutationType getRandomType() {
 
-        return MutationType.values()[new Random().nextInt(MutationType.values().length)];
+        return MutationType.values()[getRandom().nextInt(MutationType.values().length)];
     }
 }

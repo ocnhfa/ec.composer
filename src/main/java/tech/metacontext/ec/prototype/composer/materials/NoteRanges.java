@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 import java.util.List;
 import java.io.Serializable;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import static tech.metacontext.ec.prototype.composer.Settings.*;
 import tech.metacontext.ec.prototype.composer.enums.mats.*;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
@@ -63,9 +64,9 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serial
 
         int highest = this.highestRange.ordinal(), lowerest = this.lowestRange.ordinal();
         this.setMaterials(
-                new Random().ints(this.getDivision(), lowerest, highest + 1)
+                getRandom().ints(this.getDivision(), lowerest, highest + 1)
                         .mapToObj(lowerBond
-                                -> IntStream.rangeClosed(lowerBond, new Random().nextInt(highest - lowerBond + 1) + lowerBond)
+                                -> IntStream.rangeClosed(lowerBond, getRandom().nextInt(highest - lowerBond + 1) + lowerBond)
                                 .mapToObj(NoteRange::valueOf)
                                 .collect(Collectors.toList()))
                         .collect(Collectors.toList())
@@ -76,7 +77,7 @@ public class NoteRanges extends MusicMaterial<List<NoteRange>> implements Serial
     @Override
     public NoteRanges random() {
 
-        this.setDivision(new Random()
+        this.setDivision(getRandom()
                 .nextInt(MAX_DIVISION.getInt()
                         - MIN_DIVISION.getInt() + 1)
                 + MIN_DIVISION.getInt());

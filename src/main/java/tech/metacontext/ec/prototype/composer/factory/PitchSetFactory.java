@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 import tech.metacontext.ec.prototype.composer.enums.mats.Pitch;
 
 /**
@@ -63,7 +64,7 @@ public class PitchSetFactory {
 
     public void randomize() {
 
-        this.pitchNumber = new Random().nextInt(
+        this.pitchNumber = getRandom().nextInt(
                 this.maxPitchNumber - this.minPitchNumber + 1) + this.minPitchNumber;
         this.sharpAllowed = (DEFAULT_SHARP_ALLOWED == ALLOWED);
         this.enharmonicAllowed = (DEFAULT_ENHARMONIC_ALLOWED == ALLOWED);
@@ -82,13 +83,13 @@ public class PitchSetFactory {
         }
         ps.addAll(Stream.of(Pitch.values())
                 .limit(this.sharpAllowed ? 17 : 12)
-                .map(p -> new AbstractMap.SimpleEntry<>(this.presetPitches.contains(p) ? 0.0 : Math.random(), p))
+                .map(p -> new AbstractMap.SimpleEntry<>(this.presetPitches.contains(p) ? 0.0 : getRandom().nextDouble(), p))
                 .sorted((o1, o2) -> o1.getKey().compareTo(o2.getKey()))
                 .map(e -> (this.enharmonicAllowed) ? e.getValue().ordinal() : e.getValue().ordinalEnharmonic())
                 .distinct()
                 .map(i -> Pitch.values()[i])
                 //                .limit(this.pitchNumber)
-                .limit(new Random().nextInt(this.maxPitchNumber - this.minPitchNumber + 1) + this.minPitchNumber)
+                .limit(getRandom().nextInt(this.maxPitchNumber - this.minPitchNumber + 1) + this.minPitchNumber)
                 .collect(Collectors.toList())
         );
         return ps;

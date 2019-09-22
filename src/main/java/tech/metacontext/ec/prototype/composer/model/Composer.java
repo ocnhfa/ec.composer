@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -204,7 +203,7 @@ public class Composer extends Population<Composition> implements Serializable {
         }
 
         var num_elongated = this.getPopulation().stream()
-                .parallel()
+//                .parallel()
                 .filter(this::toBeElongated)
                 .peek(c -> getLogger().log(Level.INFO, "Composition {0} been elongated.", c.getId_prefix()))
                 .sequential()
@@ -232,7 +231,7 @@ public class Composer extends Population<Composition> implements Serializable {
      */
     private boolean toBeElongated(Composition c) {
 
-        if (aim.isCompleted(c) && Math.random()
+        if (aim.isCompleted(c) && getRandom().nextDouble()
                 >= Math.pow(CHANCE_ELONGATION_IF_COMPLETED.getDouble(),
                         c.getSize() - this.getAim().getAimSize() - 1)) {
             return false;
@@ -247,7 +246,7 @@ public class Composer extends Population<Composition> implements Serializable {
         getLogger().log(Level.INFO,
                 "Evolving from {0} parents.", this.getPopulationSize());
         var children = Stream.generate(this::getChild)
-                .parallel()
+//                .parallel()
                 .filter(c -> !this.conserve(c))
                 .limit(size)
                 .sequential()
@@ -284,7 +283,7 @@ public class Composer extends Population<Composition> implements Serializable {
          */
         var p0 = select(SELECT_FROM_ALL, this.threshold);
         if (this.getAim().isCompleted(p0)
-                && Math.random() < CHANCE_CROSSOVER_IF_COMPLETED.getDouble()) {
+                && getRandom().nextDouble() < CHANCE_CROSSOVER_IF_COMPLETED.getDouble()) {
             var p1 = this.select(SELECT_ONLY_COMPLETED, this.threshold);
             if (!Objects.equals(p0, p1)) {
                 return this.crossover(p0, p1);
@@ -299,8 +298,8 @@ public class Composer extends Population<Composition> implements Serializable {
         getLogger().log(Level.INFO,
                 "Composition {0} being duplicated to {1} for mutation.",
                 new Object[]{origin.getId_prefix(), mutant.getId_prefix()});
-        int selected = new Random().nextInt(mutant.getSize() - 1);
-        var type = MutationType.getRandom();
+        int selected = getRandom().nextInt(mutant.getSize() - 1);
+        var type = MutationType.getRandomType();
         switch (type) {
             case Alteration->
                 mutant.getConnectors().set(selected,
@@ -316,7 +315,7 @@ public class Composer extends Population<Composition> implements Serializable {
             case Deletion->
                 mutant.getConnectors().remove(selected);
         }
-        boolean reseeding = Math.random() < CHANCE_RESEEDING.getDouble();
+        boolean reseeding = getRandom().nextDouble() < CHANCE_RESEEDING.getDouble();
         if (reseeding) {
             mutant.resetSeed(sketchNodeFactory.newInstance(init));
         }
@@ -343,7 +342,7 @@ public class Composer extends Population<Composition> implements Serializable {
                 new Object[]{p0.getId_prefix(), child.getId_prefix()});
         String crossover_state = "X";
         do {
-            var activated = new Random().nextBoolean()
+            var activated = getRandom().nextBoolean()
                     ? ((p0.getSize() - 1 > index) ? p0 : p1)
                     : ((p1.getSize() - 1 > index) ? p1 : p0);
             child.addConnector(connectorfactory
@@ -357,7 +356,7 @@ public class Composer extends Population<Composition> implements Serializable {
                     child.getId_prefix(),
                     crossover_state});
 //        child.getRenderedChecked(this.getClass().getSimpleName() + "::crossover");
-        boolean reseeding = Math.random() < CHANCE_RESEEDING.getDouble();
+        boolean reseeding = getRandom().nextDouble() < CHANCE_RESEEDING.getDouble();
         if (reseeding) {
             child.resetSeed(sketchNodeFactory.newInstance(init));
         }
@@ -398,7 +397,7 @@ public class Composer extends Population<Composition> implements Serializable {
         filtered subset size = 25
         subset.size - thresholdIndex = 25.
          */
-        return selectedSubset.get(new Random().nextInt(selectedSubset.size()));
+        return selectedSubset.get(getRandom().nextInt(selectedSubset.size()));
     }
 
     /**

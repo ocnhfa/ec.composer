@@ -42,7 +42,7 @@ import tech.metacontext.ec.prototype.composer.styles.Style;
 public class Composition extends Individual<CompositionEval> implements Serializable {
 
     public static void main(String[] args) throws Exception {
-        Main main = new Main(100, 1, 100, LogState.TEST);
+        Studio main = new Studio(100, 1, 100, LogState.TEST);
         Composer composer = main.getComposer();
         Composition p0, p1;
         do {
@@ -117,7 +117,7 @@ public class Composition extends Individual<CompositionEval> implements Serializ
     public List<SketchNode> render() {
 
         rendered.clear();
-        if (Objects.isNull(seed) || Math.random() < CHANCE_RESEEDING.getDouble()) {
+        if (Objects.isNull(seed) || getRandom().nextDouble() < CHANCE_RESEEDING.getDouble()) {
             resetSeed(sketchNodeFactory.newInstance(this.composer.getInit()));
         }
         rendered.add(seed);

@@ -36,7 +36,7 @@ public class TransformTypeTest {
     public void testGetRandom() {
         System.out.println("getRandom");
 //        TransformType expResult = null;
-        Stream.generate(TransformType::getRandom)
+        Stream.generate(TransformType::getRandomType)
                 .limit(20)
                 .forEach(System.out::println);
 //        assertEquals(expResult, result);

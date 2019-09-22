@@ -16,19 +16,21 @@
 package tech.metacontext.ec.prototype.composer.enums;
 
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import tech.metacontext.ec.prototype.composer.Settings;
 
 /**
  *
  * @author Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public enum ConnectingState {
+
     Total,
     ByItem;
 
-    public static ConnectingState getRandom() {
+    public static ConnectingState getRandomState() {
 
-        return Math.random() < CHANCE_TOTAL_CONNECTING_STATE.getDouble()
-                ? ConnectingState.Total : ConnectingState.ByItem;
+        return Settings.getRandom().nextDouble() < CHANCE_TOTAL_CONNECTING_STATE.getDouble() ?
+                 ConnectingState.Total : ConnectingState.ByItem;
     }
 
 }

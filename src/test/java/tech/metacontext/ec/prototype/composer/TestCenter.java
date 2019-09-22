@@ -34,7 +34,7 @@ public class TestCenter {
     
     private static TestCenter instance;
     
-    private Main m;
+    private Studio m;
 
     public static void main(String[] args) {
 
@@ -53,7 +53,7 @@ public class TestCenter {
     private TestCenter() {
 
         try {
-            this.m = new Main(PRESET_POPULATION_SIZE, GOAL_CONSERVATORY_SIZE,
+            this.m = new Studio(PRESET_POPULATION_SIZE, GOAL_CONSERVATORY_SIZE,
                     GOAL_GENERATION, THRESHOLD, CONSERVE_SCORE, LogState.DISABLED);
         } catch (Exception ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);

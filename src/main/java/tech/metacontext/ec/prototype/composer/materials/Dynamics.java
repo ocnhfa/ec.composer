@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 import tech.metacontext.ec.prototype.composer.enums.mats.Intensity;
 
@@ -69,7 +70,7 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
     @Override
     public Dynamics generate() {
 
-        this.setMaterials(new Random().ints(this.getDivision(),
+        this.setMaterials(getRandom().ints(this.getDivision(),
                 this.lowestIntensity.ordinal(),
                 this.highestIntensity.ordinal() + 1)
                 .mapToObj(i -> Intensity.values()[i])
@@ -81,7 +82,7 @@ public class Dynamics extends MusicMaterial<Intensity> implements Serializable {
     @Override
     public Dynamics random() {
 
-        this.setDivision(new Random()
+        this.setDivision(getRandom()
                 .nextInt(MAX_DIVISION.getInt()
                         - MIN_DIVISION.getInt() + 1)
                 + MIN_DIVISION.getInt());

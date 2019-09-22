@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 import tech.metacontext.ec.prototype.composer.materials.*;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
@@ -69,7 +70,7 @@ public class UnaccompaniedCello extends Style {
                         .getMaterials()
                         .stream()
                         .mapToDouble(list -> list.stream().mapToDouble(RANGE::get).average().getAsDouble())
-                        .average().getAsDouble() > Math.random()
+                        .average().getAsDouble() > getRandom().nextDouble()
                 : false;
         PitchSets ps = (PitchSets) sketchNode.getMat(MaterialType.PITCH_SETS);
         RhythmicPoints rp = (RhythmicPoints) sketchNode.getMat(MaterialType.RHYTHMIC_POINTS);

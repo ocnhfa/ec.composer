@@ -34,7 +34,7 @@ public class Connector extends Individual {
     public static void main(String[] args) {
         var conn = new Connector();
         Stream.of(MaterialType.values()).forEach(mt
-                -> conn.addTransformType(mt, TransformType.getRandom()));
+                -> conn.addTransformType(mt, TransformType.getRandomType()));
         System.out.println(conn);
     }
 

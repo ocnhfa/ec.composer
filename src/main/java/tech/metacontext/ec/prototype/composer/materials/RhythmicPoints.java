@@ -16,12 +16,12 @@
 package tech.metacontext.ec.prototype.composer.materials;
 
 import java.io.Serializable;
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import static tech.metacontext.ec.prototype.composer.Parameters.*;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 import tech.metacontext.ec.prototype.composer.enums.TransformType;
 
 /**
@@ -76,7 +76,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> implements Serializab
 
         this.setMaterials(
                 Stream.generate(()
-                        -> new Random().nextInt(this.maxPoints - this.minPoints + 1) + this.minPoints)
+                        -> getRandom().nextInt(this.maxPoints - this.minPoints + 1) + this.minPoints)
                         .limit(this.getDivision())
                         .collect(Collectors.toList())
         );
@@ -86,7 +86,7 @@ public class RhythmicPoints extends MusicMaterial<Integer> implements Serializab
     @Override
     public RhythmicPoints random() {
 
-        this.setDivision(new Random()
+        this.setDivision(getRandom()
                 .nextInt(MAX_DIVISION.getInt()
                         - MIN_DIVISION.getInt() + 1)
                 + MIN_DIVISION.getInt());

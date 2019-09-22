@@ -47,16 +47,16 @@ public class ConnectorFactory {
     public Connector newConnector() {
 
         Connector conn = new Connector();
-        switch (ConnectingState.getRandom()) {
+        switch (ConnectingState.getRandomState()) {
             case Total:
-                TransformType tt = TransformType.getRandom();
+                TransformType tt = TransformType.getRandomType();
                 Stream.of(MaterialType.values())
                         .forEach(mt -> conn.addTransformType(mt, tt));
                 break;
             case ByItem:
                 //@todo ByItem: apply special algorithm
                 Stream.of(MaterialType.values())
-                        .forEach(mt -> conn.addTransformType(mt, TransformType.getRandom()));
+                        .forEach(mt -> conn.addTransformType(mt, TransformType.getRandomType()));
                 break;
         }
         return conn;

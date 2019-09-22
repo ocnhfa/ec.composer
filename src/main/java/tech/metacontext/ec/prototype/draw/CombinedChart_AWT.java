@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.jfree.chart.ChartPanel;
@@ -42,6 +41,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.statistics.DefaultMultiValueCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+import static tech.metacontext.ec.prototype.composer.Settings.getRandom;
 
 /**
  * Rendering a Line Chart.
@@ -57,10 +57,10 @@ public class CombinedChart_AWT extends ApplicationFrame {
                 series1B = new HashMap<>();
         Map<Integer, Double> series2 = new HashMap<>();
         IntStream.range(0, 50).forEach(i -> {
-            series1A.put(i, new Random().doubles(10, Math.random(), (50.0 + i) / 50 + Math.random())
+            series1A.put(i, getRandom().doubles(10, getRandom().nextDouble(), (50.0 + i) / 50 + getRandom().nextDouble())
                     .boxed().collect(Collectors.toList()));
             if (i % 2 == 0) {
-                series1B.put(i, new Random().doubles(10, Math.random(), 1.0 + Math.random())
+                series1B.put(i, getRandom().doubles(10, getRandom().nextDouble(), 1.0 + getRandom().nextDouble())
                         .boxed().sorted().collect(Collectors.toList()));
             } else {
                 series1B.put(i, new ArrayList<>());

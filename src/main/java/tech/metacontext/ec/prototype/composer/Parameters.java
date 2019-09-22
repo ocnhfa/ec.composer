@@ -27,7 +27,7 @@ public enum Parameters {
     /**
      * Score threshold percentage for selection.
      */
-//    SELECTION_THRESHOLD(0.8),
+    //    SELECTION_THRESHOLD(0.8),
     SELECTION_THRESHOLD(0.9),
     /**
      * Score for a mature composition to reach to be conserved.

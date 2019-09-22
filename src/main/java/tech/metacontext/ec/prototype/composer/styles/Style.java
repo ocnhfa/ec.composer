@@ -16,6 +16,7 @@
 package tech.metacontext.ec.prototype.composer.styles;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;
@@ -48,6 +49,11 @@ public abstract class Style implements Serializable {
      * @return double value score ranging from 0.0 to 1.0.
      */
     public abstract double rateComposition(Composition composition);
+
+    public int comparator(Composition c1, Composition c2) {
+        
+        return Double.compare(this.rateComposition(c1), this.rateComposition(c2));
+    }
 
     /**
      *
