@@ -78,11 +78,15 @@ public class Studio {
         System.out.println(header("Evolutionary Computation"));
         System.out.printf("Composer = [%s]\n", composer.getId());
         System.out.println("Population size = " + popSize);
-        System.out.println("Expected conservatory size = " + goalSize);
+
+        if (generation > 0)
+            System.out.println("Generation = " + generation);
+        else
+            System.out.println("Selected (Conservatory) size = " + goalSize);
+
+        System.out.println("Random Seed = " + RANDOM_SEED);
         System.out.println("Threshold = " + threshold);
         System.out.println("Conserve Score = " + conserve_score);
-        System.out.println("Generation = " + generation);
-        System.out.println("Random Seed = " + RANDOM_SEED);
         System.out.println(header("Evolution"));
         int conserved = 0;
         do {

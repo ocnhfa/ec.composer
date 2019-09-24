@@ -32,10 +32,10 @@ import java.util.Random;
 public class Settings {
 
     public static void main(String[] args) {
-        
+
         System.out.println(new Random().nextLong());
     }
-    
+
     public static long RANDOM_SEED = 4131318980864143334L;
     private static Random r;
 
@@ -51,6 +51,10 @@ public class Settings {
             r = new Random(RANDOM_SEED);
         return r;
     }
+
+    public static int DEFAULT_POP_SIZE = 100;
+    public static int DEFAULT_GENERATION = 300;
+    public static int DEFAULT_SELECTED_SIZE = 20;
 
     public static String LOG_PATH = "log/";
     public static String LOG_PATH_TEST = "log/test/";
