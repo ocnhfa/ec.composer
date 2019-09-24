@@ -16,7 +16,6 @@
 package tech.metacontext.ec.prototype.composer.styles;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import tech.metacontext.ec.prototype.composer.materials.MusicMaterial;
 import tech.metacontext.ec.prototype.composer.model.Composition;
 import tech.metacontext.ec.prototype.composer.model.SketchNode;

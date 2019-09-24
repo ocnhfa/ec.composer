@@ -1,7 +1,5 @@
-package tech.metacontext.ec.prototype.composer;
-
 /*
- * Copyright 2019 Administrator.
+ * Copyright 2019 Jonathan Chang, Chun-yien <ccy@musicapoetica.org>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +13,10 @@ package tech.metacontext.ec.prototype.composer;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package tech.metacontext.ec.prototype.composer;
+
 import java.util.stream.IntStream;
 import static tech.metacontext.ec.prototype.composer.Settings.*;
-import tech.metacontext.ec.prototype.composer.Studio;
 import tech.metacontext.ec.prototype.composer.model.Composer;
 import tech.metacontext.ec.prototype.composer.styles.GoldenSectionClimax;
 import tech.metacontext.ec.prototype.composer.styles.UnaccompaniedCello;
@@ -25,7 +24,7 @@ import tech.metacontext.ec.prototype.draw.LineChart_AWT;
 
 /**
  *
- * @author Administrator
+ * @author  Jonathan Chang, Chun-yien <ccy@musicapoetica.org>
  */
 public class Main {
 
@@ -42,17 +41,17 @@ public class Main {
         int SELECTED_SIZE = 0;
         int GENERATION = 300;
 
-//        long RANDOM_SEED = 1L;
-//        initialize(RANDOM_SEED);
+        long RANDOM_SEED = 100L;
+        initialize(RANDOM_SEED);
 
         Studio studio = new Studio(
                 POP_SIZE,
                 SELECTED_SIZE,
                 GENERATION,
                 LogState.DISABLED);
-        //                LogState.DEFAULT);
+        // LogState.DEFAULT);
 
-//        main.composer.draw(Composer.DRAWTYPE_AVERAGELINECHART);
+        // studio.composer.draw(Composer.DRAWTYPE_AVERAGELINECHART);
         studio.getComposer().draw(Composer.DRAWTYPE_COMBINEDCHART);
         System.out.println(header("Persisting Conservatory"));
         studio.getComposer().persistAll();

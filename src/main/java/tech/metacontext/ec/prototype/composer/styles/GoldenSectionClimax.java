@@ -54,9 +54,9 @@ public class GoldenSectionClimax extends Style {
 //        } while (composer.getConservatory().isEmpty());
         } while (composer.getPopulation().stream().anyMatch(not(composer.getAim()::isCompleted))
                 || summary.getMax() < 0.95 && composer.getConservatory().isEmpty());
-        (composer.getConservatory().isEmpty() ?
-                composer.getPopulation() :
-                composer.getConservatory().keySet())
+        (composer.getConservatory().isEmpty()
+                ? composer.getPopulation()
+                : composer.getConservatory().keySet())
                 .stream()
                 .peek(c -> System.out.println(Composer.simpleScoreOutput(c)))
                 .peek(gsc::updateClimaxIndexes)
@@ -141,34 +141,29 @@ public class GoldenSectionClimax extends Style {
             return 0.0;
         }
         long peakNodeIndex = Math.round((composition.getSize() - 1) / RATIO);
-        return (i < peakNodeIndex) ?
-                (i + 1) * peak / (peakNodeIndex + 1) :
-                (composition.getSize() - i) * peak
-                / (composition.getSize() - peakNodeIndex);
+        return (i < peakNodeIndex) ? (i + 1) * peak / (peakNodeIndex + 1)
+                : (composition.getSize() - i) * peak / (composition.getSize() - peakNodeIndex);
     }
 
     public double climaxIndex(SketchNode node) {
 
         DoubleAdder index = new DoubleAdder();
         node.getMats().forEach((mt, mm) -> {
-            double mti = 0.0;
-            switch (mt) {
-                case DYNAMICS->
-                    mti = ((Dynamics)mm).getAvgIntensityIndex(mat
-                            -> Intensity.getIntensityIndex(mat, ((Dynamics)mm).getLowestIntensity(),
-                                    ((Dynamics)mm).getHighestIntensity()));
-                case NOTE_RANGES->
-                    mti = ((NoteRanges)mm).getAvgIntensityIndex(mat
-                            -> NoteRanges.getIntensityIndex(mat, lowest, highest));
-                case PITCH_SETS->
-                    mti = ((PitchSets)mm).getIntensityIndex();
-                case RHYTHMIC_POINTS-> {
-                    var rp = (RhythmicPoints)mm;
-                    mti = rp.getAvgIntensityIndex(mat
-                            -> 1.0 * (mat - rp.getMin()) / (rp.getMax() - rp.getMin()));
+            double mti = switch (mt) {
+                case DYNAMICS-> {
+                    var dy = (Dynamics) mm;
+                    yield dy.getAvgIntensityIndex(mat -> Intensity.getIntensityIndex(mat, dy.getLowestIntensity(), dy.getHighestIntensity()));
                 }
-            }
-            assert (mti >= 0.0 && mti <= 1.0):
+                case NOTE_RANGES->
+                    ((NoteRanges) mm).getAvgIntensityIndex(mat -> NoteRanges.getIntensityIndex(mat, lowest, highest));
+                case PITCH_SETS->
+                    ((PitchSets) mm).getIntensityIndex();
+                case RHYTHMIC_POINTS-> {
+                    var rp = (RhythmicPoints) mm;
+                    yield rp.getAvgIntensityIndex(mat -> 1.0 * (mat - rp.getMin()) / (rp.getMax() - rp.getMin()));
+                }
+            };
+            assert (mti >= 0.0 && mti <= 1.0) :
                     "mti not in range: " + mt + " = " + mti + "\n" + node;
 //            System.out.printf("%s:%.2f ", mt, mti);
             index.add(mti);
